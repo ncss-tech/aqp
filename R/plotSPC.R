@@ -112,9 +112,9 @@
 #'
 #' @param default.color default horizon fill color used when `color` attribute is `NA`
 #' 
-#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`
+#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`. Additional arguments to [fixOverlap()] can be passed as options.
 #' 
-#' @param maxLabelAdjustmentIndex numeric, maximum (total) adjustments allowed when `fixLabelCollisions = TRUE`, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).
+#' @param fixOverlapArgs a named list of arguments to [fixOverlap()]. Overlap adjustments are attempted using electrostatic simulation with arguments: `list(method = 'E', q = 1)`. Alternatively, select adjustment by simulated annealing via `list(method = 'S')`. See [electroStatics_1D()] and [SANN_1D()] for details.
 #'
 #' @param \dots other arguments passed into lower level plotting functions
 #'
@@ -137,7 +137,6 @@
 #' The `x.idx.offset` argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different `SoilProfileCollection` objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
 #' 
 #' Horizon depths (e.g. cm) are converted to figure y-coordinates via: y = (depth * scaling.factor) + y.offset. 
-#'
 #'
 #'
 #' @note A new plot of soil profiles is generated, or optionally added to an existing plot.
@@ -310,7 +309,7 @@
 #' # random gradient of x-positions
 #' xoff <- runif(n = length(x), min = 1, max = length(x))
 #' 
-#' 
+#' # note profiles overlap
 #' plotSPC(x, 
 #'         relative.pos = xoff, 
 #'         y.offset = yoff, 
@@ -323,7 +322,7 @@
 #' 
 #' # align / adjust relative x positions
 #' set.seed(111)
-#' pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.5)
+#' pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.65)
 #' 
 #' # y-offset is automatically re-ordered according to
 #' # plot.order
@@ -393,7 +392,7 @@ plotSPC <- function(
     lty = 1,
     default.color = grey(0.95),
     fixLabelCollisions = FALSE,
-    maxLabelAdjustmentIndex = 4,
+    fixOverlapArgs = list(method = 'E', q = 1),
     ...
 ) {
   
@@ -430,7 +429,7 @@ plotSPC <- function(
                  "hz.boundary.lty", "axis.line.offset", "plot.depth.axis", "density", 
                  "show.legend", "col.label", "col.palette", "col.palette.bias", 
                  "col.legend.cex", "n.legend", "lwd", "lty", "default.color", 
-                 "fixLabelCollisions", "maxLabelAdjustmentIndex"
+                 "fixLabelCollisions", "fixOverlapArgs"
     )
     
     # iterate over all possible arguments that can be modified in this way
@@ -534,6 +533,11 @@ plotSPC <- function(
   if(length(y.offset) != length(x)) {
     warning('length of `y.offset` must be `length(x)` or 1, using `0`', call. = FALSE)
     y.offset <- rep(0, times = length(x))
+  }
+  
+  # fixOverlap arguments
+  if(is.null(fixOverlapArgs)) {
+    fixOverlapArgs <- list()
   }
   
   
@@ -1270,8 +1274,6 @@ plotSPC <- function(
         ## collision detection / fix
         if(fixLabelCollisions) {
           
-          ## TODO: make these adjustable via aqp options
-          
           # reasonable threshold for label collision detection
           # depends on aesthetic weighting / graphics device / hz.depths.cex
           y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
@@ -1290,7 +1292,7 @@ plotSPC <- function(
           .vertical_buffer_bottom <- pmin(
             ((max.depth - .vbf) * scaling.factor) + y.offset[i], 
             y0[nh] - (.vbf * scaling.factor)
-            )
+          )
           
           # add synthetic top / bottom anchors
           .pos <- c(
@@ -1304,24 +1306,18 @@ plotSPC <- function(
           # print(y.thresh)
           .pos <- .pos[which(.pos < ((max.depth * scaling.factor) + y.offset[i]))]
           
-          ## TODO: allow for argument override
+          # setup arguments to fixOverlap()
+          fixOverlapArgs[['x']] <- .pos
+          fixOverlapArgs[['thresh']] <- y.thresh
+          
           # find / fix overlap using electrostatic simulation
           # this includes top/bottom anchor points
-          hzd.txt.y.fixed <- 
-            suppressMessages(
-              fixOverlap( 
-                .pos, 
-                thresh = y.thresh, 
-                method = 'E', 
-                q = 1
-              )
-            )
+          hzd.txt.y.fixed <- suppressMessages(
+            do.call('fixOverlap', fixOverlapArgs)
+          )
           
           # remove top AND bottom anchors
           hzd.txt.y.fixed <- hzd.txt.y.fixed[-c(1, length(hzd.txt.y.fixed))]
-          
-          
-          ## TODO consider removing this
           
           ## this is the Label Adjustment Index (LAI)
           # how much shuffling was performed?
@@ -1332,20 +1328,8 @@ plotSPC <- function(
           # keep track of overlap metric for each profile
           lsp[['hz.depth.LAI']][i] <- .LAI
           
-          # when n > length(x), we are iterating over non-profiles and .LAI is NA
-          if(!is.na(.LAI)) {
-            # if not too "bad", keep suggested adjustments
-            if(.LAI < maxLabelAdjustmentIndex) {
-              # make changes to annotation label locations
-              hzd.txt.y <- hzd.txt.y.fixed
-            } else {
-              ## TODO: consider a message or keeping track of which profiles
-              # print(.LAI)
-              # print('not adjusting')
-            }
-          }
-          
-          # otherwise, keep original configuration
+          # make changes to annotation label locations
+          hzd.txt.y <- hzd.txt.y.fixed
         }
         
         

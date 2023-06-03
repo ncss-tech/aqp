@@ -60,7 +60,7 @@ plotSPC(
   lty = 1,
   default.color = grey(0.95),
   fixLabelCollisions = FALSE,
-  maxLabelAdjustmentIndex = 4,
+  fixOverlapArgs = list(method = "E", q = 1),
   ...
 )
 
@@ -165,9 +165,9 @@ plotSPC(
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
-\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
+\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}. Additional arguments to \code{\link[=fixOverlap]{fixOverlap()}} can be passed as options.}
 
-\item{maxLabelAdjustmentIndex}{numeric, maximum (total) adjustments allowed when \code{fixLabelCollisions = TRUE}, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).}
+\item{fixOverlapArgs}{a named list of arguments to \code{\link[=fixOverlap]{fixOverlap()}}. Overlap adjustments are attempted using electrostatic simulation with arguments: \code{list(method = 'E', q = 1)}. Alternatively, select adjustment by simulated annealing via \code{list(method = 'S')}. See \code{\link[=electroStatics_1D]{electroStatics_1D()}} and \code{\link[=SANN_1D]{SANN_1D()}} for details.}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 
@@ -358,7 +358,7 @@ yoff <- runif(n = length(x), min = 1, max = 100)
 # random gradient of x-positions
 xoff <- runif(n = length(x), min = 1, max = length(x))
 
-
+# note profiles overlap
 plotSPC(x, 
         relative.pos = xoff, 
         y.offset = yoff, 
@@ -371,7 +371,7 @@ plotSPC(x,
 
 # align / adjust relative x positions
 set.seed(111)
-pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.5)
+pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.65)
 
 # y-offset is automatically re-ordered according to
 # plot.order

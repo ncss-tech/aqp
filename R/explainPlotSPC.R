@@ -46,14 +46,22 @@
 #' # tinker
 #' explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 #' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos))
-#' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7))
-#' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7, adj = 0.2))
-#'
-#' # no solution possible given these constraints
-#' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 1, adj = 0.2))
 #' 
-#' # use alternative strategy
-#' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 1, method = 'E'))
+#' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, 
+#' thresh = 0.7))
+#' 
+#' explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, 
+#' thresh = 0.7, adj = 0.2))
+#'
+#' # SANN: solution requires many iterations, and will not always converge
+#' explainPlotSPC(sp4, name = 'name', 
+#' relative.pos = fixOverlap(pos, thresh = 0.85, adj = 0.2)
+#' )
+#' 
+#' # electrostatics: solution requires larger charge (q)
+#' explainPlotSPC(sp4, name = 'name', 
+#' relative.pos = fixOverlap(pos, thresh = 0.85, method = 'E', q = 2)
+#' )
 #'
 explainPlotSPC <- function(x, ...) {
   plotSPC(x, id.style='side', ...)
@@ -63,7 +71,7 @@ explainPlotSPC <- function(x, ...) {
   .usr <- par('usr')
   
   # get last plot parameters
-  lsp <- get('last_spc_plot', envir=aqp.env)
+  lsp <- get('last_spc_plot', envir = aqp.env)
   
   # get max depth by profile
   max.depths <- profileApply(x, max)

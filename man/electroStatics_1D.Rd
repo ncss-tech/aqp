@@ -42,7 +42,14 @@ electroStatics_1D(
 When \code{trace = TRUE} a \code{list}, otherwise numeric vector with \code{converged} attribute.
 }
 \description{
-Label placement based on a simulation of electrostatic forces
+This function will attempt
+}
+\details{
+Difficult overlap problems can be addressed by reducing \code{thresh} and increasing \code{q}. Large values of \code{q} can lead to chaotic results.
+
+This function will generate unpredictable output when \code{x} contains duplicate values.
+
+This function requires input to be pre-sorted, although interesting "artistic" simulations will often result from unsorted \code{x}.
 }
 \examples{
 

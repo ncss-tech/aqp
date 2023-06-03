@@ -47,14 +47,22 @@ pos <- c(1, 2, 3, 3.3, 5, 5.1, 5.5, 8, 9, 10)
 # tinker
 explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos))
-explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7))
-explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7, adj = 0.2))
 
-# no solution possible given these constraints
-explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 1, adj = 0.2))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, 
+thresh = 0.7))
 
-# use alternative strategy
-explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 1, method = 'E'))
+explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, 
+thresh = 0.7, adj = 0.2))
+
+# SANN: solution requires many iterations, and will not always converge
+explainPlotSPC(sp4, name = 'name', 
+relative.pos = fixOverlap(pos, thresh = 0.85, adj = 0.2)
+)
+
+# electrostatics: solution requires larger charge (q)
+explainPlotSPC(sp4, name = 'name', 
+relative.pos = fixOverlap(pos, thresh = 0.85, method = 'E', q = 2)
+)
 
 }
 \seealso{

@@ -28,12 +28,12 @@ for(i in seq(0.1, 1.5, length.out = .npanel^2)) {
   ## TODO: argument for pre-sorting
   
   z <- fixOverlap(x, thresh = 2, q = i, chargeDecay = 0, QkA_GrowthRate = 0, method = 'E', maxIter = 100, trace = TRUE)
-  .n <- nrow(z$xnew)
+  .n <- nrow(z$states)
   
-  matplot(rbind(x, z$xnew), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
+  matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
   
   # points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
-  # points(x = rep(.n + 1, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)
+  # points(x = rep(.n + 1, times = length(x)), y = z$states[.n, ], cex = 0.66, pch = 16, col = cols)
   
 }
 
@@ -50,12 +50,12 @@ for(i in seq(0, 0.5, length.out = .npanel^2)) {
   ## TODO: argument for pre-sorting
   
   z <- fixOverlap(x, thresh = 2, q = 2, chargeDecay = i, QkA_GrowthRate = 0.05, method = 'E', maxIter = 100, trace = TRUE)
-  .n <- nrow(z$xnew)
+  .n <- nrow(z$states)
   
-  matplot(rbind(x, z$xnew), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
+  matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
   
   # points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
-  # points(x = rep(.n + 1, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)
+  # points(x = rep(.n + 1, times = length(x)), y = z$states[.n, ], cex = 0.66, pch = 16, col = cols)
   
 }
 
@@ -71,12 +71,12 @@ for(i in seq(0, 0.5, length.out = .npanel^2)) {
   ## TODO: argument for pre-sorting
   
   z <- fixOverlap(x, thresh = 2, q = 1, chargeDecay = 0.05, QkA_GrowthRate = i, method = 'E', maxIter = 100, trace = TRUE)
-  .n <- nrow(z$xnew)
+  .n <- nrow(z$states)
   
-  matplot(rbind(x, z$xnew), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
+  matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
   
   # points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
-  # points(x = rep(.n + 1, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)
+  # points(x = rep(.n + 1, times = length(x)), y = z$states[.n, ], cex = 0.66, pch = 16, col = cols)
   
 }
 
@@ -92,12 +92,12 @@ for(i in seq(0.5, 4, length.out = .npanel^2)) {
   ## TODO: argument for pre-sorting
   
   z <- fixOverlap(x, thresh = i, q = 1, chargeDecay = 0.01, QkA_GrowthRate = 0.05, method = 'E', maxIter = 100, trace = TRUE)
-  .n <- nrow(z$xnew)
+  .n <- nrow(z$states)
   
-  matplot(rbind(x, z$xnew), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
+  matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
   
   # points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
-  # points(x = rep(.n + 1, times = length(x)), y = z$xnew[.n, ], cex = 0.66, pch = 16, col = cols)
+  # points(x = rep(.n + 1, times = length(x)), y = z$states[.n, ], cex = 0.66, pch = 16, col = cols)
   
 }
 

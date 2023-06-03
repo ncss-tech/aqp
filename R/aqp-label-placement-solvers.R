@@ -140,6 +140,16 @@ overlapMetrics <- function(x, thresh) {
 
 
 #' @title Label placement based on a simulation of electrostatic forces
+#' 
+#' @description This function will attempt 
+#' 
+#' @details 
+#' 
+#' Difficult overlap problems can be addressed by reducing `thresh` and increasing `q`. Large values of `q` can lead to chaotic results.
+#' 
+#' This function will generate unpredictable output when `x` contains duplicate values.
+#' 
+#' This function requires input to be pre-sorted, although interesting "artistic" simulations will often result from unsorted `x`.
 #'
 #' @param x numeric vector, pre-sorted sorted, without duplication, describing 1D label (particle) configuration
 #' 
@@ -202,10 +212,10 @@ overlapMetrics <- function(x, thresh) {
 ##       -> too low, not enough perturbation, does not converge
 ##       -> too high, chaos
 
-## NOTE: this method does not work well in the presence of ties
-
+## TODO: allow for ties / un-sorted input
 
 ## TODO: implement domain[min, max] argument for convenient anchors
+# https://github.com/ncss-tech/aqp/issues/288
 
 
 electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_GrowthRate = 0.05, maxIter = 100, tiny = 0.0001, const = 0.001, trace = FALSE, ...) {
@@ -357,23 +367,26 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   ## TODO: optionally return to lowest cost configuration
   ## TODO: optionally re-run with lower / higher q
   
-  ## TODO: return to original sorting order
-  
   # check for convergence
   # 1. no overlap
   # 2. no change in rank order
   .converged <- all(rank(xnew[nrow(xnew), ]) == rank(x.orig) & length(.om$idx) < 1)
   
   if(trace) {
+    # solutions(iteration) are re-scaled to original range
+    xnew <- t(apply(xnew, 1, .rescaleRange, .original_range[1], .original_range[2]))
+    
     # compile full results
     .res <- list(
+      x = as.vector(xnew[nrow(xnew), ]),
       F_total = as.vector(na.omit(F_total)), 
       cost = as.vector(na.omit(cost)),
-      xnew = t(apply(xnew, 1, .rescaleRange, .original_range[1], .original_range[2])), 
+      states = xnew, 
       converged = .converged
     )
   } else {
     # only the final configuration
+    # solution is re-scaled to original range
     .res <- .rescaleRange(as.vector(xnew[nrow(xnew), ]), .original_range[1], .original_range[2])
     attr(.res, 'converged') <- .converged
   }
@@ -381,16 +394,6 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   
   return(.res)
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -610,6 +613,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
           states = states
         ))
       }
+      attr(s, 'converged') <- FALSE
       return(s)
     }
     
@@ -739,6 +743,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
     ))
   } else {
     # best configuration only
+    attr(x, 'converged') <- TRUE
     return(x)
   }
   
