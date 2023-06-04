@@ -1447,6 +1447,7 @@ plotSPC <- function(
     
     
     
+    ## TODO: move this to the top of profile-process loop, in case there is no hz data
     
     
     #################
