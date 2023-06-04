@@ -40,7 +40,7 @@ s <- c('leon', 'musick', 'clarksville', 'pardee', 'lucy', 'pierre', 'drummer', '
 osds <- soilDB::fetchOSD(s)
 
 par(mar = c(0, 0, 0, 0))
-plotSPC(osds, cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
+plotSPC(osds, cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE, fixOverlapArgs = list(method = 'S'))
 
 plotSPC(trunc(osds, 0, 25), cex.names = 0.75, name.style = 'center-center', width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, fixLabelCollisions = TRUE)
 
