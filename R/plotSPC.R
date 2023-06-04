@@ -460,6 +460,8 @@ plotSPC <- function(
     stop("Object `x` must be a SoilProfileCollection", call. = FALSE) 
   }
   
+  ## TODO: update plot.order and relative.pos when n != length(x)
+  
   # don't plot an empty collection
   if (nrow(x) == 0) {
     stop("SoilProfileCollection `x` contains no horizon data", call. = FALSE)
@@ -752,6 +754,7 @@ plotSPC <- function(
   ## note: there may not be `n` profiles
   for(i in 1:n) {
     # convert linear sequence into plotting order
+    # this is NA when accessing beyond length(SPC)
     profile_i <- plot.order[i]
     
     # get truncation flag
@@ -765,8 +768,14 @@ plotSPC <- function(
     # extract the current profile's horizon data
     this_profile_label <- pLabels[profile_i]
     this_profile_id <- pIDs[profile_i]
+    this_profile_data <- h[which(h[[IDcol]] == this_profile_id), ]
     
-    this_profile_data <- h[h[[IDcol]] == this_profile_id, ]
+    ## TODO: use empty / template SPC
+    # this is an "empty" profile, site data only
+    # skip this iteration
+    if(nrow(this_profile_data) < 1){
+      next
+    }
     
     # extract column names
     cn <- names(this_profile_data)
