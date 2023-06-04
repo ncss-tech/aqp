@@ -1,4 +1,4 @@
-# aqp 2.0 (2023-03-31)
+# aqp 2.0 (2023-06-03)
 This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`.
 
 Notable changes include:
@@ -14,6 +14,7 @@ Notable changes include:
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
+ * `plotSPC()` now uses `electroStatics_1D()` for fixing hz depth label overlap, solutions are almost always better and deterministic
 
 New features:
  * example data, `wilson2022`
