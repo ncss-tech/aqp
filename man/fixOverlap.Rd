@@ -35,3 +35,6 @@ fixOverlap(s, thresh = 0.6, method = 'S')
 fixOverlap(s, thresh = 0.6, method = 'E')
 
 }
+\seealso{
+\code{\link[=electroStatics_1D]{electroStatics_1D()}}, \code{\link[=SANN_1D]{SANN_1D()}}
+}

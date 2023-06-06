@@ -42,7 +42,7 @@ electroStatics_1D(
 When \code{trace = TRUE} a \code{list}, otherwise numeric vector with \code{converged} attribute.
 }
 \description{
-This function will attempt
+This function attempts to move labels along a 1D coordinate system such that overlap (as specified by threshold) is minimized. An electrostatic simulation applies forces of repulsion between labels that are within \code{thresh} (e.g. overlapping) and forces of attraction to a uniformly spaced sequence to iteratively perturb affected labels until either no overlap is reported, or a maximum number of iterations (\code{maxIter}) has been reached.
 }
 \details{
 Difficult overlap problems can be addressed by reducing \code{thresh} and increasing \code{q}. Large values of \code{q} can lead to chaotic results.
@@ -81,6 +81,9 @@ attr(xnew, 'converged')
 # compare original vs. modified
 data.frame(orig = x, new = round(xnew, 2))
 
+}
+\seealso{
+\code{\link[=fixOverlap]{fixOverlap()}}, \code{\link[=SANN_1D]{SANN_1D()}}
 }
 \author{
 D.E. Beaudette and K.C. Thompson

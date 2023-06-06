@@ -1,7 +1,5 @@
 
 
-## TODO: this will be replaced by overlapMetrics()
-
 #' @title Find Overlap within a Sequence
 #' @description Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 #'
@@ -17,8 +15,13 @@
 #' x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 #' 
 #' findOverlap(x, thresh = 0.5)
-#'
+#' 
+#' @rdname overlapMetrics
+#' 
 findOverlap <- function(x, thresh) {
+  
+  .Deprecated('overlapMetrics', msg = 'This function is deprecated, please use the `overLapMetrics()` function instead.')
+  
   # all pair-wise distance
   d <- dist(x)
   m <- as.matrix(d)
@@ -141,7 +144,7 @@ overlapMetrics <- function(x, thresh) {
 
 #' @title Label placement based on a simulation of electrostatic forces
 #' 
-#' @description This function will attempt 
+#' @description This function attempts to move labels along a 1D coordinate system such that overlap (as specified by threshold) is minimized. An electrostatic simulation applies forces of repulsion between labels that are within `thresh` (e.g. overlapping) and forces of attraction to a uniformly spaced sequence to iteratively perturb affected labels until either no overlap is reported, or a maximum number of iterations (`maxIter`) has been reached.
 #' 
 #' @details 
 #' 
@@ -174,6 +177,8 @@ overlapMetrics <- function(x, thresh) {
 #' @author D.E. Beaudette and K.C. Thompson
 #'
 #' @return When `trace = TRUE` a `list`, otherwise numeric vector with `converged` attribute.
+#' 
+#' @seealso [fixOverlap()], [SANN_1D()]
 #' 
 #' @export
 #' 
@@ -448,6 +453,8 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
 #' 
 #' @author D.E. Beaudette and K.C. Thompson
 #' @export
+#'
+#' @seealso [electroStatics_1D()], [fixOverlap()]
 #'
 #' @examples 
 #' 
@@ -775,6 +782,8 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #' # electrostatics-inspired simulation of particles
 #' # solution is deterministic
 #' fixOverlap(s, thresh = 0.6, method = 'E')
+#' 
+#' @seealso [electroStatics_1D()], [SANN_1D()]
 #' 
 fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...) {
   

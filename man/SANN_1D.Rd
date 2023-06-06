@@ -113,6 +113,9 @@ matplot(
 table(z$log)
 
 }
+\seealso{
+\code{\link[=electroStatics_1D]{electroStatics_1D()}}, \code{\link[=fixOverlap]{fixOverlap()}}
+}
 \author{
 D.E. Beaudette and K.C. Thompson
 }
