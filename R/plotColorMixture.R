@@ -263,6 +263,15 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
       # attempt to fix overlap
       if(overlapFix) {
         
+        # save original indexing information via name
+        .original_order <- names(last.y.coords)
+        
+        # sort according to y-coordinates
+        last.y.coords <- sort(last.y.coords)
+        
+        # new ordering
+        .new_order <- names(last.y.coords)
+        
         # vertical threshold is the grob height of color swatch
         ov.thresh <- as.vector(.labelHeight) * swatch.cex
         
@@ -275,23 +284,24 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
         if(length(ov$idx) > 0) {
           message('fixing overlap')
           
-          ## TODO: data must be pre-sorted for electrostatic simulation
-          ##       --> sort data / index to labels together
-          
           # init position vector 
           # set boundary conditions for overlap adjustment
           # adding fake min / max values, based on spectra reflectance values
           .pos <- c(min(y, na.rm = TRUE), last.y.coords, max(y, na.rm = TRUE))
           
           last.y.coords <- fixOverlap(
-            .pos, method = 'S',
-            thresh = ov.thresh * 0.85
+            .pos, method = 'E',
+            thresh = ov.thresh * 0.95,
+            q = 1
           )
           
           # ignore first and last positions
           # those are the boundary conditions
           last.y.coords <- last.y.coords[2:(length(.pos) - 1)]
         }
+        
+        # revert to original order
+        last.y.coords <- last.y.coords[match(.original_order, .new_order)]
       }
       
       
