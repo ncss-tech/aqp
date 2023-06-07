@@ -1272,7 +1272,7 @@ Calculation of between-profile dissimilarity is performed using `NCSP()` (Numeri
 
 See the [function manual page](http://ncss-tech.github.io/aqp/reference/pc.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
 
-```{r eval=!inherits(requireNamespace("sharpshootR", quietly=TRUE), 'try-error'), fig.height=6, fig.width=10}
+```{r eval=!inherits(try(requireNamespace("sharpshootR", quietly=TRUE), silent=TRUE), 'try-error'), fig.height=6, fig.width=10}
 library(cluster)
 library(sharpshootR)
 
