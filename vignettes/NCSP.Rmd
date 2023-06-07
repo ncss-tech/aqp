@@ -3,12 +3,12 @@ title: "Numerical Classification of Soil Profiles"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Numerical Classification of Soil Profiles}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, echo=FALSE, results='hide', warning=FALSE}
-knitr::opts_chunk(eval=FALSE)
+knitr::opts_chunk(eval = FALSE)
 options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 

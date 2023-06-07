@@ -3,7 +3,7 @@ title: "Introduction to SoilProfileCollection Objects"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to SoilProfileCollection Objects}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
