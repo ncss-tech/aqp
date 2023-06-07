@@ -25,6 +25,8 @@
 #' 
 #' Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within `x`.
 #' 
+#' Single-horizon profile templates must include a trailing horizon delimiter: '-', '|', or '\n' depending on the format.
+#' 
 #' @examples
 #' 
 #' # list-based template
@@ -129,6 +131,19 @@
 #'         cex.names = 1, plot.depth.axis = FALSE, 
 #'         hz.depths = TRUE
 #' )
+#' 
+#' 
+#' # make a NODATA profile, with a random hash ID
+#' #  note the use of trailing horizon delimiter
+#' #  note the use of NA soil color field
+#' x <- 'NODATA,150,NA-'
+#' s <- quickSPC(x)
+#' plotSPC(s, name.style = 'center-center', 
+#'         cex.names = 1, plot.depth.axis = FALSE, 
+#'         hz.depths = TRUE)
+#'
+#'
+
 
 
 ## TODO: 
@@ -158,9 +173,11 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
       #         "id:A-Bt-Cr-R" -> random depths
       #         "id:A,10,10YR 4/4" -> depths + colors specified
       #         can also use \n as token delimiter
+      #         single horizon template must include a trailing hz delimiter
       .m1 <- grepl(pattern = '-', x = x[1], fixed = TRUE) || grepl(pattern = '\n', x = x[1], fixed = TRUE)
       
       # mode 2: "A|BtBt|Cr|RRRR" -> proportional depths
+      #         single horizon pattern must include trailing "|"
       .m2 <- grepl(pattern = '|', x = x[1], fixed = TRUE)
       
       # ... mode N
