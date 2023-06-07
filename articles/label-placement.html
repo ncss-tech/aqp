@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dealing with Overlapping Objects and Labels • aqp</title>
+<title>Overlapping Annotation • aqp</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Dealing with Overlapping Objects and Labels">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Overlapping Annotation">
 <meta property="og:description" content="aqp">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -56,7 +56,7 @@
       <a href="../articles/NCSP.html">Numerical Classification of Soil Profiles</a>
     </li>
     <li>
-      <a href="../articles/label-placement.html">Dealing with Overlapping Objects and Labels</a>
+      <a href="../articles/label-placement.html">Overlapping Annotation</a>
     </li>
   </ul>
 </li>
@@ -84,7 +84,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Dealing with Overlapping Objects and Labels</h1>
+      <h1 data-toc-skip>Overlapping Annotation</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/ncss-tech/aqp/blob/HEAD/vignettes/label-placement.Rmd" class="external-link"><code>vignettes/label-placement.Rmd</code></a></small>
@@ -97,8 +97,318 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+</div>
+<div class="section level2">
+<h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
+</h2>
+<div class="section level3">
+<h3 id="electrostatic-simulation">Electrostatic Simulation<a class="anchor" aria-label="anchor" href="#electrostatic-simulation"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="simulated-annealing">Simulated Annealing<a class="anchor" aria-label="anchor" href="#simulated-annealing"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># TODO</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create a very busy profile with lots of possible overlapping</span></span>
+<span><span class="co"># depth annotation</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quickSPC.html">quickSPC</a></span><span class="op">(</span></span>
+<span>  <span class="st">"SPC:Oi|Oe|AAA|E1|E2|E3|BhsBhsBhsBhs|Bt1|Bt2|Bt3Bt3|CCCCCC|Ab1|Ab2|2C2C2C2C2C2C|2Cr|2R2R2R2R2R2R2R2R"</span>, </span>
+<span>  interval <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">hzID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plotSPC arguments</span></span>
+<span><span class="va">.a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  width <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>, </span>
+<span>  cex.names <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  name <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>  color <span class="op">=</span> <span class="st">'z'</span>,</span>
+<span>  show.legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  print.id <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  col.palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">25</span>, palette <span class="op">=</span> <span class="st">'Spectral'</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># set plotSPC default arguments</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>.aqp.plotSPC.args <span class="op">=</span> <span class="va">.a</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># wrapper function to test label collision solutions</span></span>
+<span><span class="va">testIt</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># a normalized index of label adjustment</span></span>
+<span>  <span class="va">.LAI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">'last_spc_plot'</span>, envir <span class="op">=</span> <span class="va">aqp.env</span><span class="op">)</span><span class="op">$</span><span class="va">hz.depth.LAI</span></span>
+<span>  <span class="va">.LAI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">.LAI</span><span class="op">)</span>, <span class="fl">0</span>, <span class="va">.LAI</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">.txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"LAI: %0.3f"</span>, <span class="va">.LAI</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="va">.txt</span>, side <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># compare and contrast</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixLabelCollisions <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'No Adjustment'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 2'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 3'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 1.5'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.5'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-1-1.png" width="768" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="testing-limits">Testing Limits<a class="anchor" aria-label="anchor" href="#testing-limits"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">evalMethods</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">thresh</span>, <span class="va">q</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">9</span>, palette <span class="op">=</span> <span class="st">'Zissou 1'</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="va">cols</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="va">thresh</span>, method <span class="op">=</span> <span class="st">'E'</span>, maxIter <span class="op">=</span> <span class="fl">100</span>, trace <span class="op">=</span> <span class="cn">TRUE</span>, q <span class="op">=</span> <span class="va">q</span><span class="op">)</span></span>
+<span>  <span class="va">.n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nrow.html">nrow</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">states</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>, bg <span class="op">=</span> <span class="st">'black'</span>, fg <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, heights <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.33</span>, <span class="fl">0.66</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">cost</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">cost</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">'b'</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, xlim <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">.n</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Converged (%s): %s"</span>, <span class="va">.n</span>, <span class="va">z</span><span class="op">$</span><span class="va">converged</span><span class="op">)</span>, at <span class="op">=</span> <span class="fl">0</span>, side <span class="op">=</span> <span class="fl">3</span>, line <span class="op">=</span> <span class="fl">0</span>, cex <span class="op">=</span> <span class="fl">0.75</span>, font <span class="op">=</span> <span class="fl">3</span>, adj <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">$</span><span class="va">states</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'l'</span>, lty <span class="op">=</span> <span class="fl">1</span>, las <span class="op">=</span> <span class="fl">1</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">x</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">.n</span> <span class="op">+</span> <span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">x</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="va">x</span>, col <span class="op">=</span> <span class="va">cols</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, font <span class="op">=</span> <span class="fl">2</span>, pos <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.n</span> <span class="op">+</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">x</span>, col <span class="op">=</span> <span class="va">cols</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, font <span class="op">=</span> <span class="fl">2</span>, pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">2</span>, at <span class="op">=</span> <span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, col.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">'fg'</span><span class="op">)</span>, las <span class="op">=</span> <span class="fl">1</span>, cex.axis <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class="co">## SANN_1D doesn't always preserve rank ordering</span></span>
+<span>  <span class="co">##  -&gt;&gt; not designed to use unsorted input</span></span>
+<span>  <span class="co">##  -&gt;&gt; maybe impossible with ties in x?</span></span>
+<span>  </span>
+<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="va">thresh</span>, method <span class="op">=</span> <span class="st">'S'</span>, trace <span class="op">=</span> <span class="cn">TRUE</span>, maxIter <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span>  <span class="va">.n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nrow.html">nrow</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">states</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">stats</span>, las <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">'b'</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, xlim <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">.n</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Converged (%s): %s"</span>, <span class="va">.n</span>, <span class="va">z</span><span class="op">$</span><span class="va">converged</span><span class="op">)</span>, at <span class="op">=</span> <span class="fl">0</span>, side <span class="op">=</span> <span class="fl">3</span>, line <span class="op">=</span> <span class="fl">0</span>, cex <span class="op">=</span> <span class="fl">0.75</span>, font <span class="op">=</span> <span class="fl">3</span>, adj <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">states</span>, type <span class="op">=</span> <span class="st">'l'</span>, lty <span class="op">=</span> <span class="fl">1</span>, las <span class="op">=</span> <span class="fl">1</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">states</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">.n</span>, times <span class="op">=</span> <span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">x</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">states</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, col <span class="op">=</span> <span class="va">cols</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, font <span class="op">=</span> <span class="fl">2</span>, pos <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.n</span>, y <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">x</span>, col <span class="op">=</span> <span class="va">cols</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">0.66</span>, font <span class="op">=</span> <span class="fl">2</span>, pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">2</span>, at <span class="op">=</span> <span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, col.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">'fg'</span><span class="op">)</span>, las <span class="op">=</span> <span class="fl">1</span>, cex.axis <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co">##</span></span>
+<span><span class="co">## note: in general, as the complexity increases (larger thresholds, more overlap), q need to be larger</span></span>
+<span><span class="co">##</span></span>
+<span></span>
+<span><span class="co"># explore effect of charge, too large -&gt; chaos</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">35</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">56</span>, <span class="fl">90</span>, <span class="fl">120</span>, <span class="fl">145</span>, <span class="fl">150</span><span class="op">)</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-1.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-2.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-3.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-4.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-5.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># threshold too large</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">10</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-6.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># large threshold</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">35</span>, <span class="fl">40</span>, <span class="fl">55</span>, <span class="fl">90</span>, <span class="fl">120</span>, <span class="fl">145</span>, <span class="fl">150</span><span class="op">)</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">9</span>, q <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-7.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># single iteration enough</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">20</span>, <span class="fl">35</span>, <span class="fl">40</span>, <span class="fl">55</span>, <span class="fl">90</span>, <span class="fl">120</span>, <span class="fl">145</span>, <span class="fl">150</span><span class="op">)</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">6</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-8.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># clusters</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/jitter.html" class="external-link">jitter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">90</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fl">150</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">6</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-9.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">6</span>, q <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-10.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## impact of scale / offset</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">35</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">120</span>, <span class="fl">145</span>, <span class="fl">150</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># works as expected</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-11.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># works as expected, as long as threshold is scaled</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span> <span class="op">/</span> <span class="fl">10</span>, thresh <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">10</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-12.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># works as expected, as long as threshold is scaled</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span> <span class="op">*</span> <span class="fl">10</span>, thresh <span class="op">=</span> <span class="fl">5</span> <span class="op">*</span> <span class="fl">10</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-13.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># all work as expected, threshold not modified</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">10</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-14.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">100</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-15.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">1000</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-16.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># works as expected</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">315</span>, <span class="fl">325</span>, <span class="fl">341</span>, <span class="fl">353</span>, <span class="fl">366</span>, <span class="fl">374</span>, <span class="fl">422</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">9.7</span>, q <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">'E'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 315.0000 325.0000 341.0000 353.0000 365.5048 375.7902 422.0000</span></span>
+<span><span class="co">#&gt; attr(,"converged")</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">9.7</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-17.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1.0075</span>, <span class="fl">1.1200</span>, <span class="fl">1.3450</span>, <span class="fl">1.6450</span>, <span class="fl">1.8700</span>, <span class="fl">1.8825</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.05442329</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 1.007500 1.120000 1.345000 1.645000 1.812725 1.892032</span></span>
+<span><span class="co">#&gt; attr(,"converged")</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.05442329</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-2-18.png" width="816" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tracePlot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span>, <span class="va">cex.axis.labels</span> <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># setup plot device</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, bg <span class="op">=</span> <span class="st">'black'</span>, fg <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, widths <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># order:</span></span>
+<span>  <span class="co"># B: boundary condition violation</span></span>
+<span>  <span class="co"># O: rank (order) violation</span></span>
+<span>  <span class="co"># +: accepted perturbation</span></span>
+<span>  <span class="co"># -: rejected perturbation</span></span>
+<span>  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.85</span><span class="op">)</span>, <span class="st">'royalblue'</span>, <span class="st">'firebrick'</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">cols.lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">9</span>, <span class="st">'Spectral'</span><span class="op">)</span></span>
+<span>  <span class="va">cols.lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="va">cols.lines</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># total overlap (objective function) progress</span></span>
+<span>  <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">stats</span>, </span>
+<span>    type <span class="op">=</span> <span class="st">'h'</span>, las <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'Total Overlap'</span>,</span>
+<span>    axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    col <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">log</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">2</span>, cex.axis <span class="op">=</span> <span class="va">cex.axis.labels</span>, col.axis <span class="op">=</span> <span class="st">'white'</span>, las <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'Overlap'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="va">cex.axis.labels</span>, font <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># deviation from original configuration</span></span>
+<span>  <span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span>, <span class="va">z</span><span class="op">$</span><span class="va">ssd</span>, </span>
+<span>    type <span class="op">=</span> <span class="st">'h'</span>, las <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'Deviation'</span>,</span>
+<span>    axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    col <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">log</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">2</span>, cex.axis <span class="op">=</span> <span class="va">cex.axis.labels</span>, col.axis <span class="op">=</span> <span class="st">'white'</span>, las <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'Deviation'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="va">cex.axis.labels</span>, font <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class="co"># adjustments at each iteration</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span></span>
+<span>    <span class="va">z</span><span class="op">$</span><span class="va">states</span>, type <span class="op">=</span> <span class="st">'l'</span>, </span>
+<span>    lty <span class="op">=</span> <span class="fl">1</span>, las <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>    xlab <span class="op">=</span> <span class="st">'Iteration'</span>, ylab <span class="op">=</span> <span class="st">'x-position'</span>,</span>
+<span>    axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    col <span class="op">=</span> <span class="va">cols.lines</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">2</span>, cex.axis <span class="op">=</span> <span class="va">cex.axis.labels</span>, col.axis <span class="op">=</span> <span class="st">'white'</span>, las <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="va">x</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">4</span>, cex.axis <span class="op">=</span> <span class="va">cex.axis.labels</span>, col.axis <span class="op">=</span> <span class="st">'white'</span>, las <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="va">z</span><span class="op">$</span><span class="va">x</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'Position'</span>, side <span class="op">=</span> <span class="fl">2</span>, line <span class="op">=</span> <span class="fl">2.5</span>, cex <span class="op">=</span> <span class="va">cex.axis.labels</span>, font <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span>side <span class="op">=</span> <span class="fl">1</span>, cex.axis <span class="op">=</span> <span class="fl">1</span>, col.axis <span class="op">=</span> <span class="st">'white'</span>, line <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'Iteration'</span>, side <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="fl">2.5</span>, cex <span class="op">=</span> <span class="va">cex.axis.labels</span>, font <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># relatively challenging</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2.2</span>, <span class="fl">2.8</span>, <span class="fl">3.5</span>, <span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">10.1</span>, <span class="fl">12.8</span>, <span class="fl">13</span>, <span class="fl">14.8</span>, <span class="fl">15</span>, <span class="fl">15.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/overlapMetrics.html">overlapMetrics</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.73</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; $idx</span></span>
+<span><span class="co">#&gt;  [1]  3  4  5  6  9 10 11 12 13 14 15</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ov</span></span>
+<span><span class="co">#&gt; [1] 0.2410959</span></span></code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># fix overlap, return debugging information</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span></span>
+<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.73</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">z</span><span class="op">$</span><span class="va">converged</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tracePlot</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span></span></code></pre></div>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># trace log</span></span>
+<span><span class="co"># B: boundary condition violation</span></span>
+<span><span class="co"># O: rank (order) violation</span></span>
+<span><span class="co"># +: accepted perturbation</span></span>
+<span><span class="co"># -: rejected perturbation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">log</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  B  O  +  - </span></span>
+<span><span class="co">#&gt; 22 71 64  2</span></span></code></pre>
 </div>
   </div>
 
