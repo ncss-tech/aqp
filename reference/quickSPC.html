@@ -116,10 +116,10 @@
     <p>The list template for a single SPC allows for full specification of ID, horizon designation, bottom depths, and an arbitrary number of horizon-level attributes. A compact notation is used for profile ID (single value) and horizon depths (bottom depths, assuming datum of 0). Horizon designation and additional data (e.g. clay content) are specified as vectors all of equal length, matching the number of horizons in the profile.</p>
 <p>The character template can be provided in one of several formats:</p><ol><li><p>'A-Bt1-Bt2-Bt3-Cr-R'</p></li>
 <li><p>'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'</p></li>
-</ol><p>Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
+</ol><p>Format 1 is interpreted as a horizon sequence delimited by '-' or newline character (\n). Random integer thickness are assigned to horizons, and profile ID created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
 <p>Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the <code>interval</code> argument. Profile ID is created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
 <p>Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within <code>x</code>.</p>
-<p>Single-horizon profile templates must include a trailing horizon delimiter: '-', '|', or '' depending on the format.</p>
+<p>Single-horizon profile templates must include a trailing horizon delimiter: '-', '\n', or '|' depending on the format.</p>
     </div>
 
     <div id="ref-examples">
@@ -184,7 +184,7 @@
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="quickSPC-5.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># use newline (\n) as delimiter, more compact</span></span></span>
+<span class="r-in"><span><span class="co"># use newline character as delimiter, more compact</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="st">'Oe,10,10YR 2/2</span></span></span>
 <span class="r-in"><span><span class="st">A,20,10YR 3/3</span></span></span>
 <span class="r-in"><span><span class="st">E,30,2.5Y 8/2</span></span></span>

@@ -73,23 +73,7 @@ Girard, 2002)</p>
 
     <div id="format">
     <h2>Format</h2>
-    
-<div class="sourceCode"><pre><code> Formal class 'SoilProfileCollection' [package "aqp"]
-with 6 slots ..@ idcol : chr "soil" ..@ depthcols: chr [1:2] "top" "bottom"
-..@ metadata :'data.frame': 1 obs. of 1 variable: .. ..$ depth_units: chr
-"cm" ..@ horizons :'data.frame': 1539 obs. of 17 variables: .. ..$ soil :
-soil ID .. ..$ sand : sand .. ..$ silt : silt .. ..$ clay : clay .. ..$ R25
-: RGB r-coordinate .. ..$ G25 : RGB g-coordinate .. ..$ B25 : RGB
-b-coordinate .. ..$ pH : pH .. ..$ EC : EC .. ..$ CaCO3 : CaC03 content ..
-..$ C : C content .. ..$ Ca : Ca .. ..$ Mg : Mg .. ..$ Na : Na .. ..$ top :
-horizon top boundary (cm) .. ..$ bottom : horizon bottom boundary (cm) ..
-..$ soil_color: soil color in r-friendly format ..@ site :'data.frame': 296
-obs. of 1 variable: .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100"
-"soil101" ...  ..@ sp :Formal class 'SpatialPoints' [package "sp"] with 3
-slots .. .. ..@ coords : num [1, 1] 0 .. .. ..@ bbox : logi [1, 1] NA .. ..
-..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slots .. .. .. ..
-..@ projargs: chr NA </code></pre></div>
-
+    <p><code>SoilProfileCollection</code> object</p>
     </div>
     <div id="source">
     <h2>Source</h2>
@@ -196,33 +180,6 @@ cover attributes. Geoderma. 110: 241--263.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html" class="external-link">polygon</a></span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">25</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">(</span><span class="fl">100</span><span class="op">-</span><span class="va">r</span><span class="op">)</span><span class="op">+</span><span class="fl">150</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">(</span><span class="fl">300</span><span class="op">*</span><span class="va">sf</span><span class="op">)</span><span class="op">+</span><span class="va">yo</span>, times<span class="op">=</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>border<span class="op">=</span><span class="st">'black'</span>, col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0.8</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">##</span></span></span>
-<span class="r-in"><span><span class="co"># sample 25 profiles from the collection</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">sp5</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp5</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">25</span><span class="op">)</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span><span class="co"># compute pair-wise dissimilarity</span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="NCSP.html">NCSP</a></span><span class="op">(</span><span class="va">s</span>, vars<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'R25'</span>,<span class="st">'pH'</span>,<span class="st">'clay'</span>,<span class="st">'EC'</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">0</span>, maxDepth <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing dissimilarity matrices from 25 profiles</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  [2 Mb]</span>
-<span class="r-in"><span><span class="co"># keep only the dissimilarity between profile 1 and all others</span></span></span>
-<span class="r-in"><span><span class="va">d.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span><span class="co"># rescale dissimilarities</span></span></span>
-<span class="r-in"><span><span class="va">d.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://scales.r-lib.org/reference/rescale.html" class="external-link">rescale</a></span><span class="op">(</span><span class="va">d.1</span>, to<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># sort in ascending order</span></span></span>
-<span class="r-in"><span><span class="va">d.1.order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">d.1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># plotting parameters</span></span></span>
-<span class="r-in"><span><span class="va">yo</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="co"># y-offset</span></span></span>
-<span class="r-in"><span><span class="va">sf</span> <span class="op">&lt;-</span> <span class="fl">0.65</span> <span class="co"># scaling factor</span></span></span>
-<span class="r-in"><span><span class="co"># plot sketches</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">s</span>, max.depth<span class="op">=</span><span class="fl">300</span>, y.offset<span class="op">=</span><span class="va">yo</span>, scaling.factor<span class="op">=</span><span class="va">sf</span>, plot.order<span class="op">=</span><span class="va">d.1.order</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># add dissimilarity values with lines/points</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="va">d.1</span><span class="op">[</span><span class="va">d.1.order</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="va">d.1</span><span class="op">[</span><span class="va">d.1.order</span><span class="op">]</span>, pch<span class="op">=</span><span class="fl">16</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># link dissimilarity values with profile sketches via arrows</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="va">d.1</span><span class="op">[</span><span class="va">d.1.order</span><span class="op">]</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">95</span>, len<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># add an axis for the dissimilarity scale</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">80</span><span class="op">)</span>, labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/pretty.html" class="external-link">pretty</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">80</span><span class="op">)</span><span class="op">)</span>, line<span class="op">=</span><span class="op">-</span><span class="fl">1</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span>, las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
