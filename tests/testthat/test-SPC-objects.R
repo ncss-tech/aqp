@@ -507,11 +507,11 @@ test_that("SPC horizon ID init conflicts", {
   # test backup name
   expect_equivalent(hzidname(x), 'hzID_')
 
-  # special case: IDs resulting from slice()
-  s <- slice(sp1, 0:100 ~ .)
+  # special case: IDs resulting from dice()
+  s <- dice(sp1, 0:100 ~ ., SPC = TRUE)
   expect_equivalent(hzidname(s), 'sliceID')
   # check to make sure hzID and sliceID are present
-  expect_equal(grep('hzID|sliceID', horizonNames(s)), c(18, 20))
+  expect_equal(length(grep('hzID|sliceID', horizonNames(s))), 2)
 
 })
 

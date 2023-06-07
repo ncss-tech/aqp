@@ -171,14 +171,14 @@ test_that("slab calculations: mean, several profiles", {
   
   # aggregate single profile
   # custom slabs
-  a <- slab(sp1, fm = ~ prop, strict=TRUE, slab.structure=c(0,5,10,25,100), slab.fun = mean, na.rm=TRUE)
+  a <- slab(sp1, fm = ~ prop, strict = TRUE, slab.structure = c(0, 5, 10, 25, 100), slab.fun = mean, na.rm = TRUE)
   
   # weighted mean calculations done by 1-unit slices
-  # note slice formula notiation works from horizon "tops"
-  s.1 <- slice(sp1, 0:4 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
-  s.2 <- slice(sp1, 5:9 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
-  s.3 <- slice(sp1, 10:24 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
-  s.4 <- slice(sp1, 25:99 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
+  # note slice formula notation works from horizon "tops"
+  s.1 <- dice(sp1, 0:4 ~ prop, SPC = FALSE)$prop
+  s.2 <- dice(sp1, 5:9 ~ prop, SPC = FALSE)$prop
+  s.3 <- dice(sp1, 10:24 ~ prop, SPC = FALSE)$prop
+  s.4 <- dice(sp1, 25:99 ~ prop, SPC = FALSE)$prop
   
   # 0-5
   expect_equal(a$value[1], mean(s.1, na.rm=TRUE), tolerance=0.0001)
