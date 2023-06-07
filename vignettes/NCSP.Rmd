@@ -6,7 +6,7 @@ output:
     toc_float: true
 vignette: >
   %\VignetteIndexEntry{Numerical Classification of Soil Profiles}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

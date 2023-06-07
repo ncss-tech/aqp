@@ -6,7 +6,7 @@ output:
     toc_float: true
 vignette: >
   %\VignetteIndexEntry{Dealing with Overlapping Objects and Labels}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 
