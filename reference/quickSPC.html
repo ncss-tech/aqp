@@ -71,8 +71,8 @@
 <span>  id <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>  d <span class="op">=</span> <span class="st">"depths"</span>,</span>
 <span>  n <span class="op">=</span> <span class="st">"name"</span>,</span>
-<span>  interval <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  m <span class="op">=</span> <span class="st">"soil_color"</span></span>
+<span>  m <span class="op">=</span> <span class="st">"soil_color"</span>,</span>
+<span>  interval <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -94,12 +94,12 @@
 <dd><p>character, specified when <code>x</code> is a <code>list</code>, name of horizon name list element</p></dd>
 
 
-<dt>interval, </dt>
-<dd><p>numeric, typically an integer and only specified when using character templates in mode 2. See Details.</p></dd>
-
-
 <dt>m</dt>
 <dd><p>character, specified when <code>x</code> is a <code>list</code>, name of list element containing Munsell color notation</p></dd>
+
+
+<dt>interval, </dt>
+<dd><p>numeric, typically an integer and only specified when using character templates in mode 2. See Details.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -156,7 +156,7 @@
 <span class="r-plt img"><img src="quickSPC-3.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># specify profile IDs using "ID:" prefix</span></span></span>
+<span class="r-in"><span><span class="co"># optionally specify profile IDs using "ID:" prefix</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span><span class="st">'P1:A-Bt1-Bt2-Bt3-Cr-R'</span>,</span></span>
 <span class="r-in"><span><span class="st">'P2:A-C1-C2-C3-C4-Ab'</span>,</span></span>
@@ -166,6 +166,30 @@
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">quickSPC</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="quickSPC-4.png" alt="" width="768" height="475"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># optionally specify:</span></span></span>
+<span class="r-in"><span><span class="co"># horizon bottom depths in cm</span></span></span>
+<span class="r-in"><span><span class="co"># soil color in Munsell notation</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="st">'1. simple:Oe-A-E-Bhs'</span>,</span></span>
+<span class="r-in"><span><span class="st">'2. full:Oe,10,10YR 2/2-A,20,10YR 3/3-E,30,2.5Y 8/2-Bhs,60,7.5YR 4/6'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">quickSPC</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="quickSPC-5.png" alt="" width="768" height="475"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># use newline (\n) as delimiter, more compact</span></span></span>
+<span class="r-in"><span><span class="st">'Oe,10,10YR 2/2</span></span></span>
+<span class="r-in"><span><span class="st">A,20,10YR 3/3</span></span></span>
+<span class="r-in"><span><span class="st">E,30,2.5Y 8/2</span></span></span>
+<span class="r-in"><span><span class="st">Bhs,60,7.5YR 4/6</span></span></span>
+<span class="r-in"><span><span class="st">BC,125,7.5YR 6/4</span></span></span>
+<span class="r-in"><span><span class="st">C,150,10YR 6/2'</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="fu">quickSPC</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span>name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="quickSPC-6.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># character template, mode 2</span></span></span>
@@ -185,7 +209,7 @@
 <span class="r-in"><span>        cex.names <span class="op">=</span> <span class="fl">1</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span></span>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="quickSPC-5.png" alt="" width="768" height="475"></span>
+<span class="r-plt img"><img src="quickSPC-7.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># each horizon label is '5' depth-units</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">quickSPC</span><span class="op">(</span><span class="va">x</span>, interval <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
@@ -193,7 +217,7 @@
 <span class="r-in"><span>        cex.names <span class="op">=</span> <span class="fl">1</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span></span>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="quickSPC-6.png" alt="" width="768" height="475"></span>
+<span class="r-plt img"><img src="quickSPC-8.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># optionally specify some / all profile IDs with "ID:" prefix</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span></span>
@@ -207,7 +231,7 @@
 <span class="r-in"><span>        cex.names <span class="op">=</span> <span class="fl">1</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span></span>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="quickSPC-7.png" alt="" width="768" height="475"></span>
+<span class="r-plt img"><img src="quickSPC-9.png" alt="" width="768" height="475"></span>
 </code></pre></div>
     </div>
   </div>

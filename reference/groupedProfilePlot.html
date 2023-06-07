@@ -171,16 +171,19 @@ numeric value or vector of offsets</p></dd>
 <span class="r-in"><span><span class="co"># plot profiles, sorted and annotated by 'group' (integers)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data should be pre-sorted</span>
 <span class="r-plt img"><img src="groupedProfilePlot-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot profiles, sorted and annotated by 'group.2' (characters)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group.2'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data should be pre-sorted</span>
 <span class="r-plt img"><img src="groupedProfilePlot-2.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot profiles, sorted and annotated by 'group.3' (characters)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'group.3'</span>, max.depth<span class="op">=</span><span class="fl">150</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data should be pre-sorted</span>
 <span class="r-plt img"><img src="groupedProfilePlot-3.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -200,17 +203,20 @@ numeric value or vector of offsets</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span></span>
 <span class="r-in"><span>group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data should be pre-sorted</span>
 <span class="r-plt img"><img src="groupedProfilePlot-4.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># offsets can be set using a vector of values, recycled as needed</span></span></span>
 <span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span></span>
 <span class="r-in"><span>group.name.offset<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">5</span><span class="op">)</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data should be pre-sorted</span>
 <span class="r-plt img"><img src="groupedProfilePlot-5.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># annotate with arrows instead of vertical lines</span></span></span>
 <span class="r-in"><span><span class="fu">groupedProfilePlot</span><span class="op">(</span><span class="va">sp1</span>, groups<span class="op">=</span><span class="st">'new.group'</span>, max.depth<span class="op">=</span><span class="fl">150</span>,</span></span>
 <span class="r-in"><span>group.name.offset<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="op">-</span><span class="fl">12</span><span class="op">)</span>, break.style<span class="op">=</span><span class="st">'arrow'</span>, arrow.offset<span class="op">=</span><span class="op">-</span><span class="fl">3</span>,</span></span>
 <span class="r-in"><span>group.line.lty <span class="op">=</span> <span class="fl">1</span>, group.line.lwd <span class="op">=</span> <span class="fl">1</span>, id.style<span class="op">=</span><span class="st">'side'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data should be pre-sorted</span>
 <span class="r-plt img"><img src="groupedProfilePlot-6.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

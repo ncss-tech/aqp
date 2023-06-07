@@ -71,7 +71,7 @@
 <span>  w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, times <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  mixingMethod <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"reference"</span><span class="op">)</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  swatch.cex <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  swatch.cex <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>  label.cex <span class="op">=</span> <span class="fl">0.85</span>,</span>
 <span>  showMixedSpec <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overlapFix <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -99,7 +99,7 @@
 
 
 <dt>swatch.cex</dt>
-<dd><p>scaling factor for color swatch</p></dd>
+<dd><p>scaling factor for color swatch rectangle width and height, relative to <code>label.cex</code>, typically between 1 and 3</p></dd>
 
 
 <dt>label.cex</dt>
@@ -111,7 +111,7 @@
 
 
 <dt>overlapFix</dt>
-<dd><p>attempt to "fix" overlapping chip labels via <code><a href="fixOverlap.html">fixOverlap()</a></code></p></dd>
+<dd><p>attempt to "fix" overlapping chip labels via <code><a href="fixOverlap.html">fixOverlap()</a></code>, using <code>method = 'E'</code></p></dd>
 
 </dl></div>
     <div id="value">
@@ -147,7 +147,6 @@
 <span class="r-in"><span><span class="fu">plotColorMixture</span><span class="op">(</span></span></span>
 <span class="r-in"><span>x <span class="op">=</span> <span class="va">chips</span>, </span></span>
 <span class="r-in"><span>w <span class="op">=</span> <span class="va">wt</span>, </span></span>
-<span class="r-in"><span>swatch.cex <span class="op">=</span> <span class="fl">4</span>, </span></span>
 <span class="r-in"><span>label.cex <span class="op">=</span> <span class="fl">0.65</span>, </span></span>
 <span class="r-in"><span>showMixedSpec <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
 <span class="r-in"><span>mixingMethod <span class="op">=</span> <span class="st">'reference'</span></span></span>
@@ -160,7 +159,6 @@
 <span class="r-in"><span><span class="fu">plotColorMixture</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">chips</span>, </span></span>
 <span class="r-in"><span>  w <span class="op">=</span> <span class="va">wt</span>, </span></span>
-<span class="r-in"><span>  swatch.cex <span class="op">=</span> <span class="fl">4</span>, </span></span>
 <span class="r-in"><span>  label.cex <span class="op">=</span> <span class="fl">0.65</span>, </span></span>
 <span class="r-in"><span>  mixingMethod <span class="op">=</span> <span class="st">'exact'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>

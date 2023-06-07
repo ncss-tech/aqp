@@ -37,6 +37,9 @@
     <loc>/reference/ROSETTA.centroids.html</loc>
   </url>
   <url>
+    <loc>/reference/SANN_1D.html</loc>
+  </url>
+  <url>
     <loc>/reference/SoilProfileCollection-class.html</loc>
   </url>
   <url>
@@ -184,6 +187,9 @@
     <loc>/reference/duplicate.html</loc>
   </url>
   <url>
+    <loc>/reference/electroStatics_1D.html</loc>
+  </url>
+  <url>
     <loc>/reference/equivalentMunsellChips.html</loc>
   </url>
   <url>
@@ -212,9 +218,6 @@
   </url>
   <url>
     <loc>/reference/fillHzGaps.html</loc>
-  </url>
-  <url>
-    <loc>/reference/findOverlap.html</loc>
   </url>
   <url>
     <loc>/reference/fixOverlap.html</loc>
