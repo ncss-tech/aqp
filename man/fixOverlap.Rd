@@ -34,6 +34,67 @@ fixOverlap(s, thresh = 0.6, method = 'S')
 # solution is deterministic
 fixOverlap(s, thresh = 0.6, method = 'E')
 
+
+# create a very busy profile with lots of possible overlapping
+# depth annotation
+x <- quickSPC(
+  "SPC:AAA|BBB|CCC|D|EEEEE|FF|GG|HH|I|I|JJ|KK|LL|M|N|O|P|QQQQ|RR|S|TTTTTT|U", 
+  interval = 1
+)
+
+# plotSPC arguments
+.a <- list(
+  width = 0.2, 
+  hz.depths = TRUE, 
+  name.style = 'center-center', 
+  cex.names = 1.5, 
+  plot.depth.axis = FALSE, 
+  name = NA,
+  color = 'hzID',
+  show.legend = FALSE,
+  print.id = FALSE
+)
+
+# set plotSPC default arguments
+options(.aqp.plotSPC.args = .a)
+
+# wrapper function to test label collision solutions
+testIt <- function(x, ...) {
+  
+  plotSPC(x, ...)
+  
+  # a normalized index of label adjustment
+  .txt <- sprintf(
+    "LAI: \%0.3f", 
+    get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
+  )
+  mtext(.txt, side = 1, at = 1, line = -2, cex = 0.8)
+  
+}
+
+
+# compare and contrast
+par(mar = c(0, 0, 0, 0), mfcol = c(1, 6))
+
+testIt(x)
+title('ES (defaults)', line = -3)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN (defaults)', line = -3)
+
+testIt(x, fixOverlapArgs = list(method = 'E', q = 1.5))
+title('ES (q = 1.5)', line = -3)
+
+testIt(x, fixOverlapArgs = list(method = 'E', q = 1))
+title('ES (q = 1)', line = -3)
+
+testIt(x, fixOverlapArgs = list(method = 'E', q = 0.5))
+title('ES (q = 0.5)', line = -3)
+
+testIt(x, fixOverlapArgs = list(method = 'E', q = 0.1))
+title('ES (q = 0.1)', line = -3)
+
+
 }
 \seealso{
 \code{\link[=electroStatics_1D]{electroStatics_1D()}}, \code{\link[=SANN_1D]{SANN_1D()}}

@@ -391,7 +391,7 @@ plotSPC <- function(
     lwd = 1,
     lty = 1,
     default.color = grey(0.95),
-    fixLabelCollisions = FALSE,
+    fixLabelCollisions = hz.depths,
     fixOverlapArgs = list(method = 'E', q = 1),
     ...
 ) {
