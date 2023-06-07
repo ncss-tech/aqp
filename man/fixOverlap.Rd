@@ -42,6 +42,9 @@ x <- quickSPC(
   interval = 1
 )
 
+# convert horizon ID to numeric
+x$z <- as.numeric(x$hzID)
+
 # plotSPC arguments
 .a <- list(
   width = 0.2, 
@@ -50,9 +53,10 @@ x <- quickSPC(
   cex.names = 1.5, 
   plot.depth.axis = FALSE, 
   name = NA,
-  color = 'hzID',
+  color = 'z',
   show.legend = FALSE,
-  print.id = FALSE
+  print.id = FALSE,
+  col.palette = hcl.colors(n = 25, palette = 'Spectral', rev = TRUE)
 )
 
 # set plotSPC default arguments
@@ -74,7 +78,7 @@ testIt <- function(x, ...) {
 
 
 # compare and contrast
-par(mar = c(0, 0, 0, 0), mfcol = c(1, 6))
+op <- par(mar = c(0, 0, 0, 0), mfcol = c(1, 6))
 
 testIt(x)
 title('ES (defaults)', line = -3)
@@ -94,6 +98,7 @@ title('ES (q = 0.5)', line = -3)
 testIt(x, fixOverlapArgs = list(method = 'E', q = 0.1))
 title('ES (q = 0.1)', line = -3)
 
+par(op)
 
 }
 \seealso{
