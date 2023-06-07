@@ -130,6 +130,9 @@
 <span class="r-in"><span>  interval <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert horizon ID to numeric</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">hzID</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plotSPC arguments</span></span></span>
 <span class="r-in"><span><span class="va">.a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  width <span class="op">=</span> <span class="fl">0.2</span>, </span></span>
@@ -138,9 +141,10 @@
 <span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">1.5</span>, </span></span>
 <span class="r-in"><span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span></span>
 <span class="r-in"><span>  name <span class="op">=</span> <span class="cn">NA</span>,</span></span>
-<span class="r-in"><span>  color <span class="op">=</span> <span class="st">'hzID'</span>,</span></span>
+<span class="r-in"><span>  color <span class="op">=</span> <span class="st">'z'</span>,</span></span>
 <span class="r-in"><span>  show.legend <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>  print.id <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  print.id <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  col.palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">25</span>, palette <span class="op">=</span> <span class="st">'Spectral'</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># set plotSPC default arguments</span></span></span>
@@ -162,7 +166,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare and contrast</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'ES (defaults)'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span></span></span>
@@ -183,6 +187,7 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'ES (q = 0.1)'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="fixOverlap-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
