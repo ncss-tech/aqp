@@ -53,15 +53,9 @@ jobs:
           
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, markovchain=?ignore-before-r=4.0.0, Hmisc=?ignore
+          extra-packages: any::rcmdcheck, markovchain=?ignore-before-r=4.0.0, sharpshootR=?ignore-before-r=4.1.0
           needs: check
-          
-      - name: Install Hmisc from CRAN (R >3.6)
-        if: matrix.config.r != '3.6'
-        run: |
-          install.packages("Hmisc")
-        shell: Rscript {0}
-      
+            
       - name: Install soilDB from r-universe (R-devel+3.6 only)
         if: matrix.config.r == '3.6' || matrix.config.r == 'devel'
         run: |
