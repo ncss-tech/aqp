@@ -1270,9 +1270,17 @@ mtext('GSM depths', side = 2, line = -1.5)
 
 Calculation of between-profile dissimilarity is performed using `NCSP()` (Numerical Classification of Soil Profiles). As of aqp 2.0, `NCSP()` replaces the older implementation in `profile_compare()` which is now deprecated. Dissimilarity values depend on attributes selection (e.g. clay, CEC, pH , etc.), optional depth-weighting parameter (`k`), and a maximum depth of evaluation (`maxDepth`). 
 
-See the [function manual page](http://ncss-tech.github.io/aqp/reference/pc.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
+See the [function manual page](http://ncss-tech.github.io/aqp/reference/NCSP.html) and [this paper](http://dx.doi.org/10.1016/j.cageo.2012.10.020) for details.
 
-```{r eval=!inherits(try(requireNamespace("sharpshootR", quietly=TRUE), silent=TRUE), 'try-error'), fig.height=6, fig.width=10}
+```{r setup2, echo=FALSE, results='hide', warning=FALSE}
+# handle sharpshootR dependency of last chunk
+opts_chunk$set(
+  eval = isTRUE(R.version$major >= 4 &&
+          try(requireNamespace("sharpshootR", quietly = TRUE), silent = TRUE))
+)
+```
+
+```{r fig.height=6, fig.width=10}
 library(cluster)
 library(sharpshootR)
 
