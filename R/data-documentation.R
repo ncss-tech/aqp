@@ -264,9 +264,9 @@ NULL
 #'   # convert back to wide format
 #'   library(data.table)
 #'
-#'   a.wide.q25 <- dcast(a, top + bottom ~ variable, value.var = c('p.q25'))
-#'   a.wide.q50 <- dcast(a, top + bottom ~ variable, value.var = c('p.q50'))
-#'   a.wide.q75 <- dcast(a, top + bottom ~ variable, value.var = c('p.q75'))
+#'   a.wide.q25 <- dcast(as.data.table(a), top + bottom ~ variable, value.var = c('p.q25'))
+#'   a.wide.q50 <- dcast(as.data.table(a), top + bottom ~ variable, value.var = c('p.q50'))
+#'   a.wide.q75 <- dcast(as.data.table(a), top + bottom ~ variable, value.var = c('p.q75'))
 #'
 #'   # add a new id for the 25th, 50th, and 75th percentile pedons
 #'   a.wide.q25$id <- 'Q25'
@@ -277,8 +277,12 @@ NULL
 #'   vars <- c('top', 'bottom', 'id', 'clay', 'cec', 'ph', 'h', 's', 'v')
 #'   # make data.frame version of sp3
 #'   sp3.df <- as(sp3, 'data.frame')
-#'   sp3.grouped <- rbind(sp3.df[, vars], a.wide.q25[, vars], a.wide.q50[, vars], a.wide.q75[, vars])
-#'
+#' 
+#'   sp3.grouped <- as.data.frame(rbind(as.data.table(horizons(sp3))[, .SD, .SDcol = vars], 
+#'                                      a.wide.q25[, .SD, .SDcol = vars],
+#'                                      a.wide.q50[, .SD, .SDcol = vars], 
+#'                                      a.wide.q75[, .SD, .SDcol = vars]))
+#'                                      
 #'   # re-constitute the soil color from HSV triplets
 #'   # convert HSV back to standard R colors
 #'   sp3.grouped$soil_color <- with(sp3.grouped, hsv(h, s, v))
