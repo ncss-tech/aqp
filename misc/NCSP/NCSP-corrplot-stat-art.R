@@ -3,7 +3,7 @@
 
 library(aqp)
 library(corrplot)
-library(viridisLite)
+
 
 # make n profiles of fake data
 .makeData <- function(n) {
@@ -30,7 +30,7 @@ library(viridisLite)
   par(bg = 'black', fg = 'white')
   corrplot(
     m, 
-    col = mako(25), 
+    col = hcl.colors(n = 25, palette = 'Mako'), 
     is.corr = FALSE, 
     col.lim = c(0, 1), 
     method = "color", 
