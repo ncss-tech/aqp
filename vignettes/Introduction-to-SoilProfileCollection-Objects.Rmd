@@ -8,21 +8,6 @@ vignette: >
 ---
 
 ```{r setup, echo=FALSE, results='hide', warning=FALSE}
-library(knitr, quietly = TRUE)
-ogbmt <- getOption("bitmapType")
-options(bitmapType = "cairo")
-opts_chunk$set(
-  message = FALSE, 
-  warning = FALSE, 
-  background = '#F7F7F7', 
-  fig.align = 'center', 
-  tidy = FALSE, 
-  verbose = FALSE,
-  collapse = TRUE,
-  dev = 'png',
-  comment = "#>"
-)
-
 options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
