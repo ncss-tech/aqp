@@ -22,16 +22,50 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 
 ## Introduction
 
+```{r fig.width=8, fig.height=4, echo = FALSE}
+library(aqp)
+
+x <- quickSPC(
+  "SPC:Oi|Oe|AAAAA|E1|E2|Bhs1Bhs1Bhs1|Bhs2|CCCCCC|RRRRRRRRRR", 
+  interval = 3
+)
+
+horizons(x)$thick.sd <- 3
+horizons(x)$nm <- factor(x$name, levels = c('Oi', 'Oe', 'A', 'E1', 'E2', 'Bhs1', 'Bhs2', 'C', 'R'))
+
+set.seed(10101)
+s <- perturb(x, n = 10, thickness.attr = 'thick.sd', min.thickness = 2)
+
+.a <- list(cex.names = 0.8, color = 'nm', name = NA, show.legend = FALSE, hz.depths = TRUE, plot.depth.axis = FALSE, print.id = FALSE)
+
+options(.aqp.plotSPC.args = .a)
+
+par(mar = c(0, 0, 0, 0))
+plotSPC(s, fixLabelCollisions = FALSE)
+
+```
+
 ## Methods
 
 
 ### Electrostatic Simulation
 
+```{r fig.width=8, fig.height=4, echo = FALSE}
+par(mar = c(0, 0, 0, 0))
+plotSPC(s, fixOverlapArgs = list(method = 'E'))
+```
 
 ### Simulated Annealing
+
+```{r fig.width=8, fig.height=4, echo = FALSE}
+par(mar = c(0, 0, 0, 0))
+plotSPC(s, fixOverlapArgs = list(method = 'S'))
+
+options(.aqp.plotSPC.args = NULL)
+```
  
 
-```{r fig.width=8, fig.height=5.5}
+```{r fig.width=8, fig.height=5}
 library(aqp)
 
 # create a very busy profile with lots of possible overlapping
@@ -101,7 +135,8 @@ title('Electrostatic\nq = 0.5', line = -3.5, adj = 0.5)
 testIt(x, fixOverlapArgs = list(method = 'E', q = 0.1))
 title('Electrostatic\nq = 0.1', line = -3.5, adj = 0.5)
 
-
+# reset plotSPC() options
+options(.aqp.plotSPC.args = NULL)
 ```
 
 
@@ -235,7 +270,7 @@ tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # -: rejected perturbation
   cols <- c(grey(0.5), grey(0.85), 'royalblue', 'firebrick')
   
-  cols.lines <- hcl.colors(9, 'Spectral')
+  cols.lines <- hcl.colors(9, 'Zissou 1', rev = TRUE)
   cols.lines <- colorRampPalette(cols.lines)(length(x))
   
   # total overlap (objective function) progress
@@ -303,6 +338,16 @@ tracePlot(x, z)
 # +: accepted perturbation
 # -: rejected perturbation
 table(z$log)
+
+
+# very challenging
+set.seed(101010)
+x <- sort(runif(10, min = 2.5, max = 3.5))
+
+# widen boundary conditions
+z <- fixOverlap(x, thresh = 0.2, trace = TRUE, min.x = 0, max.x = 10, maxIter = 2000, adj = 0.05)
+
+tracePlot(x, z)
 ```
 
 

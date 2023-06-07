@@ -681,12 +681,13 @@ plotSPC(
   width = 0.3,
   plot.depth.axis = FALSE,
   hz.depths = TRUE,
-  fixLabelCollisions = TRUE,
   hz.depths.offset = 0.08
 )
 ```
 
-As of aqp version 1.41, it is possible to "fix" overlapping horizon depth labels with the new `fixLabelCollisions` argument. This approach to labeling depths works best when moving horizon designations with the `name.style` argument. Note that setting `fixLabelCollisions = TRUE` may incur a significant performance penalty when plotting large `SoilProfileCollection` objects.
+As of aqp version 1.41, it is possible to "fix" overlapping horizon depth labels with the new `fixLabelCollisions` argument. This approach to labeling depths works best when moving horizon designations with the `name.style` argument. Note that setting `fixLabelCollisions = TRUE` may incur a performance penalty when plotting large `SoilProfileCollection` objects.
+
+As of aqp version 2.0, `fixLabelCollisions` is set to `TRUE` when setting `hz.depths = TRUE`.
 
 ## Relative Horizontal Positioning
 

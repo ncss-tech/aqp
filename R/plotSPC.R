@@ -1283,6 +1283,7 @@ plotSPC <- function(
         ## collision detection / fix
         if(fixLabelCollisions) {
           
+          ## TODO: consder adjusting by scaling.factor
           # reasonable threshold for label collision detection
           # depends on aesthetic weighting / graphics device / hz.depths.cex
           y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
