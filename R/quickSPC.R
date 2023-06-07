@@ -82,14 +82,14 @@
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
 #' 
 #' # use newline (\n) as delimiter, more compact
-#' 'Oe,10,10YR 2/2
+#' x <- 'Oe,10,10YR 2/2
 #' A,20,10YR 3/3
 #' E,30,2.5Y 8/2
 #' Bhs,60,7.5YR 4/6
 #' BC,125,7.5YR 6/4
-#' C,150,10YR 6/2' |> 
-#' quickSPC() |> 
-#' plotSPC(name.style = 'center-center', cex.names = 1)
+#' C,150,10YR 6/2'
+#' 
+#' plotSPC(quickSPC(x), name.style = 'center-center', cex.names = 1)
 #' 
 #' 
 #' # character template, mode 2
