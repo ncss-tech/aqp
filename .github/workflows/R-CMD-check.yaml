@@ -52,12 +52,19 @@ jobs:
           brew install --cask xquartz
           
       - uses: r-lib/actions/setup-r-dependencies@v2
+        if: matrix.config.r == '3.6'
         with:
-          extra-packages: any::rcmdcheck, markovchain=?ignore-before-r=4.0.0, Hmisc=?ignore-before=r=4.1.0, sharpshootR=?ignore-before-r=4.1.0
+          extra-packages: any::rcmdcheck, markovchain=?ignore-before-r=4.0.0, Hmisc=?ignore, sharpshootR=?ignore
+          needs: check
+          
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        if: matrix.config.r != '3.6'
+        with:
+          extra-packages: any::rcmdcheck, markovchain=?ignore-before-r=4.0.0
           needs: check
             
-      - name: Install soilDB from r-universe (R-devel+3.6 only)
-        if: matrix.config.r == '3.6' || matrix.config.r == 'devel'
+      - name: Install soilDB from r-universe (R-devel only)
+        if: matrix.config.r == 'devel'
         run: |
           install.packages("soilDB", repos = 'https://ncss-tech.r-universe.dev')
         shell: Rscript {0}
