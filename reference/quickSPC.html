@@ -119,6 +119,7 @@
 </ol><p>Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
 <p>Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the <code>interval</code> argument. Profile ID is created via <code>digest::digest(..., algo = 'xxhash32')</code>. Iteration over templates in this format is automatic when <code>x</code> is a character vector of <code>length &gt; 1</code>.</p>
 <p>Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within <code>x</code>.</p>
+<p>Single-horizon profile templates must include a trailing horizon delimiter: '-', '|', or '' depending on the format.</p>
     </div>
 
     <div id="ref-examples">
@@ -235,6 +236,19 @@
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="quickSPC-9.png" alt="" width="768" height="475"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># make a NODATA profile, with a random hash ID</span></span></span>
+<span class="r-in"><span><span class="co">#  note the use of trailing horizon delimiter</span></span></span>
+<span class="r-in"><span><span class="co">#  note the use of NA soil color field</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="st">'NODATA,150,NA-'</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">quickSPC</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, </span></span>
+<span class="r-in"><span>        cex.names <span class="op">=</span> <span class="fl">1</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span></span>
+<span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="quickSPC-10.png" alt="" width="768" height="475"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
