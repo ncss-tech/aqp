@@ -1,9 +1,6 @@
 ---
 title: "Dealing with Overlapping Objects and Labels"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Dealing with Overlapping Objects and Labels}
   %\VignetteEngine{knitr::knitr}
