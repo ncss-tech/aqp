@@ -19,13 +19,13 @@
 #'   1. 'A-Bt1-Bt2-Bt3-Cr-R'
 #'   2. 'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'
 #'   
-#' Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
+#' Format 1 is interpreted as a horizon sequence delimited by '-' or newline character (\\n). Random integer thickness are assigned to horizons, and profile ID created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
 #'   
 #' Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the `interval` argument. Profile ID is created via `digest::digest(..., algo = 'xxhash32')`. Iteration over templates in this format is automatic when `x` is a character vector of `length > 1`.
 #' 
 #' Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within `x`.
 #' 
-#' Single-horizon profile templates must include a trailing horizon delimiter: '-', '|', or '\n' depending on the format.
+#' Single-horizon profile templates must include a trailing horizon delimiter: '-', '\\n', or '|' depending on the format.
 #' 
 #' @examples
 #' 
@@ -83,7 +83,7 @@
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', cex.names = 1)
 #' 
-#' # use newline (\n) as delimiter, more compact
+#' # use newline character as delimiter, more compact
 #' x <- 'Oe,10,10YR 2/2
 #' A,20,10YR 3/3
 #' E,30,2.5Y 8/2

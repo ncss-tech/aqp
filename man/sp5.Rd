@@ -5,21 +5,7 @@
 \alias{sp5}
 \title{Sample Soil Database #5}
 \format{
-\preformatted{ Formal class 'SoilProfileCollection' [package "aqp"]
-with 6 slots ..@ idcol : chr "soil" ..@ depthcols: chr [1:2] "top" "bottom"
-..@ metadata :'data.frame': 1 obs. of 1 variable: .. ..$ depth_units: chr
-"cm" ..@ horizons :'data.frame': 1539 obs. of 17 variables: .. ..$ soil :
-soil ID .. ..$ sand : sand .. ..$ silt : silt .. ..$ clay : clay .. ..$ R25
-: RGB r-coordinate .. ..$ G25 : RGB g-coordinate .. ..$ B25 : RGB
-b-coordinate .. ..$ pH : pH .. ..$ EC : EC .. ..$ CaCO3 : CaC03 content ..
-..$ C : C content .. ..$ Ca : Ca .. ..$ Mg : Mg .. ..$ Na : Na .. ..$ top :
-horizon top boundary (cm) .. ..$ bottom : horizon bottom boundary (cm) ..
-..$ soil_color: soil color in r-friendly format ..@ site :'data.frame': 296
-obs. of 1 variable: .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100"
-"soil101" ...  ..@ sp :Formal class 'SpatialPoints' [package "sp"] with 3
-slots .. .. ..@ coords : num [1, 1] 0 .. .. ..@ bbox : logi [1, 1] NA .. ..
-..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slots .. .. .. ..
-..@ projargs: chr NA }
+\code{SoilProfileCollection} object
 }
 \source{
 296 Soil Profiles from the La Rochelle region of France (F. Carre
@@ -115,31 +101,6 @@ axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2
 polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)),
 border='black', col=rgb(0,0,0.8, alpha=0.25))
 
-
-##
-# sample 25 profiles from the collection
-s <- sp5[sample(1:length(sp5), size=25), ]
-# compute pair-wise dissimilarity
-d <- NCSP(s, vars=c('R25','pH','clay','EC'), k = 0, maxDepth = 300)
-# keep only the dissimilarity between profile 1 and all others
-d.1 <- as.matrix(d)[1, ]
-# rescale dissimilarities
-d.1 <- rescale(d.1, to=c(80, 0))
-# sort in ascending order
-d.1.order <- rev(order(d.1))
-# plotting parameters
-yo <- 100 # y-offset
-sf <- 0.65 # scaling factor
-# plot sketches
-par(mar=c(0,0,0,0))
-plot(s, max.depth=300, y.offset=yo, scaling.factor=sf, plot.order=d.1.order)
-# add dissimilarity values with lines/points
-lines(1:25, d.1[d.1.order])
-points(1:25, d.1[d.1.order], pch=16)
-# link dissimilarity values with profile sketches via arrows
-arrows(1:25, d.1[d.1.order], 1:25, 95, len=0.1)
-# add an axis for the dissimilarity scale
-axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
 
 
 
