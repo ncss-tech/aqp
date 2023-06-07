@@ -361,8 +361,8 @@ follows.</p>
 <pre><code><span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;  [1] 1190.1998 1010.7941 1000.0776  855.3091 1017.4518 1022.0801  940.2588  943.8230  996.4848</span></span>
-<span><span class="co">#&gt; [10] 1026.7568</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;  [1] 1097.2904 1067.0905  790.1175  807.6460  875.7835 1009.3608  751.5126  949.5607 1242.6706</span></span>
+<span><span class="co">#&gt; [10]  873.7621</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -418,12 +418,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa 1190.1998             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn 1010.7941             1        1     B</span></span>
-<span><span class="co">#&gt;      kings 1000.0776             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa  855.3091             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1017.4518             1        1     A</span></span>
-<span><span class="co">#&gt;       napa 1022.0801             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa 1097.2904             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn 1067.0905             1        1     B</span></span>
+<span><span class="co">#&gt;      kings  790.1175             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa  807.6460             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino  875.7835             1        1     A</span></span>
+<span><span class="co">#&gt;       napa 1009.3608             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -582,16 +582,16 @@ data and the CRS, respectively.</p>
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;              x       y</span></span>
-<span><span class="co">#&gt;  [1,] 354026.6 4109464</span></span>
-<span><span class="co">#&gt;  [2,] 353956.2 4109553</span></span>
-<span><span class="co">#&gt;  [3,] 354149.6 4109339</span></span>
-<span><span class="co">#&gt;  [4,] 354008.9 4109610</span></span>
-<span><span class="co">#&gt;  [5,] 353970.1 4109474</span></span>
-<span><span class="co">#&gt;  [6,] 353803.2 4109561</span></span>
-<span><span class="co">#&gt;  [7,] 354133.2 4109590</span></span>
-<span><span class="co">#&gt;  [8,] 353813.3 4109396</span></span>
-<span><span class="co">#&gt;  [9,] 353991.3 4109573</span></span>
-<span><span class="co">#&gt; [10,] 353898.1 4109500</span></span></code></pre>
+<span><span class="co">#&gt;  [1,] 354072.2 4109710</span></span>
+<span><span class="co">#&gt;  [2,] 354080.1 4109544</span></span>
+<span><span class="co">#&gt;  [3,] 353937.0 4109454</span></span>
+<span><span class="co">#&gt;  [4,] 353931.4 4109481</span></span>
+<span><span class="co">#&gt;  [5,] 353969.0 4109275</span></span>
+<span><span class="co">#&gt;  [6,] 354002.0 4109672</span></span>
+<span><span class="co">#&gt;  [7,] 353881.0 4109630</span></span>
+<span><span class="co">#&gt;  [8,] 353918.8 4109452</span></span>
+<span><span class="co">#&gt;  [9,] 354018.2 4109386</span></span>
+<span><span class="co">#&gt; [10,] 354091.0 4109511</span></span></code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -1032,7 +1032,6 @@ single depth axis.</p>
 <span>  width <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  fixLabelCollisions <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hz.depths.offset <span class="op">=</span> <span class="fl">0.08</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-27-1.png" width="768" style="display: block; margin: auto;"></p>
@@ -1040,9 +1039,10 @@ single depth axis.</p>
 depth labels with the new <code>fixLabelCollisions</code> argument. This
 approach to labeling depths works best when moving horizon designations
 with the <code>name.style</code> argument. Note that setting
-<code>fixLabelCollisions = TRUE</code> may incur a significant
-performance penalty when plotting large
-<code>SoilProfileCollection</code> objects.</p>
+<code>fixLabelCollisions = TRUE</code> may incur a performance penalty
+when plotting large <code>SoilProfileCollection</code> objects.</p>
+<p>As of aqp version 2.0, <code>fixLabelCollisions</code> is set to
+<code>TRUE</code> when setting <code>hz.depths = TRUE</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="relative-horizontal-positioning">Relative Horizontal Positioning<a class="anchor" aria-label="anchor" href="#relative-horizontal-positioning"></a>
@@ -1637,14 +1637,14 @@ profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
 <span><span class="co"># note: result is in long-format</span></span>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;   variable id     value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1  9.870729             1.0000000   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1  9.870729             1.0000000   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1 11.168802             1.0000000  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1 12.581132             1.0000000  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 11.636112             1.0000000  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 10.228808             0.9879518 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2 13.531288             1.0000000   0      5</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
+<span><span class="co">#&gt; 1       p1  1 12.06426             1.0000000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1 12.06426             1.0000000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 13.28863             1.0000000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 15.84635             1.0000000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 15.13094             1.0000000  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1 14.08869             0.1428571 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 18.88290             1.0000000   0      5</span></span></code></pre>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
