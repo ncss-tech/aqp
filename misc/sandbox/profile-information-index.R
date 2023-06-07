@@ -21,6 +21,29 @@ length(memCompress(a, type = 'gzip')) / length(memCompress(b, type = 'gzip'))
 
 
 
+## truncate
+
+
+
+
+
+s <- c('holland', 'sierra', 'musick', 'hanford', 'grangeville', 'delhi', 'amador', 'cecil', 'leon', 'lucy', 'clarksville', 'zook', 'clear lake', 'yolo', 'calhi', 'corralitos', 'sacramento', 'dodgeland')
+x <- fetchOSD(s)
+
+x <- trunc(x, 0, 100)
+
+vars <- c('hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH', 'pH_class', 'distinctness', 'topography')
+
+x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'median')
+
+par(mar = c(3, 0, 1, 1))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+title('baseline = FALSE, method = median')
+
+
+
+
 
 
 

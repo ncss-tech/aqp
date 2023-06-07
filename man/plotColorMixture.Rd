@@ -9,7 +9,7 @@ plotColorMixture(
   w = rep(1, times = length(x))/length(x),
   mixingMethod = c("exact", "reference"),
   n = 1,
-  swatch.cex = 6,
+  swatch.cex = 1.5,
   label.cex = 0.85,
   showMixedSpec = FALSE,
   overlapFix = TRUE
@@ -28,13 +28,13 @@ plotColorMixture(
 
 \item{n}{number of closest mixture candidates when \code{mixingMethod = 'reference'} (see \code{\link[=mixMunsell]{mixMunsell()}}), results can be hard to interpret when \code{n > 2}}
 
-\item{swatch.cex}{scaling factor for color swatch}
+\item{swatch.cex}{scaling factor for color swatch rectangle width and height, relative to \code{label.cex}, typically between 1 and 3}
 
 \item{label.cex}{scaling factor for swatch labels}
 
 \item{showMixedSpec}{show weighted geometric mean (mixed) spectra as dotted line (only when \code{mixingMethod = 'reference'})}
 
-\item{overlapFix}{attempt to "fix" overlapping chip labels via \code{\link[=fixOverlap]{fixOverlap()}}}
+\item{overlapFix}{attempt to "fix" overlapping chip labels via \code{\link[=fixOverlap]{fixOverlap()}}, using \code{method = 'E'}}
 }
 \value{
 a \code{lattice} graphics object
@@ -58,7 +58,6 @@ if(requireNamespace("gower")) {
 plotColorMixture(
 x = chips, 
 w = wt, 
-swatch.cex = 4, 
 label.cex = 0.65, 
 showMixedSpec = TRUE, 
 mixingMethod = 'reference'
@@ -70,7 +69,6 @@ mixingMethod = 'reference'
 plotColorMixture(
   x = chips, 
   w = wt, 
-  swatch.cex = 4, 
   label.cex = 0.65, 
   mixingMethod = 'exact'
 )

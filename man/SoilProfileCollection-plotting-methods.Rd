@@ -59,8 +59,8 @@ plotSPC(
   lwd = 1,
   lty = 1,
   default.color = grey(0.95),
-  fixLabelCollisions = FALSE,
-  maxLabelAdjustmentIndex = 4,
+  fixLabelCollisions = hz.depths,
+  fixOverlapArgs = list(method = "E", q = 1),
   ...
 )
 
@@ -165,9 +165,9 @@ plotSPC(
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
-\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
+\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}. Additional arguments to \code{\link[=fixOverlap]{fixOverlap()}} can be passed as options.}
 
-\item{maxLabelAdjustmentIndex}{numeric, maximum (total) adjustments allowed when \code{fixLabelCollisions = TRUE}, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).}
+\item{fixOverlapArgs}{a named list of arguments to \code{\link[=fixOverlap]{fixOverlap()}}. Overlap adjustments are attempted using electrostatic simulation with arguments: \code{list(method = 'E', q = 1)}. Alternatively, select adjustment by simulated annealing via \code{list(method = 'S')}. See \code{\link[=electroStatics_1D]{electroStatics_1D()}} and \code{\link[=SANN_1D]{SANN_1D()}} for details.}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 
@@ -194,6 +194,8 @@ Profile sketches can be added according to relative positions along the x-axis (
 Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with \code{fixOverlap(pos)}, where \code{pos} is the original vector of relative positions.
 
 The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
+
+Horizon depths (e.g. cm) are converted to figure y-coordinates via: y = (depth * scaling.factor) + y.offset.
 }
 \note{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
@@ -203,7 +205,7 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 # example data
 data(sp1)
 # usually best to adjust margins
-par(mar=c(0,0,3,0))
+par(mar = c(0,0,3,0))
 
 # add color vector
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
@@ -215,13 +217,13 @@ depths(sp1) <- id ~ top + bottom
 hzdesgnname(sp1) <- 'name'
 
 # plot profiles
-plotSPC(sp1, id.style='side')
+plotSPC(sp1, id.style = 'side')
 
 # title, note line argument:
-title('Sample Data 1', line=1, cex.main=0.75)
+title('Sample Data 1', line = 1, cex.main = 0.75)
 
 # plot profiles without horizon-line divisions
-plotSPC(sp1, divide.hz=FALSE)
+plotSPC(sp1, divide.hz = FALSE)
 
 # diagonal lines encode horizon boundary distinctness
 sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
@@ -231,7 +233,7 @@ plotSPC(sp1, hz.distinctness.offset = 'hzD', name.style = 'center-center')
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 hzdesgnname(sp4) <- 'name'
-plotSPC(sp4, color='clay')
+plotSPC(sp4, color = 'clay')
 
 # another example
 data(sp2)
@@ -239,21 +241,24 @@ depths(sp2) <- id ~ top + bottom
 hzdesgnname(sp2) <- 'name'
 site(sp2) <- ~ surface
 
-# label with site-level attribute: `surface`
-plotSPC(sp2, label='surface', plot.order=order(sp2$surface))
+# some of these profiles are very deep, truncate plot at 400cm
+# label / re-order with site-level attribute: `surface`
+plotSPC(sp2, label = 'surface', plot.order = order(sp2$surface), 
+max.depth = 400)
 
 # example using a categorical attribute
-plotSPC(sp2, color = "plasticity")
+plotSPC(sp2, color = "plasticity", 
+max.depth = 400)
 
 # plot two SPC objects in the same figure
-par(mar=c(1,1,1,1))
-# plot the first SPC object and
+par(mar = c(1,1,1,1))
 
+# plot the first SPC object and
 # allocate space for the second SPC object
-plotSPC(sp1, n=length(sp1) + length(sp2))
+plotSPC(sp1, n = length(sp1) + length(sp2))
 
 # plot the second SPC, starting from the first empty space
-plotSPC(sp2, x.idx.offset=length(sp1), add=TRUE)
+plotSPC(sp2, x.idx.offset = length(sp1), add = TRUE)
 
 
 ##
@@ -338,6 +343,7 @@ plotSPC(
   y.offset = y.offset, 
   color = 'matrix_color', 
   cex.names = 0.75, 
+  shrink = TRUE,
   hz.depths = TRUE, 
   hz.depths.offset = 0.05,
   fixLabelCollisions = TRUE,
@@ -352,7 +358,7 @@ yoff <- runif(n = length(x), min = 1, max = 100)
 # random gradient of x-positions
 xoff <- runif(n = length(x), min = 1, max = length(x))
 
-
+# note profiles overlap
 plotSPC(x, 
         relative.pos = xoff, 
         y.offset = yoff, 
@@ -365,7 +371,7 @@ plotSPC(x,
 
 # align / adjust relative x positions
 set.seed(111)
-pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.5)
+pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.65)
 
 # y-offset is automatically re-ordered according to
 # plot.order
@@ -382,6 +388,7 @@ plotSPC(x,
 )
 
 box()
+
 }
 \references{
 Beaudette, D.E., Roudier P., and A.T. O'Geen. 2013. Algorithms for Quantitative Pedology: A Toolkit for

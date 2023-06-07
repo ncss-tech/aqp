@@ -1,7 +1,5 @@
 library(aqp)
 library(lattice)
-library(viridisLite)
-library(RColorBrewer)
 
 ## explore correlation between dist(initial configuration) and dist(proposed configuration)
 x <- c(1, 2, 3.4, 3.4, 3.4, 3.4, 6, 8, 10, 12, 13, 13, 15, 15.5)
@@ -17,7 +15,7 @@ z$mantel <- sapply(seq_along(z$stats), FUN = function(i) {
 })
 
 
-
+par(mfcol = c(1, 2))
 # hmm.
 plot(seq_along(z$stats), z$cor, type = 'l', las = 1)
 
@@ -39,7 +37,7 @@ tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # B, O, +, -
   cols <- c(grey(0.5), grey(0.85), 'royalblue', 'firebrick')
   
-  cols.lines <- brewer.pal(9, 'Spectral')
+  cols.lines <- hcl.colors(9, 'Spectral')
   cols.lines <- colorRampPalette(cols.lines)(length(x))
   
   # total overlap (objective function) progress
@@ -175,7 +173,7 @@ g$P <- P(n0 = g$n0, n1 = g$n1, Te = g$Te, k = 1)
 
 hist(g$P, breaks = 30, las = 1)
 
-levelplot(P ~ Te * n1, data = g, col.regions = viridis, contour = TRUE, xlim = c(500, -5))
+levelplot(P ~ Te * n1, data = g, col.regions = hcl.colors, contour = TRUE, xlim = c(500, -5))
 
 xyplot(P ~ Te, groups = factor(n1), data = g, type = 'l', as.table = TRUE, auto.key = list(lines = TRUE, points = FALSE, space = 'right'), par.settings = tactile::tactile.theme(), xlim = c(500, -5))
 

@@ -2,7 +2,7 @@
 # https://aty.sdsu.edu/explain/optics/rendering.html
 
 
-## simulate the color of materials that refelect light (D65) within very narrow bands of select wavelength(s)
+## simulate the color of materials that reflect light (D65) within very narrow bands of select wavelength(s)
 
 library(aqp)
 library(gifski)
