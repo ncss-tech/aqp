@@ -8,6 +8,14 @@ vignette: >
 ---
 
 ```{r setup, echo=FALSE, results='hide', warning=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  background = '#F7F7F7',
+  fig.align = 'center',
+  dev = 'png',
+  comment = "#>"
+)
 options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
@@ -1256,7 +1264,7 @@ See the [function manual page](http://ncss-tech.github.io/aqp/reference/NCSP.htm
 
 ```{r setup2, echo=FALSE, results='hide', warning=FALSE}
 # handle sharpshootR dependency of last chunk
-opts_chunk$set(
+knitr::opts_chunk$set(
   eval = isTRUE(R.version$major >= 4 &&
           try(requireNamespace("sharpshootR", quietly = TRUE), silent = TRUE))
 )
@@ -1308,7 +1316,3 @@ Some additional examples can be found in:
 
 ----------------------------
 This document is based on `aqp` version `r utils::packageDescription("aqp", field="Version")`.
-
-```{r, echo=FALSE}
-options(bitmapType = ogbmt)
-```

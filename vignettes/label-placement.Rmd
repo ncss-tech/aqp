@@ -8,9 +8,14 @@ vignette: >
 ---
 
 ```{r setup, echo=FALSE, results='hide', warning=FALSE}
+knitr::opts_chunk(eval=FALSE)
 options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
 # Introduction
+
+```{r}
+# TODO
+```
 
 
