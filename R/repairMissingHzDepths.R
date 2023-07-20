@@ -106,7 +106,7 @@ repairMissingHzDepths <- function(x, adj = 10, max.depth = 200) {
   
   # keep track of "repaired" horizons
   idx <- unique(c(idx1, idx2, idx3))
-  horizons(x)$.repaired <- FALSE
+  horizons(x)$.repaired <- rep(FALSE, nrow(x))
   horizons(x)$.repaired[idx] <- TRUE
   
   # repaired SPC

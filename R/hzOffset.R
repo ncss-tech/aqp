@@ -97,10 +97,10 @@ hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
   
   # calculate first and last horizon indices
   hzidl <- x[,, .LAST, .HZID]
-  hzidf <- c(1, hzidl[1:(length(hzidl) - 1)] + 1)[seq_along(hzidl)]
+  hzidf <- c(1, hzidl[seq_len(pmax(0, length(hzidl) - 1))] + 1)[seq_along(hzidl)]
   
   # determine intersection between each profile horizon index and the target ID + offset
-  idx <- lapply(1:length(hzidf), function(i) {
+  idx <- lapply(seq_along(hzidf), function(i) {
     haystack <- unique(do.call('c', lapply(offset, function(o) {
       o + hzid[hzid >= hzidf[i] & hzid <= hzidl[i]]
     })))
@@ -114,7 +114,7 @@ hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
   if (!SPC) return(idx)
   # TODO: subset NSE needs var in the SPC / "needs" rlang here
   .hzldx <- NULL
-  x$.hzldx <- 1:nrow(x) %in% idx
+  x$.hzldx <- seq_len(nrow(x)) %in% idx
   res <- subsetHz(x, .hzldx) 
   res$.hzldx <- NULL
   res
