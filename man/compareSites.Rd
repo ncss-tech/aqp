@@ -19,7 +19,10 @@ compareSites(x, vars, weights = rep(1, times = length(vars)), ...)
 \code{dissimilarity} / \code{dist} class object containing pair-wise distances, row/column names derived from \code{profile_id(x)}
 }
 \description{
-Compare site level attributes of a \code{SoilProfileCollection} object, returning a distance matrix conformal with the output from \code{\link[=NCSP]{NCSP()}}.
+Compare site level attributes of a \code{SoilProfileCollection} object, returning a distance matrix conformal with the output from \code{\link[=NCSP]{NCSP()}}. Values are within the range of 0-1.
+}
+\details{
+This function is typically used in conjunction with the output from \code{\link[=NCSP]{NCSP()}}.
 }
 \seealso{
 \code{\link[=NCSP]{NCSP()}} \code{\link[cluster:daisy]{cluster::daisy()}}
