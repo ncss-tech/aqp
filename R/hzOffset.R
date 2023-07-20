@@ -95,9 +95,9 @@ hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
     simplify <- TRUE
   }
   
-  # calculate LAST and first horizon indices
+  # calculate first and last horizon indices
   hzidl <- x[,, .LAST, .HZID]
-  hzidf <- c(1, hzidl[1:(length(hzidl) - 1)] + 1)
+  hzidf <- c(1, hzidl[1:(length(hzidl) - 1)] + 1)[seq_along(hzidl)]
   
   # determine intersection between each profile horizon index and the target ID + offset
   idx <- lapply(1:length(hzidf), function(i) {
