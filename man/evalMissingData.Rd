@@ -4,7 +4,13 @@
 \alias{evalMissingData}
 \title{Evaluate Missing Data}
 \usage{
-evalMissingData(x, vars, name = "hzname", p = "Cr|R|Cd", method = "relative")
+evalMissingData(
+  x,
+  vars,
+  name = hzdesgnname(x),
+  p = "Cr|R|Cd",
+  method = "relative"
+)
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}

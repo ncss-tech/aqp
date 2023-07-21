@@ -101,7 +101,7 @@
 #'      line=1, cex.axis=0.75)
 #'
 #'
-evalMissingData <- function(x, vars, name='hzname', p='Cr|R|Cd', method='relative') {
+evalMissingData <- function(x, vars, name = hzdesgnname(x), p = 'Cr|R|Cd', method = 'relative') {
   # sanity check
   if(! method %in% c('relative', 'absolute')) {
     stop("method should be one of 'relative' or 'absolute'", call. = FALSE)
@@ -110,7 +110,12 @@ evalMissingData <- function(x, vars, name='hzname', p='Cr|R|Cd', method='relativ
   hn <- horizonNames(x)
   sdv <- setdiff(vars, hn)
 
-  # check for bad hzname
+  # check for missing horizon name
+  if(name == '') {
+    stop('horizon name not set, specify with `name` argument or set with `hzdesgnname()`', call. = FALSE)
+  }
+  
+  # check for bad horizon name
   if(! name %in% hn) {
     stop(sprintf('`%s` not a horizon level attribute', name), call. = FALSE)
   }
