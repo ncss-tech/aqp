@@ -35,7 +35,7 @@
   return(.res)
 }
 
-.drawDepthAxis <- function(style = c('compact', 'traditional'), axis.line.offset, depth_axis_tick_locations, depth_axis_labels, cex.depth.axis) {
+.drawDepthAxis <- function(style = c('compact', 'traditional'), .at, .labels, .line, .cex) {
   
   style <- match.arg(style)
   
@@ -45,13 +45,16 @@
            axis(
              side = 4, 
              col = NA, 
-             col.axis = par('fg'), col.ticks = par('fg'), 
-             las = 1, font = 2, lwd.ticks = 2, lend = 3, 
-             tck = 0.01, mgp = c(3, 0.25, 0),
-             line = axis.line.offset, 
-             at = depth_axis_tick_locations, 
-             labels = depth_axis_labels, 
-             cex.axis = cex.depth.axis
+             col.axis = par('fg'), 
+             col.ticks = par('fg'), 
+             las = 1, 
+             lend = 3, 
+             mgp = c(3, 0.25, 0),
+             font = 2, lwd.ticks = 2, tck = 0.02,
+             line = .line, 
+             at = .at, 
+             labels = .labels, 
+             cex.axis = .cex
            ) 
          },
          'traditional' = {
@@ -59,13 +62,14 @@
            axis(
              side = 4, 
              col = par('fg'), 
-             col.axis = par('fg'), col.ticks = par('fg'), 
-             las = 1, font = 2, lwd.ticks = 2, lend = 3, 
-             tck = 0.01, mgp = c(3, 0.25, 0),
-             line = axis.line.offset, 
-             at = depth_axis_tick_locations, 
-             labels = depth_axis_labels, 
-             cex.axis = cex.depth.axis
+             col.axis = par('fg'), 
+             col.ticks = par('fg'), 
+             las = 1, 
+             lend = 3, 
+             line = .line, 
+             at = .at, 
+             labels = .labels, 
+             cex.axis = .cex
            )
          }
   )

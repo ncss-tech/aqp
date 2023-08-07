@@ -1500,11 +1500,11 @@ plotSPC <- function(
     
     # draw axis
     .drawDepthAxis(
-      style = 'compact', 
-      axis.line.offset, 
-      depth_axis_tick_locations, 
-      depth_axis_labels, 
-      cex.depth.axis
+      style = 'traditional',
+      .at = depth_axis_tick_locations, 
+      .labels = depth_axis_labels,
+      .line = axis.line.offset, 
+      .cex = cex.depth.axis
     )
     
   }
