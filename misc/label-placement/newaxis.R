@@ -1,4 +1,4 @@
-library(aqp)
+devtools::load_all()
 library(soilDB)
 library(sharpshootR)
 
@@ -13,8 +13,12 @@ options(.aqp.plotSPC.args = .args)
 
 plotSPC(x)
 plotSPC(x, max.depth = 100)
-plotSPC(x, max.depth = 55)
+plotSPC(x, max.depth = 54)
 plotSPC(x, max.depth = 33)
+plotSPC(x, max.depth = 36)
+
+
+plotSPC(x, hz.depths = TRUE)
 
 
 data("osd")

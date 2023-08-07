@@ -1,3 +1,80 @@
+
+# generate depth axis labels
+# m: max depth
+# i: interval
+.depthAxisSeq <- function(m, i = NULL) {
+  
+  # reasonable heuristics if an interval is not specified
+  if(is.null(i)) {
+    if(m > 800) {
+      i <- 100
+    } else if(m <= 800 & m > 200) {
+      i <- 50
+    } else if(m <= 200 & m > 100) {
+      i <- 25
+    } else if(m <= 100 & m > 50) {
+      i <- 10
+    } else if(m <= 50) {
+      i <- 5
+    }
+  }
+  
+  # convenient rounding-to function
+  # e.g. round 73, to nearest 10s place
+  # thanks SO: https://stackoverflow.com/a/32508105
+  .roundTo <- function(x, y) {
+    if((y - x %% y) <= x %% y) { x + (y - x %% y)}
+    else { x - (x %% y)}
+  }
+  
+  # clamp axis max via customized rounding
+  .max <- .roundTo(m, i)
+  
+  # axis sequence
+  .res <- seq(0, .max, by = i)
+  return(.res)
+}
+
+.drawDepthAxis <- function(style = c('compact', 'traditional'), axis.line.offset, depth_axis_tick_locations, depth_axis_labels, cex.depth.axis) {
+  
+  style <- match.arg(style)
+  
+  switch(style,
+         'compact' = {
+           # minimal axis
+           axis(
+             side = 4, 
+             col = NA, 
+             col.axis = par('fg'), col.ticks = par('fg'), 
+             las = 1, font = 2, lwd.ticks = 2, lend = 3, 
+             tck = 0.01, mgp = c(3, 0.25, 0),
+             line = axis.line.offset, 
+             at = depth_axis_tick_locations, 
+             labels = depth_axis_labels, 
+             cex.axis = cex.depth.axis
+           ) 
+         },
+         'traditional' = {
+           # traditional axis
+           axis(
+             side = 4, 
+             col = par('fg'), 
+             col.axis = par('fg'), col.ticks = par('fg'), 
+             las = 1, font = 2, lwd.ticks = 2, lend = 3, 
+             tck = 0.01, mgp = c(3, 0.25, 0),
+             line = axis.line.offset, 
+             at = depth_axis_tick_locations, 
+             labels = depth_axis_labels, 
+             cex.axis = cex.depth.axis
+           )
+         }
+  )
+  
+  # done
+  
+}
+
+
 # draft replacement for scales::col_factor (without looking at it)
 .aqp_color_map <- function(palette, domain, na.color, ordered) {
   .FUN <- function(x) {
@@ -18,44 +95,44 @@
 ## generalize and make into an exported function
 
 .interpretHorizonColor <- function(h, color, default.color, col.palette, col.palette.bias, n.legend) {
-
+  
   # this is optionally replaced with real data when using thematic colors
   color.legend.data <- NULL
-
+  
   # toggle as needed for more room
   multi.row.legend <- FALSE
   # multi-row legend indices
   leg.row.indices <- NULL
-
+  
   ## TODO: manually setting color=NULL will throw an error
   # think about how to best handle this
   # if(is.null(color)) {
   #
   # }
-
+  
   # short-circuit: if all h[[color]] are NA the following logic will not reliably work
   # this is because sometimes all NA are interpreted as logical vectors
   if (all(is.na(h[[color]]))) {
     h[[".color"]] <- rep(NA_character_, nrow(h))
   } else {
-
+    
     # there is at least 1 non-NA color to work with
-
+    
     # 1. numeric vector, re-scale and apply color ramp
     if(is.numeric(h[[color]])) {
-
+      
       # generate color ramp function
       cr <- grDevices::colorRamp(col.palette, bias = col.palette.bias)
-
+      
       # re-scale to [0,1]
       # may contain NAs
       c.rgb <- cr(.rescaleRange(h[[color]], x0 = 0, x1 = 1))
       cc <- which(complete.cases(c.rgb))
       h$.color <- NA
-
+      
       # convert non-NA values into colors
       h$.color[cc] <- rgb(c.rgb[cc, , drop = FALSE], maxColorValue = 255)
-
+      
       # generate range / colors for legend
       pretty.vals <- pretty(h[[color]], n = n.legend)
       
@@ -65,10 +142,10 @@
       # constrain legend to min/max
       # pretty.vals[1] <- min(h[[color]], na.rm = TRUE)
       # pretty.vals[length(pretty.vals)] <- max(h[[color]], na.rm = TRUE)
-
+      
       # truncate to 3 significant digits and convert to character for correct interpretation of floating point values
       leg.pretty.vals <- as.character(signif(pretty.vals, 3))
-
+      
       # special case: there are < 3 unique values -> convert to factor
       # previous calculations are ignored
       low.n.test.vals <- as.character(signif(h[[color]], digits = 3))
@@ -77,7 +154,7 @@
         h[[color]] <- low.n.test.vals
         message('less than 3 unique values, converting to factor')
       }
-
+      
       # put into a list for later
       color.legend.data <- list(
         legend = leg.pretty.vals,
@@ -86,10 +163,10 @@
         leg.row.indices = leg.row.indices
       )
     }
-
+    
     # 2. vector of categorical data
     if(is.character(h[[color]]) | is.factor(h[[color]])) {
-
+      
       # testing if ALL valid colors
       if( all(.isColorValid(na.omit(h[[color]])))) {
         # YES: interpret values directly as colors
@@ -98,11 +175,11 @@
         # NO: this is or can be converted into a factor
         if(!is.factor(h[[color]]))
           h[[color]] <- factor(h[[color]])
-
+        
         # get color mapping levels after dropping missing levels
         h[[color]] <- droplevels(h[[color]])
         color.levels <- levels(h[[color]])
-
+        
         crp <- grDevices::colorRampPalette(col.palette, bias = col.palette.bias)
         
         # make a color mapping function
@@ -122,24 +199,24 @@
         
         # apply color mapping
         h$.color <- color.mapper(h[[color]])
-
+        
         # generate colors and labels for legend
         pretty.vals <- color.levels
-
+        
         # interpret n.legend as max(items) / row
         n.leg.classes <- length(pretty.vals)
-
+        
         # create more room via multiple calls to legend
         if(n.legend < n.leg.classes) {
-
+          
           # make indices to two rows of legends
           # safely accounts for even / odd n.leg.classes
           leg.row.indices <- .splitLegend(n.leg.classes)
-
+          
           # set flag for later
           multi.row.legend <- TRUE
         }
-
+        
         # pack into a list for later use
         color.legend.data <- list(
           legend = pretty.vals,
@@ -147,26 +224,26 @@
           multi.row.legend = multi.row.legend,
           leg.row.indices = leg.row.indices
         )
-
+        
       }
     }
-
+    
   }
-
-
+  
+  
   # if the color column doesn't exist, fill with NA
   if(is.null(h[[color]]))
     h[[".color"]] <- NA
-
+  
   # fill missing colors with a reasonable default
   h[['.color']] <- ifelse(is.na(h[['.color']]), default.color, h[['.color']])
-
+  
   # assemble results
   res <- list(
     colors = h[['.color']],
     color.legend.data = color.legend.data
-    )
-
+  )
+  
   return(res)
 }
 
@@ -175,19 +252,19 @@
 # any more classes than that and things become impossible to read
 # n: total number of classes
 .splitLegend <- function(n) {
-
+  
   #  make enough room for even division of odd numbers
   n.per.row <- ceiling(n / 2)
-
+  
   # make indices for first row
   row.1.idx <- seq(from=1, to=n.per.row)
   row.2.idx <- seq(from=n.per.row + 1, to=n)
-
+  
   res <- list(
     row.1=row.1.idx,
     row.2=row.2.idx
   )
-
+  
   return(res)
 }
 
@@ -198,13 +275,13 @@
 .isColorValid <- function(x) {
   # check for named colors
   test.1 <- x %in% colors()
-
+  
   # check for valid RGB
   test.2 <- grepl('^#[a-f0-9]{6}', x, ignore.case = TRUE)
-
+  
   # check for valid RGBA colors
   test.3 <- grepl('^#[a-f0-9]{8}', x, ignore.case = TRUE)
-
+  
   # must pass at least 1 test
   res <- test.1 | test.2 | test.3
   return(res)

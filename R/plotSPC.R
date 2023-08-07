@@ -354,7 +354,6 @@ plotSPC <- function(
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,
-    cex.depth.axis = cex.names,
     cex.id = cex.names + (0.2 * cex.names),
     font.id = 2,
     srt.id = 0, 
@@ -378,8 +377,6 @@ plotSPC <- function(
     hz.distinctness.offset = NULL,
     hz.topography.offset = NULL,
     hz.boundary.lty = NULL,
-    axis.line.offset = -2,
-    plot.depth.axis = TRUE,
     density = NULL,
     show.legend = TRUE,
     col.label = color,
@@ -393,6 +390,10 @@ plotSPC <- function(
     default.color = grey(0.95),
     fixLabelCollisions = hz.depths,
     fixOverlapArgs = list(method = 'E', q = 1),
+    
+    cex.depth.axis = cex.names,
+    axis.line.offset = -2,
+    plot.depth.axis = TRUE,
     ...
 ) {
   
@@ -718,16 +719,8 @@ plotSPC <- function(
   }
   
   
-  ## better heuristics / new arguments
-  ## TODO: helper function to determine scalebar max and interval
-  ## https://github.com/ncss-tech/aqp/issues/291
-  # pre-compute nice range for depth axis
-  #
-  .da_max <- round(max.depth, -1) + 10
-  .da_interval <- round(.da_max / n.depth.ticks, -1)
-  depth_axis_intervals <- seq(from = 0, to = .da_max, by = .da_interval)
   
-  # init plotting region, unless we are appending to an existing plot
+  ## init plotting region, unless we are appending to an existing plot
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
@@ -1493,24 +1486,25 @@ plotSPC <- function(
     plot.depth.axis <- FALSE 
   }
   
+  # add depth axis
   if(plot.depth.axis) {
+    
+    # compute nice range for depth axis with sensible interval and max value
+    depth_axis_intervals <- .depthAxisSeq(max.depth)
+    
+    # convert to plot scale/offset
     depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset[1]
+    
+    # add depth units
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
     
-    # axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
-    
-    # updated style
-    # line is not drawn
-    axis(
-      side = 4, 
-      col = NA, 
-      col.axis = par('fg'), col.ticks = par('fg'), 
-      las = 1, font = 2, lwd.ticks = 2, lend = 3, 
-      tck = 0.01, mgp = c(3, 0.25, 0),
-      line = axis.line.offset, 
-      at = depth_axis_tick_locations, 
-      labels = depth_axis_labels, 
-      cex.axis = cex.depth.axis
+    # draw axis
+    .drawDepthAxis(
+      style = 'compact', 
+      axis.line.offset, 
+      depth_axis_tick_locations, 
+      depth_axis_labels, 
+      cex.depth.axis
     )
     
   }
