@@ -1,4 +1,4 @@
-# aqp 2.0 (2023-06-06)
+# aqp 2.0 (2023-08-07)
 This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`. `slice()` and `profile_compare()` are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of `slab()` is a drop-in replacement for the previous version of the function.
 
 Notable changes include:
@@ -14,7 +14,12 @@ Notable changes include:
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
- * `plotSPC()` now uses `electroStatics_1D()` for fixing hz depth label overlap, solutions are almost always better and deterministic
+ * `plotSPC()` now uses `electroStatics_1D()` for fixing horizon depth label overlap, solutions are deterministic and almost always better
+ # `plotSPC()` depth axis adjustments via new argument (logical or list) `depth.axis`
+ * deprecation of `plotSPC()` arguments:
+   - `plot.depth.axis`: set via `depth.axis = TRUE`, `depth.axis = FALSE`, or customize `depth.axis = list(...)`
+   - `cex.depth.axis`: set via `depth.axis = list(cex = 1)`
+   - `axis.line.offset`: set via `depth.axis = list(line = -2)`
 
 New features:
  * example data, `wilson2022`
@@ -24,6 +29,7 @@ New features:
  * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
  * `plotSPC()` can now mark truncated profiles with a ragged bottom
  * `fixOverlap()` now has two label-placement solvers, based on 1) electrostatics and 2) simulated annealing
+ * new default depth axis style in `plotSPC()`
 
 Incremental changes, should have no effect on previous code:
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly

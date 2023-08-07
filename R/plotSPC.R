@@ -40,8 +40,6 @@
 #'
 #' @param cex.names baseline character scaling applied to all text labels
 #'
-#' @param cex.depth.axis character scaling applied to depth scale
-#'
 #' @param cex.id character scaling applied to `label`
 #'
 #' @param font.id font style applied to `label`, default is 2 (bold)
@@ -91,6 +89,8 @@
 #' @param axis.line.offset horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)
 #'
 #' @param plot.depth.axis logical, plot depth axis? (default is `TRUE`)
+#'
+#' @param cex.depth.axis character scaling applied to depth scale
 #'
 #' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is `NULL`, no shading)
 #'
@@ -351,6 +351,7 @@ plotSPC <- function(
     hz.depths = FALSE,
     hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
     hz.depths.lines = fixLabelCollisions,
+    depth.axis = list(style = 'compact', cex = cex.names, line = -2),
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,
@@ -421,16 +422,16 @@ plotSPC <- function(
     # e.g. some of: names(formals('plotSPC'))
     # not all arguments can be set via options
     .argSet <- c("color", "width", "name", "name.style", "label", "raggedBottom", "hz.depths", 
-                 "hz.depths.offset", "hz.depths.lines", "alt.label", "alt.label.col", 
-                 "cex.names", "cex.depth.axis", "cex.id", "font.id", "srt.id", 
+                 "hz.depths.offset", "hz.depths.lines", "depth.axis", "alt.label", "alt.label.col", 
+                 "cex.names", "cex.id", "font.id", "srt.id", 
                  "print.id", "id.style", "plot.order", "relative.pos", "add", 
                  "scaling.factor", "y.offset", "x.idx.offset", "n", "max.depth", 
                  "n.depth.ticks", "shrink", "shrink.cutoff", "shrink.thin", "abbr", 
                  "abbr.cutoff", "divide.hz", "hz.distinctness.offset", "hz.topography.offset", 
-                 "hz.boundary.lty", "axis.line.offset", "plot.depth.axis", "density", 
+                 "hz.boundary.lty", "density", 
                  "show.legend", "col.label", "col.palette", "col.palette.bias", 
                  "col.legend.cex", "n.legend", "lwd", "lty", "default.color", 
-                 "fixLabelCollisions", "fixOverlapArgs"
+                 "fixLabelCollisions", "fixOverlapArgs", "axis.line.offset", "plot.depth.axis", "cex.depth.axis"
     )
     
     # iterate over all possible arguments that can be modified in this way
@@ -1481,13 +1482,52 @@ plotSPC <- function(
   ## depth axis ##
   ################
   
+  ## 
+  ## retain for 2 (?) minor versions
+  ##
+  
+  # handling of aqp 1.x style arguments
+  if(!missing(plot.depth.axis)) {
+    depth.axis <- plot.depth.axis
+    message('`plot.depth.axis` is now deprecated, please use `depth.axis` argument')
+  }
+  if(!missing(cex.depth.axis)) {
+    depth.axis <- list(cex = cex.depth.axis)
+    message('`cex.depth.axis` is now deprecated, please use `depth.axis` argument')
+  }
+  if(!missing(axis.line.offset)) {
+    depth.axis <- list(line = axis.line.offset)
+    message('`axis.line.offset` is now deprecated, please use `depth.axis` argument')
+  }
+  
+  ##
+  ## end backwards compatibility
+  ##
+  
   # suppress when there are multiple y.offsets
   if(length(unique(y.offset)) > 1) {
-    plot.depth.axis <- FALSE 
+    message('depth axis is disabled when more than 1 unique y offsets are supplied')
+    depth.axis <- FALSE 
   }
   
   # add depth axis
-  if(plot.depth.axis) {
+  if(isTRUE(depth.axis) || is.list(depth.axis)) {
+    
+    # compose list with defaults if not already
+    if(!is.list(depth.axis)) {
+      depth.axis <- list(style = 'compact', line = -2, cex = cex.names)
+    }
+    
+    # enforce defaults in list if missing
+    if(is.null(depth.axis[['style']])) {
+      depth.axis[['style']] <- 'compact'
+    }
+    if(is.null(depth.axis[['line']])) {
+      depth.axis[['line']] <- -2
+    }
+    if(is.null(depth.axis[['cex']])) {
+      depth.axis[['cex']] <- cex.names
+    }
     
     # compute nice range for depth axis with sensible interval and max value
     depth_axis_intervals <- .depthAxisSeq(max.depth)
@@ -1500,11 +1540,11 @@ plotSPC <- function(
     
     # draw axis
     .drawDepthAxis(
-      style = 'traditional',
+      style = depth.axis[['style']],
       .at = depth_axis_tick_locations, 
       .labels = depth_axis_labels,
-      .line = axis.line.offset, 
-      .cex = cex.depth.axis
+      .line = depth.axis[['line']], 
+      .cex = depth.axis[['cex']]
     )
     
   }
