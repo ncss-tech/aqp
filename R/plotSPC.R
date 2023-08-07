@@ -368,7 +368,7 @@ plotSPC <- function(
     x.idx.offset = 0,
     n = length(x),
     max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
-    n.depth.ticks = 5,
+    n.depth.ticks = 10,
     shrink = FALSE,
     shrink.cutoff = 3,
     shrink.thin = NULL,
@@ -378,7 +378,7 @@ plotSPC <- function(
     hz.distinctness.offset = NULL,
     hz.topography.offset = NULL,
     hz.boundary.lty = NULL,
-    axis.line.offset = -2.5,
+    axis.line.offset = -2,
     plot.depth.axis = TRUE,
     density = NULL,
     show.legend = TRUE,
@@ -718,18 +718,23 @@ plotSPC <- function(
   }
   
   
-  # pre-compute nice range for depth axis, also used for plot init
-  depth_axis_intervals <- pretty(seq(from=0, to = max.depth, by = 1), n = n.depth.ticks)
+  ## better heuristics / new arguments
+  ## TODO: helper function to determine scalebar max and interval
+  ## https://github.com/ncss-tech/aqp/issues/291
+  # pre-compute nice range for depth axis
+  #
+  .da_max <- round(max.depth, -1) + 10
+  .da_interval <- round(.da_max / n.depth.ticks, -1)
+  depth_axis_intervals <- seq(from = 0, to = .da_max, by = .da_interval)
   
   # init plotting region, unless we are appending to an existing plot
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
     
-    ## TODO: this seems to extend too far... review
     # y-limits also include y.offset range
     ylim.range <- c(
-      max(depth_axis_intervals) + max(y.offset), 
+      max(x) + max(y.offset), 
       -extra_y_space
     )
     
@@ -1313,7 +1318,6 @@ plotSPC <- function(
           
           # keep only positions that are < max.depth, after y.offset and scaling
           # these are scaled positions
-          # print(y.thresh)
           .pos <- .pos[which(.pos < ((max.depth * scaling.factor) + y.offset[i]))]
           
           # setup arguments to fixOverlap()
@@ -1493,7 +1497,22 @@ plotSPC <- function(
     depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset[1]
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
     
-    axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
+    # axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
+    
+    # updated style
+    # line is not drawn
+    axis(
+      side = 4, 
+      col = NA, 
+      col.axis = par('fg'), col.ticks = par('fg'), 
+      las = 1, font = 2, lwd.ticks = 2, lend = 3, 
+      tck = 0.01, mgp = c(3, 0.25, 0),
+      line = axis.line.offset, 
+      at = depth_axis_tick_locations, 
+      labels = depth_axis_labels, 
+      cex.axis = cex.depth.axis
+    )
+    
   }
   
   
