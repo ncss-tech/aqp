@@ -986,14 +986,14 @@ NULL
 #' data(jacobs2000)
 #'
 #' # basic plot
-#' par(mar=c(0,1,3,3))
-#' plot(jacobs2000, name='name', color='matrix_color', width=0.3)
+#' par(mar=c(0, 1, 3, 1.5))
+#' plotSPC(jacobs2000, name='name', color='matrix_color', width=0.3)
 #' # add concentrations
 #' addVolumeFraction(jacobs2000, 'concentration_pct',
 #' col = jacobs2000$concentration_color, pch = 16, cex.max = 0.5)
 #'
 #' # add depletions
-#' plot(jacobs2000, name='name', color='matrix_color', width=0.3)
+#' plotSPC(jacobs2000, name='name', color='matrix_color', width=0.3)
 #' addVolumeFraction(jacobs2000, 'depletion_pct',
 #' col = jacobs2000$depletion_color, pch = 16, cex.max = 0.5)
 #'
@@ -1024,6 +1024,7 @@ NULL
 #'
 #'
 "jacobs2000"
+
 
 #' Average Hydraulic Parameters from the ROSETTA Model by USDA Soil Texture
 #' Class

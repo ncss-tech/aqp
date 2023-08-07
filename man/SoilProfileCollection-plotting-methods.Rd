@@ -19,10 +19,10 @@ plotSPC(
   hz.depths = FALSE,
   hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
+  depth.axis = list(style = "compact", cex = cex.names, line = -2.5),
   alt.label = NULL,
   alt.label.col = "black",
   cex.names = 0.5,
-  cex.depth.axis = cex.names,
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
   srt.id = 0,
@@ -36,7 +36,7 @@ plotSPC(
   x.idx.offset = 0,
   n = length(x),
   max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
-  n.depth.ticks = 5,
+  n.depth.ticks = 10,
   shrink = FALSE,
   shrink.cutoff = 3,
   shrink.thin = NULL,
@@ -46,8 +46,6 @@ plotSPC(
   hz.distinctness.offset = NULL,
   hz.topography.offset = NULL,
   hz.boundary.lty = NULL,
-  axis.line.offset = -2.5,
-  plot.depth.axis = TRUE,
   density = NULL,
   show.legend = TRUE,
   col.label = color,
@@ -61,6 +59,9 @@ plotSPC(
   default.color = grey(0.95),
   fixLabelCollisions = hz.depths,
   fixOverlapArgs = list(method = "E", q = 1),
+  cex.depth.axis = cex.names,
+  axis.line.offset = -2,
+  plot.depth.axis = TRUE,
   ...
 )
 
@@ -87,13 +88,19 @@ plotSPC(
 
 \item{hz.depths.lines}{logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or \code{fixLabelCollisions = TRUE}}
 
+\item{depth.axis}{logical or list. Use a logical to suppress (\code{FALSE}) or add depth axis using defaults (\code{TRUE}). Use a list to specify one or more of:
+\itemize{
+\item \code{style} ('compact', 'traditional')
+\item \code{line} (numeric, negative values move axis to the left)
+\item \code{cex} (scaling applied to entire depth axis)
+See examples.
+}}
+
 \item{alt.label}{quoted column name of the (site-level) attribute used for secondary annotation}
 
 \item{alt.label.col}{color used for secondary annotation text}
 
 \item{cex.names}{baseline character scaling applied to all text labels}
-
-\item{cex.depth.axis}{character scaling applied to depth scale}
 
 \item{cex.id}{character scaling applied to \code{label}}
 
@@ -141,10 +148,6 @@ plotSPC(
 
 \item{hz.boundary.lty}{quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography}
 
-\item{axis.line.offset}{horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)}
-
-\item{plot.depth.axis}{logical, plot depth axis? (default is \code{TRUE})}
-
 \item{density}{fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is \code{NULL}, no shading)}
 
 \item{show.legend}{logical, show legend? (default is \code{TRUE})}
@@ -168,6 +171,12 @@ plotSPC(
 \item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}. Additional arguments to \code{\link[=fixOverlap]{fixOverlap()}} can be passed as options.}
 
 \item{fixOverlapArgs}{a named list of arguments to \code{\link[=fixOverlap]{fixOverlap()}}. Overlap adjustments are attempted using electrostatic simulation with arguments: \code{list(method = 'E', q = 1)}. Alternatively, select adjustment by simulated annealing via \code{list(method = 'S')}. See \code{\link[=electroStatics_1D]{electroStatics_1D()}} and \code{\link[=SANN_1D]{SANN_1D()}} for details.}
+
+\item{cex.depth.axis}{(deprecated, use \code{depth.axis} instead) character scaling applied to depth scale}
+
+\item{axis.line.offset}{(deprecated, use \code{depth.axis} instead) horizontal offset applied to depth axis (default is -2, larger numbers move the axis to the right)}
+
+\item{plot.depth.axis}{(deprecated, use \code{depth.axis} instead) logical, plot depth axis?}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 

@@ -34,6 +34,12 @@
 #' 
 #' @param hz.depths.lines logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or `fixLabelCollisions = TRUE`
 #'
+#' @param depth.axis logical or list. Use a logical to suppress (`FALSE`) or add depth axis using defaults (`TRUE`). Use a list to specify one or more of: 
+#'  - `style` ('compact', 'traditional')
+#'  - `line` (numeric, negative values move axis to the left)
+#'  - `cex` (scaling applied to entire depth axis) 
+#' See examples.
+#'
 #' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
 #'
 #' @param alt.label.col color used for secondary annotation text
@@ -86,11 +92,6 @@
 #'
 #' @param hz.boundary.lty quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography
 #'
-#' @param axis.line.offset horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)
-#'
-#' @param plot.depth.axis logical, plot depth axis? (default is `TRUE`)
-#'
-#' @param cex.depth.axis character scaling applied to depth scale
 #'
 #' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is `NULL`, no shading)
 #'
@@ -118,6 +119,13 @@
 #'
 #' @param \dots other arguments passed into lower level plotting functions
 #'
+#'
+#' @param axis.line.offset (deprecated, use `depth.axis` instead) horizontal offset applied to depth axis (default is -2, larger numbers move the axis to the right)
+#'
+#' @param plot.depth.axis (deprecated, use `depth.axis` instead) logical, plot depth axis?
+#'
+#' @param cex.depth.axis (deprecated, use `depth.axis` instead) character scaling applied to depth scale
+#' 
 #'
 #' @details
 #' Depth limits (`max.depth`) and number of depth ticks (`n.depth.ticks`) are *suggestions* to the [pretty()] function. You may have to tinker with both parameters to get what you want.
@@ -351,7 +359,7 @@ plotSPC <- function(
     hz.depths = FALSE,
     hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
     hz.depths.lines = fixLabelCollisions,
-    depth.axis = list(style = 'compact', cex = cex.names, line = -2),
+    depth.axis = list(style = 'compact', cex = cex.names, line = -2.5),
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,

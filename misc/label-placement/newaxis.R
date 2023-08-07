@@ -6,7 +6,23 @@ s <- c('inks' , 'pardee', 'clarksville', 'palau', 'hao', 'inks', 'eheuiki', 'pua
 x <- fetchOSD(s)
 
 
-par(mar = c(0, 0, 0, 2))
+par(mar = c(0, 0, 0, 1.5))
+
+data("jacobs2000")
+plotSPC(jacobs2000)
+
+
+options(.aqp.plotSPC.args = NULL)
+plotSPC(x)
+
+
+par(bg = 'black', fg = 'white')
+plotSPC(x)
+
+par(bg = 'white', fg = 'black')
+plotSPC(x)
+
+
 
 .args <- list(width = 0.3, name.style = 'center-center', cex.names = 1)
 options(.aqp.plotSPC.args = .args)
