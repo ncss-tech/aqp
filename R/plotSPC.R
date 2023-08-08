@@ -35,9 +35,10 @@
 #' @param hz.depths.lines logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or `fixLabelCollisions = TRUE`
 #'
 #' @param depth.axis logical or list. Use a logical to suppress (`FALSE`) or add depth axis using defaults (`TRUE`). Use a list to specify one or more of: 
-#'  - `style` ('compact', 'traditional')
-#'  - `line` (numeric, negative values move axis to the left)
-#'  - `cex` (scaling applied to entire depth axis) 
+#'  - `style`: 'compact', 'traditional'
+#'  - `line`: numeric, negative values move axis to the left
+#'  - `cex`: scaling applied to entire depth axis
+#'  - `interval`: axis interval
 #' See examples.
 #'
 #' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
@@ -70,7 +71,7 @@
 #'
 #' @param n integer describing amount of space along x-axis to allocate, defaults to `length(x)`
 #'
-#' @param max.depth suggested lower depth boundary of plot, profiles are also truncated at this depth
+#' @param max.depth numeric. The lower depth for all sketches, deeper profiles are truncated at this depth. Use larger values to arbitrarily extend the vertical dimension, convenient for leaving extract space for annotation.
 #'
 #' @param n.depth.ticks suggested number of ticks in depth scale
 #'
@@ -359,7 +360,7 @@ plotSPC <- function(
     hz.depths = FALSE,
     hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
     hz.depths.lines = fixLabelCollisions,
-    depth.axis = list(style = 'compact', cex = cex.names * 1.15, line = -2),
+    depth.axis = list(style = 'compact', cex = cex.names * 1.15),
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,
@@ -736,7 +737,7 @@ plotSPC <- function(
     
     # y-limits also include y.offset range
     ylim.range <- c(
-      max(x) + max(y.offset), 
+      max.depth + max(y.offset), 
       -extra_y_space
     )
     
@@ -1522,6 +1523,7 @@ plotSPC <- function(
   if(isTRUE(depth.axis) || is.list(depth.axis)) {
     
     # compose list with defaults if not already
+    # NULL `interval` will use sensible defaults
     if(!is.list(depth.axis)) {
       depth.axis <- list(style = 'compact', line = -2, cex = cex.names)
     }
@@ -1530,15 +1532,21 @@ plotSPC <- function(
     if(is.null(depth.axis[['style']])) {
       depth.axis[['style']] <- 'compact'
     }
+    
     if(is.null(depth.axis[['line']])) {
-      depth.axis[['line']] <- -2
+      depth.axis[['line']] <- switch(
+        depth.axis[['style']],
+        'compact' = -1.75,
+        'traditional' = -2
+      )
     }
+    
     if(is.null(depth.axis[['cex']])) {
       depth.axis[['cex']] <- cex.names
     }
     
     # compute nice range for depth axis with sensible interval and max value
-    depth_axis_intervals <- .depthAxisSeq(max.depth)
+    depth_axis_intervals <- .depthAxisSeq(max.depth, i = depth.axis[['interval']])
     
     # convert to plot scale/offset
     depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset[1]

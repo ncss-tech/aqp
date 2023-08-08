@@ -50,7 +50,7 @@
              las = 1, 
              lend = 3, 
              mgp = c(3, 0.25, 0),
-             font = 2, lwd.ticks = 2, tck = 0.02,
+             font = 1, lwd.ticks = 1, tck = 0.02,
              line = .line, 
              at = .at, 
              labels = .labels, 
