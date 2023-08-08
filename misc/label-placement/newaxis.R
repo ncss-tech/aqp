@@ -7,6 +7,17 @@ x <- fetchOSD(s)
 
 dev.off()
 
+## aqp 1.x compatibility
+par(mar = c(0, 0, 0, 2))
+data("osd")
+
+plotSPC(osd, plot.depth.axis = FALSE)
+plotSPC(osd, plot.depth.axis = TRUE)
+plotSPC(osd, cex.depth.axis = 2)
+plotSPC(osd, axis.line.offset = 0)
+
+
+dev.off()
 
 par(mar = c(0, 0, 0, 2))
 

@@ -1501,15 +1501,27 @@ plotSPC <- function(
   
   # handling of aqp 1.x style arguments
   if(!missing(plot.depth.axis)) {
-    depth.axis <- plot.depth.axis
+    if(missing(depth.axis)) {
+      depth.axis <- plot.depth.axis
+    }
     message('`plot.depth.axis` is now deprecated, please use `depth.axis` argument')
   }
+  
   if(!missing(cex.depth.axis)) {
-    depth.axis <- list(cex = cex.depth.axis)
+    if(inherits(depth.axis, 'list')) {
+      depth.axis[['cex']] <- cex.depth.axis
+    } else {
+      depth.axis <- list(cex = cex.depth.axis)
+    }
     message('`cex.depth.axis` is now deprecated, please use `depth.axis` argument')
   }
+  
   if(!missing(axis.line.offset)) {
-    depth.axis <- list(line = axis.line.offset)
+    if(inherits(depth.axis, 'list')) {
+      depth.axis[['line']] <- axis.line.offset
+    } else {
+      depth.axis <- list(line = axis.line.offset)  
+    }
     message('`axis.line.offset` is now deprecated, please use `depth.axis` argument')
   }
   
