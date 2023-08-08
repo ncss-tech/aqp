@@ -70,10 +70,12 @@ tick.heights <- yy[c(group.starts, group.ends)] + 2
 
 # plot 2 SoilProfileCollection objects on the same axis
 par(mar=c(1,1,1,1))
-plot(sp3, n=n.pedons)
-plot(sp4, add=TRUE, x.idx.offset=group.ends[1], plot.depth.axis=FALSE, id.style='side')
+plot(sp3, n = n.pedons)
+plot(sp4, add = TRUE, x.idx.offset = group.ends[1], 
+depth.axis = FALSE, id.style = 'side')
+
 # annotate groups
-profileGroupLabels(x0=group.starts, x1=group.ends,
+profileGroupLabels(x0 = group.starts, x1 = group.ends,
 labels=c('Collection 1', 'Collection 2'), y0=120, y1=tick.heights)
 
 }

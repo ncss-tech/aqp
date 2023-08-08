@@ -26,7 +26,7 @@
 #'
 #' @param label quoted column name of the (site-level) attribute used to identify profile sketches
 #' 
-#' @param raggedBottom quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary
+#' @param raggedBottom either quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary, or `FALSE` suppress ragged bottom depths when `max.depth < max(x)`
 #'
 #' @param hz.depths logical, annotate horizon top depths to the right of each sketch (`FALSE`)
 #' 
@@ -529,13 +529,17 @@ plotSPC <- function(
   
   # ragged bottom flag
   if(!missing(raggedBottom)) {
-    # valid name
-    if(! raggedBottom %in% siteNames(x))
-      stop('invalid `raggedBottom` column name', call. = FALSE)
     
-    # must be logical
-    if(! is.logical(x[[raggedBottom]]))
-      stop('`raggedBottom` must be logical', call. = FALSE)
+    # valid type
+    if(! inherits(raggedBottom, c('logical', 'character'))) {
+      stop('`raggedBottom` must be logical or character', call. = FALSE)
+    }
+    
+    # valid name
+    if((is.character(raggedBottom)) & ! raggedBottom %in% siteNames(x)) {
+      stop('invalid `raggedBottom` column name', call. = FALSE)
+    }
+    
   }
   
   # length of y.offset must length(x) or 1

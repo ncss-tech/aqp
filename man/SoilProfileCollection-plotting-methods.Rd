@@ -19,7 +19,7 @@ plotSPC(
   hz.depths = FALSE,
   hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
-  depth.axis = list(style = "compact", cex = cex.names, line = -2.5),
+  depth.axis = list(style = "compact", cex = cex.names * 1.15),
   alt.label = NULL,
   alt.label.col = "black",
   cex.names = 0.5,
@@ -80,7 +80,7 @@ plotSPC(
 
 \item{label}{quoted column name of the (site-level) attribute used to identify profile sketches}
 
-\item{raggedBottom}{quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary}
+\item{raggedBottom}{either quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary, or \code{FALSE} suppress ragged bottom depths when \code{max.depth < max(x)}}
 
 \item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (\code{FALSE})}
 
@@ -90,9 +90,10 @@ plotSPC(
 
 \item{depth.axis}{logical or list. Use a logical to suppress (\code{FALSE}) or add depth axis using defaults (\code{TRUE}). Use a list to specify one or more of:
 \itemize{
-\item \code{style} ('compact', 'traditional')
-\item \code{line} (numeric, negative values move axis to the left)
-\item \code{cex} (scaling applied to entire depth axis)
+\item \code{style}: 'compact', 'traditional'
+\item \code{line}: numeric, negative values move axis to the left
+\item \code{cex}: scaling applied to entire depth axis
+\item \code{interval}: axis interval
 See examples.
 }}
 
@@ -126,7 +127,7 @@ See examples.
 
 \item{n}{integer describing amount of space along x-axis to allocate, defaults to \code{length(x)}}
 
-\item{max.depth}{suggested lower depth boundary of plot, profiles are also truncated at this depth}
+\item{max.depth}{numeric. The lower depth for all sketches, deeper profiles are truncated at this depth. Use larger values to arbitrarily extend the vertical dimension, convenient for leaving extract space for annotation.}
 
 \item{n.depth.ticks}{suggested number of ticks in depth scale}
 

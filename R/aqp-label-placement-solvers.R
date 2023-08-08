@@ -802,7 +802,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #'   hz.depths = TRUE, 
 #'   name.style = 'center-center', 
 #'   cex.names = 1.5, 
-#'   plot.depth.axis = FALSE, 
+#'   depth.axis = FALSE, 
 #'   name = NA,
 #'   color = 'z',
 #'   show.legend = FALSE,

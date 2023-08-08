@@ -14,9 +14,13 @@ Notable changes include:
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
- * `plotSPC()` now uses `electroStatics_1D()` for fixing horizon depth label overlap, solutions are deterministic and almost always better
- # `plotSPC()` depth axis adjustments via new argument (logical or list) `depth.axis`
- * deprecation of `plotSPC()` arguments:
+ 
+Major changes to `plotSPC()`:
+ * The maximum depth range of the figure is now based on `max.depth` or `max(x)`. This means that sketches generated with aqp 2.x will generally have less white space at the bottom of the figure. Make more room for additional annotation or visual effect by setting the desired depth range with the `max.depth` argument.
+ * now uses `electroStatics_1D()` for fixing horizon depth label overlap, solutions are deterministic and almost always better
+ * better depth axis interval heuristics (if not specified), varying based on figure depth range
+ * depth axis adjustments via new argument `depth.axis`, logical or list
+ * deprecation of arguments:
    - `plot.depth.axis`: set via `depth.axis = TRUE`, `depth.axis = FALSE`, or customize `depth.axis = list(...)`
    - `cex.depth.axis`: set via `depth.axis = list(cex = 1)`
    - `axis.line.offset`: set via `depth.axis = list(line = -2)`
