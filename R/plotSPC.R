@@ -359,7 +359,7 @@ plotSPC <- function(
     hz.depths = FALSE,
     hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
     hz.depths.lines = fixLabelCollisions,
-    depth.axis = list(style = 'compact', cex = cex.names, line = -2.5),
+    depth.axis = list(style = 'compact', cex = cex.names * 1.15, line = -2),
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,
