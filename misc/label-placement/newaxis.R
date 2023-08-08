@@ -6,6 +6,7 @@ s <- c('inks' , 'pardee', 'clarksville', 'palau', 'hao', 'inks', 'eheuiki', 'pua
 x <- fetchOSD(s)
 
 dev.off()
+options(.aqp.plotSPC.args = NULL)
 
 ## aqp 1.x compatibility
 par(mar = c(0, 0, 0, 2))
@@ -19,6 +20,7 @@ plotSPC(osd, axis.line.offset = 0)
 
 dev.off()
 
+# stricter interpretation of max.depth
 par(mar = c(0, 0, 0, 2))
 
 data("jacobs2000")
@@ -26,10 +28,9 @@ data("osd")
 
 plotSPC(jacobs2000)
 plotSPC(jacobs2000, max.depth = 250)
+plotSPC(jacobs2000, max.depth = 50)
 
-options(.aqp.plotSPC.args = NULL)
-plotSPC(x)
-
+# compare axis style
 par(mar = c(0, 0, 0, 1), mfcol = c(2, 1))
 plotSPC(osd, depth.axis = list(style = 'compact'))
 plotSPC(osd, depth.axis = list(style = 'traditional'))
@@ -41,6 +42,7 @@ plotSPC(x, depth.axis = list(style = 'traditional'))
 
 dev.off()
 
+# test bg / fg colors
 par(bg = 'black', fg = 'white')
 plotSPC(x)
 
@@ -50,9 +52,10 @@ plotSPC(x)
 dev.off()
 
 
+
+# test .aqp.plotSPC.args
+# test new depth.axis interface
 par(mar = c(0, 0, 0, 2))
-
-
 
 .args <- list(width = 0.3, name.style = 'center-center', cex.names = 1)
 options(.aqp.plotSPC.args = .args)
