@@ -292,6 +292,8 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     # remove distance to self
     diag(m) <- NA
     
+    ## TODO: consider given higher charge density to left/right anchors
+    ## https://github.com/ncss-tech/aqp/issues/293
     # repelling forces (same charge) between all particles
     .F <- .electricForce(Q1 = q, Q2 = q, Qk = .Qk, d = m, tiny = tiny, const = const)
     
