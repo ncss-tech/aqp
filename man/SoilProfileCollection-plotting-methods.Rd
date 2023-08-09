@@ -169,7 +169,7 @@ See examples.
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
-\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets \code{hz.depths.lines = TRUE}. Additional arguments to \code{\link[=fixOverlap]{fixOverlap()}} can be passed via \code{fixOverlapArgs}. Overlap collisions cannot be fixed within profiles containing degenerate horizon depths (e.g. top == bottom).}
+\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets \code{hz.depths.lines = TRUE}. Additional arguments to \code{\link[=fixOverlap]{fixOverlap()}} can be passed via \code{fixOverlapArgs}. Overlap collisions cannot be fixed within profiles containing degenerate or missing horizon depths (e.g. top == bottom).}
 
 \item{fixOverlapArgs}{a named list of arguments to \code{\link[=fixOverlap]{fixOverlap()}}. Overlap adjustments are attempted using electrostatic simulation with arguments: \code{list(method = 'E', q = 1)}. Alternatively, select adjustment by simulated annealing via \code{list(method = 'S')}. See \code{\link[=electroStatics_1D]{electroStatics_1D()}} and \code{\link[=SANN_1D]{SANN_1D()}} for details.}
 

@@ -114,7 +114,7 @@
 #'
 #' @param default.color default horizon fill color used when `color` attribute is `NA`
 #' 
-#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets `hz.depths.lines = TRUE`. Additional arguments to [fixOverlap()] can be passed via `fixOverlapArgs`. Overlap collisions cannot be fixed within profiles containing degenerate horizon depths (e.g. top == bottom).
+#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets `hz.depths.lines = TRUE`. Additional arguments to [fixOverlap()] can be passed via `fixOverlapArgs`. Overlap collisions cannot be fixed within profiles containing degenerate or missing horizon depths (e.g. top == bottom).
 #' 
 #' @param fixOverlapArgs a named list of arguments to [fixOverlap()]. Overlap adjustments are attempted using electrostatic simulation with arguments: `list(method = 'E', q = 1)`. Alternatively, select adjustment by simulated annealing via `list(method = 'S')`. See [electroStatics_1D()] and [SANN_1D()] for details.
 #'
@@ -1292,12 +1292,23 @@ plotSPC <- function(
         # device coordinates: scaling / offset applied
         hzd.txt.y <- y1[-1]
         
-        # test for top == bottom, cannot perform label collision if this is the case
-        if(any(y0 == y1)) {
+        
+        # sanity checks before attempting label collision repair:
+        #  - no NA
+        #  - no top == bottom
+        if(any(is.na(c(y0, y1)))) {
           .canFixLabelCollision <- FALSE
           message(sprintf('[%s:%s] horizon with top == bottom, cannot fix horizon depth overlap\n consider using repairMissingHzDepths()', this_profile_id, nh))
+          
         } else {
-          .canFixLabelCollision <- TRUE
+          
+          # test for top == bottom, cannot perform label collision if this is the case
+          if(any(y0 == y1)) {
+            .canFixLabelCollision <- FALSE
+            message(sprintf('[%s:%s] horizon with top == bottom, cannot fix horizon depth overlap\n consider using repairMissingHzDepths()', this_profile_id, nh))
+          } else {
+            .canFixLabelCollision <- TRUE
+          }
         }
         
         ## collision detection / fix

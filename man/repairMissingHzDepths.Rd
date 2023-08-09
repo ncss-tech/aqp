@@ -23,10 +23,11 @@ Attempt a simple repair of horizon bottom depths in the presence of \code{NA}, o
 This repair is applied to the deepest horizon within a profile as identified by \code{\link{getLastHorizonID}}, as well as to bottom depths of any horizon that has a horizon below it. Horizon bottom depths are adjusted by adding \code{adj} (if non-NA). If the resulting value exceeds \code{max.depth}, the \code{max.depth} value is returned (if not \code{NA}).
 }
 \examples{
+
 h <- data.frame(
-  id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),
-  top = c(0:2, 0:3, 0:1) * 10,
-  bottom = c(rep(NA_integer_, 7), c(10, 99))
+id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),
+top = c(0:2, 0:3, 0:1) * 10,
+bottom = c(rep(NA_integer_, 7), c(10, 99))
 )
 
 # NA depths result in warnings
@@ -35,24 +36,25 @@ suppressWarnings({
 })
 
 # inspect data before repairs
-plot(h)
+plotSPC(h)
 
 g <- repairMissingHzDepths(h)
 
 # all depth logic now valid
 all(checkHzDepthLogic(g)$valid)
 
-# inspect 
-plot(g)
+# inspect
+plotSPC(g)
 
 # no adj, max.depth only
 f <- repairMissingHzDepths(h, adj = NA, max.depth = 200)
 all(checkHzDepthLogic(f)$valid)
-plot(f) 
+plotSPC(f)
 
 # max.depth defaults to max(x) if too small
 f$bottom[c(3,7)] <- NA
 d <- repairMissingHzDepths(f, adj = NA, max.depth = 20)
 all(checkHzDepthLogic(d)$valid)
-plot(d)
+plotSPC(d)
+
 }
