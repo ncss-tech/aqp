@@ -30,14 +30,27 @@ plotSPC(jacobs2000)
 plotSPC(jacobs2000, max.depth = 250)
 plotSPC(jacobs2000, max.depth = 50)
 
+# works
+par(mar = c(0, 0, 0, 2))
+plotSPC(osd, depth.axis = list(style = 'traditional', interval = 25), cex.names = 0.7)
+plotSPC(osd, depth.axis = list(style = 'compact', interval = 25), cex.names = 0.7)
+plotSPC(osd, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
+
+
+# "tape" is outside of the plot area
+plotSPC(x, depth.axis = list(style = 'tape', interval = 25, line = 0), cex.names = 0.7)
+
+
 # compare axis style
-par(mar = c(0, 0, 0, 1), mfcol = c(2, 1))
+par(mar = c(0, 0, 0, 1), mfcol = c(3, 1))
 plotSPC(osd, depth.axis = list(style = 'compact'))
 plotSPC(osd, depth.axis = list(style = 'traditional'))
+plotSPC(osd, depth.axis = list(style = 'tape'))
 
-par(mar = c(0, 0, 0, 3), mfcol = c(2, 1))
+par(mar = c(0, 0, 0, 3), mfcol = c(3, 1))
 plotSPC(x, depth.axis = list(style = 'compact'))
 plotSPC(x, depth.axis = list(style = 'traditional'))
+plotSPC(x, depth.axis = list(style = 'tape'))
 
 
 dev.off()

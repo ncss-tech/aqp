@@ -1563,16 +1563,18 @@ plotSPC <- function(
       depth.axis <- list(style = 'compact', line = -2, cex = cex.names)
     }
     
-    # enforce defaults in list if missing
+    # default style if missing
     if(is.null(depth.axis[['style']])) {
       depth.axis[['style']] <- 'compact'
     }
     
+    # default line if missing
     if(is.null(depth.axis[['line']])) {
       depth.axis[['line']] <- switch(
         depth.axis[['style']],
         'compact' = -1.75,
-        'traditional' = -2
+        'traditional' = -2,
+        'tape' = -2.5
       )
     }
     

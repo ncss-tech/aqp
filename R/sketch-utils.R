@@ -35,8 +35,8 @@
   return(.res)
 }
 
-.drawDepthAxis <- function(style = c('compact', 'traditional'), .at, .labels, .line, .cex) {
-
+.drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex) {
+  
   style <- match.arg(style)
   
   switch(style,
@@ -57,6 +57,7 @@
              cex.axis = .cex
            ) 
          },
+         
          'traditional' = {
            # traditional axis
            axis(
@@ -71,6 +72,58 @@
              labels = .labels, 
              cex.axis = .cex
            )
+         },
+         
+         'tape' = {
+           ## TODO: does not work on wide figures...
+           
+           # something like the fabric, graduated tapes
+           # used by NCSS and elsewhere
+           # alternating colors
+           .cols <- c('white', grey(0.3))
+           # convert line notation to user coordinates
+           .dx <- grconvertX(.line, from = 'line', to = 'user')
+           # shift
+           .x <- par('usr')[2] - .dx
+           
+           # width of tape based on widest depth annotation
+           .w <- strwidth(as.character(max(.at)), units = 'user', cex = .cex) / 1.5
+           .n <- length(.at)
+           
+           # alternating colors of tape
+           rect(
+             xleft = .x - .w,
+             xright = .x + .w, 
+             ybottom = .at[-1], 
+             ytop = .at[-.n], 
+             col = .cols, 
+             border = NA
+           )
+           
+           # outline
+           rect(
+             xleft = .x - .w, 
+             xright = .x + .w, 
+             ybottom = .at[.n], 
+             ytop = .at[1],
+             col = NA,
+             border = par('fg')
+           )
+           
+           ## TODO: figure out ideal place to put these
+           # .labY <- .at[-1] - (diff(.at) / 2)
+           .labY <- .at[-1]
+           # seelct labels
+           text(
+             x = .x, 
+             y = .labY, 
+             labels = .at[-1], 
+             cex = .cex, 
+             col = invertLabelColor(.cols), 
+             # adj = c(0.5, 0.5), 
+             pos = 3
+           )
+
          }
   )
   
