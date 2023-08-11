@@ -37,7 +37,7 @@
 
 .drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex, .n) {
   
-  style <- match.arg(style)
+  style <- match.arg(tolower(style))
   
   switch(style,
          'compact' = {
