@@ -4,6 +4,7 @@ library(sharpshootR)
 
 s <- c('inks' , 'pardee', 'clarksville', 'palau', 'hao', 'inks', 'eheuiki', 'puaulu')
 x <- fetchOSD(s)
+z <- perturb(x[1, ], n = 25, boundary.attr = 'hzd')
 
 dev.off()
 options(.aqp.plotSPC.args = NULL)
@@ -12,6 +13,7 @@ options(.aqp.plotSPC.args = NULL)
 par(mar = c(0, 0, 0, 2))
 data("osd")
 
+# backwards compatibility
 plotSPC(osd, plot.depth.axis = FALSE)
 plotSPC(osd, plot.depth.axis = TRUE)
 plotSPC(osd, cex.depth.axis = 2)
@@ -38,19 +40,35 @@ plotSPC(osd, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
 
 
 # "tape" is outside of the plot area
-plotSPC(x, depth.axis = list(style = 'tape', interval = 25, line = 0), cex.names = 0.7)
+plotSPC(x, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
+
+plotSPC(z, print.id = FALSE, depth.axis = list(style = 'traditional', interval = 25))
+plotSPC(z, print.id = FALSE, depth.axis = list(style = 'compact', interval = 25))
+plotSPC(z, print.id = FALSE, depth.axis = list(style = 'tape', interval = 25))
 
 
 # compare axis style
-par(mar = c(0, 0, 0, 1), mfcol = c(3, 1))
-plotSPC(osd, depth.axis = list(style = 'compact'))
-plotSPC(osd, depth.axis = list(style = 'traditional'))
-plotSPC(osd, depth.axis = list(style = 'tape'))
+ragg::agg_png(filename = 'demo.png', width = 800, height = 1000, scaling = 1.5)
 
-par(mar = c(0, 0, 0, 3), mfcol = c(3, 1))
-plotSPC(x, depth.axis = list(style = 'compact'))
-plotSPC(x, depth.axis = list(style = 'traditional'))
-plotSPC(x, depth.axis = list(style = 'tape'))
+par(mar = c(1, 0, 0, 2), mfcol = c(3, 1))
+
+options(.aqp.plotSPC.args = list(cex.names = 1, name = NA, name.style = 'center-center'))
+plotSPC(osd, depth.axis = list(interval = 20, style = 'compact', line = -3))
+mtext('compact', side = 2, line = -3)
+
+plotSPC(osd, depth.axis = list(interval = 20, style = 'traditional', line = -3))
+mtext('traditional', side = 2, line = -3)
+
+plotSPC(osd, depth.axis = list(interval = 20, style = 'tape', line = 2))
+mtext('tape', side = 2, line = -3)
+
+dev.off()
+
+
+par(mar = c(1, 0, 0, 3), mfcol = c(3, 1))
+plotSPC(x, depth.axis = list(style = 'compact', line = -3))
+plotSPC(x, depth.axis = list(style = 'traditional', line = -3))
+plotSPC(x, depth.axis = list(style = 'tape', line = 2))
 
 
 dev.off()

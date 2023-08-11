@@ -1574,7 +1574,7 @@ plotSPC <- function(
         depth.axis[['style']],
         'compact' = -1.75,
         'traditional' = -2,
-        'tape' = -2.5
+        'tape' = 3.5
       )
     }
     
@@ -1597,7 +1597,8 @@ plotSPC <- function(
       .at = depth_axis_tick_locations, 
       .labels = depth_axis_labels,
       .line = depth.axis[['line']], 
-      .cex = depth.axis[['cex']]
+      .cex = depth.axis[['cex']],
+      .n = n
     )
     
   }

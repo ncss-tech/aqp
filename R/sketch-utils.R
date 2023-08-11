@@ -35,7 +35,7 @@
   return(.res)
 }
 
-.drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex) {
+.drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex, .n) {
   
   style <- match.arg(style)
   
@@ -75,16 +75,23 @@
          },
          
          'tape' = {
-           ## TODO: does not work on wide figures...
-           
            # something like the fabric, graduated tapes
            # used by NCSS and elsewhere
            # alternating colors
            .cols <- c('white', grey(0.3))
+           
+           # requires alternative calculation of position
+           # n + line converted to user coordinates
+           
            # convert line notation to user coordinates
            .dx <- grconvertX(.line, from = 'line', to = 'user')
-           # shift
-           .x <- par('usr')[2] - .dx
+           
+           # shift using user coordinates of figure
+           # this doesn't scale beyond 6 profiles
+           # .x <- par('usr')[2] - .dx
+           
+           # shift relative to number of profiles or allocated space
+           .x <- .n + .dx
            
            # width of tape based on widest depth annotation
            .w <- strwidth(as.character(max(.at)), units = 'user', cex = .cex) / 1.5
@@ -110,18 +117,19 @@
              border = par('fg')
            )
            
-           ## TODO: figure out ideal place to put these
+           # consider computing an exact coordinate, vs pos / offset
+           # use at - (text height)
            # .labY <- .at[-1] - (diff(.at) / 2)
-           .labY <- .at[-1]
+           .labY <- .at
            # seelct labels
            text(
              x = .x, 
              y = .labY, 
-             labels = .at[-1], 
+             labels = .at, 
              cex = .cex, 
              col = invertLabelColor(.cols), 
-             # adj = c(0.5, 0.5), 
-             pos = 3
+             offset = 0.25,
+             pos = 1
            )
 
          }
