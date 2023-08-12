@@ -37,6 +37,17 @@
 
 
 
+#' @title Draw a depth axis along side soil profile sketches
+#'
+#' @param style character, depth axis style
+#' @param .at numeric vector, depth axis annotation coordinates
+#' @param .labels character vector, tick mark labels
+#' @param .line numeric, line offset for horizontal placement of axis
+#' @param .cex numeric, scaling factor for axis
+#' @param .n integer, horizontal space allocated for profile sketches (used for placement of 'tape' style depth axis)
+#' 
+#' @noRd
+#' @return nothing, low-level plotting function
 .drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex, .n) {
   
   # launder / check style

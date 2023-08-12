@@ -90,7 +90,7 @@ plotSPC(
 
 \item{depth.axis}{logical or list. Use a logical to suppress (\code{FALSE}) or add depth axis using defaults (\code{TRUE}). Use a list to specify one or more of:
 \itemize{
-\item \code{style}: 'compact', 'traditional'
+\item \code{style}: 'traditional', 'compact', 'tape'
 \item \code{line}: numeric, negative values move axis to the left
 \item \code{cex}: scaling applied to entire depth axis
 \item \code{interval}: axis interval

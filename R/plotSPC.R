@@ -35,7 +35,7 @@
 #' @param hz.depths.lines logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or `fixLabelCollisions = TRUE`
 #'
 #' @param depth.axis logical or list. Use a logical to suppress (`FALSE`) or add depth axis using defaults (`TRUE`). Use a list to specify one or more of: 
-#'  - `style`: 'compact', 'traditional'
+#'  - `style`: 'traditional', 'compact', 'tape'
 #'  - `line`: numeric, negative values move axis to the left
 #'  - `cex`: scaling applied to entire depth axis
 #'  - `interval`: axis interval
@@ -1592,6 +1592,7 @@ plotSPC <- function(
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
     
     # draw axis
+    # pass-in `n` (number of profiles or horizontal space) for placement of 'tape' style
     .drawDepthAxis(
       style = depth.axis[['style']],
       .at = depth_axis_tick_locations, 

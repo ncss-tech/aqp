@@ -27,7 +27,7 @@
 #' @keywords package
 #' @import data.table
 #' @importFrom grDevices chull col2rgb colorRamp colorRampPalette colors convertColor grey hsv rgb rgb2hsv
-#' @importFrom graphics abline arrows axis box grid image legend lines mtext par points polygon rect segments strheight strwidth text
+#' @importFrom graphics abline arrows axis box grid image legend lines mtext par points polygon rect segments strheight strwidth text grconvertX
 #' @importFrom methods setClass setOldClass representation prototype new isGeneric setGeneric setReplaceMethod setMethod .hasSlot as new slot slot<- slotNames
 #' @importFrom stats TukeyHSD aggregate aov approxfun as.dist as.formula cmdscale complete.cases dist formula median model.frame na.omit na.pass quantile rnorm runif sd splinefun terms update weighted.mean
 #' @importFrom utils object.size packageVersion
