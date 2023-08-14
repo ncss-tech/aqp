@@ -23,7 +23,6 @@ plotSPC(osd, axis.line.offset = 0)
 dev.off()
 
 # stricter interpretation of max.depth
-par(mar = c(0, 0, 0, 2))
 
 data("jacobs2000")
 data("osd")
@@ -31,20 +30,21 @@ data("osd")
 plotSPC(jacobs2000)
 plotSPC(jacobs2000, max.depth = 250)
 plotSPC(jacobs2000, max.depth = 50)
+plotSPC(jacobs2000, max.depth = 50, depth.axis = list(style = 'tape'))
+
 
 # works
-par(mar = c(0, 0, 0, 2))
-plotSPC(osd, depth.axis = list(style = 'traditional', interval = 25), cex.names = 0.7)
-plotSPC(osd, depth.axis = list(style = 'compact', interval = 25), cex.names = 0.7)
-plotSPC(osd, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
+explainPlotSPC(osd, depth.axis = list(style = 'traditional', interval = 25), cex.names = 0.7)
+explainPlotSPC(osd, depth.axis = list(style = 'compact', interval = 25), cex.names = 0.7)
+explainPlotSPC(osd, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
 
 
-# "tape" is outside of the plot area
-plotSPC(x, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
+# "tape" location is computed differently
+explainPlotSPC(x, depth.axis = list(style = 'tape', interval = 25), cex.names = 0.7)
 
-plotSPC(z, print.id = FALSE, depth.axis = list(style = 'traditional', interval = 25))
-plotSPC(z, print.id = FALSE, depth.axis = list(style = 'compact', interval = 25))
-plotSPC(z, print.id = FALSE, depth.axis = list(style = 'tape', interval = 25))
+explainPlotSPC(z, print.id = FALSE, depth.axis = list(style = 'traditional', interval = 25))
+explainPlotSPC(z, print.id = FALSE, depth.axis = list(style = 'compact', interval = 25))
+explainPlotSPC(z, print.id = FALSE, depth.axis = list(style = 'tape', interval = 25))
 
 
 # compare axis style
@@ -86,7 +86,7 @@ dev.off()
 
 # test .aqp.plotSPC.args
 # test new depth.axis interface
-par(mar = c(0, 0, 0, 2))
+par(mar = c(0, 0, 0, 3))
 
 .args <- list(width = 0.3, name.style = 'center-center', cex.names = 1)
 options(.aqp.plotSPC.args = .args)
@@ -103,6 +103,7 @@ plotSPC(x, depth.axis = list(line = -1.5))
 
 plotSPC(x, depth.axis = list(style = 'compact'))
 plotSPC(x, depth.axis = list(style = 'traditional'))
+plotSPC(x, depth.axis = list(style = 'tape', line = 3))
 
 plotSPC(x, depth.axis = list(style = 'x'))
 
@@ -115,6 +116,9 @@ plotSPC(x, max.depth = 100)
 plotSPC(x, max.depth = 54)
 plotSPC(x, max.depth = 33)
 plotSPC(x, max.depth = 36)
+
+plotSPC(x, max.depth = 33, depth.axis = list(style = 'compact'))
+plotSPC(x, max.depth = 33, depth.axis = list(style = 'tape'))
 
 
 plotSPC(x, hz.depths = TRUE)

@@ -44,11 +44,10 @@
 #' @param .labels character vector, tick mark labels
 #' @param .line numeric, line offset for horizontal placement of axis
 #' @param .cex numeric, scaling factor for axis
-#' @param .n integer, horizontal space allocated for profile sketches (used for placement of 'tape' style depth axis)
 #' 
 #' @noRd
 #' @return nothing, low-level plotting function
-.drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex, .n) {
+.drawDepthAxis <- function(style = c('compact', 'traditional', 'tape'), .at, .labels, .line, .cex) {
   
   # launder / check style
   style <- tolower(style)
@@ -92,32 +91,34 @@
          'tape' = {
            # something like the fabric, graduated tapes
            # used by NCSS and elsewhere
+           
            # alternating colors
            .cols <- c('white', grey(0.3))
            
-           # requires alternative calculation of position
-           # n + line converted to user coordinates
-           
-           # convert line notation to user coordinates
-           .dx <- grconvertX(.line, from = 'line', to = 'user')
-           
-           # shift using user coordinates of figure
-           # this doesn't scale beyond 6 profiles
-           # .x <- par('usr')[2] - .dx
-           
-           # shift relative to number of profiles or allocated space
-           .x <- .n + .dx
-           
            # width of tape based on widest depth annotation
            .w <- strwidth(as.character(max(.at)), units = 'user', cex = .cex) / 1.5
-           .n <- length(.at)
+           
+           ## not currently used, "line" depends on aspect ratio of figure
+           # convert line notation to user coordinates
+           # .dx <- grconvertX(.line, from = 'line', to = 'user')
+           
+           ## TODO: figure out line-style adjustment that ignores figure aspect ratio
+           # shift using max x value in user coordinates of figure
+           .x <- par('usr')[2] - (2 * .w)
+           
+           # number of depth labels
+           .nat <- length(.at)
+           
+           # temporarily disable figure clipping
+           # this is important because rect() adds to the figure area vs. margin by axis()
+           .op <- par(xpd = NA)
            
            # alternating colors of tape
            rect(
              xleft = .x - .w,
              xright = .x + .w, 
              ybottom = .at[-1], 
-             ytop = .at[-.n], 
+             ytop = .at[-.nat], 
              col = .cols, 
              border = NA
            )
@@ -126,7 +127,7 @@
            rect(
              xleft = .x - .w, 
              xright = .x + .w, 
-             ybottom = .at[.n], 
+             ybottom = .at[.nat], 
              ytop = .at[1],
              col = NA,
              border = par('fg')
@@ -136,7 +137,7 @@
            # use at - (text height)
            # .labY <- .at[-1] - (diff(.at) / 2)
            .labY <- .at
-           # seelct labels
+           # select labels
            text(
              x = .x, 
              y = .labY, 
@@ -146,6 +147,9 @@
              offset = 0.25,
              pos = 1
            )
+           
+           # return to original graphics state
+           par(.op)
 
          }
   )

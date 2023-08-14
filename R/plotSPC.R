@@ -35,10 +35,10 @@
 #' @param hz.depths.lines logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or `fixLabelCollisions = TRUE`
 #'
 #' @param depth.axis logical or list. Use a logical to suppress (`FALSE`) or add depth axis using defaults (`TRUE`). Use a list to specify one or more of: 
-#'  - `style`: 'traditional', 'compact', 'tape'
-#'  - `line`: numeric, negative values move axis to the left
-#'  - `cex`: scaling applied to entire depth axis
-#'  - `interval`: axis interval
+#'  - `style`: character, one of 'traditional', 'compact', or 'tape'
+#'  - `line`: numeric, negative values move axis to the left (does not apply to `style = 'tape'`)
+#'  - `cex`: numeric, scaling applied to entire depth axis
+#'  - `interval`: numeric, axis interval
 #' See examples.
 #'
 #' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
@@ -612,7 +612,7 @@ plotSPC <- function(
   # roughly 10% of length(x)
   extra_x_space <- n * 0.1
   
-  # multiplier (width * x_left_spac_mult) used to set left-side space along x-axis
+  # multiplier (width * x_left_space_mult) used to set left-side space along x-axis
   x_left_space_mult <- 2
   
   # add a little extra x-space when n <= 5
@@ -744,9 +744,12 @@ plotSPC <- function(
       max.depth + max(y.offset), 
       -extra_y_space
     )
+
+    # x-limits
+    xlim.range <- c(width * x_left_space_mult, n + extra_x_space)
     
     plot(x = 0, y = 0, type = 'n', 
-         xlim = c(width * x_left_space_mult, n + (extra_x_space)),
+         xlim = xlim.range,
          ylim = ylim.range,
          axes = FALSE, xlab = '', ylab = ''
     )
@@ -1574,7 +1577,7 @@ plotSPC <- function(
         depth.axis[['style']],
         'compact' = -1.75,
         'traditional' = -2,
-        'tape' = 3.5
+        'tape' = 4
       )
     }
     
@@ -1592,14 +1595,12 @@ plotSPC <- function(
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
     
     # draw axis
-    # pass-in `n` (number of profiles or horizontal space) for placement of 'tape' style
     .drawDepthAxis(
       style = depth.axis[['style']],
       .at = depth_axis_tick_locations, 
       .labels = depth_axis_labels,
       .line = depth.axis[['line']], 
-      .cex = depth.axis[['cex']],
-      .n = n
+      .cex = depth.axis[['cex']]
     )
     
   }
