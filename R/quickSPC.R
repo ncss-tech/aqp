@@ -108,14 +108,14 @@
 #' # each horizon label is '10' depth-units (default)
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', 
-#'         cex.names = 1, plot.depth.axis = FALSE, 
+#'         cex.names = 1, depth.axis = FALSE, 
 #'         hz.depths = TRUE
 #' )
 #' 
 #' # each horizon label is '5' depth-units
 #' s <- quickSPC(x, interval = 5)
 #' plotSPC(s, name.style = 'center-center', 
-#'         cex.names = 1, plot.depth.axis = FALSE, 
+#'         cex.names = 1, depth.axis = FALSE, 
 #'         hz.depths = TRUE
 #' )
 #' 
@@ -128,7 +128,7 @@
 #' 
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', 
-#'         cex.names = 1, plot.depth.axis = FALSE, 
+#'         cex.names = 1, depth.axis = FALSE, 
 #'         hz.depths = TRUE
 #' )
 #' 
@@ -139,7 +139,7 @@
 #' x <- 'NODATA,150,NA-'
 #' s <- quickSPC(x)
 #' plotSPC(s, name.style = 'center-center', 
-#'         cex.names = 1, plot.depth.axis = FALSE, 
+#'         cex.names = 1, depth.axis = FALSE, 
 #'         hz.depths = TRUE)
 #'
 #'

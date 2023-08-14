@@ -26,7 +26,7 @@
 #'
 #' @param label quoted column name of the (site-level) attribute used to identify profile sketches
 #' 
-#' @param raggedBottom quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary
+#' @param raggedBottom either quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary, or `FALSE` suppress ragged bottom depths when `max.depth < max(x)`
 #'
 #' @param hz.depths logical, annotate horizon top depths to the right of each sketch (`FALSE`)
 #' 
@@ -34,13 +34,18 @@
 #' 
 #' @param hz.depths.lines logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or `fixLabelCollisions = TRUE`
 #'
+#' @param depth.axis logical or list. Use a logical to suppress (`FALSE`) or add depth axis using defaults (`TRUE`). Use a list to specify one or more of: 
+#'  - `style`: character, one of 'traditional', 'compact', or 'tape'
+#'  - `line`: numeric, negative values move axis to the left (does not apply to `style = 'tape'`)
+#'  - `cex`: numeric, scaling applied to entire depth axis
+#'  - `interval`: numeric, axis interval
+#' See examples.
+#'
 #' @param alt.label quoted column name of the (site-level) attribute used for secondary annotation
 #'
 #' @param alt.label.col color used for secondary annotation text
 #'
 #' @param cex.names baseline character scaling applied to all text labels
-#'
-#' @param cex.depth.axis character scaling applied to depth scale
 #'
 #' @param cex.id character scaling applied to `label`
 #'
@@ -66,7 +71,7 @@
 #'
 #' @param n integer describing amount of space along x-axis to allocate, defaults to `length(x)`
 #'
-#' @param max.depth suggested lower depth boundary of plot, profiles are also truncated at this depth
+#' @param max.depth numeric. The lower depth for all sketches, deeper profiles are truncated at this depth. Use larger values to arbitrarily extend the vertical dimension, convenient for leaving extract space for annotation.
 #'
 #' @param n.depth.ticks suggested number of ticks in depth scale
 #'
@@ -88,9 +93,6 @@
 #'
 #' @param hz.boundary.lty quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography
 #'
-#' @param axis.line.offset horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)
-#'
-#' @param plot.depth.axis logical, plot depth axis? (default is `TRUE`)
 #'
 #' @param density fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is `NULL`, no shading)
 #'
@@ -112,12 +114,19 @@
 #'
 #' @param default.color default horizon fill color used when `color` attribute is `NA`
 #' 
-#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets `hz.depths.lines = TRUE`. Additional arguments to [fixOverlap()] can be passed as options.
+#' @param fixLabelCollisions use [fixOverlap()] to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets `hz.depths.lines = TRUE`. Additional arguments to [fixOverlap()] can be passed via `fixOverlapArgs`. Overlap collisions cannot be fixed within profiles containing degenerate or missing horizon depths (e.g. top == bottom).
 #' 
 #' @param fixOverlapArgs a named list of arguments to [fixOverlap()]. Overlap adjustments are attempted using electrostatic simulation with arguments: `list(method = 'E', q = 1)`. Alternatively, select adjustment by simulated annealing via `list(method = 'S')`. See [electroStatics_1D()] and [SANN_1D()] for details.
 #'
 #' @param \dots other arguments passed into lower level plotting functions
 #'
+#'
+#' @param axis.line.offset (deprecated, use `depth.axis` instead) horizontal offset applied to depth axis (default is -2, larger numbers move the axis to the right)
+#'
+#' @param plot.depth.axis (deprecated, use `depth.axis` instead) logical, plot depth axis?
+#'
+#' @param cex.depth.axis (deprecated, use `depth.axis` instead) character scaling applied to depth scale
+#' 
 #'
 #' @details
 #' Depth limits (`max.depth`) and number of depth ticks (`n.depth.ticks`) are *suggestions* to the [pretty()] function. You may have to tinker with both parameters to get what you want.
@@ -351,10 +360,10 @@ plotSPC <- function(
     hz.depths = FALSE,
     hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
     hz.depths.lines = fixLabelCollisions,
+    depth.axis = list(style = 'compact', cex = cex.names * 1.15),
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,
-    cex.depth.axis = cex.names,
     cex.id = cex.names + (0.2 * cex.names),
     font.id = 2,
     srt.id = 0, 
@@ -368,7 +377,7 @@ plotSPC <- function(
     x.idx.offset = 0,
     n = length(x),
     max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
-    n.depth.ticks = 5,
+    n.depth.ticks = 10,
     shrink = FALSE,
     shrink.cutoff = 3,
     shrink.thin = NULL,
@@ -378,8 +387,6 @@ plotSPC <- function(
     hz.distinctness.offset = NULL,
     hz.topography.offset = NULL,
     hz.boundary.lty = NULL,
-    axis.line.offset = -2.5,
-    plot.depth.axis = TRUE,
     density = NULL,
     show.legend = TRUE,
     col.label = color,
@@ -393,6 +400,10 @@ plotSPC <- function(
     default.color = grey(0.95),
     fixLabelCollisions = hz.depths,
     fixOverlapArgs = list(method = 'E', q = 1),
+    
+    cex.depth.axis = cex.names,
+    axis.line.offset = -2,
+    plot.depth.axis = TRUE,
     ...
 ) {
   
@@ -420,16 +431,16 @@ plotSPC <- function(
     # e.g. some of: names(formals('plotSPC'))
     # not all arguments can be set via options
     .argSet <- c("color", "width", "name", "name.style", "label", "raggedBottom", "hz.depths", 
-                 "hz.depths.offset", "hz.depths.lines", "alt.label", "alt.label.col", 
-                 "cex.names", "cex.depth.axis", "cex.id", "font.id", "srt.id", 
+                 "hz.depths.offset", "hz.depths.lines", "depth.axis", "alt.label", "alt.label.col", 
+                 "cex.names", "cex.id", "font.id", "srt.id", 
                  "print.id", "id.style", "plot.order", "relative.pos", "add", 
                  "scaling.factor", "y.offset", "x.idx.offset", "n", "max.depth", 
                  "n.depth.ticks", "shrink", "shrink.cutoff", "shrink.thin", "abbr", 
                  "abbr.cutoff", "divide.hz", "hz.distinctness.offset", "hz.topography.offset", 
-                 "hz.boundary.lty", "axis.line.offset", "plot.depth.axis", "density", 
+                 "hz.boundary.lty", "density", 
                  "show.legend", "col.label", "col.palette", "col.palette.bias", 
                  "col.legend.cex", "n.legend", "lwd", "lty", "default.color", 
-                 "fixLabelCollisions", "fixOverlapArgs"
+                 "fixLabelCollisions", "fixOverlapArgs", "axis.line.offset", "plot.depth.axis", "cex.depth.axis"
     )
     
     # iterate over all possible arguments that can be modified in this way
@@ -518,13 +529,17 @@ plotSPC <- function(
   
   # ragged bottom flag
   if(!missing(raggedBottom)) {
-    # valid name
-    if(! raggedBottom %in% siteNames(x))
-      stop('invalid `raggedBottom` column name', call. = FALSE)
     
-    # must be logical
-    if(! is.logical(x[[raggedBottom]]))
-      stop('`raggedBottom` must be logical', call. = FALSE)
+    # valid type
+    if(! inherits(raggedBottom, c('logical', 'character'))) {
+      stop('`raggedBottom` must be logical or character', call. = FALSE)
+    }
+    
+    # valid name
+    if((is.character(raggedBottom)) & ! raggedBottom %in% siteNames(x)) {
+      stop('invalid `raggedBottom` column name', call. = FALSE)
+    }
+    
   }
   
   # length of y.offset must length(x) or 1
@@ -597,7 +612,7 @@ plotSPC <- function(
   # roughly 10% of length(x)
   extra_x_space <- n * 0.1
   
-  # multiplier (width * x_left_spac_mult) used to set left-side space along x-axis
+  # multiplier (width * x_left_space_mult) used to set left-side space along x-axis
   x_left_space_mult <- 2
   
   # add a little extra x-space when n <= 5
@@ -718,23 +733,23 @@ plotSPC <- function(
   }
   
   
-  # pre-compute nice range for depth axis, also used for plot init
-  depth_axis_intervals <- pretty(seq(from=0, to = max.depth, by = 1), n = n.depth.ticks)
   
-  # init plotting region, unless we are appending to an existing plot
+  ## init plotting region, unless we are appending to an existing plot
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
     
-    ## TODO: this seems to extend too far... review
     # y-limits also include y.offset range
     ylim.range <- c(
-      max(depth_axis_intervals) + max(y.offset), 
+      max.depth + max(y.offset), 
       -extra_y_space
     )
+
+    # x-limits
+    xlim.range <- c(width * x_left_space_mult, n + extra_x_space)
     
     plot(x = 0, y = 0, type = 'n', 
-         xlim = c(width * x_left_space_mult, n + (extra_x_space)),
+         xlim = xlim.range,
          ylim = ylim.range,
          axes = FALSE, xlab = '', ylab = ''
     )
@@ -1280,10 +1295,29 @@ plotSPC <- function(
         # device coordinates: scaling / offset applied
         hzd.txt.y <- y1[-1]
         
-        ## collision detection / fix
-        if(fixLabelCollisions) {
+        
+        # sanity checks before attempting label collision repair:
+        #  - no NA
+        #  - no top == bottom
+        if(any(is.na(c(y0, y1)))) {
+          .canFixLabelCollision <- FALSE
+          message(sprintf('[%s:%s] horizon with top == bottom, cannot fix horizon depth overlap\n consider using repairMissingHzDepths()', this_profile_id, nh))
           
-          ## TODO: consder adjusting by scaling.factor
+        } else {
+          
+          # test for top == bottom, cannot perform label collision if this is the case
+          if(any(y0 == y1)) {
+            .canFixLabelCollision <- FALSE
+            message(sprintf('[%s:%s] horizon with top == bottom, cannot fix horizon depth overlap\n consider using repairMissingHzDepths()', this_profile_id, nh))
+          } else {
+            .canFixLabelCollision <- TRUE
+          }
+        }
+        
+        ## collision detection / fix
+        if(fixLabelCollisions && .canFixLabelCollision) {
+          
+          ## TODO: consider adjusting by scaling.factor
           # reasonable threshold for label collision detection
           # depends on aesthetic weighting / graphics device / hz.depths.cex
           y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
@@ -1313,7 +1347,6 @@ plotSPC <- function(
           
           # keep only positions that are < max.depth, after y.offset and scaling
           # these are scaled positions
-          # print(y.thresh)
           .pos <- .pos[which(.pos < ((max.depth * scaling.factor) + y.offset[i]))]
           
           # setup arguments to fixOverlap()
@@ -1484,16 +1517,92 @@ plotSPC <- function(
   ## depth axis ##
   ################
   
-  # suppress when there are multiple y.offsets
-  if(length(unique(y.offset)) > 1) {
-    plot.depth.axis <- FALSE 
+  ## 
+  ## retain for 2 (?) minor versions
+  ##
+  
+  # handling of aqp 1.x style arguments
+  if(!missing(plot.depth.axis)) {
+    if(missing(depth.axis)) {
+      depth.axis <- plot.depth.axis
+    }
+    message('`plot.depth.axis` is now deprecated, please use `depth.axis` argument')
   }
   
-  if(plot.depth.axis) {
+  if(!missing(cex.depth.axis)) {
+    if(inherits(depth.axis, 'list')) {
+      depth.axis[['cex']] <- cex.depth.axis
+    } else {
+      depth.axis <- list(cex = cex.depth.axis)
+    }
+    message('`cex.depth.axis` is now deprecated, please use `depth.axis` argument')
+  }
+  
+  if(!missing(axis.line.offset)) {
+    if(inherits(depth.axis, 'list')) {
+      depth.axis[['line']] <- axis.line.offset
+    } else {
+      depth.axis <- list(line = axis.line.offset)  
+    }
+    message('`axis.line.offset` is now deprecated, please use `depth.axis` argument')
+  }
+  
+  ##
+  ## end backwards compatibility
+  ##
+  
+  # suppress when there are multiple y.offsets
+  if(length(unique(y.offset)) > 1) {
+    message('depth axis is disabled when more than 1 unique y offsets are supplied')
+    depth.axis <- FALSE 
+  }
+  
+  # add depth axis
+  if(isTRUE(depth.axis) || is.list(depth.axis)) {
+    
+    # compose list with defaults if not already
+    # NULL `interval` will use sensible defaults
+    if(!is.list(depth.axis)) {
+      depth.axis <- list(style = 'compact', line = -2, cex = cex.names)
+    }
+    
+    # default style if missing
+    if(is.null(depth.axis[['style']])) {
+      depth.axis[['style']] <- 'compact'
+    }
+    
+    # default line if missing
+    if(is.null(depth.axis[['line']])) {
+      depth.axis[['line']] <- switch(
+        depth.axis[['style']],
+        'compact' = -1.75,
+        'traditional' = -2,
+        'tape' = 4
+      )
+    }
+    
+    if(is.null(depth.axis[['cex']])) {
+      depth.axis[['cex']] <- cex.names
+    }
+    
+    # compute nice range for depth axis with sensible interval and max value
+    depth_axis_intervals <- .depthAxisSeq(max.depth, i = depth.axis[['interval']])
+    
+    # convert to plot scale/offset
     depth_axis_tick_locations <- (depth_axis_intervals * scaling.factor) + y.offset[1]
+    
+    # add depth units
     depth_axis_labels <- paste(depth_axis_intervals, depth_units(x))
     
-    axis(side=4, line=axis.line.offset, las=2, at=depth_axis_tick_locations, labels=depth_axis_labels, cex.axis=cex.depth.axis, col.axis=par('fg'))
+    # draw axis
+    .drawDepthAxis(
+      style = depth.axis[['style']],
+      .at = depth_axis_tick_locations, 
+      .labels = depth_axis_labels,
+      .line = depth.axis[['line']], 
+      .cex = depth.axis[['cex']]
+    )
+    
   }
   
   

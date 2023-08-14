@@ -11,6 +11,7 @@ test_that("textureTriangleSummary() works as expected", {
   skip_if_not_installed(pkg = "Hmisc")
 
   # requires Tcl/tk, at least on linux
+  # throws warning on GH actions / linux: "no DISPLAY variable so Tk is not available"
   skip_if_not_installed(pkg = "soiltexture")
 
   # does it work?

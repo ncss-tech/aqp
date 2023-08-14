@@ -13,10 +13,11 @@
 #' @return `SoilProfileCollection` with a new (logical) horizon-level attribute `.repaired` marking affected horizons
 #' @export
 #' @examples 
+#' 
 #' h <- data.frame(
-#'   id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),
-#'   top = c(0:2, 0:3, 0:1) * 10,
-#'   bottom = c(rep(NA_integer_, 7), c(10, 99))
+#' id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),
+#' top = c(0:2, 0:3, 0:1) * 10,
+#' bottom = c(rep(NA_integer_, 7), c(10, 99))
 #' )
 #' 
 #' # NA depths result in warnings
@@ -25,26 +26,27 @@
 #' })
 #' 
 #' # inspect data before repairs
-#' plot(h)
+#' plotSPC(h)
 #' 
 #' g <- repairMissingHzDepths(h)
 #' 
 #' # all depth logic now valid
 #' all(checkHzDepthLogic(g)$valid)
 #' 
-#' # inspect 
-#' plot(g)
+#' # inspect
+#' plotSPC(g)
 #' 
 #' # no adj, max.depth only
 #' f <- repairMissingHzDepths(h, adj = NA, max.depth = 200)
 #' all(checkHzDepthLogic(f)$valid)
-#' plot(f) 
+#' plotSPC(f)
 #' 
 #' # max.depth defaults to max(x) if too small
 #' f$bottom[c(3,7)] <- NA
 #' d <- repairMissingHzDepths(f, adj = NA, max.depth = 20)
 #' all(checkHzDepthLogic(d)$valid)
-#' plot(d)
+#' plotSPC(d)
+#' 
 repairMissingHzDepths <- function(x, adj = 10, max.depth = 200) {
   # define SPC k-keywords as local vars for R CMD CHECK
   .LAST <- NULL; .HZID <- NULL

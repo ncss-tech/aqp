@@ -69,12 +69,20 @@ jacobs2000$rubiforder <- order(jacobs2000$rubif)
 
 # Plot in order of increasing Rubification index
 
-plotSPC(jacobs2000, axis.line.offset = -1,
-        color = "matrix_color",
-        label = "rubif",
-        plot.order = jacobs2000$rubiforder)
+plotSPC(jacobs2000,
+color = "matrix_color",
+label = "rubif",
+plot.order = jacobs2000$rubiforder,
+max.depth = 250
+)
 
-abline(h = c(0,100,150,200), lty = 2)
+segments(
+  x0 = 0.5, 
+  x1 = length(jacobs2000) + 0.5, 
+  y0 = c(0,100,150,200), 
+  y1 = c(0,100,150,200), 
+  lty = 2
+)
 
 # Add [estimated] parent material color swatches
 trash <- sapply(seq_along(jacobs2000$c_horizon_color), function(i) {

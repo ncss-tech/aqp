@@ -60,12 +60,20 @@ jacobs2000$melanorder <- order(jacobs2000$melan)
 
 # Plot in order of increasing Melanization index
 
-plotSPC(jacobs2000, axis.line.offset = -1,
+plotSPC(jacobs2000, 
         color = "matrix_color",
         label = "melan",
-        plot.order = jacobs2000$melanorder)
+        plot.order = jacobs2000$melanorder,
+        max.depth = 250
+        )
 
-abline(h = c(0,100,150,200), lty = 2)
+segments(
+  x0 = 0.5, 
+  x1 = length(jacobs2000) + 0.5, 
+  y0 = c(0,100,150,200), 
+  y1 = c(0,100,150,200), 
+  lty = 2
+)
 
 # Add [estimated] parent material color swatches
 lapply(seq_along(jacobs2000$c_horizon_color), function(i) {

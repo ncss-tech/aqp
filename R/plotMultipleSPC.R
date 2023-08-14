@@ -49,27 +49,29 @@
 #'
 #' # plot 2 SoilProfileCollection objects on the same axis
 #' par(mar=c(1,1,1,1))
-#' plot(sp3, n=n.pedons)
-#' plot(sp4, add=TRUE, x.idx.offset=group.ends[1], plot.depth.axis=FALSE, id.style='side')
+#' plotSPC(sp3, n = n.pedons)
+#' plotSPC(sp4, add = TRUE, x.idx.offset = group.ends[1], 
+#' depth.axis = FALSE, id.style = 'side')
+#' 
 #' # annotate groups
-#' profileGroupLabels(x0=group.starts, x1=group.ends,
+#' profileGroupLabels(x0 = group.starts, x1 = group.ends,
 #' labels=c('Collection 1', 'Collection 2'), y0=120, y1=tick.heights)
 #'
 profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, label.cex=0.75) {
-
+  
   # sanity check: start / stop / label lengths should be equal
   if(! all.equal(length(x0), length(x1), length(labels)) )
     stop('start positions, stop positions, and number of labels must be equal', call. = FALSE)
-
+  
   # pre-compute some elements
   n.groups <- length(x0)
   label.centers <- (x0 + x1) / 2
-
+  
   # add group base lines
   segments(x0=x0, x1=x1, y0=y0, y1=y0)
   # add arrows to first / last group members
   arrows(x0=c(x0, x1), x1=c(x0, x1), y0=c(y0, y0), y1=y1, length=0.1)
-
+  
   # annotate with group names
   text(x=label.centers, y=y0 + label.offset, labels=labels, cex=label.cex)
 }
@@ -239,17 +241,17 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #'   label.offset = 3,
 #'   args = arg.list, 
 #'   merged.legend = 'clay', merged.legend.title = 'Clay (%)',
-#'   axis.line.offset = 0
+#'   depth.axis = list(line = 0)
 #' )
 plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times = length(spc.list)), merged.legend = NULL, merged.colors = c("#5E4FA2", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598", "#FEE08B","#FDAE61", "#F46D43", "#D53E4F","#9E0142"), merged.legend.title = merged.legend, arrow.offset = 2, bracket.base.depth = 95, label.offset = 2, label.cex = 0.75, ...) {
-
+  
   # compute group stats
   n.groups <- length(spc.list)
   spc.lengths <- sapply(spc.list, length)
   n.pedons <- sum(spc.lengths)
   group.starts <- c(1, 1 + cumsum(spc.lengths[-n.groups]))
   group.ends <- cumsum(spc.lengths)
-
+  
   # get depths + offset to start / end profiles
   yy <- unlist(sapply(spc.list, function(i) profileApply(i, max)))
   tick.heights <- yy[c(group.starts, group.ends)] + arrow.offset
@@ -364,7 +366,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
     
     
   }
-
+  
   # setup plot with first SPC in list
   do.call(
     what = plotSPC, 
@@ -373,8 +375,8 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
       n = n.pedons, 
       na.omit(args[[1]]),
       ...)
-    )
-
+  )
+  
   # iterate over remaining SPC objs
   if(n.groups > 1) {
     for(i in 2:n.groups) {
@@ -383,12 +385,18 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
       suppressMessages(
         do.call(
           what = plotSPC, 
-          args = c(x=this.obj, x.idx.offset=group.ends[i-1], add=TRUE, plot.depth.axis=FALSE, this.args)
+          args = c(
+            x = this.obj, 
+            x.idx.offset = group.ends[i-1], 
+            add = TRUE, 
+            depth.axis = FALSE, 
+            this.args
+          )
         )
       )
     }
   }
-
+  
   # annotate groups with brackets
   profileGroupLabels(
     x0 = group.starts, 
@@ -398,7 +406,7 @@ plotMultipleSPC <- function(spc.list, group.labels, args = rep(list(NA), times =
     y1 = tick.heights, 
     label.offset = label.offset, 
     label.cex = label.cex
-    )
+  )
   
   # add merged legend
   if(! is.null(merged.legend)) {

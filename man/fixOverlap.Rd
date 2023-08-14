@@ -51,7 +51,7 @@ x$z <- as.numeric(x$hzID)
   hz.depths = TRUE, 
   name.style = 'center-center', 
   cex.names = 1.5, 
-  plot.depth.axis = FALSE, 
+  depth.axis = FALSE, 
   name = NA,
   color = 'z',
   show.legend = FALSE,
