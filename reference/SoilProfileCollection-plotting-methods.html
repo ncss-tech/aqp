@@ -82,10 +82,10 @@ Options can be used to conveniently specify sets of arguments that will be used 
 <span>  hz.depths <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hz.depths.offset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">fixLabelCollisions</span>, <span class="fl">0.03</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  hz.depths.lines <span class="op">=</span> <span class="va">fixLabelCollisions</span>,</span>
+<span>  depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>style <span class="op">=</span> <span class="st">"compact"</span>, cex <span class="op">=</span> <span class="va">cex.names</span> <span class="op">*</span> <span class="fl">1.15</span><span class="op">)</span>,</span>
 <span>  alt.label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alt.label.col <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  cex.names <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  cex.depth.axis <span class="op">=</span> <span class="va">cex.names</span>,</span>
 <span>  cex.id <span class="op">=</span> <span class="va">cex.names</span> <span class="op">+</span> <span class="op">(</span><span class="fl">0.2</span> <span class="op">*</span> <span class="va">cex.names</span><span class="op">)</span>,</span>
 <span>  font.id <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  srt.id <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -99,7 +99,7 @@ Options can be used to conveniently specify sets of arguments that will be used 
 <span>  x.idx.offset <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  n <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  max.depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.infinite</a></span><span class="op">(</span><span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, <span class="fl">200</span>, <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  n.depth.ticks <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  n.depth.ticks <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  shrink <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  shrink.cutoff <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  shrink.thin <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -109,8 +109,6 @@ Options can be used to conveniently specify sets of arguments that will be used 
 <span>  hz.distinctness.offset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hz.topography.offset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hz.boundary.lty <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axis.line.offset <span class="op">=</span> <span class="op">-</span><span class="fl">2.5</span>,</span>
-<span>  plot.depth.axis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  density <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  col.label <span class="op">=</span> <span class="va">color</span>,</span>
@@ -124,6 +122,9 @@ Options can be used to conveniently specify sets of arguments that will be used 
 <span>  default.color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span>,</span>
 <span>  fixLabelCollisions <span class="op">=</span> <span class="va">hz.depths</span>,</span>
 <span>  fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"E"</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  cex.depth.axis <span class="op">=</span> <span class="va">cex.names</span>,</span>
+<span>  axis.line.offset <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
+<span>  plot.depth.axis <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -158,7 +159,7 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 
 <dt>raggedBottom</dt>
-<dd><p>quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary</p></dd>
+<dd><p>either quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary, or <code>FALSE</code> suppress ragged bottom depths when <code>max.depth &lt; max(x)</code></p></dd>
 
 
 <dt>hz.depths</dt>
@@ -173,6 +174,15 @@ Options can be used to conveniently specify sets of arguments that will be used 
 <dd><p>logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or <code>fixLabelCollisions = TRUE</code></p></dd>
 
 
+<dt>depth.axis</dt>
+<dd><p>logical or list. Use a logical to suppress (<code>FALSE</code>) or add depth axis using defaults (<code>TRUE</code>). Use a list to specify one or more of:</p><ul><li><p><code>style</code>: character, one of 'traditional', 'compact', or 'tape'</p></li>
+<li><p><code>line</code>: numeric, negative values move axis to the left (does not apply to <code>style = 'tape'</code>)</p></li>
+<li><p><code>cex</code>: numeric, scaling applied to entire depth axis</p></li>
+<li><p><code>interval</code>: numeric, axis interval
+See examples.</p></li>
+</ul></dd>
+
+
 <dt>alt.label</dt>
 <dd><p>quoted column name of the (site-level) attribute used for secondary annotation</p></dd>
 
@@ -183,10 +193,6 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 <dt>cex.names</dt>
 <dd><p>baseline character scaling applied to all text labels</p></dd>
-
-
-<dt>cex.depth.axis</dt>
-<dd><p>character scaling applied to depth scale</p></dd>
 
 
 <dt>cex.id</dt>
@@ -238,7 +244,7 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 
 <dt>max.depth</dt>
-<dd><p>suggested lower depth boundary of plot, profiles are also truncated at this depth</p></dd>
+<dd><p>numeric. The lower depth for all sketches, deeper profiles are truncated at this depth. Use larger values to arbitrarily extend the vertical dimension, convenient for leaving extract space for annotation.</p></dd>
 
 
 <dt>n.depth.ticks</dt>
@@ -279,14 +285,6 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 <dt>hz.boundary.lty</dt>
 <dd><p>quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography</p></dd>
-
-
-<dt>axis.line.offset</dt>
-<dd><p>horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)</p></dd>
-
-
-<dt>plot.depth.axis</dt>
-<dd><p>logical, plot depth axis? (default is <code>TRUE</code>)</p></dd>
 
 
 <dt>density</dt>
@@ -330,11 +328,23 @@ Options can be used to conveniently specify sets of arguments that will be used 
 
 
 <dt>fixLabelCollisions</dt>
-<dd><p>use <code><a href="fixOverlap.html">fixOverlap()</a></code> to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets <code>hz.depths.lines = TRUE</code>. Additional arguments to <code><a href="fixOverlap.html">fixOverlap()</a></code> can be passed as options.</p></dd>
+<dd><p>use <code><a href="fixOverlap.html">fixOverlap()</a></code> to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets <code>hz.depths.lines = TRUE</code>. Additional arguments to <code><a href="fixOverlap.html">fixOverlap()</a></code> can be passed via <code>fixOverlapArgs</code>. Overlap collisions cannot be fixed within profiles containing degenerate or missing horizon depths (e.g. top == bottom).</p></dd>
 
 
 <dt>fixOverlapArgs</dt>
 <dd><p>a named list of arguments to <code><a href="fixOverlap.html">fixOverlap()</a></code>. Overlap adjustments are attempted using electrostatic simulation with arguments: <code>list(method = 'E', q = 1)</code>. Alternatively, select adjustment by simulated annealing via <code>list(method = 'S')</code>. See <code><a href="electroStatics_1D.html">electroStatics_1D()</a></code> and <code><a href="SANN_1D.html">SANN_1D()</a></code> for details.</p></dd>
+
+
+<dt>cex.depth.axis</dt>
+<dd><p>(deprecated, use <code>depth.axis</code> instead) character scaling applied to depth scale</p></dd>
+
+
+<dt>axis.line.offset</dt>
+<dd><p>(deprecated, use <code>depth.axis</code> instead) horizontal offset applied to depth axis (default is -2, larger numbers move the axis to the right)</p></dd>
+
+
+<dt>plot.depth.axis</dt>
+<dd><p>(deprecated, use <code>depth.axis</code> instead) logical, plot depth axis?</p></dd>
 
 
 <dt>...</dt>
@@ -538,6 +548,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>  fixLabelCollisions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-14.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -557,6 +568,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
 <span class="r-in"><span>        name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-15.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -578,6 +590,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
 <span class="r-in"><span>        name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/box.html" class="external-link">box</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-16.png" alt="" width="768" height="475"></span>

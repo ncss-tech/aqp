@@ -242,10 +242,10 @@ package when omitted.</p>
 <span><span class="co"># sketch profiles</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, </span>
-<span>        cex.names <span class="op">=</span> <span class="fl">1</span>, plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>        cex.names <span class="op">=</span> <span class="fl">1</span>, depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-1-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -361,8 +361,8 @@ follows.</p>
 <pre><code><span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;  [1] 1130.4604  989.5593  899.6887  791.4852 1017.0913  960.7401  592.8808  907.9045  987.0899</span></span>
-<span><span class="co">#&gt; [10]  925.3145</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;  [1]  909.1613 1134.9311 1062.2407  902.8165 1253.5487  974.7919 1078.4231  783.6210 1076.1748</span></span>
+<span><span class="co">#&gt; [10]  778.9129</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -418,12 +418,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa 1130.4604             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn  989.5593             1        1     B</span></span>
-<span><span class="co">#&gt;      kings  899.6887             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa  791.4852             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1017.0913             1        1     A</span></span>
-<span><span class="co">#&gt;       napa  960.7401             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa  909.1613             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn 1134.9311             1        1     B</span></span>
+<span><span class="co">#&gt;      kings 1062.2407             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa  902.8165             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino 1253.5487             1        1     A</span></span>
+<span><span class="co">#&gt;       napa  974.7919             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -582,16 +582,16 @@ data and the CRS, respectively.</p>
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;              x       y</span></span>
-<span><span class="co">#&gt;  [1,] 354006.4 4109449</span></span>
-<span><span class="co">#&gt;  [2,] 353983.6 4109454</span></span>
-<span><span class="co">#&gt;  [3,] 354240.4 4109469</span></span>
-<span><span class="co">#&gt;  [4,] 353994.4 4109560</span></span>
-<span><span class="co">#&gt;  [5,] 353840.2 4109483</span></span>
-<span><span class="co">#&gt;  [6,] 353975.1 4109539</span></span>
-<span><span class="co">#&gt;  [7,] 353992.9 4109624</span></span>
-<span><span class="co">#&gt;  [8,] 353899.2 4109540</span></span>
-<span><span class="co">#&gt;  [9,] 353988.2 4109475</span></span>
-<span><span class="co">#&gt; [10,] 353989.8 4109444</span></span></code></pre>
+<span><span class="co">#&gt;  [1,] 354000.7 4109543</span></span>
+<span><span class="co">#&gt;  [2,] 353987.2 4109449</span></span>
+<span><span class="co">#&gt;  [3,] 354129.3 4109413</span></span>
+<span><span class="co">#&gt;  [4,] 353965.7 4109483</span></span>
+<span><span class="co">#&gt;  [5,] 354249.5 4109526</span></span>
+<span><span class="co">#&gt;  [6,] 353988.0 4109527</span></span>
+<span><span class="co">#&gt;  [7,] 353958.4 4109579</span></span>
+<span><span class="co">#&gt;  [8,] 354012.4 4109633</span></span>
+<span><span class="co">#&gt;  [9,] 353969.2 4109408</span></span>
+<span><span class="co">#&gt; [10,] 353752.3 4109373</span></span></code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -990,8 +990,8 @@ and resolution</li>
 </li>
 <li>adjust sketch width with <code>width</code>, typically within
 0.15-0.35</li>
-<li>move depth axis to the left with negative
-<code>axis.line.offset</code> values</li>
+<li>move depth axis to the left using negative <code>line</code> values,
+e.g. (<code>depth.axis = list(line = -2)</code>)</li>
 </ul>
 <p>Get some example data from the Official Series Descriptions:</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
@@ -1009,12 +1009,11 @@ and resolution</li>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="op">]</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, width <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;"></p>
-<p>Using 8x6 inch output device, slight adjustments to
-<code>axis.line.offset</code> and <code>width</code> are usually
+<p>Using 8x6 inch output device, slight adjustments to are usually
 required:</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, axis.line.offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-26-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1030,7 +1029,7 @@ single depth axis.</p>
 <span>  cex.names <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span>
 <span>  width <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  hz.depths.offset <span class="op">=</span> <span class="fl">0.08</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -1285,7 +1284,7 @@ and can be written with the <code>win.metafile()</code> function.</p>
 <span><span class="co"># svglite(filename = 'e:/temp/fig.svg', width = 7, height = 6, pointsize = 12)</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># par(mar = c(0,2,0,4), xpd = NA)</span></span>
-<span><span class="co"># plotSPC(x, cex.names=1, axis.line.offset = -0.2, width=0.3)</span></span>
+<span><span class="co"># plotSPC(x, cex.names=1, depth.axis = list(line = -0.2), width=0.3)</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># dev.off()</span></span></code></pre></div>
 </div>
@@ -1637,14 +1636,14 @@ profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
 <span><span class="co"># note: result is in long-format</span></span>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;   variable id     value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1 43.394846             1.0000000   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1 43.394846             1.0000000   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1 41.056519             1.0000000  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1 22.525148             1.0000000  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 15.913902             1.0000000  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 14.043793             0.6923077 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2  8.066387             1.0000000   0      5</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
+<span><span class="co">#&gt; 1       p1  1 28.07559             1.0000000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1 28.07559             1.0000000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 30.27452             1.0000000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 17.33628             1.0000000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 11.39741             1.0000000  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1 10.79966             0.7288136 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 27.46769             1.0000000   0      5</span></span></code></pre>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
@@ -1763,7 +1762,7 @@ details.</p>
 <span>  color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span>,</span>
 <span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span>
 <span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  depth.axis <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-51-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>Some additional examples can be found in:</p>
