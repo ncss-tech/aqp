@@ -80,6 +80,7 @@ x$z <- as.numeric(x$hzID)
 # plotSPC arguments
 .a <- list(
   width = 0.2, 
+  max.depth = 40,
   hz.depths = TRUE, 
   name.style = 'center-center', 
   cex.names = 1.5,
@@ -104,15 +105,15 @@ testIt <- function(x, ...) {
   .LAI <- ifelse(is.na(.LAI), 0, .LAI)
   
   .txt <- sprintf("LAI: %0.3f", .LAI)
-  mtext(.txt, side = 1, at = 1, line = -2, cex = 0.8)
+  mtext(.txt, side = 1, at = 1, line = -1.5, cex = 0.8)
 }
 
 
 # compare and contrast
-par(mar = c(0, 0, 0, 0), mfcol = c(1, 8))
+par(mar = c(1, 0, 0, 0), mfcol = c(1, 8))
 
 testIt(x, fixLabelCollisions = FALSE)
-title('No Adjustment', line = -3.5, adj = 0.5)
+title('No\nAdjustment', line = -3.5, adj = 0.5)
 
 testIt(x, fixOverlapArgs = list(method = 'S'))
 title('SANN\nsim 1', line = -3.5, adj = 0.5)

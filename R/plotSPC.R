@@ -360,7 +360,7 @@ plotSPC <- function(
     hz.depths = FALSE,
     hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
     hz.depths.lines = fixLabelCollisions,
-    depth.axis = list(style = 'compact', cex = cex.names * 1.15),
+    depth.axis = list(style = 'traditional', cex = cex.names * 1.15),
     alt.label = NULL,
     alt.label.col = 'black',
     cex.names = 0.5,
@@ -1563,12 +1563,12 @@ plotSPC <- function(
     # compose list with defaults if not already
     # NULL `interval` will use sensible defaults
     if(!is.list(depth.axis)) {
-      depth.axis <- list(style = 'compact', line = -2, cex = cex.names)
+      depth.axis <- list(style = 'traditional', line = -2, cex = cex.names * 1.15)
     }
     
     # default style if missing
     if(is.null(depth.axis[['style']])) {
-      depth.axis[['style']] <- 'compact'
+      depth.axis[['style']] <- 'traditional'
     }
     
     # default line if missing
@@ -1582,7 +1582,7 @@ plotSPC <- function(
     }
     
     if(is.null(depth.axis[['cex']])) {
-      depth.axis[['cex']] <- cex.names
+      depth.axis[['cex']] <- cex.names * 1.15
     }
     
     # compute nice range for depth axis with sensible interval and max value

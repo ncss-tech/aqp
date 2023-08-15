@@ -1,4 +1,4 @@
-library(aqp)
+devtools::load_all()
 library(soilDB)
 library(sharpshootR)
 

@@ -11,6 +11,8 @@
 
 library(aqp)
 
+options(.aqp.plotSPC.args = list(depth.axis = FALSE))
+
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 hzdesgnname(sp1) <- 'name'
@@ -19,12 +21,13 @@ hzdesgnname(sp1) <- 'name'
 checkHzDepthLogic(sp1)
 
 # 
-par(mar = c(0, 0, 0, 0))
+par(mar = c(0, 0, 0, 2))
 
 plotSPC(
   sp1,
   cex.names = 0.66,
   hz.depths = FALSE,
+  depth.axis = TRUE,
   name.style = 'center-center'
 )
 
