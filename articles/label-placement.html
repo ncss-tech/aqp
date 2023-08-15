@@ -58,6 +58,9 @@
     <li>
       <a href="../articles/label-placement.html">Overlapping Annotation</a>
     </li>
+    <li>
+      <a href="../articles/new-in-aqp-2.html">What is new in aqp 2.0?</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -126,6 +129,7 @@
 <span><span class="co"># plotSPC arguments</span></span>
 <span><span class="va">.a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  width <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>  max.depth <span class="op">=</span> <span class="fl">40</span>,</span>
 <span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>, </span>
 <span>  cex.names <span class="op">=</span> <span class="fl">1.5</span>,</span>
@@ -150,15 +154,15 @@
 <span>  <span class="va">.LAI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">.LAI</span><span class="op">)</span>, <span class="fl">0</span>, <span class="va">.LAI</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">.txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"LAI: %0.3f"</span>, <span class="va">.LAI</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="va">.txt</span>, side <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="va">.txt</span>, side <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># compare and contrast</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixLabelCollisions <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'No Adjustment'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'No\nAdjustment'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
