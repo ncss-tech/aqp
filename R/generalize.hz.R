@@ -1,28 +1,29 @@
-# return a vector of generalized horizon names, based on:
-# x: a vector of new names
-# x: a vector of regex patterns
-# non.matching.code: code for any non-matching hz designations
-# hzdepm: vector of hz mid-points
-# dots: additional arguments passed to grep (e.g. perl=TRUE)
+
+## TODO: consider always returning an ordered factor, why would this ever not be the intended output?
 
 #' @title Generalize Horizon Names
 #'
 #' @description Generalize a vector of horizon names, based on new classes, and REGEX
-#' patterns. Or create a new column `ghl` in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
+#' patterns. Or create a new column `ghl` in a `SoilProfileCollection` (requires a horizon designation name to be defined for the collection, see details)
 #'
-#' @param x a character vector of horizon names or a `SoilProfileCollection`
-#' @param new a character vector of new horizon classes
-#' @param pattern a character vector of REGEX patterns, same length as `new`
-#' @param non.matching.code label used for any horizon not matching any `pattern`
-#' @param hzdepm a numeric vector of horizon mid-points; `NA` values in `hzdepm` will result in `non.matching.code` (or `NA` if not defined) in result
-#' @param ordered by default, the result is an ordered factor when `hzdepm` is defined. 
-#' @param ... additional arguments passed to `grep()` such as `perl=TRUE` for advanced REGEX
-#' @return (ordered) factor of the same length as `x` (if character) or as number of horizons in `x` (if SoilProfileCollection)
+#' @param x character vector of horizon names or a `SoilProfileCollection` object
+#' @param new character vector of generalized horizon labels (GHL)
+#' @param pattern character vector of REGEX patterns, same length as `new`
+#' @param non.matching.code character, label used for any horizon not matched by `pattern`
+#' @param hzdepm numeric vector of horizon mid-points; `NA` values in `hzdepm` will result in `non.matching.code` (or `NA` if not defined) in result
+#' @param ordered logical, `TRUE` when `hzdepm` argument is specified
+#' @param ... additional arguments passed to `grep()` such as `perl = TRUE` for advanced REGEX
+#' @return factor (possibly an ordered factor) of the same length as `x` (if character) or as number of horizons in `x` (if `SoilProfileCollection`)
+#' 
 #' @details When `x` is a `SoilProfileCollection` the `ghl` column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations.
 #' 
 #' @seealso [hzdesgnname()]
 #' @author D.E. Beaudette
 #' @keywords manip
+#' 
+#' @references 
+#' Beaudette, D. E., Roudier, P., & Skovlin, J. (2016). Probabilistic representation of genetic soil horizons. Digital soil morphometrics, 281-293. 
+#' 
 #' @export
 #' @examples
 #' 
@@ -31,21 +32,26 @@
 #' # check original distribution of hz designations
 #' table(sp1$name)
 #' 
-#' # generalize
-#' sp1$genhz <- generalize.hz(sp1$name,
-#'                            new=c('O','A','B','C','R'),
-#'                            pattern=c('O', '^A','^B','C','R'))
+#' # generalized horizon labels
+#' # character vector input
+#' sp1$genhz <- generalizeHz(
+#'   sp1$name,
+#'   new = c('O','A','B','C','R'),
+#'   pattern = c('O', '^A','^B','C','R'),
+#'   ordered = TRUE
+#' )
 #' 
 #' # see how we did / what we missed
 #' table(sp1$genhz, sp1$name)
 #' 
 #' 
-#' ## a more advanced example, requries perl=TRUE
+#' ## a more advanced example, requries `perl = TRUE`
 #' # example data
 #' x <- c('A', 'AC', 'Bt1', '^AC', 'C', 'BC', 'CB')
 #' 
 #' # new labels
 #' n <- c('A', '^AC', 'C')
+#' 
 #' # patterns:
 #' # "A anywhere in the name"
 #' # "literal '^A' anywhere in the name"
@@ -53,10 +59,36 @@
 #' p <- c('A', '^A', '(?<!A)C')
 #' 
 #' # note additional argument
-#' res <- generalize.hz(x, new = n, pattern=p, perl=TRUE)
+#' res <- generalizeHz(
+#'   x, 
+#'   new = n, 
+#'   pattern = p, 
+#'   perl = TRUE
+#' )
 #' 
 #' # double-check: OK
 #' table(res, x)
+#' 
+#' ## apply to a SoilProfileCollection
+#' data(sp1)
+#' depths(sp1) <- id ~ top + bottom
+#' 
+#' # must set horizon designation metadata
+#' hzdesgnname(sp1) <- 'name'
+#' 
+#' # result is a SoilProfileCollection
+#' x <- generalizeHz(
+#'   sp1,
+#'   new = c('O','A','B','C','R'),
+#'   pattern = c('O', '^A','^B','C','R'),
+#'   ordered = TRUE
+#' )
+#' 
+#' # GHL stored in 'genhz' column
+#' x$genhz
+#' 
+#' # GHL metadata is set
+#' GHL(x)
 #'
 generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), ...) {
 
@@ -111,7 +143,7 @@ setMethod("generalizeHz", signature(x = "character"), function(x, new, pattern, 
   )
 })
 
-# SoilProfileColletion method
+# SoilProfileCollection method
 #' @param ghl Generalized Horizon Designation column name (to be created/updated when `x` is a `SoilProfileCollection`)
 #' @export
 #' @rdname generalize.hz
@@ -134,8 +166,10 @@ setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, ne
   x
 })
 
-# convert a cross-tabulation: {original, genhz} to adjacency matrix
-#' @param tab A cross-tabulation of original and generalized labels e.g. `table(original, genhz)`
+#' @title Convert cross-tabulation to adjacency matrix.
+#' @description Convert a cross-tabulation: {original, genhz} to adjacency matrix.
+#' 
+#' @param tab table, cross-tabulation of original and generalized horizon labels e.g. `table(original, genhz)`
 #'
 #' @export
 #' @rdname hzTransitionProbabilities
@@ -150,3 +184,5 @@ genhzTableToAdjMat <- function(tab) {
   m[rownames(tab), colnames(tab)] <- tab
   return(m)
 }
+
+

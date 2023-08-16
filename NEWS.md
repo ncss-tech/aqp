@@ -14,6 +14,7 @@ Notable changes include:
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
+ * `get.ml.hz()` no longer uses the `name` argument
  
 Major changes to `plotSPC()`:
  * The maximum depth range of the figure is now based on `max.depth` or `max(x)`. This means that sketches generated with aqp 2.x will generally have less white space at the bottom of the figure. Make more room for additional annotation or visual effect by setting the desired depth range with the `max.depth` argument.

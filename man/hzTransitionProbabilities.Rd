@@ -5,7 +5,7 @@
 \alias{genhzTableToAdjMat}
 \alias{hzTransitionProbabilities}
 \alias{mostLikelyHzSequence}
-\title{Horizon Transition Probabilities}
+\title{Convert cross-tabulation to adjacency matrix.}
 \usage{
 genhzTableToAdjMat(tab)
 
@@ -18,7 +18,7 @@ hzTransitionProbabilities(
 mostLikelyHzSequence(mc, t0, maxIterations = 10)
 }
 \arguments{
-\item{tab}{A cross-tabulation of original and generalized labels e.g. \code{table(original, genhz)}}
+\item{tab}{table, cross-tabulation of original and generalized horizon labels e.g. \code{table(original, genhz)}}
 
 \item{x}{A \code{SoilProfileCollection} object.}
 
@@ -46,6 +46,8 @@ horizons, given a \code{markovchain} object initialized from horizon
 transition probabilities and an initial state, \code{t0}. See examples.
 }
 \description{
+Convert a cross-tabulation: {original, genhz} to adjacency matrix.
+
 Functions for creating and working with horizon (sequence) transition
 probability matrices.
 }

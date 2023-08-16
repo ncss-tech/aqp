@@ -19,7 +19,7 @@ plotSPC(
   hz.depths = FALSE,
   hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
-  depth.axis = list(style = "compact", cex = cex.names * 1.15),
+  depth.axis = list(style = "traditional", cex = cex.names * 1.15),
   alt.label = NULL,
   alt.label.col = "black",
   cex.names = 0.5,

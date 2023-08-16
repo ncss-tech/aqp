@@ -39,28 +39,28 @@ generalize.hz(
 )
 }
 \arguments{
-\item{x}{a character vector of horizon names or a \code{SoilProfileCollection}}
+\item{x}{character vector of horizon names or a \code{SoilProfileCollection} object}
 
-\item{new}{a character vector of new horizon classes}
+\item{new}{character vector of generalized horizon labels (GHL)}
 
-\item{pattern}{a character vector of REGEX patterns, same length as \code{new}}
+\item{pattern}{character vector of REGEX patterns, same length as \code{new}}
 
-\item{non.matching.code}{label used for any horizon not matching any \code{pattern}}
+\item{non.matching.code}{character, label used for any horizon not matched by \code{pattern}}
 
-\item{hzdepm}{a numeric vector of horizon mid-points; \code{NA} values in \code{hzdepm} will result in \code{non.matching.code} (or \code{NA} if not defined) in result}
+\item{hzdepm}{numeric vector of horizon mid-points; \code{NA} values in \code{hzdepm} will result in \code{non.matching.code} (or \code{NA} if not defined) in result}
 
-\item{ordered}{by default, the result is an ordered factor when \code{hzdepm} is defined.}
+\item{ordered}{logical, \code{TRUE} when \code{hzdepm} argument is specified}
 
-\item{...}{additional arguments passed to \code{grep()} such as \code{perl=TRUE} for advanced REGEX}
+\item{...}{additional arguments passed to \code{grep()} such as \code{perl = TRUE} for advanced REGEX}
 
 \item{ghl}{Generalized Horizon Designation column name (to be created/updated when \code{x} is a \code{SoilProfileCollection})}
 }
 \value{
-(ordered) factor of the same length as \code{x} (if character) or as number of horizons in \code{x} (if SoilProfileCollection)
+factor (possibly an ordered factor) of the same length as \code{x} (if character) or as number of horizons in \code{x} (if \code{SoilProfileCollection})
 }
 \description{
 Generalize a vector of horizon names, based on new classes, and REGEX
-patterns. Or create a new column \code{ghl} in a SoilProfileCollection (requires a horizon designation name to be defined for the collection, see details)
+patterns. Or create a new column \code{ghl} in a \code{SoilProfileCollection} (requires a horizon designation name to be defined for the collection, see details)
 }
 \details{
 When \code{x} is a \code{SoilProfileCollection} the \code{ghl} column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations.
@@ -72,21 +72,26 @@ data(sp1)
 # check original distribution of hz designations
 table(sp1$name)
 
-# generalize
-sp1$genhz <- generalize.hz(sp1$name,
-                           new=c('O','A','B','C','R'),
-                           pattern=c('O', '^A','^B','C','R'))
+# generalized horizon labels
+# character vector input
+sp1$genhz <- generalizeHz(
+  sp1$name,
+  new = c('O','A','B','C','R'),
+  pattern = c('O', '^A','^B','C','R'),
+  ordered = TRUE
+)
 
 # see how we did / what we missed
 table(sp1$genhz, sp1$name)
 
 
-## a more advanced example, requries perl=TRUE
+## a more advanced example, requries `perl = TRUE`
 # example data
 x <- c('A', 'AC', 'Bt1', '^AC', 'C', 'BC', 'CB')
 
 # new labels
 n <- c('A', '^AC', 'C')
+
 # patterns:
 # "A anywhere in the name"
 # "literal '^A' anywhere in the name"
@@ -94,11 +99,40 @@ n <- c('A', '^AC', 'C')
 p <- c('A', '^A', '(?<!A)C')
 
 # note additional argument
-res <- generalize.hz(x, new = n, pattern=p, perl=TRUE)
+res <- generalizeHz(
+  x, 
+  new = n, 
+  pattern = p, 
+  perl = TRUE
+)
 
 # double-check: OK
 table(res, x)
 
+## apply to a SoilProfileCollection
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+
+# must set horizon designation metadata
+hzdesgnname(sp1) <- 'name'
+
+# result is a SoilProfileCollection
+x <- generalizeHz(
+  sp1,
+  new = c('O','A','B','C','R'),
+  pattern = c('O', '^A','^B','C','R'),
+  ordered = TRUE
+)
+
+# GHL stored in 'genhz' column
+x$genhz
+
+# GHL metadata is set
+GHL(x)
+
+}
+\references{
+Beaudette, D. E., Roudier, P., & Skovlin, J. (2016). Probabilistic representation of genetic soil horizons. Digital soil morphometrics, 281-293.
 }
 \seealso{
 \code{\link[=hzdesgnname]{hzdesgnname()}}
