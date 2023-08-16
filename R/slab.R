@@ -57,7 +57,7 @@
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `hdquantile()` method', call. = FALSE)
   
-  res <- Hmisc::hdquantile(values, probs = probs, na.rm = na.rm)
+  res <- as.numeric(Hmisc::hdquantile(values, probs = probs, na.rm = na.rm))
   
   names(res) <- paste('p.q', round(probs * 100), sep = '')
   return(res)
