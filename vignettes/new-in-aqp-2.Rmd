@@ -2,7 +2,7 @@
 title: "What is new in aqp 2.0?"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Numerical Classification of Soil Profiles}
+  %\VignetteIndexEntry{What is new in aqp 2.0?}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
