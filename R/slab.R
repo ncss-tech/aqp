@@ -57,7 +57,7 @@
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `hdquantile()` method', call. = FALSE)
   
-  res <- Hmisc::hdquantile(values, probs = probs, na.rm = na.rm)
+  res <- as.numeric(Hmisc::hdquantile(values, probs = probs, na.rm = na.rm))
   
   names(res) <- paste('p.q', round(probs * 100), sep = '')
   return(res)
@@ -560,7 +560,7 @@ setGeneric("slab", function(object,
 #'
 #'
 #' # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
-#' gen.hz.ml <- get.ml.hz(a, "variable", c('O','A','B','C'))
+#' gen.hz.ml <- get.ml.hz(a, c('O','A','B','C'))
 #'
 #'
 #' \dontrun{

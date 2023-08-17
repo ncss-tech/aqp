@@ -215,6 +215,39 @@ test_that("edge case: slab.structure[2] > max(x)", {
   expect_equivalent(a$value, 13.58427, tolerance=0.001)
 })
 
+test_that("edge case: slab.structure[1] > 0 (w/ custom slab function)", {
+  data(sp3, package = "aqp")
+  depths(sp3) <- id ~ top + bottom
+  
+  # custom 'slab' function, returning mean +/- 1SD
+  mean.and.sd <- function(values) {
+    m <- mean(values, na.rm = TRUE)
+    s <- sd(values, na.rm = TRUE)
+    upper <- m + s
+    lower <- m - s
+    res <- c(mean = m,
+             lower = lower,
+             upper = upper)
+    return(res)
+  }
+  
+  ## this time, compute the weighted mean of selected properties, by profile ID
+  a <- slab(sp3,
+            fm = id ~ L + A + B,
+            slab.structure = c(40, 60), 
+            slab.fun = mean.and.sd
+  )
+  
+  # convert long -> wide
+  res <- data.table::dcast(
+    data.table::as.data.table(a),
+    formula = id + top + bottom ~ variable,
+    value.var = 'mean'
+  )
+  
+  expect_equal(nrow(res), length(sp3))
+  expect_equal(ncol(res), 6L)
+})
 
 test_that("overlapping horizons", {
   data(sp4, package = 'aqp')

@@ -96,23 +96,23 @@ genSlabLabels <- function(slab.structure = 1, max.d = NULL, n.profiles = NULL, s
   
   # calculate a sequence of cumulative depths and corresponding indices for each slab
   j <- diff(i)
+  hzd <- horizonDepths(spc)
   if (length(j) == 0) {
     stop("Empty slab.structure", call. = FALSE)
-  } else if(length(j) == 1 && j == 0) {
+  } else if (length(j) == 1 && j == 0) {
     stop("Invalid slab.structure", call. = FALSE)
   } else {
-    idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x]))))
+    idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x])))) + i[1]
     idx2 <- do.call('c', lapply(seq_along(j), function(x) rep(x, j[x])))
     mt <- data.frame(idx1, slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
   }
-  hzdepb <- horizonDepths(spc)[2]
-  colnames(mt) <- c(hzdepb, "slab_id", "slab_label")
+  colnames(mt) <- c(hzd[2], "slab_id", "slab_label")
   
   # merge the dice'd data.frame result with the slab ID and labels
-  res <- merge(diced, mt, by = hzdepb, all.x = TRUE, sort = FALSE)
+  res <- merge(diced, mt, by = hzd[2], all.x = TRUE, sort = FALSE)
   
   # order by horizon ID and depth
-  res <- res[order(res[[idname(spc)]], res[[hzdepb]]),]
+  res <- res[order(res[[idname(spc)]], res[[hzd[2]]]),]
   
   # return the slab IDs as a factor, with labels denoting each segment top and bottom
   factor(res$slab_id, labels = na.omit(unique(res$slab_label)))
