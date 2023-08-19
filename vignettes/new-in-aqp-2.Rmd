@@ -22,6 +22,56 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 # Introduction
 
 ```{r}
-# TODO
+
 ```
+
+
+This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`. `slice()` and `profile_compare()` are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of `slab()` is a drop-in replacement for the previous version of the function.
+
+Notable changes include:
+ * deprecation of `slice()` in favor of the new, faster, more robust implementation in `dice()` 
+ * complete overhaul of `slab()`, with new arguments, faster back-end, and weighted aggregation implemented (finally)
+ * deprecation of `profile_compare()` in favor of the `NCSP()`--a complete overhaul based on Maynard et al., 2020
+   - site level attributes now handled by `compareSites()`
+   - variable weights now possible via argument
+ * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections
+ * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive mixtures
+ * `gower` package moved to SUGGESTS
+ * `plotColorMixture()` now using grid graphics functions to determine color swatch geometry and setting overlap detection threshold
+ * removal of `PMS2Munsell()` and support data
+ * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
+ * removal of `rruff.sample` example XRD patterns
+ * `get.ml.hz()` no longer uses the `name` argument
+ 
+Major changes to `plotSPC()`:
+ * The maximum depth range of the figure is now based on `max.depth` or `max(x)`. This means that sketches generated with aqp 2.x will generally have less white space at the bottom of the figure. Make more room for additional annotation or visual effect by setting the desired depth range with the `max.depth` argument.
+ * now uses `electroStatics_1D()` for fixing horizon depth label overlap, solutions are deterministic and almost always better
+ * better depth axis interval heuristics (if not specified), varying based on figure depth range
+ * depth axis adjustments via new argument `depth.axis`, logical or list
+ * deprecation of arguments:
+   - `plot.depth.axis`: set via `depth.axis = TRUE`, `depth.axis = FALSE`, or customize `depth.axis = list(...)`
+   - `cex.depth.axis`: set via `depth.axis = list(cex = 1)`
+   - `axis.line.offset`: set via `depth.axis = list(line = -2)`
+
+New features:
+ * example data, `wilson2022`
+ * fast prototyping of SPCs via `quickSPC()` and list / character templates
+ * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
+ * coarse fragment classification via `fragmentSieve()` and `fragmentClasses()`
+ * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
+ * `plotSPC()` now marks truncated profiles with a ragged bottom
+ * `fixOverlap()` now has two label-placement solvers, based on 1) electrostatics and 2) simulated annealing
+ * new [depth axis styles](https://ncss-tech.github.io/AQP/aqp/sketches.html) in `plotSPC()`
+
+Incremental changes, should have no effect on previous code:
+ * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
+ * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
+ * aesthetic cleanup in `explainPlotSPC()`
+ * `soilColorSignature()` gains arguments and perceptual color distances (dE00) via farver package
+ * `as(<SPC>, "data.frame")`: Replace `plyr::join()` with `merge()`
+ * `correctAWC()`: NA handling - return NA when frags are NA 
+ * `mutate_profile()`: Faster (data.table-based) evaluation of profile-level expressions (#255)
+ * `profileApply`: Add support for custom `lapply()`-like function (`APPLY.FUN`) for processing chunks (#256) 
+ * Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()` (#254)
+ * Add `simplify` argument to `SoilTextureLevels()` and `ssc_to_texcl()` to optionally convert to an ordered factor with maximum of 12 levels (rather than 21). This smaller list of classes excludes sand grain size variants such as fine sand, loamy coarse sand, and very fine sandy loam.
 

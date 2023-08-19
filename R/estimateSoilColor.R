@@ -44,34 +44,37 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   ## convert input to CIELAB
   z <- munsell2rgb(hue, value, chroma, returnLAB = TRUE)
   
+  # latest models
+  # load('../../SoilWeb-data/OSD/models/procrustes-models.rda')
+  
   # select transformation
   # transformation parameters via vegan::procrustes()
   params <- switch(sourceMoistureState,
          dry = {
            # dry -> moist
            list(
-             scale = 0.813113909258287,
+             scale = 0.812898619142037,
              
-             rotation = structure(c(0.995726413877236, 0.0257258575317077, -0.0886966118937879, 
-                                    -0.0198592989419549, 0.997595348898966, 0.0664012658063297, 0.0901915569923982, 
-                                    -0.0643560417475089, 0.993842936755039), .Dim = c(3L, 3L)),
+             rotation = structure(c(0.995675622919053, 0.0257258722497405, -0.0892649618929251, 
+                                    -0.0197691154694856, 0.997558105087928, 0.0669851404935216, 0.0907702374036196, 
+                                    -0.0649307821481665, 0.993752865420432), dim = c(3L, 3L)),
              
-             translation = structure(c(-4.1036881559009, 1.62003171022114, -0.738786964568888
-             ), .Dim = c(1L, 3L))
+             translation = structure(c(-4.08321328666085, 1.61159422497282, -0.753817567156023
+             ), dim = c(1L, 3L))
            )
          },
          
          moist = {
            # moist -> dry  
            list(
-             scale = 0.832382710140909,
+             scale = 0.832203042606691,
              
-             rotation = structure(c(0.995726413877236, -0.0198592989419543, 0.0901915569923983, 
-                                    0.0257258575317069, 0.997595348898967, -0.0643560417475067, -0.0886966118937878, 
-                                    0.0664012658063277, 0.993842936755039), .Dim = c(3L, 3L)),
+             rotation = structure(c(0.995675622919054, -0.0197691154694851, 0.0907702374036196, 
+                                    0.0257258722497396, 0.997558105087928, -0.0649307821481645, -0.0892649618929251, 
+                                    0.0669851404935191, 0.993752865420432), dim = c(3L, 3L)),
              
-             translation = structure(c(21.1881839195852, 0.403136273628388, 5.99548096284415
-             ), .Dim = c(1L, 3L))
+             translation = structure(c(21.1915203051648, 0.411048926770148, 6.01556883263775
+             ), dim = c(1L, 3L))
            )
            }
   )
