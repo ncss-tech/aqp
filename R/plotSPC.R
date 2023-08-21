@@ -1317,10 +1317,13 @@ plotSPC <- function(
         ## collision detection / fix
         if(fixLabelCollisions && .canFixLabelCollision) {
           
+          ## TODO: only need to compute this 1 time, move outside of loop
           ## TODO: consider adjusting by scaling.factor
+          
           # reasonable threshold for label collision detection
           # depends on aesthetic weighting / graphics device / hz.depths.cex
           y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
+          # print(y.thresh)
           
           # must include top + bottom depths for collision detection
           # account for the fact that top-most and bottom-most horizon depths are inset

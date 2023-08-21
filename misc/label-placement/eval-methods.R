@@ -9,7 +9,7 @@ evalMethods <- function(x, thresh, q, ...) {
   z <- fixOverlap(x, thresh = thresh, method = 'E', maxIter = 100, trace = TRUE, q = q)
   .n <- nrow(z$states)
   
-  par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
+  op <- par(mar = c(0, 2, 1, 0.5), bg = 'black', fg = 'white')
   layout(matrix(c(1, 2, 3, 4), ncol = 2, nrow = 2), heights = c(0.33, 0.66))
   
   plot(seq_along(z$cost), z$cost, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(1, .n))
@@ -45,6 +45,8 @@ evalMethods <- function(x, thresh, q, ...) {
   
   axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = par('fg'), las = 1, cex.axis = 0.6)
   
+  par(op)
+  layout(1)
 }
 
 
@@ -106,5 +108,24 @@ evalMethods(x, thresh = 9.7, q = 1)
 x <- c(1.0075, 1.1200, 1.3450, 1.6450, 1.8700, 1.8825)
 fixOverlap(x, thresh = 0.05442329, q = 1)
 evalMethods(x, thresh = 0.05442329, q = 1)
+
+
+## TODO: profile-level determination of reasonable q
+
+# HAO series horizon depths
+x <- c(0L, 4L, 8L, 15L, 20L, 23L, 25L, 30L, 34L, 38L, 46L, 53L, 58L, 
+       61L, 64L, 76L, 104L, 152L)
+
+# meta-stable configurations found, 
+# but overlap remains between depths 1 and 2
+# repeated running fixOverlap() cannot fix with these q values
+evalMethods(x, thresh = 4.25, q = 0.5)
+evalMethods(x, thresh = 4.25, q = 1)
+
+# stable configuration without overlap requires larger (q) charge
+# but this purturbs everything else too much
+evalMethods(x, thresh = 4.25, q = 1.25)
+
+
 
 dev.off()
