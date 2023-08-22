@@ -45,6 +45,7 @@ evalMethods <- function(x, thresh, q, ...) {
   
   axis(side = 2, at = unique(x), labels = round(unique(x), 1), col.axis = par('fg'), las = 1, cex.axis = 0.6)
   
+  # reset graphics state
   par(op)
   layout(1)
 }

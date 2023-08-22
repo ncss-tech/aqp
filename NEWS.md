@@ -261,7 +261,7 @@ Incremental changes, should have no effect on previous code:
   * aqp 1.18 scheduled for next CRAN release
 
 # aqp 1.17.06 (2019-07-15)
-   * `plotSPC()` gains a new argument for relative positioning: relative.pos
+   * `plotSPC()` gains a new argument for relative positioning: `relative.pos`
    * relative positioning helper function: `fixOverlap()`, see manual page for examples
    * `explainPlotSPC()`, `addDiagnosticBracket()`, and `addVolumeFraction()` updated accordingly
 
@@ -413,8 +413,8 @@ Incremental changes, should have no effect on previous code:
    * texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method='closest', see manual page for details
 
 # aqp 1.7-7 (2014-11-06)
-   * bug fix c/o Jos? Padarian: SPC objects now understand logical indexing rules
-   * removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package
+   * bug fix c/o Jose Padarian: SPC objects now understand logical indexing rules
+   * removed `spatial_subset()`: this functionality can be accomplished outside of AQP and removes dependency on rgeos package
 
 # aqp 1.7-6 (2014-09-26)
    * bug fix c/o Jos? Padarian: when promoting coordinates from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!
@@ -428,13 +428,13 @@ Incremental changes, should have no effect on previous code:
    * When applied to a single categorical variable, the results from slab() now contain an attribute 'original.levels'
   that contains the original factor levels. This is important because when casting from long->wide format, illegal
   column names are scrubbed by make.names(). This process would convert horizon designations like '2Bt' into 'X2Bt'.
-  You can recover the original horizon names via attr(x, 'original.levels').
+  You can recover the original horizon names via `attr(x, 'original.levels')`.
 
 # aqp 1.6-3 (2014-02-04)
    * plotSPC() has a new argument: `label`, used to set site-level attribute containing profile labels
 
 # aqp 1.6-2 (2014-01-10)
-   * plotSPC() now registers plotting parameters in the environment aqp.env
+   * plotSPC() now registers plotting parameters in the environment `aqp.env`
    * new function addVolumeFraction() for annotating profile plots with volumetric information (e.g. rock fragment volume)
 
 # aqp 1.6-1 (2013-12-31)
