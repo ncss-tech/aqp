@@ -431,7 +431,8 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.17.06" id="aqp-11706-2019-07-15">aqp 1.17.06 (2019-07-15)<a class="anchor" aria-label="anchor" href="#aqp-11706-2019-07-15"></a></h2>
 <ul><li>
-<code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gains a new argument for relative positioning: relative.pos</li>
+<code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> gains a new argument for relative positioning: <code>relative.pos</code>
+</li>
 <li>relative positioning helper function: <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>, see manual page for examples</li>
 <li>
 <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code>, <code><a href="../reference/addDiagnosticBracket.html">addDiagnosticBracket()</a></code>, and <code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> updated accordingly</li>
@@ -653,8 +654,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.7-7" id="aqp-17-7-2014-11-06">aqp 1.7-7 (2014-11-06)<small>2014-11-13</small><a class="anchor" aria-label="anchor" href="#aqp-17-7-2014-11-06"></a></h2>
-<ul><li>bug fix c/o Jos? Padarian: SPC objects now understand logical indexing rules</li>
-<li>removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package</li>
+<ul><li>bug fix c/o Jose Padarian: SPC objects now understand logical indexing rules</li>
+<li>removed <code>spatial_subset()</code>: this functionality can be accomplished outside of AQP and removes dependency on rgeos package</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.7-6" id="aqp-17-6-2014-09-26">aqp 1.7-6 (2014-09-26)<a class="anchor" aria-label="anchor" href="#aqp-17-6-2014-09-26"></a></h2>
@@ -667,7 +668,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6-4" id="aqp-16-4-2014-02-14">aqp 1.6-4 (2014-02-14)<a class="anchor" aria-label="anchor" href="#aqp-16-4-2014-02-14"></a></h2>
-<ul><li>When applied to a single categorical variable, the results from slab() now contain an attribute ‘original.levels’ that contains the original factor levels. This is important because when casting from long-&gt;wide format, illegal column names are scrubbed by make.names(). This process would convert horizon designations like ‘2Bt’ into ‘X2Bt’. You can recover the original horizon names via attr(x, ‘original.levels’).</li>
+<ul><li>When applied to a single categorical variable, the results from slab() now contain an attribute ‘original.levels’ that contains the original factor levels. This is important because when casting from long-&gt;wide format, illegal column names are scrubbed by make.names(). This process would convert horizon designations like ‘2Bt’ into ‘X2Bt’. You can recover the original horizon names via <code>attr(x, 'original.levels')</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6-3" id="aqp-16-3-2014-02-04">aqp 1.6-3 (2014-02-04)<a class="anchor" aria-label="anchor" href="#aqp-16-3-2014-02-04"></a></h2>
@@ -675,7 +676,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6-2" id="aqp-16-2-2014-01-10">aqp 1.6-2 (2014-01-10)<a class="anchor" aria-label="anchor" href="#aqp-16-2-2014-01-10"></a></h2>
-<ul><li>plotSPC() now registers plotting parameters in the environment aqp.env</li>
+<ul><li>plotSPC() now registers plotting parameters in the environment <code>aqp.env</code>
+</li>
 <li>new function addVolumeFraction() for annotating profile plots with volumetric information (e.g. rock fragment volume)</li>
 </ul></div>
     <div class="section level2">
