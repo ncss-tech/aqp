@@ -286,11 +286,12 @@ evalMethods(x, thresh = 5, q = 1.8)
 evalMethods(x, thresh = 5, q = 3)
 evalMethods(x, thresh = 5, q = 4)
 evalMethods(x, thresh = 5, q = 5)
+```
 
+Additional examples to tinker with.
+```{eval = FALSE}
 # threshold too large
 evalMethods(x, thresh = 10, q = 3)
-
-
 
 
 # large threshold
