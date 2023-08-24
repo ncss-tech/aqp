@@ -507,6 +507,7 @@ NULL
 #' @keywords datasets
 #' @examples
 #'
+#' \dontrun{
 #' library(scales)
 #' data(sp5)
 #' par(mar=c(1,1,1,1))
@@ -587,7 +588,7 @@ NULL
 #' polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)),
 #' border='black', col=rgb(0,0,0.8, alpha=0.25))
 #'
-#'
+#' }
 #'
 #'
 NULL
