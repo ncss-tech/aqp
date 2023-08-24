@@ -7,13 +7,13 @@
 \S4method{split}{SoilProfileCollection}(x, f, drop = TRUE, ...)
 }
 \arguments{
-\item{x}{a \code{SoilProfileCollection} object}
+\item{x}{\code{SoilProfileCollection} object}
 
-\item{f}{a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.}
+\item{f}{character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that \code{as.factor(f)} defines the grouping, or a list of such factors in which case their interaction is used for the grouping.}
 
-\item{drop}{logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When \code{drop=FALSE} and \code{f} contains missing values an additional group "\if{html}{\out{<missing>}}" is returned.}
+\item{drop}{logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When \code{drop=FALSE} and \code{f} contains missing values an additional group "missing" is returned.}
 
-\item{...}{Additional arguments are ignored}
+\item{...}{additional arguments are ignored}
 }
 \value{
 A list of \code{SoilProfileCollection} or \code{NULL} for empty result.
