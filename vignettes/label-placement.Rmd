@@ -33,7 +33,7 @@ par(mar = c(0, 0, 0, 0))
 plotSPC(osd, name = NA, fixLabelCollisions = FALSE, cex.names = 1.75, hz.depths = TRUE, depth.axis = FALSE, cex.id = 0.66, name.style = 'center-center')
 ```
 
-Version 2.0 of the {aqp} package provides two algorithms for avoiding overlapping annotation, available in `plotSPC()` for the adjustment of horizon depth annotation, and for general use via `fixOverlap()`.
+Version 2.0 of the {aqp} package provides two algorithms for avoiding overlapping annotation, available in `plotSPC()` for the adjustment of horizon depth annotation, and for general use via `fixOverlap()`. Within the context of `plotSPC()`, overlapping horizon depth labels are flagged according to an overlap threshold computed from label text height on the current graphics device.
 
 Consider the following example soil profile sketches, created from a single soil profile template characterized by multiple thin horizons. Simulation and duplication were used to generate multiple copies of the three variations on the original template.
 
@@ -72,19 +72,31 @@ title('Example Data', line = -1.5)
 ```
 
 
+Selecting the optimal label-adjustment methods and parameters will depend on the collection of profiles, horizonation, profile height, font sizes, and graphics device settings (figure height, resolution).
+
+  * *electrostatic simulation:* This is generally the best method, having deterministic solutions that typically move labels as little as possible in fewer iterations. It does not do well with many very thin horizons near the top or bottom of the profile. Very complex profiles and larger font sizes may require setting `q` to values larger than 1. Set `q` to values between 0.25-0.75 to minimize adjustment distances. This method cannot (yet) provide a label adjustment solution in the presence of missing horizon depths or horizons where `top == bottom`.
+  
+  * *simulated annealing:* This method is the most adaptive, typically capable of providing reasonable solutions for even the most complex profiles. The non-deterministic solutions can be undesirable when preparing figures for publication.
+
+
 ### Electrostatic Simulation
 
-An electrostatic simulation applies forces of repulsion between labels that are within a given threshold (e.g. overlapping) and forces of attraction to a uniformly spaced sequence to iteratively perturb affected labels until either no overlap is reported, or a maximum number of iterations (`maxIter`) has been reached. Label adjustment solutions are deterministic and can be controlled by additional arguments to `electroStatics_1D()`. The most common adjustment is charge density, `q`. See comparisons below.
+An electrostatic simulation applies forces of repulsion between labels that are within a given distance threshold and forces of attraction to a uniformly spaced sequence. Affected labels are iteratively perturbed until either no overlap is reported, or a maximum number of iterations has been reached. Label adjustment solutions are deterministic and can be controlled by additional arguments to `electroStatics_1D()`. The most common adjustment is via charge density (`q`). See comparisons below.
 
 ```{r fig.width=8, fig.height=5, echo = FALSE}
 par(mar = c(0, 0, 0, 0))
-plotSPC(s, fixOverlapArgs = list(method = 'E'))
+# select "Electrostatic" label placement method
+# adjust default charge density to 0.5
+plotSPC(s, fixOverlapArgs = list(method = 'E', q = 0.5))
 title('Label Adjustment by Electrostatic Simulation', line = -1.5)
 ```
 
-### Simulated Annealing
-This approach makes small adjustments to label position until overlap is removed, or until `maxIter` is reached. Rank order and boundary conditions are preserved. The underlying algorithm is based on simulated annealing. Label placement solutions are non-deterministic, use `set.seed()` if repeatability is important. The "cooling schedule" parameters `T0` and `k` can be used to tune the algorithm for specific applications. These additional arguments are passed to `SANN_1D()`.
 
+
+### Simulated Annealing
+This approach makes small adjustments to affected label positions until overlap is removed, or until a maximum number of iterations is reached. Rank order and boundary conditions are preserved. The underlying algorithm is based on simulated annealing. Label placement solutions are non-deterministic, use `set.seed()` if repeatability is important. The "cooling schedule" parameters `T0` and `k` can be used to tune the algorithm for specific applications. These additional arguments are passed to `SANN_1D()` via `fixOverlap()`.
+
+Note that each solution, within duplicate profiles, is slightly different.
 ```{r fig.width=8, fig.height=5, echo = FALSE}
 par(mar = c(0, 0, 0, 0))
 plotSPC(s, fixOverlapArgs = list(method = 'S'))
@@ -92,6 +104,7 @@ title('Label Adjustment by Simulated Annealing', line = -1.5)
 
 options(.aqp.plotSPC.args = NULL)
 ```
+
 
 ## Quick Comparison
 
@@ -198,14 +211,16 @@ plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 
 
 ## General Cases
-
+The label adjustment functionality can be used outside of the context of `plotSPC()`. The function `overlapMetics()` can be used to determine overlap within a vector of positions based on a given distance threshold. 
 ```{r}
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 overlapMetrics(x, thresh = 0.5)
 ```
 
+The `fixOverlap()` function will attempt adjustment, given distance threshold and a method selection. Additional parameters are passed on to `SANN_1D()` or `electroStatics_1D()`. The `converged` attribute is included in the result to signify that a successful solution was possible. See the manual page for `fixOverlap()` for additional details.
 ```{r message=TRUE}
+# vector of positions, typically labels but could be profile sketch alignment on the x-axis
 s <- c(1, 2, 2.3, 4, 5, 5.5, 7)
 
 # simulated annealing, solution is non-deterministic
@@ -275,16 +290,25 @@ evalMethods <- function(x, thresh, q, ...) {
 }
 ```
 
-In general, as the complexity increases (larger thresholds, more overlap), `q` needs to be larger.
+The top panels represent the objective function, smaller values are better. Bottom panels illustrate perturbations to elements of the position vector `x`. Larger values of charge density `q` are required applying the electrostatic simulation method to increasingly complex problems (e.g. larger thresholds, more overlap). However, setting `q` too high will result in chaos and failure to converge.
 ```{r fig.width=8.5, fig.height=5}
 # explore effect of charge (q)
 # too large -> chaos
 x <- c(0, 2, 5, 12, 18, 20, 35, 40, 50, 56, 90, 120, 145, 150)
 
+# just about right, very few perturbations required
 evalMethods(x, thresh = 5, q = 1.1)
+
+# ok, but now most label positions are affected
 evalMethods(x, thresh = 5, q = 1.8)
+
+# too high, wasting time on more iterations
 evalMethods(x, thresh = 5, q = 3)
+
+# far too high, wasting more time with little gain
 evalMethods(x, thresh = 5, q = 4)
+
+# chaos and failure to converge
 evalMethods(x, thresh = 5, q = 5)
 ```
 
@@ -335,7 +359,6 @@ evalMethods(x, thresh = 9.7, q = 1)
 x <- c(1.0075, 1.1200, 1.3450, 1.6450, 1.8700, 1.8825)
 fixOverlap(x, thresh = 0.05442329, q = 1)
 evalMethods(x, thresh = 0.05442329, q = 1)
-
 ```
 
 
