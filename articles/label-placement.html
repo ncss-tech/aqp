@@ -112,7 +112,10 @@ below).</p>
 <p>Version 2.0 of the {aqp} package provides two algorithms for avoiding
 overlapping annotation, available in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> for the
 adjustment of horizon depth annotation, and for general use via
-<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>.</p>
+<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>. Within the context of <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>,
+overlapping horizon depth labels are flagged according to an overlap
+threshold computed from label text height on the current graphics
+device.</p>
 <p>Consider the following example soil profile sketches, created from a
 single soil profile template characterized by multiple thin horizons.
 Simulation and duplication were used to generate multiple copies of the
@@ -140,31 +143,52 @@ three variations on the original template.</p>
 <p>Overlapping horizon depth labels are clear. Note that there are three
 copies of each simulated variation on the original template.
 <img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;"></p>
+<p>Selecting the optimal label-adjustment methods and parameters will
+depend on the collection of profiles, horizonation, profile height, font
+sizes, and graphics device settings (figure height, resolution).</p>
+<ul>
+<li><p><em>electrostatic simulation:</em> This is generally the best
+method, having deterministic solutions that typically move labels as
+little as possible in fewer iterations. It does not do well with many
+very thin horizons near the top or bottom of the profile. Very complex
+profiles and larger font sizes may require setting <code>q</code> to
+values larger than 1. Set <code>q</code> to values between 0.25-0.75 to
+minimize adjustment distances. This method cannot (yet) provide a label
+adjustment solution in the presence of missing horizon depths or
+horizons where <code>top == bottom</code>.</p></li>
+<li><p><em>simulated annealing:</em> This method is the most adaptive,
+typically capable of providing reasonable solutions for even the most
+complex profiles. The non-deterministic solutions can be undesirable
+when preparing figures for publication.</p></li>
+</ul>
 <div class="section level3">
 <h3 id="electrostatic-simulation">Electrostatic Simulation<a class="anchor" aria-label="anchor" href="#electrostatic-simulation"></a>
 </h3>
 <p>An electrostatic simulation applies forces of repulsion between
-labels that are within a given threshold (e.g. overlapping) and forces
-of attraction to a uniformly spaced sequence to iteratively perturb
-affected labels until either no overlap is reported, or a maximum number
-of iterations (<code>maxIter</code>) has been reached. Label adjustment
-solutions are deterministic and can be controlled by additional
-arguments to <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code>. The most common
-adjustment is charge density, <code>q</code>. See comparisons below.</p>
+labels that are within a given distance threshold and forces of
+attraction to a uniformly spaced sequence. Affected labels are
+iteratively perturbed until either no overlap is reported, or a maximum
+number of iterations has been reached. Label adjustment solutions are
+deterministic and can be controlled by additional arguments to
+<code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code>. The most common adjustment is via
+charge density (<code>q</code>). See comparisons below.</p>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="simulated-annealing">Simulated Annealing<a class="anchor" aria-label="anchor" href="#simulated-annealing"></a>
 </h3>
-<p>This approach makes small adjustments to label position until overlap
-is removed, or until <code>maxIter</code> is reached. Rank order and
-boundary conditions are preserved. The underlying algorithm is based on
-simulated annealing. Label placement solutions are non-deterministic,
-use <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> if repeatability is important. The “cooling
-schedule” parameters <code>T0</code> and <code>k</code> can be used to
-tune the algorithm for specific applications. These additional arguments
-are passed to <code><a href="../reference/SANN_1D.html">SANN_1D()</a></code>.</p>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;"></p>
+<p>This approach makes small adjustments to affected label positions
+until overlap is removed, or until a maximum number of iterations is
+reached. Rank order and boundary conditions are preserved. The
+underlying algorithm is based on simulated annealing. Label placement
+solutions are non-deterministic, use <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> if
+repeatability is important. The “cooling schedule” parameters
+<code>T0</code> and <code>k</code> can be used to tune the algorithm for
+specific applications. These additional arguments are passed to
+<code><a href="../reference/SANN_1D.html">SANN_1D()</a></code> via <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>.</p>
+<p>Note that each solution, within duplicate profiles, is slightly
+different.
+<img src="label-placement_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -302,6 +326,10 @@ plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 <div class="section level2">
 <h2 id="general-cases">General Cases<a class="anchor" aria-label="anchor" href="#general-cases"></a>
 </h2>
+<p>The label adjustment functionality can be used outside of the context
+of <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>. The function <code>overlapMetics()</code> can
+be used to determine overlap within a vector of positions based on a
+given distance threshold.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3.4</span>, <span class="fl">3.5</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
@@ -311,8 +339,15 @@ plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $ov</span></span>
 <span><span class="co">#&gt; [1] 0.125</span></span></code></pre>
+<p>The <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> function will attempt adjustment, given
+distance threshold and a method selection. Additional parameters are
+passed on to <code><a href="../reference/SANN_1D.html">SANN_1D()</a></code> or <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code>.
+The <code>converged</code> attribute is included in the result to
+signify that a successful solution was possible. See the manual page for
+<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> for additional details.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2.3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5.5</span>, <span class="fl">7</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># vector of positions, typically labels but could be profile sketch alignment on the x-axis</span></span>
+<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2.3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5.5</span>, <span class="fl">7</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># simulated annealing, solution is non-deterministic</span></span>
 <span><span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">s</span>, thresh <span class="op">=</span> <span class="fl">0.5</span>, method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span></span></code></pre></div>
@@ -388,26 +423,36 @@ simulation (<code>method = 'E'</code>) and simulated annealing
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span>  </span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>In general, as the complexity increases (larger thresholds, more
-overlap), <code>q</code> needs to be larger.</p>
+<p>The top panels represent the objective function, smaller values are
+better. Bottom panels illustrate perturbations to elements of the
+position vector <code>x</code>. Larger values of charge density
+<code>q</code> are required applying the electrostatic simulation method
+to increasingly complex problems (e.g. larger thresholds, more overlap).
+However, setting <code>q</code> too high will result in chaos and
+failure to converge.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># explore effect of charge (q)</span></span>
 <span><span class="co"># too large -&gt; chaos</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">35</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">56</span>, <span class="fl">90</span>, <span class="fl">120</span>, <span class="fl">145</span>, <span class="fl">150</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># just about right, very few perturbations required</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-1.png" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># ok, but now most label positions are affected</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-2.png" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># too high, wasting time on more iterations</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-3.png" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># far too high, wasting more time with little gain</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-4.png" width="816" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># chaos and failure to converge</span></span>
+<span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-5.png" width="816" style="display: block; margin: auto;"></p>
 <p>Additional examples to tinker with.</p>
 <pre class="eval"><code><span><span class="co"># threshold too large</span></span>
