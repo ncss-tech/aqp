@@ -97,89 +97,170 @@
 
     
     
+<p>This is a major update to {aqp} that may create some issues for code
+depending on specific inputs/outputs as of {aqp} &lt;= 1.42,
+particularly those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>,
+and <code><a href="../reference/profile_compare.html">profile_compare()</a></code>. As of {aqp} 2.0,
+<code><a href="../reference/slice.html">slice()</a></code> and <code><a href="../reference/profile_compare.html">profile_compare()</a></code> are deprecated,
+but will continue to work for the rest of calendar year 2023. There are
+no plans to maintain these functions beyond {aqp} 2.0. The new version
+of <code><a href="../reference/slab.html">slab()</a></code> is a drop-in replacement for the previous
+version.</p>
+<p>See the manual pages for <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>, <code><a href="../reference/NCSP.html">NCSP()</a></code>,
+and <code><a href="../reference/slab.html">slab()</a></code>. Note that these new / updated functions perform
+stricter tests for horizon depth logic errors. Messages and warnings are
+issued when invalid depth logic is reported by
+<code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code>. New functions
+<code><a href="../reference/accumulateDepths.html">accumulateDepths()</a></code>, <code><a href="../reference/repairMissingHzDepths.html">repairMissingHzDepths()</a></code>,
+and <code><a href="../reference/fillHzGaps.html">fillHzGaps()</a></code> can usually salvage problematic
+profiles.</p>
 <div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<h2 id="notable-changes">Notable Changes<a class="anchor" aria-label="anchor" href="#notable-changes"></a>
 </h2>
-<p>This is a major update to aqp that may create some issues for code
-depending on specific inputs/outputs in aqp &lt; 1.42, particularly
-those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>, and
-<code><a href="../reference/profile_compare.html">profile_compare()</a></code>. <code><a href="../reference/slice.html">slice()</a></code> and
-<code><a href="../reference/profile_compare.html">profile_compare()</a></code> are now deprecated, but will continue to
-work for the rest of calendar year 2023. There are no plans to maintain
-these functions beyond aqp 2.0. The new version of <code><a href="../reference/slab.html">slab()</a></code>
-is a drop-in replacement for the previous version of the function.</p>
-<p>Notable changes include: * deprecation of <code><a href="../reference/slice.html">slice()</a></code> in
-favor of the new, faster, more robust implementation in
-<code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> * complete overhaul of <code><a href="../reference/slab.html">slab()</a></code>, with new
-arguments, faster back-end, and weighted aggregation implemented
-(finally) * deprecation of <code><a href="../reference/profile_compare.html">profile_compare()</a></code> in favor of
-the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al.,
-2020 - site level attributes now handled by <code><a href="../reference/compareSites.html">compareSites()</a></code>
-- variable weights now possible via argument * <code><a href="../reference/perturb.html">perturb()</a></code>
-and <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code> are now vectorized, and optimized for
-larger collections * <code><a href="../reference/mixMunsell.html">mixMunsell()</a></code> now uses
+<ul>
+<li>Deprecation of <code><a href="../reference/slice.html">slice()</a></code> in favor of the new, faster,
+more robust implementation via <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>. Be sure to update
+existing code to use <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code> from now on. Some argument
+names have changed.</li>
+<li>Complete overhaul of <code><a href="../reference/slab.html">slab()</a></code> (thanks to <span class="citation">@brownag</span>), with new arguments, faster back-end,
+and weighted aggregation implemented (finally).</li>
+<li>Deprecation of <code><a href="../reference/profile_compare.html">profile_compare()</a></code> in favor of the new
+<code><a href="../reference/NCSP.html">NCSP()</a></code> function–a complete overhaul based on Maynard et
+al., 2020. Note that:
+<ul>
+<li>site level attributes are now handled by
+<code><a href="../reference/compareSites.html">compareSites()</a></code>
+</li>
+<li>variable weights are specified by argument</li>
+</ul>
+</li>
+<li>The functions <code><a href="../reference/perturb.html">perturb()</a></code> and <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code>
+are now vectorized, and optimized for larger
+<code>SoilProfileCollection</code> objects.</li>
+<li>
+<code><a href="../reference/mixMunsell.html">mixMunsell()</a></code> now uses
 <code>mixingMethod = 'exact'</code> by default for the simulation of
-subtractive mixtures * <code>gower</code> package moved to SUGGESTS *
+subtractive color mixtures</li>
+<li>
+<code>gower</code> package moved to SUGGESTS</li>
+<li>
 <code><a href="../reference/plotColorMixture.html">plotColorMixture()</a></code> now using grid graphics functions to
-determine color swatch geometry and setting overlap detection threshold
-* removal of <code>PMS2Munsell()</code> and support data * deprecation
-of <code>coordinates()&lt;-</code> and <code>proj4string()&lt;-</code>
-in favor of <code>initSpatial()&lt;-</code> * removal of
-<code>rruff.sample</code> example XRD patterns *
+determine color swatch geometry and setting overlap detection
+threshold</li>
+<li>Removal of <code>PMS2Munsell()</code> and support data</li>
+<li>Deprecation of <code>coordinates()&lt;-</code> and
+<code>proj4string()&lt;-</code> in favor of
+<code>initSpatial()&lt;-</code>
+</li>
+<li>Removal of <code>rruff.sample</code> example XRD patterns</li>
+<li>
 <code><a href="../reference/get.ml.hz.html">get.ml.hz()</a></code> no longer uses the <code>name</code>
-argument</p>
-<p>Major changes to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>: * The maximum depth range of
-the figure is now based on <code>max.depth</code> or
-<code>max(x)</code>. This means that sketches generated with aqp 2.x
-will generally have less white space at the bottom of the figure. Make
-more room for additional annotation or visual effect by setting the
-desired depth range with the <code>max.depth</code> argument. * now uses
-<code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code> for fixing horizon depth label overlap,
-solutions are deterministic and almost always better * better depth axis
-interval heuristics (if not specified), varying based on figure depth
-range * depth axis adjustments via new argument <code>depth.axis</code>,
-logical or list * deprecation of arguments: -
-<code>plot.depth.axis</code>: set via <code>depth.axis = TRUE</code>,
-<code>depth.axis = FALSE</code>, or customize
-<code>depth.axis = list(...)</code> - <code>cex.depth.axis</code>: set
-via <code>depth.axis = list(cex = 1)</code> -
+argument</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="major-changes-to-plotspc">Major changes to <code>plotSPC()</code><a class="anchor" aria-label="anchor" href="#major-changes-to-plotspc"></a>
+</h2>
+<ul>
+<li>The maximum depth range of the figure is now based on
+<code>max.depth</code> or <code>max(x)</code>. This means that sketches
+generated with {aqp} 2.x will generally have less white space at the
+bottom of the figure. Make more room for additional annotation or visual
+effect by setting the desired depth range with the
+<code>max.depth</code> argument.</li>
+<li>Now using the <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code> method for fixing
+horizon depth label overlap, solutions are deterministic and almost
+always better. Adjust label overlap adjustment strategy with
+<code>fixOverlapArgs = list(...)</code>.</li>
+<li>Better depth axis interval heuristics (if not specified), varying
+based on figure depth range.</li>
+<li>Depth axis adjustments via new argument <code>depth.axis</code>,
+logical or list</li>
+<li>deprecation of arguments:
+<ul>
+<li>
+<code>plot.depth.axis</code>: set via
+<code>depth.axis = TRUE</code>, <code>depth.axis = FALSE</code>, or
+customize <code>depth.axis = list(...)</code>
+</li>
+<li>
+<code>cex.depth.axis</code>: set via
+<code>depth.axis = list(cex = 1)</code>
+</li>
+<li>
 <code>axis.line.offset</code>: set via
-<code>depth.axis = list(line = -2)</code></p>
-<p>New features: * example data, <code>wilson2022</code> * fast
-prototyping of SPCs via <code><a href="../reference/quickSPC.html">quickSPC()</a></code> and list / character
-templates * re-use arguments to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> via
-<code>options(.aqp.plotSPC.args = list(...))</code> * coarse fragment
-classification via <code><a href="../reference/fragmentSieve.html">fragmentSieve()</a></code> and
-<code><a href="../reference/fragmentClasses.html">fragmentClasses()</a></code> * S4
-<code>as.data.frame(&lt;SPC&gt;)</code> as shorthand for
-<code>as(&lt;SPC&gt;, 'data.frame')</code> * <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> now
-marks truncated profiles with a ragged bottom *
-<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> now has two label-placement solvers, based on
-1) electrostatics and 2) simulated annealing * new <a href="https://ncss-tech.github.io/AQP/aqp/sketches.html" class="external-link">depth axis
-styles</a> in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code></p>
-<p>Incremental changes, should have no effect on previous code: * bug
-fix in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> when
+<code>depth.axis = list(line = -2)</code>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="new-features">New Features<a class="anchor" aria-label="anchor" href="#new-features"></a>
+</h2>
+<ul>
+<li>New example data, <code>wilson2022</code>.</li>
+<li>Fast prototyping of <code>SoilProfileCollection</code> objects via
+<code><a href="../reference/quickSPC.html">quickSPC()</a></code> and list / character templates.</li>
+<li>Re-use arguments to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> via setting
+<code>options(.aqp.plotSPC.args = list(...))</code>. Set to
+<code>options(.aqp.plotSPC.args = NULL)</code> to disable.</li>
+<li>Coarse fragment classification via <code><a href="../reference/fragmentSieve.html">fragmentSieve()</a></code> and
+<code><a href="../reference/fragmentClasses.html">fragmentClasses()</a></code>.</li>
+<li>S4 <code>as.data.frame(&lt;SPC&gt;)</code> as shorthand for
+<code>as(&lt;SPC&gt;, 'data.frame')</code>
+</li>
+<li>
+<code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> now marks truncated profiles with a ragged
+bottom.</li>
+<li>
+<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> now has two label-placement solvers:
+<ul>
+<li>electrostatic simulation (<code>method = "E"</code>)</li>
+<li>simulated annealing (<code>method = "S"</code>)</li>
+</ul>
+</li>
+<li>New <a href="https://ncss-tech.github.io/AQP/aqp/sketches.html" class="external-link">depth axis
+styles</a> in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="incremental-changes-should-have-no-effect-on-previous-code">Incremental changes, should have no effect on previous code<a class="anchor" aria-label="anchor" href="#incremental-changes-should-have-no-effect-on-previous-code"></a>
+</h2>
+<ul>
+<li>Bug fix in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> when
 <code>fixLabelCollisions = TRUE</code>, adjustments suggested to
-<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> are now scaled correctly *
-<code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> reports label adjustment index when label
-collision repair is enabled * aesthetic cleanup in
-<code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> * <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> gains
-arguments and perceptual color distances (dE00) via farver package *
+<code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> are now scaled correctly.</li>
+<li>
+<code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code> reports label adjustment index when
+label collision repair is enabled.</li>
+<li>Aesthetic cleanup in <code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code>.</li>
+<li>
+<code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> gains arguments and perceptual
+color distances (dE00) via {farver} package.</li>
+<li>
 <code>as(&lt;SPC&gt;, "data.frame")</code>: Replace
-<code><a href="https://rdrr.io/pkg/plyr/man/join.html" class="external-link">plyr::join()</a></code> with <code><a href="https://rdrr.io/pkg/sp/man/merge.html" class="external-link">merge()</a></code> *
-<code><a href="../reference/correctAWC.html">correctAWC()</a></code>: NA handling - return NA when frags are NA *
-<code><a href="../reference/mutate_profile.html">mutate_profile()</a></code>: Faster (data.table-based) evaluation of
-profile-level expressions (#255) * <code>profileApply</code>: Add
-support for custom <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function
-(<code>APPLY.FUN</code>) for processing chunks (#256) * Add
-<code>.interpretHorizonColor()</code> outputs to
+<code><a href="https://rdrr.io/pkg/plyr/man/join.html" class="external-link">plyr::join()</a></code> with <code><a href="https://rdrr.io/pkg/sp/man/merge.html" class="external-link">merge()</a></code>.</li>
+<li>
+<code><a href="../reference/correctAWC.html">correctAWC()</a></code>: NA handling - return NA when frags are
+NA.</li>
+<li>
+<code><a href="../reference/mutate_profile.html">mutate_profile()</a></code>: Faster (data.table-based) evaluation
+of profile-level expressions.</li>
+<li>
+<code>profileApply</code>: Add support for custom
+<code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code>-like function (<code>APPLY.FUN</code>) for
+processing chunks.</li>
+<li>Add <code>.interpretHorizonColor()</code> outputs to
 <code>last_spc_plot</code> in <code>aqp.env</code> for use in custom
-<code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend()</a></code> (#254) * Add <code>simplify</code> argument to
+<code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend()</a></code>.</li>
+<li>Add <code>simplify</code> argument to
 <code><a href="../reference/SoilTextureLevels.html">SoilTextureLevels()</a></code> and <code><a href="../reference/texture.html">ssc_to_texcl()</a></code> to
 optionally convert to an ordered factor with maximum of 12 levels
 (rather than 21). This smaller list of classes excludes sand grain size
 variants such as fine sand, loamy coarse sand, and very fine sandy
-loam.</p>
+loam.</li>
+</ul>
 </div>
   </div>
 
