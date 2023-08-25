@@ -18,6 +18,9 @@ knitr::opts_chunk$set(
 )
 options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 library(aqp, quietly = TRUE)
 .bluecolors <- hcl.colors(n = 25, palette = 'Blues')[-25]
 ```

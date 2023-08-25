@@ -36,6 +36,10 @@ setGeneric("glom", function(p, z1, z2 = NULL,
 #' @aliases glom
 #' @rdname glom
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' data(sp1, package = 'aqp')
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group

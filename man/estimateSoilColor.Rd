@@ -38,6 +38,9 @@ This is still a work in progress.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 estimateSoilColor(hue = '10YR', value = 3, chroma = 3, sourceMoistureState = 'moist')
 
 # note that estimation is not symmetric

@@ -24,6 +24,9 @@ This function is fully vectorized and will pad output with NA-records when NA ar
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 # Munsell notation to sRGB triplets [0-1] 
 color <- munsell2rgb(
   the_hue = c('10YR', '2.5YR', '5YR'), 
@@ -43,8 +46,8 @@ rgb2munsell(color)
 \references{
 \url{http://ncss-tech.github.io/AQP/}
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-\url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+http://www.cis.rit.edu/mcsl/online/munsell.php
 }
 \author{
 D.E. Beaudette

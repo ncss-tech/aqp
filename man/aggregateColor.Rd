@@ -45,6 +45,9 @@ where \code{w_i} is the weight associated with color \code{i}, \code{thickness_i
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 # load some example data
 data(sp1, package='aqp')
 
@@ -74,14 +77,11 @@ s$slice <- paste0(s$top, ' cm')
 s$slice <- factor(s$slice, levels=guessGenHzLevels(s, 'slice')$levels)
 a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
 
-\dontrun{
   # optionally plot with helper function
   if(require(sharpshootR))
     aggregateColorPlot(a)
-}
 
 # a more interesting example
-\dontrun{
   data(loafercreek, package = 'soilDB')
   
   # generalize horizon names using REGEX rules
@@ -102,7 +102,7 @@ a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
   
   # inspect aggregate data
   a$aggregate.data
-}
+
 
 }
 \seealso{

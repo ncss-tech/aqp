@@ -49,6 +49,10 @@ The best results are obtained when setting margins to zero, and inverting foregr
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
+
 # better graphics defaults
 op <- par(mar = c(0, 0, 0, 0), fg = 'white', bg = 'black')
 

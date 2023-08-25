@@ -33,6 +33,9 @@
 #' 
 #' @examples
 #' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' # load some example data
 #' data(sp1, package='aqp')
 #' 
@@ -62,14 +65,11 @@
 #' s$slice <- factor(s$slice, levels=guessGenHzLevels(s, 'slice')$levels)
 #' a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
 #' 
-#' \dontrun{
 #'   # optionally plot with helper function
 #'   if(require(sharpshootR))
 #'     aggregateColorPlot(a)
-#' }
 #' 
 #' # a more interesting example
-#' \dontrun{
 #'   data(loafercreek, package = 'soilDB')
 #'   
 #'   # generalize horizon names using REGEX rules
@@ -90,7 +90,7 @@
 #'   
 #'   # inspect aggregate data
 #'   a$aggregate.data
-#' }
+#' 
 #' 
 aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace = 'CIE2000', k = NULL, profile_wt = NULL, mixingMethod = c('estimate', 'exact')) {
   

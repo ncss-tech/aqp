@@ -16,14 +16,17 @@
 #' @references 
 #' \url{http://ncss-tech.github.io/AQP/}
 #' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-#' \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 #' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#' http://www.cis.rit.edu/mcsl/online/munsell.php
 #'
 #' @return an (NA-padded) \code{data.frame} containing `hue`, `value`, `chroma`, and distance (dE00 when \code{colorSpace = 'CIE2000'}, Euclidean distance otherwise) to nearest matching color.
 #' 
 #' @export
 #'
 #' @examples 
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 #' 
 #' # Munsell notation to sRGB triplets [0-1] 
 #' color <- munsell2rgb(
@@ -200,8 +203,8 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' 
 #' @references \url{http://ncss-tech.github.io/AQP/}
 #' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-#' \url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 #' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#' http://www.cis.rit.edu/mcsl/online/munsell.php
 #' 
 #' @author D.E. Beaudette
 #' 

@@ -70,6 +70,6 @@ depth.axis = FALSE, hz.depths = TRUE)
 
 }
 \references{
-Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{doi.org/10.1016/j.geoderma.2022.115809}
+Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{10.1016/j.geoderma.2022.115809}
 }
 \keyword{datasets}

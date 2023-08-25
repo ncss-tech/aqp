@@ -20,6 +20,9 @@
 #' @export
 #' @examples
 #'
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#'
 #' # load sample data
 #' data(sp3)
 #' data(sp4)

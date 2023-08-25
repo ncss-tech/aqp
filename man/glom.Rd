@@ -63,6 +63,10 @@ The full depth range of horizons included within the interval are returned (a "r
 If inverting results with \code{invert}, it is possible that thick horizons (whose boundaries span wider than the specified interval) will be split into \emph{two} horizons, where previously they were one. This may make the results from \code{ids = TRUE} different from what you expect, as they will be based on a profile with an "extra" horizon and re-calculated unique horizon ID (\code{hzidname(spc)}) \code{"hzID"}.
 }
 \examples{
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group

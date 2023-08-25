@@ -24,6 +24,10 @@ Calculate "rubification" component of "Profile Development Index" after Harden (
 In Harden (1982) "rubification" is calculated relative to a reference parent material. Several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 }
 \examples{
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 library(aqp)
 data("jacobs2000", package="aqp")
 

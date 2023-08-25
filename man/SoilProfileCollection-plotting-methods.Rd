@@ -212,6 +212,10 @@ A new plot of soil profiles is generated, or optionally added to an existing plo
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
+
 # example data
 data(sp1)
 # usually best to adjust margins

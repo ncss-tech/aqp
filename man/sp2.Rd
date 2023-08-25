@@ -36,6 +36,9 @@ Creek, California.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 data(sp2)
 
 # convert into SoilProfileCollection object

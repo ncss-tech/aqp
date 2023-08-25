@@ -53,6 +53,10 @@ Two-way panels are used when multiple hues are provided and \code{style='CC'}. T
   }
 }
 \examples{
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 # single hue page
 contrastChart(m = '10YR 3/3', hues = '10YR')
 

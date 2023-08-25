@@ -116,8 +116,8 @@ getClosestMunsellChip('7.9YR 2.7/2.0')
 \references{
 \url{http://ncss-tech.github.io/AQP/}
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-\url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+http://www.cis.rit.edu/mcsl/online/munsell.php
 }
 \author{
 D.E. Beaudette

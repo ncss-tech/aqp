@@ -54,7 +54,9 @@
 #'   * biome: biome
 #'
 #' @references 
-#' Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{doi.org/10.1016/j.geoderma.2022.115809}
+#' Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{10.1016/j.geoderma.2022.115809}
+#' 
+#' 
 #' 
 #' @examples 
 #' 
@@ -168,6 +170,9 @@ NULL
 #' Bulletin 1590-G.
 #' @keywords datasets
 #' @examples
+#'
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 #'
 #' data(sp2)
 #'
@@ -982,7 +987,10 @@ NULL
 #' @keywords datasets
 #'
 #' @examples
-#'
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' # load
 #' data(jacobs2000)
 #'

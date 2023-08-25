@@ -83,6 +83,8 @@ A message is printed when \code{scaledDistance} is larger than 1.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2)) 
 
 # try a couple different methods
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')

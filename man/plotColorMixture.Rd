@@ -47,6 +47,9 @@ If present, \code{names} attribute of \code{x} is used for the figure legend.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 # color chips
 chips <- c('5B 5/10', '5Y 8/8')
 names(chips) <- chips

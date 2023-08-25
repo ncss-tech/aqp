@@ -10,6 +10,10 @@
 #' @author Andrew G. Brown
 #' @seealso \code{\link{hurst.redness}} \code{\link{barron.torrent.redness.LAB}} \code{\link{buntley.westin.index}}
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' data(sp1)
 #'
 #' # promote sp1 data to SoilProfileCollection
@@ -93,6 +97,10 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' @rdname harden.rubification
 #' @export harden.rubification
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' library(aqp)
 #' data("jacobs2000", package="aqp")
 #'
@@ -182,6 +190,10 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' @rdname harden.melanization
 #' @export harden.melanization
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' library(aqp)
 #' data("jacobs2000", package="aqp")
 #'
