@@ -52,6 +52,10 @@
 #' # aggregate colors over horizon-level attribute: 'genhz'
 #' a <- aggregateColor(sp1, groups = 'genhz', col = 'soil_color')
 #' 
+#' # check results
+#' str(a)
+#' 
+#' \dontrun{
 #' # aggregate colors over site-level attribute: 'group'
 #' a <- aggregateColor(sp1, groups = 'group', col = 'soil_color')
 #' 
@@ -90,7 +94,7 @@
 #'   
 #'   # inspect aggregate data
 #'   a$aggregate.data
-#' 
+#' }
 #' 
 aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace = 'CIE2000', k = NULL, profile_wt = NULL, mixingMethod = c('estimate', 'exact')) {
   
