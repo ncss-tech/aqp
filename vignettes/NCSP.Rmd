@@ -89,7 +89,7 @@ groupedProfilePlot(z, groups = 'subgroup', group.name.offset = -10, break.style 
 ```
 
 
-Define weights and compute seperately horizon and site level distance matrices. In this case, the site-level distances are give double the weight as the horizon-level distances. See the manual pages (`?NCSP` and `?compareSites`) for additional arguments that can be used to further customize the comparison.
+Define weights and compute separately horizon and site level distance matrices. In this case, the site-level distances are give double the weight as the horizon-level distances. See the manual pages (`?NCSP` and `?compareSites`) for additional arguments that can be used to further customize the comparison.
 ```{r}
 # horizon-level distance matrix weight
 w1 <- 1
@@ -110,7 +110,7 @@ D <- Reduce(
 
 
 
-Investigate the final distance matrix using divisive hierarchical clustering. The `plotProfileDendrogram()` function from the {sharpshootR} package is a convenient way to combine the resulting dendrogram with soil profile sketches. Note that the site-level distances have a very strong effect on the overall structure.
+Investigate the final distance matrix using divisive hierarchical clustering. The `plotProfileDendrogram()` function from the {sharpshootR} package is a convenient way to combine the resulting dendrogram with soil profile sketches. Note that the site-level distances have a very strong effect on the overall clustering structure.
 ```{r fig.width=8.5, fig.height=6}
 # divisive hierarchical clustering
 h <- as.hclust(diana(D))

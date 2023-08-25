@@ -21,6 +21,7 @@ These data are c/o F. Carre (Florence.CARRE@ineris.fr).
 }
 \examples{
 
+\dontrun{
 library(scales)
 data(sp5)
 par(mar=c(1,1,1,1))
@@ -101,7 +102,7 @@ axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2
 polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)),
 border='black', col=rgb(0,0,0.8, alpha=0.25))
 
-
+}
 
 
 }
