@@ -24,6 +24,8 @@ This is a major update to {aqp} that may create some issues for code depending o
 
 See the manual pages for `dice()`, `NCSP()`, and `slab()`. Note that these new / updated functions perform stricter tests for horizon depth logic errors. Messages and warnings are issued when invalid depth logic is reported by `checkHzDepthLogic()`. New functions `accumulateDepths()`, `repairMissingHzDepths()`, and `fillHzGaps()` can usually salvage problematic profiles.
 
+The `replace_na` and `add_soil_flag` arguments to `profile_compare()` are not present in `NCSP()`; missing data are always replaced by maximum dissimilarity (1 when Gower's distance metric is used) and the soil/non-soil matrix is always used to compare profiles of different depth.
+
 
 ## Notable Changes
 
