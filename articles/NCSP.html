@@ -100,8 +100,150 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>With the release of {aqp} 2.0, the soil profile comparison algorithm
+implemented in <code><a href="../reference/profile_compare.html">profile_compare()</a></code> (Beaudette et al., 2013)
+has been completely re-written as <code><a href="../reference/NCSP.html">NCSP()</a></code> and re-named the
+“Numerical Comparison of Soil Profiles”. A more recent discussion of
+this algorithm is provided in Maynard et al. (2020).</p>
+<p>This short vignette demonstrates how to use the <code><a href="../reference/NCSP.html">NCSP()</a></code>
+function from {aqp} 2.x to perform a pair-wise comparison of soil data
+encoded as a <code>SoilProfileCollection</code> object. The pair-wise
+comparison of site-level attributes, previously available in
+<code><a href="../reference/profile_compare.html">profile_compare()</a></code> has been removed from <code><a href="../reference/NCSP.html">NCSP()</a></code>
+and implemented as a stand-alone function named
+<code><a href="../reference/compareSites.html">compareSites()</a></code>. A final distance matrix (combining horizon
+and site level attributes) is created via weighted average. A more
+detailed version of this vignette can be found in the <a href="https://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html" class="external-link">Pair-Wise
+Distances by Generalized Horizon Labels</a> tutorial.</p>
+</div>
+<div class="section level2">
+<h2 id="a-simple-example">A Simple Example<a class="anchor" aria-label="anchor" href="#a-simple-example"></a>
+</h2>
+<p>Consider three soil profiles, containing basic morphology associated
+with the <a href="https://casoilresource.lawr.ucdavis.edu/sde/?series=appling" class="external-link">Appling</a>,
+<a href="https://casoilresource.lawr.ucdavis.edu/sde/?series=Bonneau" class="external-link">Bonneau</a>,
+and <a href="https://casoilresource.lawr.ucdavis.edu/sde/?series=cecil" class="external-link">Cecil</a>
+soil series. These data are provided in the example dataset “osd” as
+part of the {aqp} package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># TODO</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># load data and make a copy</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"osd"</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">osd</span></span></code></pre></div>
+<p>Simulation is used below to generate 4 realizations of each soil
+series, using the <code><a href="../reference/perturb.html">perturb()</a></code> function.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assume a standard deviation of 10cm for horizon boundary depths</span></span>
+<span><span class="co"># far too large for most horizons, but helps to make a point</span></span>
+<span><span class="va">x</span><span class="op">$</span><span class="va">hzd</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span></span>
+<span><span class="co"># generate 4 realizations of each soil profile in `x`</span></span>
+<span><span class="co"># limit the minimum horizon thickness to 5cm</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span></span>
+<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/perturb.html">perturb</a></span><span class="op">(</span><span class="va">x</span>, id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"sim-%02d"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, boundary.attr <span class="op">=</span> <span class="st">'hzd'</span>, min.thickness <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># combine source + simulated data into a single SoilProfileCollection</span></span>
+<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">combine</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">s</span><span class="op">)</span></span></code></pre></div>
+<p>A quick review of the source and simulated profiles, note patterns in
+horizon depths, horizon designation, and moist soil colors. The profiles
+have been visually truncated at 185cm for clarity (note ragged bottoms).
+The new <code>.aqp.plotSPC.args</code> option is used to set default
+arguments to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> for the remainder of the R session.
+Simulated profiles are labeled with a numeric suffix (e.g. “-01”)</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set plotSPC argument defaults</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>.aqp.plotSPC.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name.style <span class="op">=</span> <span class="st">'center-center'</span>, depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>style <span class="op">=</span> <span class="st">'compact'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">2.5</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">0.33</span>, cex.names <span class="op">=</span> <span class="fl">0.75</span>, cex.id <span class="op">=</span> <span class="fl">0.66</span>, max.depth <span class="op">=</span> <span class="fl">185</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NCSP_files/figure-html/unnamed-chunk-3-1.png" width="816" style="display: block; margin: auto;"></p>
+<p>Subgroup level classification (encoded as an un-ordered factor) will
+be used as a site-level attribute for computing pair-wise distances.
+Quickly review the grouping structure with
+<code><a href="../reference/groupedProfilePlot.html">groupedProfilePlot()</a></code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># encode as a factor for distance calculation</span></span>
+<span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/groupedProfilePlot.html">groupedProfilePlot</a></span><span class="op">(</span><span class="va">z</span>, groups <span class="op">=</span> <span class="st">'subgroup'</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, break.style <span class="op">=</span> <span class="st">'arrow'</span>, group.line.lty <span class="op">=</span> <span class="fl">1</span>, group.line.lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NCSP_files/figure-html/unnamed-chunk-4-1.png" width="816" style="display: block; margin: auto;"></p>
+<p>Horizon designation, grouped into <a href="https://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.html" class="external-link">“generalized
+horizon labels”</a> will be used as the horizon-level attribute for
+computing pair-wise distances. REGEX pattern matching is used to apply
+generalized horizon labels (GHL) to each horizon, and are encoded as
+ordered factors. A thematic soil profile sketch (horizon color defined
+by a property or condition) is a convenient way to graphically check GHL
+assignment.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assign GHL</span></span>
+<span><span class="va">z</span><span class="op">$</span><span class="va">genhz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generalize.hz.html">generalize.hz</a></span><span class="op">(</span></span>
+<span>  <span class="va">z</span><span class="op">$</span><span class="va">hzname</span>, new <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'E'</span>, <span class="st">'Bt'</span>, <span class="st">'C'</span><span class="op">)</span>, </span>
+<span>  pattern <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="st">'E'</span>, <span class="st">'Bt'</span>, <span class="st">'C|Bt4'</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># check GHL</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/groupedProfilePlot.html">groupedProfilePlot</a></span><span class="op">(</span><span class="va">z</span>, groups <span class="op">=</span> <span class="st">'subgroup'</span>, group.name.offset <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, break.style <span class="op">=</span> <span class="st">'arrow'</span>, group.line.lty <span class="op">=</span> <span class="fl">1</span>, group.line.lwd <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">'genhz'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NCSP_files/figure-html/unnamed-chunk-5-1.png" width="816" style="display: block; margin: auto;"></p>
+<p>Define weights and compute seperately horizon and site level distance
+matrices. In this case, the site-level distances are give double the
+weight as the horizon-level distances. See the manual pages
+(<code><a href="../reference/NCSP.html">?NCSP</a></code> and <code><a href="../reference/compareSites.html">?compareSites</a></code>) for additional
+arguments that can be used to further customize the comparison.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># horizon-level distance matrix weight</span></span>
+<span><span class="va">w1</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="co"># perform NCSP using only the GHL (ordered factors) to a depth of 185cm</span></span>
+<span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NCSP.html">NCSP</a></span><span class="op">(</span><span class="va">z</span>, vars <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'genhz'</span><span class="op">)</span>, maxDepth <span class="op">=</span> <span class="fl">185</span>, k <span class="op">=</span> <span class="fl">0</span>, rescaleResult <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># site-level distance matrix weight</span></span>
+<span><span class="va">w2</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="co"># Gower's distance metric applied to subgroup classification (nominal factor)</span></span>
+<span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compareSites.html">compareSites</a></span><span class="op">(</span><span class="va">z</span>, <span class="st">'subgroup'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># perform weighted average of distance matrices</span></span>
+<span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span></span>
+<span>  <span class="va">`+`</span>, </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">d1</span> <span class="op">*</span> <span class="va">w1</span>, <span class="va">d2</span> <span class="op">*</span> <span class="va">w2</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="va">w1</span>, <span class="va">w2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Investigate the final distance matrix using divisive hierarchical
+clustering. The <code><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram()</a></code> function from the
+{sharpshootR} package is a convenient way to combine the resulting
+dendrogram with soil profile sketches. Note that the site-level
+distances have a very strong effect on the overall structure.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># divisive hierarchical clustering</span></span>
+<span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a></span><span class="op">(</span><span class="va">D</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># hang soil profile sketches from resulting dendrogram</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">z</span>, clust <span class="op">=</span> <span class="va">h</span>, scaling.factor <span class="op">=</span> <span class="fl">0.0075</span>, y.offset <span class="op">=</span> <span class="fl">0.15</span>, width <span class="op">=</span> <span class="fl">0.33</span>, color <span class="op">=</span> <span class="st">'genhz'</span>, name <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># annotate dendorgram with subgroup classification</span></span>
+<span><span class="co"># this handy function provided by the {ape} package</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">tiplabels</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">[</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">]</span>, cex <span class="op">=</span> <span class="fl">1.5</span>, offset <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># helpful legend</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'topleft'</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">15</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="NCSP_files/figure-html/unnamed-chunk-7-1.png" width="816" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<ul>
+<li>Beaudette, D.E., P. Roudier, and A.T. O’Geen. 2013. Algorithms for
+quantitative pedology: A toolkit for soil scientists. Computers and
+Geoscience 52:258-268.</li>
+<li>Maynard, J.J., S.W. Salley, D.E. Beaudette, and J.E. Herrick. 2020.
+Numerical soil classification supports soil identification by citizen
+scientists using limited, simple soil observations. Soil Science Society
+of America Journal 84:1675-1692.</li>
+</ul>
 </div>
   </div>
 

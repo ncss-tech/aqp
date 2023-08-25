@@ -114,6 +114,12 @@ issued when invalid depth logic is reported by
 <code><a href="../reference/accumulateDepths.html">accumulateDepths()</a></code>, <code><a href="../reference/repairMissingHzDepths.html">repairMissingHzDepths()</a></code>,
 and <code><a href="../reference/fillHzGaps.html">fillHzGaps()</a></code> can usually salvage problematic
 profiles.</p>
+<p>The <code>replace_na</code> and <code>add_soil_flag</code> arguments
+to <code><a href="../reference/profile_compare.html">profile_compare()</a></code> are not present in
+<code><a href="../reference/NCSP.html">NCSP()</a></code>; missing data are always replaced by maximum
+dissimilarity (1 when Gower’s distance metric is used) and the
+soil/non-soil matrix is always used to compare profiles of different
+depth.</p>
 <div class="section level2">
 <h2 id="notable-changes">Notable Changes<a class="anchor" aria-label="anchor" href="#notable-changes"></a>
 </h2>
