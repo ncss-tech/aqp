@@ -143,6 +143,9 @@ where <code>w_i</code> is the weight associated with color <code>i</code>, <code
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># keep examples from using more than 2 cores</span></span></span>
+<span class="r-in"><span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OMP_THREAD_LIMIT"</span>, unset <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># load some example data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span>, package<span class="op">=</span><span class="st">'aqp'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -174,14 +177,13 @@ where <code>w_i</code> is the weight associated with color <code>i</code>, <code
 <span class="r-in"><span><span class="va">s</span><span class="op">$</span><span class="va">slice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">slice</span>, levels<span class="op">=</span><span class="fu"><a href="guessGenHzLevels.html">guessGenHzLevels</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">'slice'</span><span class="op">)</span><span class="op">$</span><span class="va">levels</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">aggregateColor</span><span class="op">(</span><span class="va">s</span>, groups <span class="op">=</span> <span class="st">'slice'</span>, col <span class="op">=</span> <span class="st">'soil_color'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># optionally plot with helper function</span></span></span>
 <span class="r-in"><span>  <span class="kw">if</span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html" class="external-link">aggregateColorPlot</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: sharpshootR</span>
+<span class="r-plt img"><img src="aggregateColor-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a more interesting example</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">loafercreek</span>, package <span class="op">=</span> <span class="st">'soilDB'</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  <span class="co"># generalize horizon names using REGEX rules</span></span></span>
@@ -199,10 +201,18 @@ where <code>w_i</code> is the weight associated with color <code>i</code>, <code
 <span class="r-in"><span>  <span class="co"># plot results with helper function</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/aggregateColorPlot.html" class="external-link">aggregateColorPlot</a></span><span class="op">(</span><span class="va">a</span>, print.n.hz <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="aggregateColor-2.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  <span class="co"># inspect aggregate data</span></span></span>
 <span class="r-in"><span>  <span class="va">a</span><span class="op">$</span><span class="va">aggregate.data</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   genhz   hue value chroma   munsell distance       col  n        H</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     A 7.5YR     3      3 7.5YR 3/3 2.941674 #5B422EFF 22 3.365835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    BA 7.5YR     4      4 7.5YR 4/4 1.428148 #7D593AFF 16 3.338803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   Bt1 7.5YR     4      4 7.5YR 4/4 2.295589 #7D593AFF 27 3.853158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   Bt2   5YR     4      5   5YR 4/5 1.171590 #845637FF 28 3.643060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   Bt3   5YR     4      5   5YR 4/5 2.833348 #845637FF 31 3.549099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    Cr 7.5YR     5      5 7.5YR 5/5 4.588224 #9D724AFF  4 1.979363</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
