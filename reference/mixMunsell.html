@@ -130,7 +130,8 @@
 </ul></div>
     <div id="details">
     <h2>Details</h2>
-    <p>An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.</p>
+    <p>See the <a href="https://ncss-tech.github.io/AQP/aqp/mix-colors.html" class="external-link">expanded tutorial</a> for examples.</p>
+<p>An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.</p>
 <p>Thankfully, <a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf" class="external-link">Scott Burns has outlined the entire process</a>, and Paul Centore has provided a Munsell color chip <a href="https://www.munsellcolourscienceforpainters.com" class="external-link">reflectance spectra library</a>. The estimation of a subtractive mixture of soil colors can proceed as follows:</p><ol><li><p>look up the associated spectra for each color in <code>x</code></p></li>
 <li><p>compute the weighted (<code>w</code> argument) geometric mean of the spectra</p></li>
 <li><p>convert the spectral mixture to the closest Munsell color via:</p></li>
@@ -159,43 +160,6 @@
     <p>D.E. Beaudette</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># keep examples from using more than 2 cores</span></span></span>
-<span class="r-in"><span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OMP_THREAD_LIMIT"</span>, unset <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> </span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># try a couple different methods</span></span></span>
-<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/2'</span>, <span class="st">'5YR 5/6'</span>, <span class="st">'10B 4/4'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"gower"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'reference'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: gower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   munsell   distance scaledDistance distanceMetric mixingMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  5Y 5/1 0.01311294      0.5245176          Gower    reference</span>
-<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    munsell distance scaledDistance distanceMetric mixingMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 5/1 1.670085             NA           dE00        exact</span>
-<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     munsell distance scaledDistance distanceMetric mixingMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR 5/2 1.241368             NA           dE00     estimate</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># 2.5 values</span></span></span>
-<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 2.5/2'</span>, <span class="st">'5YR 5/6'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"gower"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'reference'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   munsell   distance scaledDistance distanceMetric mixingMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  5Y 4/3 0.01107466      0.4429862          Gower    reference</span>
-<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'exact'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     munsell distance scaledDistance distanceMetric mixingMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR 4/3 3.469518             NA           dE00        exact</span>
-<span class="r-in"><span><span class="fu">mixMunsell</span><span class="op">(</span><span class="va">cols</span>, mixingMethod <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     munsell distance scaledDistance distanceMetric mixingMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR 4/4 2.463059             NA           dE00     estimate</span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
