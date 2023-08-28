@@ -1,22 +1,13 @@
 
-## quickly display two sets of colors and soil color contrast metrics
-# m1: munsell colors
-# m2: munsell colors
-# col.cex: scaling for color labels
-# col.font: font for color labels
-# d.cex: scaling for contrast metric labels
-# cc.font: font for contrast class
-# dE00.font: font for delta-E00 label
-# labels: vector of labels for colors being compared
-# printMetrics: add contrast metrics
-# \dots{}: further arguments passed to colorspace::swatchplot
-#' Color Contrast Plot
+
 #'
-#' A simple display of two sets of colors, NCSS color contrast class and CIE
+#' @title Color Contrast Plot
+#'
+#' @description A simple display of two sets of colors, NCSS color contrast class and CIE
 #' delta-E00.
-#'
-#' This function requires the \code{farver} package for calculation of CIE
-#' delta-E00
+#' 
+#' @note This function requires the `farver` package for calculation of CIE
+#' delta-E00.
 #'
 #' @param m1 first set of Munsell colors for comparison (e.g. '5YR 3/2')
 #' @param m2 second set of Munsell colors for comparison
@@ -29,9 +20,9 @@
 #' @param label.cex scaling factor for labels
 #' @param label.font font for labels
 #' @param printMetrics logical, print metrics between color swatches
-#' @param \dots further arguments to \code{colorspace::swatchplot}
+#' @param \dots further arguments to `colorspace::swatchplot`
 #' @author D.E. Beaudette
-#' @seealso \code{\link{colorContrast}}
+#' @seealso [colorContrast()]
 #' @keywords hplots
 #' @export
 #' @examples

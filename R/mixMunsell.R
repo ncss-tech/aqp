@@ -153,6 +153,8 @@
 #'
 #'
 #' @details
+#' See the [expanded tutorial](https://ncss-tech.github.io/AQP/aqp/mix-colors.html) for examples.
+#' 
 #' An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.
 #' 
 #' Thankfully, [Scott Burns has outlined the entire process](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf), and Paul Centore has provided a Munsell color chip [reflectance spectra library](https://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:
@@ -190,26 +192,6 @@
 #'
 #' @seealso [munsell.spectra]
 #' @export
-#' @examples 
-#' 
-#' # keep examples from using more than 2 cores
-#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2)) 
-#' 
-#' # try a couple different methods
-#' cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
-#' if(requireNamespace("gower")) {
-#' mixMunsell(cols, mixingMethod = 'reference')
-#' }
-#' mixMunsell(cols, mixingMethod = 'exact')
-#' mixMunsell(cols, mixingMethod = 'estimate')
-#' 
-#' # 2.5 values
-#' cols <- c('10YR 2.5/2', '5YR 5/6')
-#' if(requireNamespace("gower")) {
-#' mixMunsell(cols, mixingMethod = 'reference')
-#' }
-#' mixMunsell(cols, mixingMethod = 'exact')
-#' mixMunsell(cols, mixingMethod = 'estimate')
 #' 
 mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('exact', 'reference', 'estimate', 'adaptive'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025, ...) {
 

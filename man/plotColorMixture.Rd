@@ -43,39 +43,7 @@ a \code{lattice} graphics object
 Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
 }
 \details{
-If present, \code{names} attribute of \code{x} is used for the figure legend.
-}
-\examples{
-
-# keep examples from using more than 2 cores
-data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
-
-# color chips
-chips <- c('5B 5/10', '5Y 8/8')
-names(chips) <- chips
-
-# weights
-wt <- c(1, 1)
-
-if(requireNamespace("gower")) {
-plotColorMixture(
-x = chips, 
-w = wt, 
-label.cex = 0.65, 
-showMixedSpec = TRUE, 
-mixingMethod = 'reference'
-)
-
-}
-
-
-plotColorMixture(
-  x = chips, 
-  w = wt, 
-  label.cex = 0.65, 
-  mixingMethod = 'exact'
-)
-
+If present, \code{names} attribute of \code{x} is used for the figure legend. See the \href{https://ncss-tech.github.io/AQP/aqp/mix-colors.html}{expanded tutorial} for examples.
 }
 \seealso{
 \code{\link[=mixMunsell]{mixMunsell()}}

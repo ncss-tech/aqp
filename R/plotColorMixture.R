@@ -3,7 +3,7 @@
 #' 
 #' @description Lattice visualization demonstrating subtractive mixtures of colors in Munsell notation and associated spectra.
 #' 
-#' @details If present, `names` attribute of `x` is used for the figure legend.
+#' @details If present, `names` attribute of `x` is used for the figure legend. See the [expanded tutorial](https://ncss-tech.github.io/AQP/aqp/mix-colors.html) for examples.
 #' 
 #' @author D.E. Beaudette
 #' 
@@ -31,37 +31,6 @@
 #' 
 #' @seealso [mixMunsell()]
 #' @export
-#' 
-#' @examples 
-#' 
-#' # keep examples from using more than 2 cores
-#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
-#' 
-#' # color chips
-#' chips <- c('5B 5/10', '5Y 8/8')
-#' names(chips) <- chips
-#' 
-#' # weights
-#' wt <- c(1, 1)
-#' 
-#' if(requireNamespace("gower")) {
-#' plotColorMixture(
-#' x = chips, 
-#' w = wt, 
-#' label.cex = 0.65, 
-#' showMixedSpec = TRUE, 
-#' mixingMethod = 'reference'
-#' )
-#'
-#'}
-#'
-#' 
-#' plotColorMixture(
-#'   x = chips, 
-#'   w = wt, 
-#'   label.cex = 0.65, 
-#'   mixingMethod = 'exact'
-#' )
 #' 
 plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('exact', 'reference'), n = 1, swatch.cex = 1.5, label.cex = 0.85, showMixedSpec = FALSE, overlapFix = TRUE) {
   

@@ -1,4 +1,4 @@
-# aqp 2.0 (2023-08-07)
+# aqp 2.0 (2023-08-28)
 This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`. `slice()` and `profile_compare()` are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of `slab()` is a drop-in replacement for the previous version of the function.
 
 Notable changes include:

@@ -36,6 +36,9 @@ output from \code{\link[=rgb2munsell]{rgb2munsell()}}
 \description{
 Convert reflectance spectra to closest Munsell chip
 }
+\details{
+See the \href{https://ncss-tech.github.io/AQP/aqp/mix-colors.html}{expanded tutorial} for additional examples.
+}
 \examples{
 
 # Munsell reference spectra
@@ -66,6 +69,7 @@ colorContrastPlot(
   labels = c('original', 'spectral\ninterpretation')
 )
 
+\dontrun{
 if(requireNamespace("gower")) {
 # mix colors, return spectra, convert to color
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
@@ -75,6 +79,7 @@ res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
 res$mixed
 spec2Munsell(res$spec)
 
+}
 }
 
 }

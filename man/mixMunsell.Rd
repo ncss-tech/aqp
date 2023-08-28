@@ -54,6 +54,8 @@ When \code{keepMixedSpec = TRUE} then a \code{list}:
 Simulate mixing of colors in Munsell notation, similar to the way in which mixtures of pigments operate.
 }
 \details{
+See the \href{https://ncss-tech.github.io/AQP/aqp/mix-colors.html}{expanded tutorial} for examples.
+
 An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.
 
 Thankfully, \href{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}{Scott Burns has outlined the entire process}, and Paul Centore has provided a Munsell color chip \href{https://www.munsellcolourscienceforpainters.com}{reflectance spectra library}. The estimation of a subtractive mixture of soil colors can proceed as follows:
@@ -80,28 +82,6 @@ Key assumptions include:
 For the purposes of estimating (for example) a "mixed soil color within the top 18cm of soil" these assumptions are usually valid. Again, these are estimates that are ultimately "snapped" to the nearest chip and not do not need to approach the accuracy of paint-matching systems.
 
 A message is printed when \code{scaledDistance} is larger than 1.
-}
-\examples{
-
-# keep examples from using more than 2 cores
-data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2)) 
-
-# try a couple different methods
-cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
-if(requireNamespace("gower")) {
-mixMunsell(cols, mixingMethod = 'reference')
-}
-mixMunsell(cols, mixingMethod = 'exact')
-mixMunsell(cols, mixingMethod = 'estimate')
-
-# 2.5 values
-cols <- c('10YR 2.5/2', '5YR 5/6')
-if(requireNamespace("gower")) {
-mixMunsell(cols, mixingMethod = 'reference')
-}
-mixMunsell(cols, mixingMethod = 'exact')
-mixMunsell(cols, mixingMethod = 'estimate')
-
 }
 \references{
 Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.

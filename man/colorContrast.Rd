@@ -12,16 +12,15 @@ colorContrast(m1, m2)
 \item{m2}{vector of Munsell colors ('10YR 3/6')}
 }
 \value{
-A \code{data.frame} with the following columns:
-
+\code{data.frame} with the following columns:
 \itemize{
-\item{m1: }{Munsell color 1}
-\item{m2: }{Munsell color 2}
-\item{dH: }{delta-hue, as computed by \code{huePosition}}
-\item{dV: }{delta-value, absolute value of difference in Munsell value (m1 vs. m2)}
-\item{dc: }{delta-chroma, absolute value of difference in Munsell chroma (m1 vs. m2)}
-\item{dE00: }{delta-E00, e.g. the \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{CIE delta-E as refined in 2000}}
-\item{cc: }{soil color contrast class, as specified in Soil Survey Technical Note 2 \href{https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{wayback machine URL}}
+\item m1: Munsell color 1
+\item m2: Munsell color 2
+\item dH: delta-hue, as computed by \code{huePosition}
+\item dV: delta-value, absolute value of difference in Munsell value (m1 vs. m2)
+\item dc: delta-chroma, absolute value of difference in Munsell chroma (m1 vs. m2)
+\item dE00: delta-E00, e.g. the \href{https://en.wikipedia.org/wiki/Color_difference#CIEDE2000}{CIE delta-E as refined in 2000}
+\item cc: soil color contrast class, as specified in Soil Survey Technical Note 2.
 }
 }
 \description{
@@ -73,7 +72,6 @@ colorContrast(m1, m2)
 \references{
 \enumerate{
 \item https://en.wikipedia.org/wiki/Color_difference
-\item Soil Survey Technical Note 2 \href{https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569}{wayback machine URL}
 }
 }
 \seealso{

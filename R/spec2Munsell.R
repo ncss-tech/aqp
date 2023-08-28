@@ -7,6 +7,9 @@
 ## TODO: allow for more flexibility in spectra min/max/res wavelength
 
 #' @title Convert reflectance spectra to closest Munsell chip
+#' 
+#' @details See the [expanded tutorial](https://ncss-tech.github.io/AQP/aqp/mix-colors.html) for additional examples.
+#' 
 #' @param x reflectance spectra, must range from 380nm to 730nm with resolution specified in `res`
 #' 
 #' @param res spectra resolution in nm, typically 5nm or 10nm
@@ -61,6 +64,7 @@
 #'   labels = c('original', 'spectral\ninterpretation')
 #' )
 #' 
+#' \dontrun{
 #' if(requireNamespace("gower")) {
 #' # mix colors, return spectra, convert to color
 #' cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
@@ -70,6 +74,7 @@
 #' res$mixed
 #' spec2Munsell(res$spec)
 #' 
+#' }
 #' }
 #' 
 spec2Munsell <- function(x, res = 10, convert = TRUE, SO = c('CIE1931', 'CIE1964'), illuminant = c('D65', 'F2'), ...) {

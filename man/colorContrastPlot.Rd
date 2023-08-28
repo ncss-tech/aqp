@@ -48,9 +48,9 @@ colorContrastPlot(
 A simple display of two sets of colors, NCSS color contrast class and CIE
 delta-E00.
 }
-\details{
+\note{
 This function requires the \code{farver} package for calculation of CIE
-delta-E00
+delta-E00.
 }
 \examples{
 
@@ -69,7 +69,7 @@ colorContrastPlot(m1, m2)
 
 }
 \seealso{
-\code{\link{colorContrast}}
+\code{\link[=colorContrast]{colorContrast()}}
 }
 \author{
 D.E. Beaudette
