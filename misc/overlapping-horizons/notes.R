@@ -24,20 +24,46 @@ x <- readRDS('misc/overlapping-horizons/example-DSP-data.rds')
 # all 4 profiles have overlap
 checkHzDepthLogic(x)
 
-## TODO: there should be an overlap error reported here:
+# correctly identifies overlap
+hzDepthTests(top = x[1, , .TOP], bottom = x[1, , .BOTTOM])
+
+
+## TODO: there should be an overlap error reported here, right?
 checkHzDepthLogic(x, byhz = TRUE)
+
+## this can't possibly detect overlap, working a horizon at a time..
+hzDepthTests(top = x[1, 1, .TOP], bottom = x[1, 1, .BOTTOM])
+
+
 
 ## consider a new function flagOverlap()
 
 # crude prototype, single profile at a time
+# may not scale well due to use of dist() in overlapMetrics()
 flagOverlap <- function(x) {
   
   .fo <- function(i) {
-    .x <- i[, , .TOP]
-    .o <- overlapMetrics(.x, thresh = 0.1)
     
-    .res <- rep(FALSE, times = length(.x))
-    .res[.o$idx] <- TRUE
+    # tops / bottoms
+    # NA not currently handled
+    .tops <- i[, , .TOP]
+    .bottoms <- i[, , .BOTTOM]
+    
+    # find perfect overlap
+    .rt <- rle(.tops)
+    .rb <- rle(.bottoms)
+    
+    # id affected horizons
+    .ot <- .rt$values[which(.rt$lengths > 1)]
+    .ob <- .rb$values[which(.rb$lengths > 1)]
+    
+    # index affected horizons
+    .m <- outer(.ot, .tops, '==')
+    idx <- as.vector(apply(.m, 1, which))
+    
+    # generate flag vector along sequence of horizons 
+    .res <- rep(FALSE, times = length(.tops))
+    .res[idx] <- TRUE
     
     return(.res)
   }
@@ -54,6 +80,19 @@ plotSPC(x, color = '.overlapFlag')
 
 plotSPC(x, color = 'hzID', show.legend = FALSE)
 plotSPC(x, color = 'claytotest')
+
+
+
+z <- data.frame(
+  id = 'SPC',
+  top = c(0, 25, 25, 50, 75, 100, 100),
+  bottom = c(25, 50, 50, 75, 100, 125, 125)
+)
+
+depths(z) <- id ~ top + bottom
+z$.overlapFlag <- flagOverlap(z)
+plotSPC(z, color = '.overlapFlag')
+
 
 
 ## TODO: fillHzGaps() adding bogus horizons
