@@ -5,6 +5,8 @@
 #' Gaps are defined as:
 #'  * within each profile, for horizons `i` to `n_hz`:
 #'  * `bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)`
+#'  
+#'  @note This function cannot yet handle overlapping horizons.
 #'
 #' @param x `SoilProfileCollection` object
 #' 
@@ -77,6 +79,8 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   
   h <- data.table::as.data.table(horizons(x))
 
+  ## TODO: adapt for use with overlapping horizons
+  # https://github.com/ncss-tech/aqp/issues/296
   lead.idx <- 2:nrow(h)
   lag.idx <- 1:(nrow(h) - 1)
 
