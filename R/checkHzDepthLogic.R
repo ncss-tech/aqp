@@ -1,17 +1,21 @@
-#' Check a SoilProfileCollection object for errors in horizon depths.
+#' @title Check a SoilProfileCollection object for errors in horizon depths.
 #'
-#' @description This function inspects a SoilProfileCollection object, looking for four common errors in horizon depths:
+#' @description This function inspects a `SoilProfileCollection` object, looking for four common errors in horizon depths:
 #'
 #'   1. bottom depth shallower than top depth
 #'   2. equal top and bottom depth
 #'   3. missing top or bottom depth (e.g. `NA`)
-#'   4. gap or overlap between adjacent horizons
+#'   4. gap or overlap between adjacent horizons (only if `byhz = FALSE`)
 #'
 #' @param x `SoilProfileCollection` or `data.frame` object to check
-#' @param hzdepths SoilProfileCollection uses `horizonDepths(x)` Default: `NULL`; if `x` is a data.frame, character vector of column names of top and bottom depths
-#' @param idname SoilProfileCollection uses `idname(x)` Default: `NULL`; if `x` is a data.frame, character vector with column name of unique profile ID;
-#' @param fast If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: `FALSE`
-#' @param byhz Apply logic tests to profiles or individual horizons?
+#' 
+#' @param hzdepths character vector, describing top and bottom depths in a `SoilProfileCollection` or `data.frame`. `horizonDepths(x)` is used when `x` is a `SoilProfileCollection`.
+#' 
+#' @param idname character, describing the column containing profile IDs in a `SoilProfileCollection` or `data.frame`. `idname(x)` is used when `x` is a `SoilProfileCollection`.
+#' 
+#' @param fast logical, When `TRUE`, details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster.
+#' 
+#' @param byhz logical, apply logic tests to profiles (`FALSE`) or individual horizons (`TRUE`)?
 #'
 #' @return A `data.frame` containing profile IDs, validity boolean (`valid`) and test results if `fast = FALSE`.
 #'
@@ -19,10 +23,10 @@
 #'
 #'  - `id` : Profile IDs, named according to `idname(x)`
 #'  - `valid` : boolean, profile passes all of the following tests
-#'    - `depthLogic` : boolean, errors related to depth logic
-#'    - `sameDepth` : boolean, errors related to same top/bottom depths
-#'    - `missingDepth` : boolean, NA in top / bottom depths
-#'    - `overlapOrGap` : boolean, gaps or overlap in adjacent horizons
+#'  - `depthLogic` : boolean, errors related to depth logic
+#'  - `sameDepth` : boolean, errors related to same top/bottom depths
+#'  - `missingDepth` : boolean, NA in top / bottom depths
+#'  - `overlapOrGap` : boolean, gaps or overlap in adjacent horizons (`NA` when `byhz = TRUE`)
 #'
 #' @export
 #' @author D.E. Beaudette, A.G. Brown, S.M. Roecker
@@ -112,52 +116,17 @@ checkHzDepthLogic <- function(x,
       res$.hzID <- NULL
     }
   }
+  
   # add profile ID and top/bottom depth for byhz==TRUE
   if (byhz) {
     res <- cbind(h[, .SD, .SDcols = c(idn, hzd)], res)
+    
+    # fill overlapOrGap with NA as that test isn't possible on horizon-basis
+    res[['overlapOrGap']] <- NA
   }
+  
   return(as.data.frame(res))
 
-  #
-  # # used inside / outside of scope of .check()
-  # htb <- horizonDepths(x)
-  # idn <- idname(x)
-  #
-  # .check <- function(i) {
-  #   # extract pieces
-  #   h <- horizons(i)
-  #
-  #   # convenience vars
-  #   ID.i <- h[[idn]][1]
-  #   .top <- h[[htb[1]]]
-  #   .bottom <- h[[htb[2]]]
-  #
-  #   # hzTests takes two numeric vectors and returns named logical
-  #   test <- hzDepthTests(.top, .bottom)
-  #
-  #   # pack into DF, 1 row per profile
-  #   res <- data.frame(
-  #     .id=ID.i,
-  #     depthLogic=test[1],
-  #     sameDepth=test[2],
-  #     missingDepth=test[3],
-  #     overlapOrGap=test[4],
-  #     stringsAsFactors = FALSE
-  #   )
-  #
-  #   # re-name .id -> idname(x)
-  #   names(res)[1] <- idn
-  #
-  #   return(res)
-  # }
-  #
-  # # iterate over profiles, result is safely packed into a DF ready for splicing into @site
-  # res <- profileApply(x, .check, simplify = FALSE, frameify = TRUE)
-  #
-  # # add 'valid' flag for simple filtering
-  # res[['valid']] <- !apply(res[, -1], 1, any)
-  #
-  # return(res)
 }
 
 #' @title Tests of horizon depth logic

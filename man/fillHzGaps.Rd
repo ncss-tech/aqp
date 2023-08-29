@@ -26,6 +26,8 @@ Gaps are defined as:
 \item within each profile, for horizons \code{i} to \code{n_hz}:
 \item \verb{bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)}
 }
+
+@note This function cannot yet handle overlapping horizons.
 }
 \examples{
 

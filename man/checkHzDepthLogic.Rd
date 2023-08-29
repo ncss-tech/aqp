@@ -15,13 +15,13 @@ checkHzDepthLogic(
 \arguments{
 \item{x}{\code{SoilProfileCollection} or \code{data.frame} object to check}
 
-\item{hzdepths}{SoilProfileCollection uses \code{horizonDepths(x)} Default: \code{NULL}; if \code{x} is a data.frame, character vector of column names of top and bottom depths}
+\item{hzdepths}{character vector, describing top and bottom depths in a \code{SoilProfileCollection} or \code{data.frame}. \code{horizonDepths(x)} is used when \code{x} is a \code{SoilProfileCollection}.}
 
-\item{idname}{SoilProfileCollection uses \code{idname(x)} Default: \code{NULL}; if \code{x} is a data.frame, character vector with column name of unique profile ID;}
+\item{idname}{character, describing the column containing profile IDs in a \code{SoilProfileCollection} or \code{data.frame}. \code{idname(x)} is used when \code{x} is a \code{SoilProfileCollection}.}
 
-\item{fast}{If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: \code{FALSE}}
+\item{fast}{logical, When \code{TRUE}, details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster.}
 
-\item{byhz}{Apply logic tests to profiles or individual horizons?}
+\item{byhz}{logical, apply logic tests to profiles (\code{FALSE}) or individual horizons (\code{TRUE})?}
 }
 \value{
 A \code{data.frame} containing profile IDs, validity boolean (\code{valid}) and test results if \code{fast = FALSE}.
@@ -30,21 +30,19 @@ The \code{data.frame} will have as many rows as profiles in \code{x} (\code{leng
 \itemize{
 \item \code{id} : Profile IDs, named according to \code{idname(x)}
 \item \code{valid} : boolean, profile passes all of the following tests
-\itemize{
 \item \code{depthLogic} : boolean, errors related to depth logic
 \item \code{sameDepth} : boolean, errors related to same top/bottom depths
 \item \code{missingDepth} : boolean, NA in top / bottom depths
-\item \code{overlapOrGap} : boolean, gaps or overlap in adjacent horizons
-}
+\item \code{overlapOrGap} : boolean, gaps or overlap in adjacent horizons (\code{NA} when \code{byhz = TRUE})
 }
 }
 \description{
-This function inspects a SoilProfileCollection object, looking for four common errors in horizon depths:
+This function inspects a \code{SoilProfileCollection} object, looking for four common errors in horizon depths:
 \enumerate{
 \item bottom depth shallower than top depth
 \item equal top and bottom depth
 \item missing top or bottom depth (e.g. \code{NA})
-\item gap or overlap between adjacent horizons
+\item gap or overlap between adjacent horizons (only if \code{byhz = FALSE})
 }
 }
 \examples{
