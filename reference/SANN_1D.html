@@ -43,6 +43,9 @@
     <li>
       <a href="../articles/new-in-aqp-2.html">What is new in aqp 2.0?</a>
     </li>
+    <li>
+      <a href="../articles/overlapping-horizons.html">Overlapping Horizons</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -162,15 +165,15 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># easy</span></span></span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.2</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 9 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4 iterations</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># harder</span></span></span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.6</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 31 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 24 iterations</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># much harder</span></span></span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.9</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 172 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 359 iterations</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># interpret `trace` output</span></span></span>
