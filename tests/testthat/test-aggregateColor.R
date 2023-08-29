@@ -65,7 +65,7 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
   test <- with(a$aggregate.data, paste0(hue, ' ', value, '/', chroma))
   test2 <- with(a2$aggregate.data, paste0(hue, ' ', value, '/', chroma))
 
-  if(requireNamespace('farver', quietly = TRUE) & packageVersion("farver") >= '2.0.2') {
+  if(requireNamespace('farver', quietly = TRUE) && packageVersion("farver") >= '2.0.2') {
     expect_equal(test, '7.5YR 3/2')
     expect_equal(test2, '7.5YR 3/2')
   } else {
