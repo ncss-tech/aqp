@@ -68,7 +68,10 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.01" id="aqp-201-2023-08-29">aqp 2.01 (2023-08-29)<a class="anchor" aria-label="anchor" href="#aqp-201-2023-08-29"></a></h2>
-</div>
+<ul><li>new function <code><a href="../reference/flagOverlappingHz.html">flagOverlappingHz()</a></code> for identifying horizons with perfect overlap</li>
+<li>
+<code><a href="../reference/fillHzGaps.html">fillHzGaps()</a></code>, <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>, and several other functions now safely handle horizons with perfect overlap (<a href="https://github.com/ncss-tech/aqp/issues/296" class="external-link">#296</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0" id="aqp-20-2023-08-28">aqp 2.0 (2023-08-28)<small>2023-08-28</small><a class="anchor" aria-label="anchor" href="#aqp-20-2023-08-28"></a></h2>
 <p>This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp &lt; 1.42, particularly those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>, and <code><a href="../reference/profile_compare.html">profile_compare()</a></code>. <code><a href="../reference/slice.html">slice()</a></code> and <code><a href="../reference/profile_compare.html">profile_compare()</a></code> are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of <code><a href="../reference/slab.html">slab()</a></code> is a drop-in replacement for the previous version of the function.</p>
