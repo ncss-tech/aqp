@@ -36,9 +36,28 @@ hzDepthTests(top = x[1, 1, .TOP], bottom = x[1, 1, .BOTTOM])
 
 
 
-## consider a new function flagOverlap()
-# find perfectly overlapping horizons, likely an intentional data modeling decision
-flagOverlapingHz <- function(x) {
+## 
+#' @title Flag perfectly overlapping horizons within a SoilProfileCollection
+#'
+#' @param x a `SoilProfileCollection` object
+#'
+#' @return logical vector with length (and order) matching the horizons of `x` 
+#' @export
+#'
+#' @examples
+#' 
+#' # two overlapping horizons
+#' z <- data.frame(
+#'   id = 'SPC',
+#'   top = c(0, 25, 25, 50, 75, 100, 100),
+#'   bottom = c(25, 50, 50, 75, 100, 125, 125)
+#' )
+#' 
+#' depths(z) <- id ~ top + bottom
+#' z$.overlapFlag <- flagOverlappingHz(z)
+#' plotSPC(z, color = '.overlapFlag', hz.depths = TRUE, depth.axis = FALSE, cex.names = 0.85)
+#' 
+flagOverlappingHz <- function(x) {
   
   # crude prototype, single profile at a time
   .fo <- function(i) {
@@ -56,6 +75,7 @@ flagOverlapingHz <- function(x) {
     .ot <- .rt$values[which(.rt$lengths > 1)]
     .ob <- .rb$values[which(.rb$lengths > 1)]
     
+    ## TODO: tests required
     # index affected horizons
     .m <- outer(.ot, .tops, '==')
     idx <- as.vector(apply(.m, 1, which))
@@ -67,10 +87,13 @@ flagOverlapingHz <- function(x) {
     return(.res)
   }
   
-   profileApply(x, .fo, simplify = TRUE)
+  # TODO: can probably be made faster
+  #  * only hz data required
+  #  * split (profile ID) / apply (.fo()) / combine via DT (returns vector)
+  profileApply(x, .fo, simplify = TRUE)
 }
 
-x$.overlapFlag <- flagOverlapingHz(x)
+x$.overlapFlag <- flagOverlappingHz(x)
 
 par(mar = c(2, 0, 3, 2))
 options(.aqp.plotSPC.args = list(name.style = 'center-center', color = 'hzID', hz.depths = TRUE, depth.axis = FALSE, cex.names = 0.85))
@@ -81,7 +104,7 @@ plotSPC(x, color = 'hzID', show.legend = FALSE)
 plotSPC(x, color = 'claytotest')
 
 
-# two overlapping horizons
+## two overlapping horizons
 z <- data.frame(
   id = 'SPC',
   top = c(0, 25, 25, 50, 75, 100, 100),
@@ -89,7 +112,7 @@ z <- data.frame(
 )
 
 depths(z) <- id ~ top + bottom
-z$.overlapFlag <- flagOverlapingHz(z)
+z$.overlapFlag <- flagOverlappingHz(z)
 plotSPC(z, color = '.overlapFlag')
 
 
