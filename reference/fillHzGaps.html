@@ -4,7 +4,8 @@ Gaps are defined as:
 within each profile, for horizons i to n_hz:
 bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
 
-'><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+
+@note This function cannot yet handle overlapping horizons.'><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -76,7 +77,8 @@ bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)
     <p>This function attempts to find "gaps" in the horizon records of a <code>SoilProfileCollection</code> object and fill with placeholder horizons (profile ID, horizon ID, to/bottom depths, all else <code>NA</code>). Missing horizon records between the top of each profile and <code>to_top</code>, or the bottom of each profile and <code>to_bottom</code> are treated as gaps when those arguments are not <code>NULL</code>. You can use this function to prepare a potentially messy <code>SoilProfileCollection</code> for subsequent analyses that are sensitive to horizon sequence inconsistencies or require a conformal "rectangle" of data spanning known depths.</p>
 <p>Gaps are defined as:</p><ul><li><p>within each profile, for horizons <code>i</code> to <code>n_hz</code>:</p></li>
 <li><p><code>bottom_i != top_i+1 (but only to i = 1:(n_hz - 1)</code></p></li>
-</ul></div>
+</ul><p>@note This function cannot yet handle overlapping horizons.</p>
+    </div>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fillHzGaps</span><span class="op">(</span><span class="va">x</span>, flag <span class="op">=</span> <span class="cn">TRUE</span>, to_top <span class="op">=</span> <span class="fl">0</span>, to_bottom <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

@@ -3,7 +3,7 @@
 bottom depth shallower than top depth
 equal top and bottom depth
 missing top or bottom depth (e.g. NA)
-gap or overlap between adjacent horizons
+gap or overlap between adjacent horizons (only if byhz = FALSE)
 
 "><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -74,10 +74,10 @@ gap or overlap between adjacent horizons
     </div>
 
     <div class="ref-description">
-    <p>This function inspects a SoilProfileCollection object, looking for four common errors in horizon depths:</p><ol><li><p>bottom depth shallower than top depth</p></li>
+    <p>This function inspects a <code>SoilProfileCollection</code> object, looking for four common errors in horizon depths:</p><ol><li><p>bottom depth shallower than top depth</p></li>
 <li><p>equal top and bottom depth</p></li>
 <li><p>missing top or bottom depth (e.g. <code>NA</code>)</p></li>
-<li><p>gap or overlap between adjacent horizons</p></li>
+<li><p>gap or overlap between adjacent horizons (only if <code>byhz = FALSE</code>)</p></li>
 </ol></div>
 
     <div id="ref-usage">
@@ -97,19 +97,19 @@ gap or overlap between adjacent horizons
 
 
 <dt>hzdepths</dt>
-<dd><p>SoilProfileCollection uses <code>horizonDepths(x)</code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector of column names of top and bottom depths</p></dd>
+<dd><p>character vector, describing top and bottom depths in a <code>SoilProfileCollection</code> or <code>data.frame</code>. <code>horizonDepths(x)</code> is used when <code>x</code> is a <code>SoilProfileCollection</code>.</p></dd>
 
 
 <dt>idname</dt>
-<dd><p>SoilProfileCollection uses <code>idname(x)</code> Default: <code>NULL</code>; if <code>x</code> is a data.frame, character vector with column name of unique profile ID;</p></dd>
+<dd><p>character, describing the column containing profile IDs in a <code>SoilProfileCollection</code> or <code>data.frame</code>. <code>idname(x)</code> is used when <code>x</code> is a <code>SoilProfileCollection</code>.</p></dd>
 
 
 <dt>fast</dt>
-<dd><p>If details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster. Default: <code>FALSE</code></p></dd>
+<dd><p>logical, When <code>TRUE</code>, details about specific test results are not needed, the operation can allocate less memory and run approximately 5x faster.</p></dd>
 
 
 <dt>byhz</dt>
-<dd><p>Apply logic tests to profiles or individual horizons?</p></dd>
+<dd><p>logical, apply logic tests to profiles (<code>FALSE</code>) or individual horizons (<code>TRUE</code>)?</p></dd>
 
 </dl></div>
     <div id="value">
@@ -120,11 +120,11 @@ gap or overlap between adjacent horizons
 
 
 <p>The <code>data.frame</code> will have as many rows as profiles in <code>x</code> (<code>length(x)</code>).</p><ul><li><p><code>id</code> : Profile IDs, named according to <code>idname(x)</code></p></li>
-<li><p><code>valid</code> : boolean, profile passes all of the following tests</p><ul><li><p><code>depthLogic</code> : boolean, errors related to depth logic</p></li>
+<li><p><code>valid</code> : boolean, profile passes all of the following tests</p></li>
+<li><p><code>depthLogic</code> : boolean, errors related to depth logic</p></li>
 <li><p><code>sameDepth</code> : boolean, errors related to same top/bottom depths</p></li>
 <li><p><code>missingDepth</code> : boolean, NA in top / bottom depths</p></li>
-<li><p><code>overlapOrGap</code> : boolean, gaps or overlap in adjacent horizons</p></li>
-</ul></li>
+<li><p><code>overlapOrGap</code> : boolean, gaps or overlap in adjacent horizons (<code>NA</code> when <code>byhz = TRUE</code>)</p></li>
 </ul></div>
     <div id="author">
     <h2>Author</h2>

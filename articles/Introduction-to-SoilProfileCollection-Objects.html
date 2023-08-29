@@ -364,8 +364,8 @@ follows.</p>
 <pre><code><span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;  [1]  961.6381  824.2088  964.5879  895.4740 1008.7920  902.3249  813.9984  921.9819  909.8483</span></span>
-<span><span class="co">#&gt; [10] 1041.0245</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;  [1] 1188.0595 1000.7582  909.3999 1005.2755  892.2617  879.7892  818.7464 1088.7114  901.7708</span></span>
+<span><span class="co">#&gt; [10]  954.4990</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -421,12 +421,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa  961.6381             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn  824.2088             1        1     B</span></span>
-<span><span class="co">#&gt;      kings  964.5879             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa  895.4740             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino 1008.7920             1        1     A</span></span>
-<span><span class="co">#&gt;       napa  902.3249             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa 1188.0595             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn 1000.7582             1        1     B</span></span>
+<span><span class="co">#&gt;      kings  909.3999             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa 1005.2755             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino  892.2617             1        1     A</span></span>
+<span><span class="co">#&gt;       napa  879.7892             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -585,16 +585,16 @@ data and the CRS, respectively.</p>
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;              x       y</span></span>
-<span><span class="co">#&gt;  [1,] 354025.5 4109417</span></span>
-<span><span class="co">#&gt;  [2,] 353925.6 4109450</span></span>
-<span><span class="co">#&gt;  [3,] 354079.7 4109751</span></span>
-<span><span class="co">#&gt;  [4,] 353869.4 4109508</span></span>
-<span><span class="co">#&gt;  [5,] 354064.5 4109447</span></span>
-<span><span class="co">#&gt;  [6,] 354087.2 4109554</span></span>
-<span><span class="co">#&gt;  [7,] 354075.6 4109568</span></span>
-<span><span class="co">#&gt;  [8,] 353896.7 4109479</span></span>
-<span><span class="co">#&gt;  [9,] 354155.1 4109629</span></span>
-<span><span class="co">#&gt; [10,] 353987.2 4109467</span></span></code></pre>
+<span><span class="co">#&gt;  [1,] 353897.6 4109507</span></span>
+<span><span class="co">#&gt;  [2,] 354002.6 4109671</span></span>
+<span><span class="co">#&gt;  [3,] 354121.0 4109614</span></span>
+<span><span class="co">#&gt;  [4,] 353995.6 4109548</span></span>
+<span><span class="co">#&gt;  [5,] 354077.4 4109614</span></span>
+<span><span class="co">#&gt;  [6,] 353947.7 4109701</span></span>
+<span><span class="co">#&gt;  [7,] 354107.9 4109532</span></span>
+<span><span class="co">#&gt;  [8,] 353935.6 4109585</span></span>
+<span><span class="co">#&gt;  [9,] 353959.6 4109422</span></span>
+<span><span class="co">#&gt; [10,] 354215.8 4109532</span></span></code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -662,36 +662,36 @@ performed related to four common errors in horizon depths:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic</a></span><span class="op">(</span><span class="va">sp4</span>, byhz <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;                id top bottom valid hzID depthLogic sameDepth missingDepth overlapOrGap</span></span>
-<span><span class="co">#&gt; 1          colusa   0      3  TRUE    1      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 2          colusa   3      8  TRUE    2      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 3          colusa   8     30  TRUE    3      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 4          colusa  30     42  TRUE    4      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 5           glenn   0      9  TRUE    5      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 6           glenn   9     34  TRUE    6      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 7           kings   0      4  TRUE    7      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 8           kings   4     13  TRUE    8      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 9           kings  13     40  TRUE    9      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 10       mariposa   0      3  TRUE   10      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 11       mariposa   3     14  TRUE   11      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 12       mariposa  14     34  TRUE   12      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 13       mariposa  34     49  TRUE   13      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 14      mendocino   0      2  TRUE   14      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 15      mendocino   2      8  TRUE   15      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 16      mendocino   8     30  TRUE   16      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 17           napa   0      6  TRUE   17      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 18           napa   6     20  TRUE   18      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 19     san benito   0      8  TRUE   19      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 20     san benito   8     20  TRUE   20      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 21         shasta   0      3  TRUE   21      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 22         shasta   3     40  TRUE   22      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 23 shasta-trinity   0      2  TRUE   23      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 24 shasta-trinity   2      5  TRUE   24      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 25 shasta-trinity   5     12  TRUE   25      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 26 shasta-trinity  12     23  TRUE   26      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 27 shasta-trinity  23     40  TRUE   27      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 28         tehama   0      3  TRUE   28      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 29         tehama   3      7  TRUE   29      FALSE     FALSE        FALSE        FALSE</span></span>
-<span><span class="co">#&gt; 30         tehama   7     16  TRUE   30      FALSE     FALSE        FALSE        FALSE</span></span></code></pre>
+<span><span class="co">#&gt; 1          colusa   0      3  TRUE    1      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 2          colusa   3      8  TRUE    2      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 3          colusa   8     30  TRUE    3      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 4          colusa  30     42  TRUE    4      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 5           glenn   0      9  TRUE    5      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 6           glenn   9     34  TRUE    6      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 7           kings   0      4  TRUE    7      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 8           kings   4     13  TRUE    8      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 9           kings  13     40  TRUE    9      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 10       mariposa   0      3  TRUE   10      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 11       mariposa   3     14  TRUE   11      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 12       mariposa  14     34  TRUE   12      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 13       mariposa  34     49  TRUE   13      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 14      mendocino   0      2  TRUE   14      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 15      mendocino   2      8  TRUE   15      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 16      mendocino   8     30  TRUE   16      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 17           napa   0      6  TRUE   17      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 18           napa   6     20  TRUE   18      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 19     san benito   0      8  TRUE   19      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 20     san benito   8     20  TRUE   20      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 21         shasta   0      3  TRUE   21      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 22         shasta   3     40  TRUE   22      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 23 shasta-trinity   0      2  TRUE   23      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 24 shasta-trinity   2      5  TRUE   24      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 25 shasta-trinity   5     12  TRUE   25      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 26 shasta-trinity  12     23  TRUE   26      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 27 shasta-trinity  23     40  TRUE   27      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 28         tehama   0      3  TRUE   28      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 29         tehama   3      7  TRUE   29      FALSE     FALSE        FALSE           NA</span></span>
+<span><span class="co">#&gt; 30         tehama   7     16  TRUE   30      FALSE     FALSE        FALSE           NA</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="coercion">Coercion<a class="anchor" aria-label="anchor" href="#coercion"></a>
@@ -1640,13 +1640,13 @@ profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1 23.95199              1.000000   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1 24.41805              1.000000   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1 25.04336              1.000000  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1 26.54277              1.000000  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 25.38448              1.000000  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 24.47561              0.952381 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2 10.90889              1.000000   0      5</span></span></code></pre>
+<span><span class="co">#&gt; 1       p1  1 11.87159            1.00000000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1 12.59495            1.00000000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 13.86394            1.00000000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 15.80190            1.00000000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 13.42252            1.00000000  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1 12.91415            0.09333333 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 15.59027            1.00000000   0      5</span></span></code></pre>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://Rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
