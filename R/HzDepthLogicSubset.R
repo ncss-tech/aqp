@@ -11,6 +11,8 @@
 #' 
 #' @description This function removes profiles or horizons from a `SoilProfileCollection` that are flagged as having invalid horizon depth logic by [`checkHzDepthLogic`]. Invalid profiles may be created when setting `byhz = TRUE`; use caution as some functions may not work properly in the presence of gaps. Consider using [`fillHzGaps`] to fill these gaps.
 #' 
+#' @note This function cannot identify (and remove) overlapping horizons when `byhz = TRUE`.
+#' 
 #' @param x a `SoilProfileCollection` object
 #' 
 #' @param byhz logical, evaluate horizon depth logic at the horizon level (profile level if `FALSE`)

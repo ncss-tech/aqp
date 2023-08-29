@@ -17,3 +17,6 @@ a \code{SoilProfileCollection} object
 \description{
 This function removes profiles or horizons from a \code{SoilProfileCollection} that are flagged as having invalid horizon depth logic by \code{\link{checkHzDepthLogic}}. Invalid profiles may be created when setting \code{byhz = TRUE}; use caution as some functions may not work properly in the presence of gaps. Consider using \code{\link{fillHzGaps}} to fill these gaps.
 }
+\note{
+This function cannot identify (and remove) overlapping horizons when \code{byhz = TRUE}.
+}

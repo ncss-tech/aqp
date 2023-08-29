@@ -128,6 +128,7 @@
 	}
 	
 	# slice into 1cm increments, result is a data.frame
+	# NOTE: when byhz = TRUE, overlapping horizons cannot be detected
 	data <- dice(x = object, fm = fm.slice, strict = strict, byhz = byhz, SPC = FALSE, pctMissing = TRUE)
   
 	# Note: in this case we need to subtract the extra slice included by slice()/dice()

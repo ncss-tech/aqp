@@ -141,6 +141,18 @@ plotSPC(d, color = 'claytotest', cex.names = 0.5, hz.depths = FALSE, depth.axis 
 horizons(d)
 
 
+# no bogus horizons
+d <- dice(x)
+plotSPC(d, color = 'claytotest', cex.names = 0.5, hz.depths = FALSE, depth.axis = TRUE)
+
+# extra records are returned
+horizons(d[1, 25:35])
+
+
+# 
+d <- dice(x, strict = TRUE)
+d@metadata
+
 
 
 ## test slab()

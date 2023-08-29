@@ -340,6 +340,7 @@ NCSP <- function(
   
   ## dice
   # pctMissing is used to develop soil/non-soil matrix
+  # NOTE: profiles with overlapping horizons will be removed
   s <- suppressMessages(dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = TRUE, strict = TRUE))
   
   # number of profiles, accounting for subset via dice()

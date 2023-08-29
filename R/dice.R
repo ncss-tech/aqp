@@ -33,9 +33,10 @@ setGeneric("dice", function(x,
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
   if (strict) {
+    # NOTE: this will not find/remove perfectly overlapping horizons
     x <- HzDepthLogicSubset(x, byhz = byhz)
     
-    ## TODO: this could invoke 2x calls to fillHzGaps
+    ## TODO: this could invoke 2x calls to fillHzGaps()
     # removed horizons will trigger an automatic gap-filling
     if (!is.null(metadata(x)$removed.horizons)) {
       message('filling gaps left by HzDepthLogicSubset')
