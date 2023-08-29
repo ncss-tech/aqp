@@ -83,3 +83,53 @@ test_that("multiple simultaneous arguments", {
   expect_true(max(z) == 75)
   
 })
+
+
+test_that("ignore perfectly overlapping horizons", {
+  
+  y <- data.frame(
+    id = 'SPC',
+    top = c(0, 25, 25, 50, 75, 100, 100),
+    bottom = c(25, 50, 50, 75, 100, 125, 125)
+  )
+  
+  depths(y) <- id ~ top + bottom
+  
+  # fill gaps AND NA-pad to top/bottom anchors
+  z <- fillHzGaps(y)
+  
+  # result is always this
+  expect_true(inherits(z, 'SoilProfileCollection'))
+  
+  # flag column present
+  expect_true('.filledGap' %in% horizonNames(z))
+  
+  # no filling required
+  expect_true(all(!z$.filledGap))
+  
+})
+
+test_that("gap + perfectly overlapping horizons", {
+  
+  y <- data.frame(
+    id = 'SPC',
+    top = c(0, 15, 25, 25, 50, 75, 100, 100),
+    bottom = c(10, 25, 50, 50, 75, 100, 125, 125)
+  )
+  
+  depths(y) <- id ~ top + bottom
+  
+  # fill gaps AND NA-pad to top/bottom anchors
+  z <- fillHzGaps(y)
+  
+  # result is always this
+  expect_true(inherits(z, 'SoilProfileCollection'))
+  
+  # flag column present
+  expect_true('.filledGap' %in% horizonNames(z))
+  
+  # single filled horizons
+  expect_true(z$.filledGap[2])
+  
+})
+

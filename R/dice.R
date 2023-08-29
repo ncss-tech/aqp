@@ -96,8 +96,6 @@ setGeneric("dice", function(x,
     if (length(z) == 0) {
       z <- NULL
     } else {
-      ## TODO: adding new bogus horizons when there are overlapping source horizons
-      
       # z-index is specified
       # note z-index defines slice tops, lower limit is (z + 1)
       # must fill from min(z) --- [gaps] --- max(z) + 1

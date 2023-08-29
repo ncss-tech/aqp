@@ -1,4 +1,6 @@
 # aqp 2.01 (2023-08-29)
+ * new function `flagOverlappingHz()` for identifying horizons with perfect overlap
+ * `fillHzGaps()`, `dice()`, `slab()`, and several other functions now safely handle horizons with perfect overlap (#296)
 
 
 # aqp 2.0 (2023-08-28)

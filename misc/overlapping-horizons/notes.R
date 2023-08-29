@@ -37,61 +37,7 @@ hzDepthTests(top = x[1, 1, .TOP], bottom = x[1, 1, .BOTTOM])
 
 
 ## 
-#' @title Flag perfectly overlapping horizons within a SoilProfileCollection
-#'
-#' @param x a `SoilProfileCollection` object
-#'
-#' @return logical vector with length (and order) matching the horizons of `x` 
-#' @export
-#'
-#' @examples
-#' 
-#' # two overlapping horizons
-#' z <- data.frame(
-#'   id = 'SPC',
-#'   top = c(0, 25, 25, 50, 75, 100, 100),
-#'   bottom = c(25, 50, 50, 75, 100, 125, 125)
-#' )
-#' 
-#' depths(z) <- id ~ top + bottom
-#' z$.overlapFlag <- flagOverlappingHz(z)
-#' plotSPC(z, color = '.overlapFlag', hz.depths = TRUE, depth.axis = FALSE, cex.names = 0.85)
-#' 
-flagOverlappingHz <- function(x) {
-  
-  # crude prototype, single profile at a time
-  .fo <- function(i) {
-    
-    # tops / bottoms
-    # NA not currently handled
-    .tops <- i[, , .TOP]
-    .bottoms <- i[, , .BOTTOM]
-    
-    # find perfect overlap
-    .rt <- rle(.tops)
-    .rb <- rle(.bottoms)
-    
-    # id affected horizons
-    .ot <- .rt$values[which(.rt$lengths > 1)]
-    .ob <- .rb$values[which(.rb$lengths > 1)]
-    
-    ## TODO: tests required
-    # index affected horizons
-    .m <- outer(.ot, .tops, '==')
-    idx <- as.vector(apply(.m, 1, which))
-    
-    # generate flag vector along sequence of horizons 
-    .res <- rep(FALSE, times = length(.tops))
-    .res[idx] <- TRUE
-    
-    return(.res)
-  }
-  
-  # TODO: can probably be made faster
-  #  * only hz data required
-  #  * split (profile ID) / apply (.fo()) / combine via DT (returns vector)
-  profileApply(x, .fo, simplify = TRUE)
-}
+
 
 x$.overlapFlag <- flagOverlappingHz(x)
 
@@ -115,9 +61,28 @@ depths(z) <- id ~ top + bottom
 z$.overlapFlag <- flagOverlappingHz(z)
 plotSPC(z, color = '.overlapFlag')
 
+# no longer returns bogus horizons
+plotSPC(fillHzGaps(z), color = '.overlapFlag')
 
 
-## TODO: fillHzGaps() adding bogus horizons
+# create a real gap
+z <- data.frame(
+  id = 'SPC',
+  top = c(0, 15, 25, 25, 50, 75, 100, 100),
+  bottom = c(10, 25, 50, 50, 75, 100, 125, 125)
+)
+
+depths(z) <- id ~ top + bottom
+z$.overlapFlag <- flagOverlappingHz(z)
+plotSPC(z, color = '.overlapFlag', default.color = 'yellow')
+
+# gap has been filled
+# overlapping horizons have not been interpreted as gaps
+plotSPC(fillHzGaps(z), color = '.overlapFlag', default.color = 'yellow')
+
+
+
+## no longer returns bogus horizons
 xx <- fillHzGaps(x[1, ])
 plotSPC(xx)
 
@@ -131,32 +96,27 @@ plotSPC(xx)
 # ok: no error thrown
 (d <- dice(x, fm = 30 ~ claytotest + .overlapFlag, SPC = FALSE, strict = TRUE))
 
-# not right: extra NA slices...?
+# no longer creates extra NA slices
 d <- dice(x, fm = 25:45 ~ claytotest + .overlapFlag)
 plotSPC(d, color = 'claytotest', cex.names = 0.5, hz.depths = FALSE, depth.axis = TRUE)
 horizons(d[1, ])
 
 d <- dice(x, fm = 28:40 ~ claytotest + .overlapFlag)
 plotSPC(d, color = 'claytotest', cex.names = 0.5, hz.depths = FALSE, depth.axis = TRUE)
-horizons(d)
+horizons(d[1, ])
 
 
 # no bogus horizons
 d <- dice(x)
 plotSPC(d, color = 'claytotest', cex.names = 0.5, hz.depths = FALSE, depth.axis = TRUE)
 
-# extra records are returned
+# as expected
 horizons(d[1, 25:35])
-
-
-# 
-d <- dice(x, strict = TRUE)
-d@metadata
-
 
 
 ## test slab()
 # wt.mean is correct
+# contributing fraction is correct
 (a <- slab(x, upedonid ~ claytotest, slab.structure = c(0, 50), slab.fun = mean, na.rm = TRUE))
 
 profileApply(x, function(i) {
