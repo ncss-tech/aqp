@@ -13,7 +13,7 @@ library(aqp)
 # hzdesgnname(x) <- 'hzname'
 # site(x) <- ~ NasisSiteName + taxonname + dspplotid + earthcovkind1 + earthcovkind2
 # 
-# x <- x[c(1, 2, 3, 8), ]
+# x <- x[c(1, 2, 3, 4, 8), ]
 # 
 # saveRDS(x, file = 'misc/overlapping-horizons/example-DSP-data.rds')
 
@@ -37,11 +37,10 @@ hzDepthTests(top = x[1, 1, .TOP], bottom = x[1, 1, .BOTTOM])
 
 
 ## consider a new function flagOverlap()
-
-# crude prototype, single profile at a time
-# may not scale well due to use of dist() in overlapMetrics()
-flagOverlap <- function(x) {
+# find perfectly overlapping horizons, likely an intentional data modeling decision
+flagOverlapingHz <- function(x) {
   
+  # crude prototype, single profile at a time
   .fo <- function(i) {
     
     # tops / bottoms
@@ -71,7 +70,7 @@ flagOverlap <- function(x) {
    profileApply(x, .fo, simplify = TRUE)
 }
 
-x$.overlapFlag <- flagOverlap(x)
+x$.overlapFlag <- flagOverlapingHz(x)
 
 par(mar = c(2, 0, 3, 2))
 options(.aqp.plotSPC.args = list(name.style = 'center-center', color = 'hzID', hz.depths = TRUE, depth.axis = FALSE, cex.names = 0.85))
@@ -82,7 +81,7 @@ plotSPC(x, color = 'hzID', show.legend = FALSE)
 plotSPC(x, color = 'claytotest')
 
 
-
+# two overlapping horizons
 z <- data.frame(
   id = 'SPC',
   top = c(0, 25, 25, 50, 75, 100, 100),
@@ -90,7 +89,7 @@ z <- data.frame(
 )
 
 depths(z) <- id ~ top + bottom
-z$.overlapFlag <- flagOverlap(z)
+z$.overlapFlag <- flagOverlapingHz(z)
 plotSPC(z, color = '.overlapFlag')
 
 
