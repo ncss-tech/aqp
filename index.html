@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.01</span>
       </span>
     </div>
 
@@ -116,7 +116,15 @@
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is aqp 1.43</span></span>
+<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
+<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
+<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
+<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
+<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
+<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
+<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
+<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span>
+<span><span class="co">#&gt; This is aqp 2.0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/depths.html">depths</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span>
 <span></span>
@@ -128,15 +136,25 @@
 <p><img src="reference/figures/README-unnamed-chunk-2-2.png" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+<h2 id="install-suggested-packages">Install Suggested Packages<a class="anchor" aria-label="anchor" href="#install-suggested-packages"></a>
 </h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"colorspace"</span>, <span class="st">"ape"</span>, <span class="st">"soilDB"</span>, <span class="st">"latticeExtra"</span>, <span class="st">"tactile"</span>, <span class="st">"compositions"</span>, </span>
+<span><span class="st">"sharpshootR"</span>, <span class="st">"markovchain"</span>, <span class="st">"xtable"</span>, <span class="st">"testthat"</span>, <span class="st">"Gmedian"</span>, </span>
+<span><span class="st">"farver"</span>, <span class="st">"Hmisc"</span>, <span class="st">"tibble"</span>, <span class="st">"RColorBrewer"</span>, <span class="st">"scales"</span>, <span class="st">"digest"</span>, </span>
+<span><span class="st">"MASS"</span>, <span class="st">"mpspline2"</span>, <span class="st">"soiltexture"</span>, <span class="st">"knitr"</span>, <span class="st">"rmarkdown"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"aqp"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To cite aqp in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Beaudette, D., Roudier, P., Brown, A. (2022). aqp: Algorithms for</span></span>
-<span><span class="co">#&gt;   Quantitative Pedology. R package version 1.42.</span></span>
+<span><span class="co">#&gt;   Beaudette, D., Roudier, P., Brown, A. (2023). aqp: Algorithms for</span></span>
+<span><span class="co">#&gt;   Quantitative Pedology. R package version 2.0.</span></span>
 <span><span class="co">#&gt;   &lt;https://CRAN.R-project.org/package=aqp&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Beaudette, D.E., Roudier, P., O'Geen, A.T. Algorithms for</span></span>
@@ -157,6 +175,16 @@
 </ul>
 </div>
 <div class="section level2">
+<h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
+</h2>
+<ul>
+<li><a href="https://ncss-tech.github.io/aqp/articles/Introduction-to-SoilProfileCollection-Objects.html" class="external-link">Introduction to SoilProfileCollection Objects</a></li>
+<li><a href="https://ncss-tech.github.io/aqp/articles/NCSP.html" class="external-link">Numerical Classification of Soil Profiles</a></li>
+<li><a href="https://ncss-tech.github.io/aqp/articles/label-placement.html" class="external-link">Overlapping Annotation</a></li>
+<li><a href="https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html" class="external-link">What is new in aqp 2.0?</a></li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="aqp-in-the-wild">aqp in the Wild<a class="anchor" aria-label="anchor" href="#aqp-in-the-wild"></a>
 </h2>
 <ul>
@@ -164,7 +192,6 @@
 <li><a href="https://www.scopus.com/results/citedbyresults.uri?sort=plf-f&amp;cite=2-s2.0-84871520076&amp;src=s&amp;imp=t&amp;sid=77a47f45322dcfd492772ab2198cbd60&amp;sot=cite&amp;sdt=a&amp;sl=0&amp;origin=inward&amp;editSaveSearch=&amp;txGid=2178c12c5b47dbcdd8b2f12cd9a81478" class="external-link">as found by Scopus</a></li>
 <li><a href="https://scholar.google.com/scholar?cites=14155970656017510549&amp;as_sdt=5,29&amp;sciodt=0,29&amp;hl=en" class="external-link">as found by Google Scholar</a></li>
 <li><a href="http://www.scielo.br/scielo.php?script=sci_arttext&amp;pid=S2179-80872019000100121" class="external-link uri">http://www.scielo.br/scielo.php?script=sci_arttext&amp;pid=S2179-80872019000100121</a></li>
-<li><a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JF004720" class="external-link uri">https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JF004720</a></li>
 </ul>
 </div>
 </div>
