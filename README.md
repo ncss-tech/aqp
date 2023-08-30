@@ -38,7 +38,15 @@ remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, buil
 
 ``` r
 library(aqp)
-#> This is aqp 1.43
+#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+#> which was just loaded, will retire in October 2023.
+#> Please refer to R-spatial evolution reports for details, especially
+#> https://r-spatial.org/r/2023/05/15/evolution4.html.
+#> It may be desirable to make the sf package available;
+#> package maintainers should consider adding sf to Suggests:.
+#> The sp package is now running under evolution status 2
+#>      (status 2 uses the sf package in place of rgdal)
+#> This is aqp 2.0
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 
@@ -54,15 +62,25 @@ plot(sp4, color = 'CF')
 
 <img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
 
+## Install Suggested Packages
+
+``` r
+p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+"sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
+"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+
+install.packages(p)
+```
+
 ## Citation
 
 ``` r
 citation("aqp")
-#> 
 #> To cite aqp in publications use:
 #> 
-#>   Beaudette, D., Roudier, P., Brown, A. (2022). aqp: Algorithms for
-#>   Quantitative Pedology. R package version 1.42.
+#>   Beaudette, D., Roudier, P., Brown, A. (2023). aqp: Algorithms for
+#>   Quantitative Pedology. R package version 2.0.
 #>   <https://CRAN.R-project.org/package=aqp>
 #> 
 #>   Beaudette, D.E., Roudier, P., O'Geen, A.T. Algorithms for
@@ -77,15 +95,25 @@ citation("aqp")
 
 ## Related Packages
 
--   [soilDB](https://github.com/ncss-tech/soilDB)
--   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
+- [soilDB](https://github.com/ncss-tech/soilDB)
+- [sharpshootR](https://github.com/ncss-tech/sharpshootR)
+
+## Vignettes
+
+- [Introduction to SoilProfileCollection
+  Objects](https://ncss-tech.github.io/aqp/articles/Introduction-to-SoilProfileCollection-Objects.html)
+- [Numerical Classification of Soil
+  Profiles](https://ncss-tech.github.io/aqp/articles/NCSP.html)
+- [Overlapping
+  Annotation](https://ncss-tech.github.io/aqp/articles/label-placement.html)
+- [What is new in aqp
+  2.0?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
 
 ## aqp in the Wild
 
--   <https://www.pnas.org/content/115/26/6751>
--   [as found by
-    Scopus](https://www.scopus.com/results/citedbyresults.uri?sort=plf-f&cite=2-s2.0-84871520076&src=s&imp=t&sid=77a47f45322dcfd492772ab2198cbd60&sot=cite&sdt=a&sl=0&origin=inward&editSaveSearch=&txGid=2178c12c5b47dbcdd8b2f12cd9a81478)
--   [as found by Google
-    Scholar](https://scholar.google.com/scholar?cites=14155970656017510549&as_sdt=5,29&sciodt=0,29&hl=en)
--   <http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-80872019000100121>
--   <https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2018JF004720>
+- <https://www.pnas.org/content/115/26/6751>
+- [as found by
+  Scopus](https://www.scopus.com/results/citedbyresults.uri?sort=plf-f&cite=2-s2.0-84871520076&src=s&imp=t&sid=77a47f45322dcfd492772ab2198cbd60&sot=cite&sdt=a&sl=0&origin=inward&editSaveSearch=&txGid=2178c12c5b47dbcdd8b2f12cd9a81478)
+- [as found by Google
+  Scholar](https://scholar.google.com/scholar?cites=14155970656017510549&as_sdt=5,29&sciodt=0,29&hl=en)
+- <http://www.scielo.br/scielo.php?script=sci_arttext&pid=S2179-80872019000100121>
