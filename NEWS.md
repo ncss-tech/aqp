@@ -7,6 +7,7 @@
 This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`. `slice()` and `profile_compare()` are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of `slab()` is a drop-in replacement for the previous version of the function.
 
 Notable changes include:
+
  * deprecation of `slice()` in favor of the new, faster, more robust implementation in `dice()` 
  * complete overhaul of `slab()`, with new arguments, faster back-end, and weighted aggregation implemented (finally)
  * deprecation of `profile_compare()` in favor of the `NCSP()`--a complete overhaul based on Maynard et al., 2020
@@ -22,6 +23,7 @@ Notable changes include:
  * `get.ml.hz()` no longer uses the `name` argument
  
 Major changes to `plotSPC()`:
+
  * The maximum depth range of the figure is now based on `max.depth` or `max(x)`. This means that sketches generated with aqp 2.x will generally have less white space at the bottom of the figure. Make more room for additional annotation or visual effect by setting the desired depth range with the `max.depth` argument.
  * now uses `electroStatics_1D()` for fixing horizon depth label overlap, solutions are deterministic and almost always better
  * better depth axis interval heuristics (if not specified), varying based on figure depth range
@@ -32,6 +34,7 @@ Major changes to `plotSPC()`:
    - `axis.line.offset`: set via `depth.axis = list(line = -2)`
 
 New features:
+
  * example data, `wilson2022`
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
@@ -42,6 +45,7 @@ New features:
  * new [depth axis styles](https://ncss-tech.github.io/AQP/aqp/sketches.html) in `plotSPC()`
 
 Incremental changes, should have no effect on previous code:
+
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
  * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
  * aesthetic cleanup in `explainPlotSPC()`
