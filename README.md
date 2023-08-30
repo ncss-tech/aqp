@@ -10,6 +10,30 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](http://ncss-tech.
 
 # Algorithms for Quantitative Pedology (aqp) package for R
 
+<!-- aqp hexsticker! -->
+
+<a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png">
+<img src = "https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width = "45%" height = "45%" hspace="15" vspace="15" align="right"/></a>
+
+The Algorithms for Quantitative Pedology (AQP) project was started in
+2009 to organize a loosely-related set of concepts and source code on
+the topic of soil profile visualization, aggregation, and classification
+into this package (aqp). Over the past 8 years, the project has grown
+into a suite of related R packages that enhance and simplify the
+quantitative analysis of soil profile data. Central to the AQP project
+is a new vocabulary of specialized functions and data structures that
+can accommodate the inherent complexity of soil profile information;
+freeing the scientist to focus on ideas rather than boilerplate data
+processing tasks <doi:10.1016/j.cageo.2012.10.020>. These functions and
+data structures have been extensively tested and documented, applied to
+projects involving hundreds of thousands of soil profiles, and deeply
+integrated into widely used tools such as SoilWeb
+<https://casoilresource.lawr.ucdavis.edu/soilweb-apps/>. Components of
+the AQP project (aqp, soilDB, sharpshootR, soilReports packages) serve
+an important role in routine data analysis within the USDA-NRCS Soil
+Science Division. The AQP suite of R packages offer a convenient
+platform for bridging the gap between pedometric theory and practice.
+
 ## Installation
 
 Get the stable version from CRAN:
@@ -25,11 +49,6 @@ version + dependencies:
 remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
 ```
 
-<!-- aqp hexsticker! -->
-
-<a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png">
-<img src = "https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width = "45%" height = "45%" hspace="15" vspace="15" align="right"/></a>
-
 ## Website
 
 <http://ncss-tech.github.io/AQP/>
@@ -38,29 +57,34 @@ remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, buil
 
 ``` r
 library(aqp)
-#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-#> which was just loaded, will retire in October 2023.
-#> Please refer to R-spatial evolution reports for details, especially
-#> https://r-spatial.org/r/2023/05/15/evolution4.html.
-#> It may be desirable to make the sf package available;
-#> package maintainers should consider adding sf to Suggests:.
-#> The sp package is now running under evolution status 2
-#>      (status 2 uses the sf package in place of rgdal)
-#> This is aqp 2.0
-data(sp4)
-depths(sp4) <- id ~ top + bottom
 
-par(mar = c(0, 0, 4, 0))
-plot(sp4, color = 'clay')
+# example data from three official series descriptions
+data("osd")
+
+# simulate 2 copies of each
+# using horizon boundary distinctness offsets
+set.seed(10101)
+x <- perturb(osd, n = 2, boundary.attr = 'hzd', min.thickness = 5)
+
+# tighter margins
+par(mar = c(0, 0, 1, 0))
+
+# adjust default style
+# depict truncation at 175cm with ragged bottom
+plotSPC(
+  x, 
+  name.style = 'center-center', 
+  cex.names = 1,
+  width = 0.33,
+  cex.id = 0.9,
+  hz.distinctness.offset = 'hzd', 
+  max.depth = 175, 
+  depth.axis = FALSE, 
+  hz.depths = TRUE
+)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
-
-``` r
-plot(sp4, color = 'CF')
-```
-
-<img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.svg" style="display: block; margin: auto;" />
 
 ## Install Suggested Packages
 
@@ -77,6 +101,7 @@ install.packages(p)
 
 ``` r
 citation("aqp")
+#> 
 #> To cite aqp in publications use:
 #> 
 #>   Beaudette, D., Roudier, P., Brown, A. (2023). aqp: Algorithms for
@@ -108,6 +133,26 @@ citation("aqp")
   Annotation](https://ncss-tech.github.io/aqp/articles/label-placement.html)
 - [What is new in aqp
   2.0?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
+
+## Tutorials
+
+- [Soil Profile
+  Sketches](https://ncss-tech.github.io/AQP/aqp/sketches.html)
+- [Assigning Generalized Horizon
+  Labels](https://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.html)
+- [Visualization of Horizon
+  Boundaries](https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html)
+- [Mixing Munsell Colors in
+  {aqp}](https://ncss-tech.github.io/AQP/aqp/mix-colors.html)
+- [Theoretical Water Retention
+  Curves](https://ncss-tech.github.io/AQP/aqp/water-retention-curves.html)
+- [Soil Texture Vizualization
+  Ideas](https://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html)
+
+## Related Presentations / Posters
+
+- [Numerical Classification of Soil Profiles (2023 NCSS
+  Meetings)](https://ncss-tech.github.io/AQP/presentations/2023-NCSS-NCSP-poster.pdf)
 
 ## aqp in the Wild
 
