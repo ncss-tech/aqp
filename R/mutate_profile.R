@@ -26,27 +26,27 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
       .names <- as.character(.dots)
     }
     
+    # cleaner to have horizon_level be applied to each expression independently
+    hzin <- horizon_level
+    if (is.null(horizon_level) || !is.logical(horizon_level)) {
+      horizon_level <- rep(FALSE, length(.dots))
+    }
+    
     # iterate over expressions left to right
     for (i in 1:length(.dots)) {
       
       # default is to create site-level properties unless result matches number of horizons
-      if (is.null(horizon_level) || !is.logical(horizon_level)) {
-        # decide whether we are adding/modifying a site or horizon level variable so
-        #  that degenerate cases do not create identical columns in site and horizon table or get put in unexpected slot
-        #  2021-10-29: updated to use first and last profile, and allowing user override via argument
-        res_eval1 <- .data_dots(compositeSPC(object[1,]), eval(.dots[[i]]))[[1]]
-        res_eval2 <- .data_dots(compositeSPC(object[nrow(object),]), eval(.dots[[i]]))[[1]]
-        # allow user to override the determination
-        if (!missing(horizon_level)) {
-          # check length of first/last profile result against number of horizons
-          if (length(res_eval1) == nrow(object[1,]) && 
-              length(res_eval2) == nrow(object[nrow(object),])) {
-            horizon_level <- TRUE
-          } else {
-            # otherwise, assume site-level
-            horizon_level <- FALSE 
-          }
-        }
+      # decide whether we are adding/modifying a site or horizon level variable so
+      #  that degenerate cases do not create identical columns in site and horizon table or get put in unexpected slot
+      #  2021-10-29: updated to use first and last profile, and allowing user override via argument
+      res_eval1 <- .data_dots(compositeSPC(object[1, ]), eval(.dots[[i]]))[[1]]
+      res_eval2 <- .data_dots(compositeSPC(object[nrow(object), ]), eval(.dots[[i]]))[[1]]
+      
+      # allow user to override the determination
+      # check length of first/last profile result against number of horizons
+      if (length(res_eval1) == nrow(object[1,]) &&
+          length(res_eval2) == nrow(object[nrow(object),])) {
+        horizon_level[i] <- TRUE
       }
       
       x <- data.table::data.table(object@site)[object@horizons, on = idname(object)]
@@ -60,7 +60,7 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
           object[[n]] <- NULL
         }
       }
-      if (!horizon_level) {
+      if (isFALSE(hzin) || !horizon_level[i]) {
         if (nrow(unique(res[, .SD, .SDcols = colnames(res)[colnames(res) != hzidname(object)]])) > length(object)) {
           stop("mutate_profile: some profiles returned more than one result and `horizon_level=FALSE`", call. = FALSE)
         }
