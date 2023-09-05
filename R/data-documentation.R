@@ -12,6 +12,14 @@
 
 
 
+#' @title Example SoilProfileCollection with Overlapping Horizons
+#' @description A `SoilProfileCollection` with overlapping horizons, derived from a Dynamic Soil Properties project.
+#' @keywords datasets
+#' @usage data(SPC.with.overlap)
+#' @format A `SoilProfileCollection`
+"SPC.with.overlap"
+
+
 #' @title Example Data from Wilson et al. 2022
 #' @description An example `SoilProfileCollection`, derived from Wilson et al., 2022. Select data extracted from Appendix tables.
 #' @keywords datasets

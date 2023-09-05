@@ -3,23 +3,9 @@ library(aqp)
 ## keeping track of progress here:
 # https://github.com/ncss-tech/aqp/issues/296
 
+data("SPC.with.overlap")
 
-
-## example data from Sharon
-
-# x <- read.csv('e:/temp/2020GRR014SPCdata.csv')
-# 
-# depths(x) <- upedonid ~ hzdept + hzdepb
-# hzdesgnname(x) <- 'hzname'
-# site(x) <- ~ NasisSiteName + taxonname + dspplotid + earthcovkind1 + earthcovkind2
-# 
-# x <- x[c(1, 2, 3, 4, 8), ]
-# 
-# saveRDS(x, file = 'misc/overlapping-horizons/example-DSP-data.rds')
-
-
-# example DSP data
-x <- readRDS('misc/overlapping-horizons/example-DSP-data.rds')
+x <- SPC.with.overlap
 
 # all 4 profiles have overlap
 checkHzDepthLogic(x)
