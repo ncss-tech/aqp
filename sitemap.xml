@@ -19,9 +19,6 @@
     <loc>/articles/new-in-aqp-2.html</loc>
   </url>
   <url>
-    <loc>/articles/overlapping-horizons.html</loc>
-  </url>
-  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -47,6 +44,9 @@
   </url>
   <url>
     <loc>/reference/SANN_1D.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SPC.with.overlap.html</loc>
   </url>
   <url>
     <loc>/reference/SoilProfileCollection-class.html</loc>
