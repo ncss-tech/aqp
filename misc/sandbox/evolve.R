@@ -105,9 +105,12 @@ o <- fetchOSD(c('musick'))
 e <- evolve(o, iter = 75, loss.limits = c(1, 3))
 
 par(mar = c(0, 0, 0, 0))
-plotSPC(e, plot.depth.axis = FALSE, name.style = 'center-center', print.id = FALSE, width = 0.45)
+plotSPC(e, depth.axis = FALSE, name.style = 'center-center', print.id = FALSE, width = 0.45)
 abline(h = 0)
 
+par(mar = c(0, 0, 0, 0))
+plotSPC(e, depth.axis = FALSE, name = NA, print.id = FALSE, width = 0.45, lwd = 0.33)
+abline(h = 0, lwd = 1, lty = 2)
 
 
 # plotSPC(z, plot.depth.axis = FALSE, name.style = 'center-center', print.id = FALSE, width = 0.45)
