@@ -7,7 +7,7 @@
 library(aqp)
 library(gifski)
 
-?spec2Munsell
+# ?spec2Munsell
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
 res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
 
