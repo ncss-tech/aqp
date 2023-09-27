@@ -1,5 +1,6 @@
 # aqp 2.0.2 (2023-09-14)
  * new function `col2Munsell()` generalizes and replaces `rgb2munsell()` (thanks Shawn Salley for the suggestion)
+ * new function `warpHorizons()` for warping horizon thickness (inflate/deflate) (thanks Shawn Salley for idea / inspiration)
 
 # aqp 2.0.1 (2023-09-03)
  * CRAN release (CRAN check bugfix)
