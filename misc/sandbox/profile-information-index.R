@@ -4,7 +4,7 @@ library(data.table)
 library(lattice)
 library(tactile)
 library(hexbin)
-library(viridisLite)
+
 
 ## TODO:
 # * what is the baseline? 
@@ -36,9 +36,9 @@ vars <- c('hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH', 'pH_class
 
 x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'median')
 
-par(mar = c(3, 0, 1, 1))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+par(mar = c(3, 0, 1, 2))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('baseline = FALSE, method = median')
 
 
@@ -54,34 +54,34 @@ vars <- c('hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH', 'pH_class
 
 x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'median')
 
-par(mar = c(3, 0, 1, 1))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+par(mar = c(3, 0, 1, 2))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('baseline = FALSE, method = median')
 
 
 
 x$pi <- profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'median')
 
-par(mar = c(3, 0, 1, 1))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+par(mar = c(3, 0, 1, 2))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('baseline = TRUE, method = median')
 
 
 x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'sum')
 
-par(mar = c(3, 0, 1, 1))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+par(mar = c(3, 0, 1, 2))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('baseline = FALSE, method = sum')
 
 
 x$pi <- profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'sum')
 
-par(mar = c(3, 0, 1, 1))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.75, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.66, las = 1)
+par(mar = c(3, 0, 1, 2))
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('baseline = TRUE, method = sum')
 
 
@@ -126,7 +126,10 @@ z <- data.frame(
 
 cor(z)
 
-hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = mako, colorkey = FALSE, varname.cex = 0.75, varname.font = 2)
+.cols <- hcl.colors(n = 100, palette = 'zissou 1')
+.cp <- colorRampPalette(.cols)
+
+hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = .cp, colorkey = FALSE, varname.cex = 0.75, varname.font = 2)
 
 
 
@@ -151,7 +154,7 @@ bwplot(greatgroup ~ nhz, data = site(x), par.settings = tactile.theme(), varwidt
 bwplot(pi ~ factor(nhz) | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons')
 
 
-hexbinplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', trans = log, inv = exp, xbins = 10, colramp = viridis, colorkey = FALSE)
+hexbinplot(pi ~ nhz | greatgroup, data = site(x), par.settings = tactile.theme(), ylab = 'Profile Information Index', xlab = 'Number of Horizons', trans = log, inv = exp, xbins = 10, colramp = .cp, colorkey = FALSE)
 
 
 
