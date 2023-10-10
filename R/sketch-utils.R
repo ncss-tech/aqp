@@ -206,7 +206,7 @@
     if(is.numeric(h[[color]])) {
       
       # generate color ramp function
-      cr <- grDevices::colorRamp(col.palette, bias = col.palette.bias)
+      cr <- grDevices::colorRamp(col.palette, bias = col.palette.bias, space = 'Lab', interpolate = 'spline')
       
       # re-scale to [0,1]
       # may contain NAs
@@ -264,7 +264,7 @@
         h[[color]] <- droplevels(h[[color]])
         color.levels <- levels(h[[color]])
         
-        crp <- grDevices::colorRampPalette(col.palette, bias = col.palette.bias)
+        crp <- grDevices::colorRampPalette(col.palette, bias = col.palette.bias, space = 'Lab', interpolate = 'spline')
         
         # make a color mapping function
         if (requireNamespace("scales", quietly = TRUE)) {
