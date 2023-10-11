@@ -20,7 +20,7 @@ a \code{lattice} graphics object
 This function creates a visualization of the output from \code{colorQuantiles} using lattice graphics.
 }
 \details{
-Marginal percentiles and L1 median CIELAB values from \code{colorQuantiles} are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via \code{rgb2Munsell}.
+Marginal percentiles and L1 median CIELAB values from \code{colorQuantiles()} are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via \code{\link[=col2Munsell]{col2Munsell()}}.
 }
 \author{
 D.E. Beaudette

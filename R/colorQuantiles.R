@@ -182,9 +182,9 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 #' @param pt.cex scaling factor for color chips
 #' @param lab.cex chip label scaling factor
 #'
-#' @return a \code{lattice} graphics object
+#' @return a `lattice` graphics object
 #' 
-#' @details Marginal percentiles and L1 median CIELAB values from \code{colorQuantiles} are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via \code{rgb2Munsell}. 
+#' @details Marginal percentiles and L1 median CIELAB values from `colorQuantiles()` are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via [col2Munsell()]. 
 #' 
 #' @author D.E. Beaudette
 #'

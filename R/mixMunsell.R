@@ -363,7 +363,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # XYZ -> sRGB -> Munsell
       mx <- spec2Munsell(mixed, ...)
       
-      # NOTE: ... are passed to rgb2munsell()
+      # NOTE: ... are passed to col2munsell()
       #       convert = TRUE: mx is a data.frame
       #       convert = FALSE: mx is a matrix
       
@@ -406,7 +406,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
       # would make sense to reshape reference data
       
-      # NOTE: arguments to rgb2munsell() are silently ignored
+      # NOTE: arguments to col2munsell() are silently ignored
       
       ## TODO: time wasted here
       # reshape reference spectra: wavelength to columns

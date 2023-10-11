@@ -28,10 +28,10 @@ spec2Munsell(
 \item F2 represents typical fluorescent lighting
 }}
 
-\item{...}{further arguments to \code{\link[=rgb2munsell]{rgb2munsell()}}}
+\item{...}{further arguments to \code{\link[=col2Munsell]{col2Munsell()}}}
 }
 \value{
-output from \code{\link[=rgb2munsell]{rgb2munsell()}}
+output from \code{\link[=col2Munsell]{col2Munsell()}}
 }
 \description{
 Convert reflectance spectra to closest Munsell chip
@@ -45,7 +45,7 @@ See the \href{https://ncss-tech.github.io/AQP/aqp/mix-colors.html}{expanded tuto
 data("munsell.spectra.wide")
 
 # convert to closest Munsell chip
-# sRGB -> Munsell conversion via rgb2Munsell()
+# sRGB -> Munsell conversion via col2Munsell()
 spec2Munsell(munsell.spectra.wide[, '10YR 3/3'])
 
 # attempt several

@@ -22,9 +22,9 @@
 #'    * D65 represents average daylight
 #'    * F2 represents typical fluorescent lighting
 #' 
-#' @param ... further arguments to [col2munsell()]
+#' @param ... further arguments to [col2Munsell()]
 #'
-#' @return output from [col2munsell()]
+#' @return output from [col2Munsell()]
 #' @export
 #'
 #' @references 

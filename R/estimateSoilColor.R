@@ -91,6 +91,8 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   ## CIELAB -> closest Munsel
   res <- col2Munsell(Y, space = 'CIELAB', nClosest = 1)
   
+  ## no longer required since col2Munsell() ##
+  
   # ## CIELAB -> sRGB
   # ## TODO: why does farver give slightly different results?
   # 
@@ -102,6 +104,9 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   # 
   # ## sRGB -> Munsell
   # res <- rgb2munsell(color = .srgb, colorSpace = 'CIE2000', nClosest = 1)
+  
+  ###
+  
   
   ## additional diagnostics... ?
   
