@@ -1,9 +1,8 @@
-## https://github.com/ncss-tech/aqp/issues/67
-# closest Munsell chip to LAB coordinates and error: sigma is dE00 when colorSpace = 'CIE2000'
-.closestMunselltoCIELAB <- function(lab) {
-  lab <- as.matrix(lab)
-  srgb <- grDevices::convertColor(lab, from = 'Lab', to = 'sRGB', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
-  res <- rgb2munsell(srgb, colorSpace = 'CIE2000')
+# simple wrapper around col2Munsell(..., space = 'CIELAB')
+# closest Munsell chip to LAB coordinates and error
+# sigma is dE00 
+.formatClosestMunsell <- function(lab) {
+  res <- col2Munsell(lab, space = 'CIELAB', nClosest = 1)
   res.txt <- sprintf("%s %s/%s\n(%.3f)", res$hue, res$value, res$chroma, res$sigma)
   return(res.txt)
 }
@@ -63,13 +62,17 @@
 colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   # sanity check, need this for L1 median
-  if(!requireNamespace('Gmedian'))
-    stop('package `Gmedian` is required', call.=FALSE)
+  if(!requireNamespace('Gmedian')) {
+    stop('package `Gmedian` is required', call. = FALSE)
+  }
+    
 
-  # hex represntation -> sRGB
+  # hex representation -> sRGB
   soilColors.srgb <- t(col2rgb(soilColors)) / 255
+  
   # sRGB -> CIE LAB
-  soilColors.lab <- convertColor(soilColors.srgb, from = 'sRGB', to = 'Lab', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
+  soilColors.lab <- convertColor(soilColors.srgb, from = 'sRGB', to = 'Lab', from.ref.white = 'D65', to.ref.white = 'D65', clip = FALSE)
+  
   # convert to DF for use in diana
   soilColors.lab <- as.data.frame(soilColors.lab)
   names(soilColors.lab) <- c('L', 'A', 'B')
@@ -107,12 +110,12 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   ## find closest Munsell chips via CIE LAB coordinates
   # this is the closest Munsell chip to the L1 median color
-  L1.closest <- .closestMunselltoCIELAB(L1)
+  L1.closest <- .formatClosestMunsell(L1)
 
   # closest munsell chip to marginal L,A,B quantiles
-  L.closest <- .closestMunselltoCIELAB(soilColors.lab[L.q.idx, ])
-  A.closest <- .closestMunselltoCIELAB(soilColors.lab[A.q.idx, ])
-  B.closest <- .closestMunselltoCIELAB(soilColors.lab[B.q.idx, ])
+  L.closest <- .formatClosestMunsell(soilColors.lab[L.q.idx, ])
+  A.closest <- .formatClosestMunsell(soilColors.lab[A.q.idx, ])
+  B.closest <- .formatClosestMunsell(soilColors.lab[B.q.idx, ])
 
 
   ## find closest observed color to L1 median via CIE2000 distance metric
@@ -142,26 +145,26 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   # combine into single DF for plotting
   res <- list(
-    marginal=data.frame(
-      p=p,
-      L=q.L.values,
-      A=q.A.values,
-      B=q.B.values,
-      L_colors=q.L.colors,
-      A_colors=q.A.colors,
-      B_colors=q.B.colors,
-      L_chip=L.closest,
-      A_chip=A.closest,
-      B_chip=B.closest,
+    marginal = data.frame(
+      p = p,
+      L = q.L.values,
+      A = q.A.values,
+      B = q.B.values,
+      L_colors = q.L.colors,
+      A_colors = q.A.colors,
+      B_colors = q.B.colors,
+      L_chip = L.closest,
+      A_chip = A.closest,
+      B_chip = B.closest,
       stringsAsFactors = FALSE
     ),
-    L1=data.frame(
-      p=0.5,
-      L=L1[, 1],
-      A=L1[, 2],
-      B=L1[, 3],
-      L1_color=L1.color,
-      L1_chip=L1.closest,
+    L1 = data.frame(
+      p = 0.5,
+      L = L1[, 1],
+      A = L1[, 2],
+      B = L1[, 3],
+      L1_color = L1.color,
+      L1_chip = L1.closest,
       stringsAsFactors = FALSE
     )
   )

@@ -22,9 +22,9 @@
 #'    * D65 represents average daylight
 #'    * F2 represents typical fluorescent lighting
 #' 
-#' @param ... further arguments to [rgb2munsell()]
+#' @param ... further arguments to [col2munsell()]
 #'
-#' @return output from [rgb2munsell()]
+#' @return output from [col2munsell()]
 #' @export
 #'
 #' @references 
@@ -40,7 +40,7 @@
 #' data("munsell.spectra.wide")
 #' 
 #' # convert to closest Munsell chip
-#' # sRGB -> Munsell conversion via rgb2Munsell()
+#' # sRGB -> Munsell conversion via col2Munsell()
 #' spec2Munsell(munsell.spectra.wide[, '10YR 3/3'])
 #' 
 #' # attempt several
@@ -153,7 +153,7 @@ spec2Munsell <- function(x, res = 10, convert = TRUE, SO = c('CIE1931', 'CIE1964
   
   # convert sRGB to closest Munsell chip
   if(convert) {
-    m <- rgb2munsell(col.srgb, ...)
+    m <- col2Munsell(col.srgb, ...)
     return(m)
   } else {
     # return sRGB coordinates

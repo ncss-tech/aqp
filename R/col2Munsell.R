@@ -5,7 +5,9 @@
 #' @description Lookup the `n` closest Munsell chips from the `munsell` lookup table from various color notations. This function replaces `rgb2munsell()`.
 #'
 #' @param col character vector of colors, `data.frame` or `matrix` of color coordinates in sRGB or CIELAB color space
-#' @param space character, one of `sRGB` or `CIELAB`, defines the input color system 
+#' 
+#' @param space character, one of `sRGB` or `CIELAB`, defines the input color system
+#' 
 #' @param nClosest integer, number of closest Munsell colors to return (valid range is 1-20)
 #'
 
