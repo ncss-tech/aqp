@@ -114,6 +114,25 @@ plotColorMixture <- function(x, w = rep(1, times = length(x)) / length(x), mixin
       # last color is the mixture, 
       # replace reference spectra / munsell chip with actual mixture
       if(i == length(colors)) {
+        
+        # avoid trying to append to a 0-length DF 
+        # if the last color has no reference spectra
+        if(nrow(z) < 1) {
+          # pad with NA
+          z <- z[1:length(mx$spec), ]
+          
+          # fill columns with pieces of the closest Munsell
+          .pm <- parseMunsell(mx$mixed$munsell, convertColors = FALSE)
+          z$hue <- .pm$hue
+          z$value <- .pm$value
+          z$chroma <- .pm$chroma
+          
+          ## NOTE: hard-coded spectra wavelengths!!
+          # fill wavelength column
+          z$wavelength <- seq(from = 380, to = 730, by = 10)
+        }
+        
+        # save mixed spectra and closest Munsell color
         z$reflectance <- mx$spec
         z$munsell <- mx$mixed$munsell
       }

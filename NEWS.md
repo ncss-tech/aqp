@@ -1,6 +1,7 @@
-# aqp 2.0.2 (2023-09-14)
+# aqp 2.0.2 (2023-10-11)
  * new function `col2Munsell()` generalizes and replaces `rgb2munsell()` (thanks Shawn Salley for the suggestion)
  * new function `warpHorizons()` for warping horizon thickness (inflate/deflate) (thanks Shawn Salley for idea / inspiration)
+ * fixed minor bug in `plotColorMixture()` when final mixed color does not exist in spectral library
 
 # aqp 2.0.1 (2023-09-03)
  * CRAN release (CRAN check bugfix)
