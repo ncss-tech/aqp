@@ -10,7 +10,7 @@ library(soilDB)
 library(ggplot2)
 library(forcats)
 
-x <- fetchKSSL('bearden', returnMorphologicData = TRUE, simplifyColors = TRUE)
+x <- fetchKSSL('clarksville', returnMorphologicData = TRUE, simplifyColors = TRUE)
 s <- x$SPC
 
 ## only pedons with complete colors
