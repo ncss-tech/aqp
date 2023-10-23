@@ -102,6 +102,9 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   #                     .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
   #                      .SDcols = hcnames]
 
+  ## BUG: need a short-circuit for single-profile / single-horizon objects
+  ## https://github.com/ncss-tech/aqp/issues/301
+  
   
   # https://github.com/ncss-tech/aqp/issues/296
   # do not attempt to fill gaps when there are perfectly overlapping horizons
