@@ -7,10 +7,11 @@
 profileInformationIndex(
   x,
   vars,
-  method = c("median", "mean", "sum"),
+  method = c("sum", "mean", "median"),
   baseline = TRUE,
-  useDepths = TRUE,
-  numericDigits = 4
+  numericDigits = 8,
+  removeNA = FALSE,
+  padNA = TRUE
 )
 }
 \arguments{
@@ -22,15 +23,17 @@ profileInformationIndex(
 
 \item{baseline}{logical, compute ratio to "baseline" information content, see details}
 
-\item{useDepths}{logical, include horizon depths in \code{vars}}
-
 \item{numericDigits}{integer, number of significant digits to retain in numeric -> character conversion}
+
+\item{removeNA}{remove NA before compression}
+
+\item{padNA}{pad all profiles with NA to deepest lower depth in \code{x} (\code{max(x)})}
 }
 \value{
 a numeric vector of the same length as \code{length(x)} and in the same order, suitable for direct assignment to a new site-level attribute
 }
 \description{
-A simple index of "information" content associated with individuals in a \code{SoilProfileCollection} object. Information content is quantified by number of bytes after gzip compression via \code{memCompress()}.
+A simple index of "information" content associated with individuals in a \code{SoilProfileCollection} object. Information content is quantified by number of bytes after compression via \code{memCompress()}.
 }
 \details{
 Information content via compression (gzip) is the central assumption behind this function: the values associated with a simple soil profile having few horizons and little variation between horizons (isotropic depth-functions) will compress to a much smaller size than a complex profile (many horizons, strong anisotropy). Information content is evaluated a profile at a time, over each site or horizon level attribute specified in \code{vars}. Values are aggregated to the profile level by \code{method}: median, mean, or sum. The \code{baseline} argument invokes a comparison to the simplest possible representation of each depth-function:
@@ -43,34 +46,56 @@ The ratios computed against a "simple" baseline represent something like "inform
 }
 \examples{
 
-# simulate three profiles of increasing complexity
-p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5)
+# single horizon, constant value
+p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5, name = 'H')
 
+# multiple horizons, constant value
 p2 <- data.frame(
-id = 2, top = c(0, 10, 20, 30, 40, 50), 
-bottom = c(10, 20, 30, 40, 50, 100), 
-p = rep(5, times = 6)
+  id = 2, top = c(0, 10, 20, 30, 40, 50),
+  bottom = c(10, 20, 30, 40, 50, 100),
+  p = rep(5, times = 6),
+  name = c('A1', 'A2', 'Bw', 'Bt1', 'Bt2', 'C')
 )
 
+# multiple horizons, random values
 p3 <- data.frame(
-id = 3, top = c(0, 10, 20, 30, 40, 50), 
-bottom = c(10, 20, 30, 40, 50, 100), 
-p = c(1, 5, 10, 3, 6, 2)
+  id = 3, top = c(0, 10, 20, 30, 40, 50),
+  bottom = c(10, 20, 30, 40, 50, 100),
+  p = c(1, 5, 10, 35, 6, 2),
+  name = c('A1', 'A2', 'Bw', 'Bt1', 'Bt2', 'C')
 )
+
+# multiple horizons, mostly NA
+p4 <- data.frame(
+  id = 4, top = c(0, 10, 20, 30, 40, 50),
+  bottom = c(10, 20, 30, 40, 50, 100),
+  p = c(1, NA, NA, NA, NA, NA),
+  name = c('A1', 'A2', 'Bw', 'Bt1', 'Bt2', 'C')
+)
+
+# shallower version of p1
+p5 <- data.frame(id = 5, top = 0, bottom = 50, p = 5, name = 'H')
 
 # combine and upgrade to SPC
-z <- rbind(p1, p2, p3)
+z <- rbind(p1, p2, p3, p4, p5)
 depths(z) <- id ~ top + bottom
+hzdesgnname(z) <- 'name'
+
+z <- fillHzGaps(z)
 
 # visual check
-plotSPC(z, color = 'p')
+par(mar = c(1, 0, 3, 3))
+plotSPC(z, color = 'p', name.style = 'center-center', cex.names = 0.8, max.depth = 110)
 
-# compute information index several ways
-profileInformationIndex(z, vars = c('p'), method = 'sum')
-profileInformationIndex(z, vars = c('p'), method = 'mean')
+# factor version of horizon name
+z$fname <- factor(z$name)
 
-profileInformationIndex(z, vars = c('p'), method = 'mean', baseline = FALSE)
-profileInformationIndex(z, vars = c('p'), method = 'sum', baseline = FALSE)
+vars <- c('p', 'name')
+# result is total bytes
+pi <- profileInformationIndex(z, vars = vars, method = 'sum', baseline = FALSE)
+
+text(x = 1:5, y = 105, labels = pi, cex = 0.85)
+mtext('Profile Information Index (bytes)', side = 1, line = -1)
 
 }
 \author{

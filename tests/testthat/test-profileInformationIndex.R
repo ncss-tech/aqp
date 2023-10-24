@@ -3,7 +3,7 @@ context("profile information metrics")
 test_that(".pii works", {
   
   # constant data
-  x <- .pii(i = rep(1, 10), baseline = TRUE, numericDigits = 4)
+  x <- .pii(i = rep(1, 10), baseline = TRUE, numericDigits = 4, removeNA = FALSE)
   expect_true(inherits(x, c('numeric', 'integer')))
   expect_true(length(x) == 1)
   
@@ -11,7 +11,7 @@ test_that(".pii works", {
   # expect_equal(x, 1L)
   
   # simple data
-  x <- .pii(i = as.integer(c(1:10)), baseline = TRUE, numericDigits = 4)
+  x <- .pii(i = as.integer(c(1:10)), baseline = TRUE, numericDigits = 4, removeNA = FALSE)
   expect_true(inherits(x, c('numeric', 'integer')))
   expect_true(length(x) == 1)
   
@@ -19,7 +19,7 @@ test_that(".pii works", {
   # expect_equal(x, 2L, tolerance = 1)
   
   # complex data
-  x <- .pii(i = letters, baseline = TRUE, numericDigits = 4)
+  x <- .pii(i = letters, baseline = TRUE, numericDigits = 4, removeNA = FALSE)
   expect_true(inherits(x, c('numeric', 'integer')))
   expect_true(length(x) == 1)
   
@@ -46,7 +46,7 @@ test_that("basic operation", {
   # changes in r-devel / memCompress() give slightly different results
   # adapt test after this is sorted out
   
-  p <- profileInformationIndex(x, vars = c('p'), method = 'sum')
+  p <- profileInformationIndex(x, vars = 'p', method = 'sum', baseline = FALSE)
   expect_true(inherits(p, c('numeric', 'integer')))
   expect_true(length(p) == 2)
   
