@@ -7,7 +7,7 @@
 profileInformationIndex(
   x,
   vars,
-  method = c("sum", "mean", "median"),
+  method = c("joint", "individual"),
   baseline = TRUE,
   numericDigits = 8,
   removeNA = FALSE,
@@ -19,7 +19,7 @@ profileInformationIndex(
 
 \item{vars}{character vector of site or horizon level attributes to consider}
 
-\item{method}{character: aggregation method, information content evaluated over \code{vars}: 'median', 'mean', or 'sum'}
+\item{method}{character, 'individual' or 'joint' complexity}
 
 \item{baseline}{logical, compute ratio to "baseline" information content, see details}
 
