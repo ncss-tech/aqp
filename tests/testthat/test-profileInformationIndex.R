@@ -1,32 +1,31 @@
 context("profile information metrics")
 
-# test_that(".pii works", {
-#   
-#   # constant data
-#   x <- .pii(i = rep(1, 10), baseline = TRUE, numericDigits = 4, removeNA = FALSE)
-#   expect_true(inherits(x, c('numeric', 'integer')))
-#   expect_true(length(x) == 1)
-#   
-#   # changes in r-devel / memCompress() give slightly different results
-#   # expect_equal(x, 1L)
-#   
-#   # simple data
-#   x <- .pii(i = as.integer(c(1:10)), baseline = TRUE, numericDigits = 4, removeNA = FALSE)
-#   expect_true(inherits(x, c('numeric', 'integer')))
-#   expect_true(length(x) == 1)
-#   
-#   # changes in r-devel / memCompress() give slightly different results
-#   # expect_equal(x, 2L, tolerance = 1)
-#   
-#   # complex data
-#   x <- .pii(i = letters, baseline = TRUE, numericDigits = 4, removeNA = FALSE)
-#   expect_true(inherits(x, c('numeric', 'integer')))
-#   expect_true(length(x) == 1)
-#   
-#   # changes in r-devel / memCompress() give slightly different results
-#   # expect_equal(x, 3.615, tolerance = 0.001)
-#   
-# })
+## TODO: finish these
+test_that("helper functions", {
+  
+  v <- aqp:::.prepareVector(1:10, d = 10)
+  expect_equal(length(v), 1)
+  expect_equal(nchar(v), 11)
+  
+  # v <- aqp:::.prepareVector(letters, d = 10)
+  # v <- aqp:::.prepareVector(TRUE, d = 10)
+  # v <- aqp:::.prepareVector(factor(c('A', 'Z')), d = 10)
+  # 
+  # b <- aqp:::.prepareBaseline(1:10, d = 10, type = 'numeric')
+  # 
+  # x <- 1:10
+  # i <- aqp:::.prepareVariable(x, removeNA = TRUE, numericDigits = 4)
+  # 
+  # x <- c('A', 'C', 'C', 'D')
+  # i <- aqp:::.prepareVariable(x, removeNA = TRUE, numericDigits = 4)
+  # 
+  # x <- factor(c('A', 'C', 'C', 'D'))
+  # i <- aqp:::.prepareVariable(x, removeNA = TRUE, numericDigits = 4)
+  # 
+  # x <- c(TRUE, TRUE, FALSE)
+  # i <- aqp:::.prepareVariable(x, removeNA = TRUE, numericDigits = 4)
+  
+})
 
 
 test_that("basic operation", {
@@ -43,7 +42,7 @@ test_that("basic operation", {
   depths(x) <- id ~ top + bottom
   
   
-  # changes in r-devel / memCompress() give slightly different results
+  # memCompress() give slightly different results across platforms
   # adapt test after this is sorted out
   
   p <- profileInformationIndex(x, vars = 'p', method = 'joint', baseline = FALSE)

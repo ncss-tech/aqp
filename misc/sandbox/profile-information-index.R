@@ -1,17 +1,21 @@
 
 library(soilDB)
-library(data.table)
 library(lattice)
 library(tactile)
 library(hexbin)
 library(purrr)
-
+library(mvtnorm)
 
 ## TODO:
 # * what is the baseline? 
 # * compressed vs. raw
 # * compressed values vs. compressed (mean or constant level factors)
 # * Shannon H and differential entropy
+# * joint vs. individual compression may not be doing what I think it is doing
+# * effect of flattening character vectors?
+# * joint and individual may be the same thing
+# * compressed vs. un-compressed length may be meaningful (e.g. normalized)
+
 
 a <- rnorm(n = 100)
 b <- rep(mean(a), times = length(a))
@@ -26,8 +30,9 @@ aqp:::.prepareVector(1:10, d = 4)
 aqp:::.prepareVariable(1:10, numericDigits = 4, removeNA = FALSE)
 aqp:::.prepareVariable(c('A', 'A', 'A', 'B', 'C'), numericDigits = 4, removeNA = FALSE)
 
-
-
+# note usage
+aqp:::.compressedLength(1:10)
+aqp:::.compressedLength(aqp:::.prepareVector(1:10))
 
 aqp:::.compressedLength(1:10)
 aqp:::.compressedLength(1)
@@ -48,6 +53,47 @@ aqp:::.compressedLength(c(100, 500, 1000))
 # single variable complexity vs. joint complexity
 aqp:::.compressedLength(1:10) + aqp:::.compressedLength(20:30)
 aqp:::.compressedLength(c(1:10, 20:30))
+
+set.seed(101011)
+sigma <- matrix(
+  c(
+    4, 3, 3, 
+    3, 3, 3, 
+    3, 3, 8
+  ), ncol = 3)
+n <- 10000
+x <- rmvnorm(n = n, mean = c(10, 20, 30), sigma = sigma)
+cor(x)
+
+y <- cbind(
+  runif(n, min = min(x), max = max(x)), 
+  runif(n, min = min(x), max = max(x)),
+  runif(n, min = min(x), max = max(x))
+  )
+cor(y)
+
+.cols <- hcl.colors(n = 100, palette = 'zissou 1')
+.cp <- colorRampPalette(.cols)
+
+hexplom(x, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = .cp, colorkey = FALSE, varname.cex = 0.75, varname.font = 2, xlab = '')
+
+hexplom(y, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = .cp, colorkey = FALSE, varname.cex = 0.75, varname.font = 2, xlab = '')
+
+aqp:::.compressedLength(c(x[, 1], x[, 2], x[, 3])) / aqp:::.compressedLength(c(y[, 1], y[, 2], y[, 3]))
+
+# aqp:::.compressedLength(x[, 1]) / aqp:::.compressedLength(rep(mean(x[, 1], times = nrow(x))))
+# aqp:::.compressedLength(y[, 1]) / aqp:::.compressedLength(rep(mean(y[, 1], times = nrow(x))))
+
+aqp:::.compressedLength(c(x[, 1], x[, 2], x[, 3])) / 
+  (aqp:::.compressedLength(x[, 1]) + aqp:::.compressedLength(x[, 2]) + aqp:::.compressedLength(x[, 3]))
+
+aqp:::.compressedLength(c(y[, 1], y[, 2], y[, 3])) / 
+  (aqp:::.compressedLength(y[, 1]) + aqp:::.compressedLength(y[, 2]) + aqp:::.compressedLength(y[, 3])) 
+
+
+
+
+
 
 
 
@@ -111,21 +157,42 @@ z <- rbind(p1, p2, p3, p4, p5)
 depths(z) <- id ~ top + bottom
 hzdesgnname(z) <- 'name'
 
-# z <- fillHzGaps(z)
-
-# visual check
-par(mar = c(1, 0, 3, 3))
-plotSPC(z, color = 'p', name.style = 'center-center', cex.names = 0.8, max.depth = 110)
-
 # factor version of horizon name
 z$fname <- factor(z$name)
 
-vars <- c('p', 'name')
-# result is total bytes
-pi <- profileInformationIndex(z, vars = vars, baseline = FALSE, padNA = FALSE, removeNA = TRUE)
 
-text(x = 1:5, y = 105, labels = pi, cex = 0.85)
-mtext('Profile Information Index (bytes)', side = 1, line = -1)
+a <- dice(z[3, ])
+a$p <- runif(n = nrow(a), min = 0, max = 40)
+a$name <- NA
+profile_id(a) <- '6'
+
+b <- a
+b$p <- sort(b$p, decreasing = TRUE)
+b$name <- NA
+profile_id(b) <- '7'
+
+z <- combine(z, a, b)
+
+
+vars <- c('p', 'name')
+pi <- profileInformationIndex(z, vars = vars, method = 'j')
+pi.b <- profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
+
+
+# visual check
+.args <- list(width = 0.33, color = 'p', name.style = 'center-center', cex.names = 0.75, max.depth = 110, col.legend.cex = 0.8, lwd = 0.33, depth.axis = list(line = -1, cex = 0.75, style = 'compact'), col.label = 'property')
+options(.aqp.plotSPC.args = .args)
+
+par(mar = c(1, 0, 3, 3), mfcol = c(1, 2))
+plotSPC(z)
+text(x = 1:length(z), y = 105, labels = pi, cex = 0.85)
+mtext('Profile Information Index (bytes)', side = 1, line = -0.5)
+
+plotSPC(z)
+text(x = 1:length(z), y = 105, labels = signif(pi.b, digits = 4), cex = 0.85)
+mtext('Profile Complexity Ratio', side = 1, line = -0.5)
+
+
 
 
 # effect of aggregation function
@@ -159,10 +226,9 @@ d
 
 aqp:::.compressedLength(d)
 
-
-
-
-
+# m <- d
+# m[] <- d[sample(1:length(d))]
+# aqp:::.compressedLength(m)
 
 
 
@@ -192,7 +258,7 @@ aqp:::.compressedLength(d)
 
 
 
-
+options(.aqp.plotSPC.args = NULL)
 
 s <- c('holland', 'sierra', 'musick', 'hanford', 'grangeville', 'delhi', 'amador', 'cecil', 'leon', 'lucy', 'clarksville', 'zook', 'clear lake', 'yolo', 'calhi', 'corralitos', 'sacramento', 'dodgeland')
 x <- fetchOSD(s)
@@ -203,14 +269,14 @@ par(mar = c(3, 0, 1, 2), mfrow = c(2, 1))
 
 vars <- c('hue', 'value', 'chroma', 'hzname')
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE, padNA = TRUE, removeNA = FALSE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = TRUE, removeNA = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('baseline = TRUE, removeNA = FALSE, padNA = TRUE')
 
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE, padNA = FALSE, removeNA = TRUE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = FALSE, removeNA = TRUE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
@@ -248,13 +314,13 @@ title('method = i, baseline = FALSE, padNA = FALSE', cex.main = 1)
 
 
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = TRUE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = TRUE, removeNA = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('method = j, baseline = FALSE, padNA = TRUE', cex.main = 1)
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = FALSE, padNA = TRUE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = FALSE, padNA = TRUE, removeNA = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
@@ -309,12 +375,12 @@ x$A <- .lab[, 2]
 x$B <- .lab[, 3]
 
 
-x$pi <- profileInformationIndex(x, vars = c('L', 'A', 'B'), baseline = FALSE, method = 'j', padNA = FALSE, removeNA = FALSE)
+x$pi <- profileInformationIndex(x, vars = c('L', 'A', 'B'), baseline = FALSE, method = 'j', padNA = FALSE, removeNA = TRUE)
 
 par(mar = c(3, 0, 1, 2), mfrow = c(1,1))
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE, method = sum')
+
 
 
 
@@ -372,12 +438,13 @@ plot(joint ~ individual, data = z, las = 1)
 plot(baseline.joint ~ baseline.individual, data = z, las = 1)
 hexbinplot(baseline.joint ~ joint, data = z, par.settings = tactile.theme(), trans = log, inv = exp, xbins = 30, colramp = .cp, colorkey = FALSE, varname.cex = 0.75, varname.font = 2, main = 'Profile Information Index')
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = FALSE, removeNA = TRUE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE, padNA = FALSE, removeNA = TRUE)
 x$nhz <- profileApply(x, FUN = nrow, simplify = TRUE)
 
 x$greatgroup <- factor(x$greatgroup, levels = c('palexeralfs', 'haploxeralfs', 'haploxerepts', 'xerorthents', 'haploxererts', 'endoaquolls'))
 
-
+dev.off()
+options(.aqp.plotSPC.args = NULL)
 hist(x$pi, las = 1, breaks = 20, xlab = 'Profile Information Index (baseline sum)', main = '')
 
 # .crit <- mean(x$pi) + (c(-2, 2) * sd(x$pi))
@@ -473,7 +540,7 @@ z1 <- lapply(
 z1 <- combine(z1)
 # z1 <- trunc(z1, 0, min(z1))
 
-z1$pi <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'i', baseline = FALSE, padNA = FALSE, removeNA = TRUE)
+z1$pi <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', baseline = TRUE, padNA = FALSE, removeNA = TRUE)
 
 par(mar = c(3, 0, 0, 2))
 plotSPC(z1, color = 'p1', plot.order = order(z1$pi), print.id = FALSE, width = 0.35, divide.hz = FALSE)

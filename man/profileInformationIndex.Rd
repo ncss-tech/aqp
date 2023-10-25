@@ -8,10 +8,11 @@ profileInformationIndex(
   x,
   vars,
   method = c("joint", "individual"),
-  baseline = TRUE,
+  baseline = FALSE,
   numericDigits = 8,
-  removeNA = FALSE,
-  padNA = TRUE
+  removeNA = !padNA,
+  padNA = FALSE,
+  compression = "gzip"
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ profileInformationIndex(
 \item{removeNA}{remove NA before compression}
 
 \item{padNA}{pad all profiles with NA to deepest lower depth in \code{x} (\code{max(x)})}
+
+\item{compression}{character, compression method as used by \code{\link[=memCompress]{memCompress()}}: 'gzip', 'bzip2', 'xz', 'none'}
 }
 \value{
 a numeric vector of the same length as \code{length(x)} and in the same order, suitable for direct assignment to a new site-level attribute
@@ -36,13 +39,13 @@ a numeric vector of the same length as \code{length(x)} and in the same order, s
 A simple index of "information" content associated with individuals in a \code{SoilProfileCollection} object. Information content is quantified by number of bytes after compression via \code{memCompress()}.
 }
 \details{
-Information content via compression (gzip) is the central assumption behind this function: the values associated with a simple soil profile having few horizons and little variation between horizons (isotropic depth-functions) will compress to a much smaller size than a complex profile (many horizons, strong anisotropy). Information content is evaluated a profile at a time, over each site or horizon level attribute specified in \code{vars}. Values are aggregated to the profile level by \code{method}: median, mean, or sum. The \code{baseline} argument invokes a comparison to the simplest possible representation of each depth-function:
+Information content via compression (gzip) is the central assumption behind this function: the values associated with a simple soil profile having few horizons and little variation between horizons (isotropic depth-functions) will compress to a much smaller size than a complex profile (many horizons, strong anisotropy). Information content is evaluated a profile at a time, over each site or horizon level attribute specified in \code{vars}. The \code{baseline} argument invokes a comparison to the simplest possible representation of each depth-function:
 \itemize{
 \item \code{numeric}: replication of the mean value to match the number of horizons with non-NA values
 \item \code{character} or \code{factor}: replication of the most frequent value to match the number of horizons with non-NA values
 }
 
-The ratios computed against a "simple" baseline represent something like "information gain", ranging from 0 to 1. Larger baseline ratios suggest more complexity (more information) associated with a soil profile's depth-functions. Alternatively, the total quantity of information (in bytes) can be determined by setting \code{baseline = FALSE} and \code{method = 'sum'}.
+The ratios computed against a "simple" baseline represent something like "information gain". Larger baseline ratios suggest more complexity (more information) associated with a soil profile's depth-functions. Alternatively, the total quantity of information (in bytes) can be determined by setting \code{baseline = FALSE}.
 }
 \examples{
 
@@ -92,7 +95,7 @@ z$fname <- factor(z$name)
 
 vars <- c('p', 'name')
 # result is total bytes
-pi <- profileInformationIndex(z, vars = vars, method = 'sum', baseline = FALSE)
+pi <- profileInformationIndex(z, vars = vars, method = 'joint', baseline = FALSE)
 
 text(x = 1:5, y = 105, labels = pi, cex = 0.85)
 mtext('Profile Information Index (bytes)', side = 1, line = -1)
