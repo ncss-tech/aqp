@@ -316,12 +316,14 @@ profileInformationIndex <- function(x, vars, method = c('joint', 'individual'), 
     }
   }
   
+  ## TODO: this will error / drop profiles in the presence of bad horizonation
+  
   # dice() to 1cm intervals for common baseline
   #  -> 10 horizons of the same data NOT more informative than 1 horizon 
   #  -> causes data corruption when bad hz depths present (lots of messages)
   x <- dice(x, fill = padNA)
   
-  ## TODO: think about how to make this more efficient when n > 1000
+  ## TODO: convert to data.table
   
   # iterate over profiles
   # result is a vector suitable for site-level attribute
