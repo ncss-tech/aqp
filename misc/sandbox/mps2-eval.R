@@ -5,6 +5,7 @@ library(sharpshootR)
 library(mpspline2)
 library(reshape2)
 library(lattice)
+library(tactile)
 
 ## thoughts:
 # * variable depths option from EAS 
@@ -13,20 +14,94 @@ library(lattice)
 # * slab2SPC() or option to slab() to re-shape into an SPC
 
 
+# make some example data
+x <- list(
+  id = 'A',
+  depths = c(25, 33, 100, 150,  175),
+  name = c('A', 'Bw', 'Bt1', 'Bt2', 'BC'),
+  p1 = c(12, 15, 35, 20, 15),
+  soil_color = c('10YR 3/3', '10YR 4/4', '10YR 4/6', '5G 6/2', '5BG 4/4')
+)
 
-## don't need these anymore
-# helper functions
-# source('https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/sandbox/mps-functions.R')
+x <- quickSPC(x)
 
-# fewer moving parts
-options(stringsAsFactors = FALSE)
+# fake site data
+site(x)$fake_site_attr <- 1:length(x)
 
+# check source data
+par(mar=c(0,0,3,1))
+plotSPC(x, color='p1', col.palette = hcl.colors(10, 'viridis'))
+
+s <- seq(0, 1, by = 0.25)
+m <- lapply(s, function(i) {
+  .spc <- spc2mpspline(x, var_name = 'p1', lam = i, method = 'est_1cm')
+  profile_id(.spc) <- sprintf("%s-%s", profile_id(.spc), format(i, digits = 2))
+  return(.spc)
+})
+
+z <- combine(m)
+z$p1 <- z$p1_spline
+
+xx <- combine(z, x)
+
+par(mar = c(0, 0, 3, 2))
+plotSPC(xx, color = 'p1', col.palette = hcl.colors(10, 'viridis'), divide.hz = FALSE, width = 0.35, cex.names = 0.8, name = NA)
+mtext(side = 3, at = 2, line = -1.5, text = 'value of lambda')
+
+# o <- order(xx$p1_rmse)
+# plotSPC(xx, color = 'p1', col.palette = hcl.colors(10, 'viridis'), divide.hz = FALSE, width = 0.35, plot.order = o)
+
+d <- dice(xx)
+d$p1diff <- rep(NA, times = nrow(d))
+
+d$p1diff <- profileApply(d, function(i) {
+  d[1, ]$p1 - i$p1
+})
+
+plotSPC(d, color = 'p1diff', col.palette = hcl.colors(10, 'viridis'), divide.hz = FALSE, width = 0.35, cex.names = 0.8, name = NA)
+mtext(side = 3, at = 2, line = -2, text = 'value of lambda')
+
+
+
+tps <- tactile.theme(superpose.line = list(lwd = 2))
+
+# compare depth-functions by method, no aggregation
+xyplot(cbind(top, bottom) ~ p1, id=xx$id, groups = factor(id),
+       data=as(xx, 'data.frame'),
+       par.settings=tps,
+       auto.key=list(columns=3, lines=TRUE, points=FALSE),
+       strip=strip.custom(bg=grey(0.85)),
+       ylim=c(185, -5), as.table=TRUE, panel=panel.depth_function,
+       scales = list(alternating = 1),
+       asp = 1
+)
+
+xyplot(cbind(top, bottom) ~ p1 | id, id=xx$id,
+       data=as(xx, 'data.frame'),
+       par.settings=tps,
+       auto.key=list(columns=4, lines=TRUE, points=FALSE),
+       strip=strip.custom(bg=grey(0.85)),
+       ylim=c(185, -5), as.table=TRUE, panel=panel.depth_function,
+       layout = c(6, 1),
+       scales = list(alternating = 1)
+)
+
+
+
+## test effect of lambda
+slab(xx, id ~ p1, slab.structure = c(0, 50), slab.fun = mean, na.rm = TRUE)
+slab(xx, id ~ p1, slab.structure = c(0, 50), slab.fun = sum, na.rm = TRUE)
+
+
+
+
+####################### more complex examples / eval ########################
 
 # make some example data
 ids <- LETTERS[1:6]
 
 set.seed(10101)
-x <- lapply(ids, random_profile, n=c(6, 7, 8), n_prop=2, method='LPP', SPC=TRUE)
+x <- lapply(ids, random_profile, n = c(6, 7, 8), n_prop = 2, method = 'LPP', SPC = TRUE, lpp.u = 40)
 x <- combine(x)
 
 # fake site data
@@ -127,13 +202,11 @@ plotSPC(z, color='p1', divide.hz = FALSE, width = 0.25, cex.names = 0.66, max.de
 
 # plot by group
 par(mar=c(0, 0, 3, 1))
-plotSPC(z, color='p1', max.depth=175, name=NA, divide.hz=FALSE, width = 0.3, col.palette = hcl.colors(10), n.legend = 8)
+plotSPC(z, color='p1', max.depth = max(x), name=NA, divide.hz=FALSE, width = 0.3, col.palette = hcl.colors(10), n.legend = 8)
 
 groupedProfilePlot(z, groups = 'original_id', color='p1', max.depth = max(x), group.name.offset = -10, name=NA, divide.hz=FALSE, width=0.3, col.palette = hcl.colors(10), n.legend = 8)
 
 groupedProfilePlot(z, groups = 'provenance', color='p1', max.depth = max(x), group.name.offset = -10, name=NA, divide.hz=FALSE, width = 0.3, col.palette = hcl.colors(10), n.legend = 8)
-
-tps <- list(superpose.line=list(lwd=2, col=c('royalblue', 'darkgreen', 'firebrick', 'orange')))
 
 # compare depth-functions by method, no aggregation
 xyplot(cbind(top, bottom) ~ p1 | original_id, id=z$id, groups=provenance, 
@@ -141,9 +214,11 @@ xyplot(cbind(top, bottom) ~ p1 | original_id, id=z$id, groups=provenance,
        par.settings=tps,
        auto.key=list(columns=4, lines=TRUE, points=FALSE),
        strip=strip.custom(bg=grey(0.85)),
-       ylim=c(175, -5), as.table=TRUE, panel=panel.depth_function,
+       ylim=c(125, -5), as.table=TRUE, panel=panel.depth_function,
        layout = c(6, 1),
-       scales = list(x = list(relation = 'free'))
+       scales = list(x = list(relation = 'free')),
+       ylab = 'Depth (cm)',
+       xlab = 'simulated property'
 )
 
 
@@ -152,7 +227,7 @@ xyplot(cbind(top, bottom) ~ p1 | original_id, id=z$id, groups=provenance,
 z.agg <- slab(z, fm = provenance ~ p1)
 
 xyplot(top ~ p.q50, groups=provenance, data=z.agg, ylab='Depth', asp=1.5,
-       lower=z.agg$p.q25, upper=z.agg$p.q75, ylim=c(200,-5),
+       lower=z.agg$p.q25, upper=z.agg$p.q75, ylim=c(125,-5),
        xlab='median bounded by 25th and 75th percentiles',
        sync.colors=TRUE, alpha=0.25,
        par.settings=tps,
@@ -164,7 +239,7 @@ xyplot(top ~ p.q50, groups=provenance, data=z.agg, ylab='Depth', asp=1.5,
 )
 
 xyplot(top ~ p.q50, groups=provenance, data=z.agg, ylab='Depth', asp=1.5,
-       ylim=c(200,-5),
+       ylim=c(125,-5),
        xlab='median bounded by 25th and 75th percentiles',
        par.settings=tps,
        auto.key=list(columns=4, lines=TRUE, points=FALSE),
@@ -174,11 +249,11 @@ xyplot(top ~ p.q50, groups=provenance, data=z.agg, ylab='Depth', asp=1.5,
 )
 
 xyplot(top ~ p.q50 | provenance, data=z.agg, ylab='Depth', asp=1.5,
-       lower=z.agg$p.q25, upper=z.agg$p.q75, ylim=c(175,-5),
+       lower=z.agg$p.q25, upper=z.agg$p.q75, ylim=c(125, -5),
        xlab='median bounded by 25th and 75th percentiles',
        sync.colors=TRUE, alpha=0.5,
        strip=strip.custom(bg=grey(0.85)),
-       par.settings=list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'firebrick'))),
+       par.settings = tps,
        panel=panel.depth_function, 
        prepanel=prepanel.depth_function,
        cf=z.agg$contributing_fraction,
@@ -188,11 +263,25 @@ xyplot(top ~ p.q50 | provenance, data=z.agg, ylab='Depth', asp=1.5,
 
 # * only using a single property.. need to update EAS code to do more than a single property
 # * truncate comparisons to 110cm
-d <- NCSP(z, vars = 'p1', maxDepth = 110)
+d <- NCSP(z, vars = 'p1', maxDepth = 100)
 
 # interesting
 par(mar = c(0, 0, 0, 3))
-plotProfileDendrogram(z, cluster::diana(d), dend.y.scale = 175, scaling.factor = 0.85, y.offset = 2, color = 'p1', divide.hz = FALSE, width = 0.3, max.depth = 150, cex.names = 0.8)
+plotProfileDendrogram(z, cluster::diana(d), dend.y.scale = 175, scaling.factor = 0.95, y.offset = 2, color = 'p1', divide.hz = FALSE, width = 0.3, max.depth = 125, cex.names = 0.8)
 
 
 ## TODO: viz via nMDS and betadispersion
+
+
+## what about simple summaries within a fixed depth interval?
+# nearly identical
+
+slab(z, provenance ~ p1, slab.structure = c(0, 50), slab.fun = mean, na.rm = TRUE)
+
+slab(z, provenance ~ p1, slab.structure = c(0, 50), slab.fun = sum, na.rm = TRUE)
+
+
+
+
+
+
