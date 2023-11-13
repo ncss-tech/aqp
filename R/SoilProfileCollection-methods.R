@@ -272,7 +272,7 @@ setMethod(f = 'unique',
             
             # compute hash by profile, for selected variables
             md5 <- profileApply(x, function(i) {
-              # unlist in order to drop row names
+              # unlist() in order to drop row names
               digest::digest(unlist(as(i, 'data.frame')[, vars]))
             })
             

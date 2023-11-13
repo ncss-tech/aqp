@@ -324,6 +324,10 @@ profileInformationIndex <- function(x, vars, method = c('joint', 'individual'), 
   x <- dice(x, fill = padNA)
   
   ## TODO: convert to data.table
+  # SPC = FALSE
+  # data.table()
+  # dt[, ]
+  # as.vector()
   
   # iterate over profiles
   # result is a vector suitable for site-level attribute
