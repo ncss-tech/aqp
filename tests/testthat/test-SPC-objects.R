@@ -112,7 +112,6 @@ test_that("SPC deconstruction into a list", {
 
   expect_equivalent(l$horizons, horizons(sp1))
   expect_equivalent(l$site, site(sp1))
-  expect_equivalent(l$sp, sp1@sp)
   expect_equivalent(l$diagnostic, diagnostic_hz(sp1))
   expect_equivalent(l$restrictions, restrictions(sp1))
 
@@ -187,7 +186,6 @@ test_that("SPC subsetting with tidy verbs ", {
 
 test_that("SPC graceful failure of spatial operations when data are missing", {
 
-  # @sp has not been initialized
   expect_false(validSpatialData(sp1))
 
   # coercion should not work
