@@ -5,6 +5,7 @@
 \alias{plotSPC}
 \alias{plot,SoilProfileCollection,ANY-method,plot.SoilProfileCollection}
 \alias{plot}
+\alias{plot,SoilProfileCollection-method}
 \alias{plot,SoilProfileCollection,ANY-method}
 \title{Create Soil Profile Sketches}
 \usage{
