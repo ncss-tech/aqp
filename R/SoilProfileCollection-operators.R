@@ -443,7 +443,7 @@ setMethod("[[", signature(x = "SoilProfileCollection",
 #' @param value New value to replace -- unit length or equal in length to number
 #'   of sites or horizons in the collection.
 #'
-#' @aliases [[<-,SoilProfileCollection-method, [[<-,SoilProfileCollection,ANY,ANY-method 
+#' @aliases [[<-,SoilProfileCollection-method [[<-,SoilProfileCollection,ANY,ANY-method 
 #' @docType methods
 #' @rdname doublebracket-set
 setReplaceMethod("[[", signature(x = "SoilProfileCollection",
