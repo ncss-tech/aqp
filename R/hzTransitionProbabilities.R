@@ -1,33 +1,38 @@
 # generate transition probability matrix from horizon designations
-#' Horizon Transition Probabilities
+#' @title Horizon Transition Probabilities
 #'
-#' Functions for creating and working with horizon (sequence) transition
+#' @description Functions for creating and working with horizon (sequence) transition
 #' probability matrices.
 #'
-#' See the following tutorials for some ideas: \describe{ \item{horizon
-#' designation
-#' TP}{\url{http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html}}
-#' \item{soil color
-#' TP}{\url{http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html}} }
+#' See the following tutorials for some ideas: 
+#' 
+#'   * [horizon designation TP](http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html)
+#'   * [soil color TP](http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html)
 #'
 #' @aliases hzTransitionProbabilities genhzTableToAdjMat mostLikelyHzSequence
-#' @param x A \code{SoilProfileCollection} object.
-#' @param name A horizon level attribute in \code{x} that names horizons.
+#' 
+#' @param x a `SoilProfileCollection` object.
+#' 
+#' @param name A horizon level attribute in `x` that names horizons.
+#' 
 #' @param loopTerminalStates should terminal states loop back to themselves?
+#' 
 #' This is useful when the transition probability matrix will be used to
-#' initialize a \code{markovchain} object. See examples below.
-#' @return The function \code{hzTransitionProbabilities} returns a square
-#' matrix of transition probabilities. See examples.
+#' initialize a `markovchain` object. See examples below.
+#' 
+#' @return A square matrix of transition probabilities. See examples.
 #'
-#' The function \code{genhzTableToAdjMat} returns a square adjacency matrix.
+#' The function [genhzTableToAdjMat()] returns a square adjacency matrix.
 #' See examples.
 #'
-#' The function \code{mostLikelyHzSequence} returns the most likely sequence of
-#' horizons, given a \code{markovchain} object initialized from horizon
-#' transition probabilities and an initial state, \code{t0}. See examples.
+#' The function [mostLikelyHzSequence()] returns the most likely sequence of
+#' horizons, given a `markovchain` object initialized from horizon
+#' transition probabilities and an initial state, `t0`. See examples.
+#' 
 #' @note These functions are still experimental and subject to change.
+#' 
 #' @author D.E. Beaudette
-#' @seealso \code{\link{generalize.hz}}
+#' @seealso [generalize.hz()]
 #' @keywords manip
 #' @export
 #' @examples

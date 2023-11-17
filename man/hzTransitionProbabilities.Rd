@@ -20,11 +20,12 @@ mostLikelyHzSequence(mc, t0, maxIterations = 10)
 \arguments{
 \item{tab}{table, cross-tabulation of original and generalized horizon labels e.g. \code{table(original, genhz)}}
 
-\item{x}{A \code{SoilProfileCollection} object.}
+\item{x}{a \code{SoilProfileCollection} object.}
 
 \item{name}{A horizon level attribute in \code{x} that names horizons.}
 
 \item{loopTerminalStates}{should terminal states loop back to themselves?
+
 This is useful when the transition probability matrix will be used to
 initialize a \code{markovchain} object. See examples below.}
 
@@ -35,13 +36,12 @@ initialize a \code{markovchain} object. See examples below.}
 \item{maxIterations}{Maximum number of iterations. Default: \code{10}}
 }
 \value{
-The function \code{hzTransitionProbabilities} returns a square
-matrix of transition probabilities. See examples.
+A square matrix of transition probabilities. See examples.
 
-The function \code{genhzTableToAdjMat} returns a square adjacency matrix.
+The function \code{\link[=genhzTableToAdjMat]{genhzTableToAdjMat()}} returns a square adjacency matrix.
 See examples.
 
-The function \code{mostLikelyHzSequence} returns the most likely sequence of
+The function \code{\link[=mostLikelyHzSequence]{mostLikelyHzSequence()}} returns the most likely sequence of
 horizons, given a \code{markovchain} object initialized from horizon
 transition probabilities and an initial state, \code{t0}. See examples.
 }
@@ -50,13 +50,12 @@ Convert a cross-tabulation: {original, genhz} to adjacency matrix.
 
 Functions for creating and working with horizon (sequence) transition
 probability matrices.
+
+See the following tutorials for some ideas:
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html}{horizon designation TP}
+\item \href{http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html}{soil color TP}
 }
-\details{
-See the following tutorials for some ideas: \describe{ \item{horizon
-designation
-TP}{\url{http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html}}
-\item{soil color
-TP}{\url{http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html}} }
 }
 \note{
 These functions are still experimental and subject to change.
@@ -108,7 +107,7 @@ steadyStates(mc)
 
 }
 \seealso{
-\code{\link{generalize.hz}}
+\code{\link[=generalize.hz]{generalize.hz()}}
 }
 \author{
 D.E. Beaudette

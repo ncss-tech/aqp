@@ -7,24 +7,22 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @param ssc a \code{data.frame} object with 3 columns: `sand`, `silt`, `clay` and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.
+#' @param ssc a `data.frame` object with 3 columns: 'sand', 'silt', 'clay' and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.
 #' 
-#' @param method type of simulation: `dirichlet` or `normal`. See details.
+#' @param method type of simulation: 'dirichlet' or 'normal'. See details.
 #' 
 #' @param n number of simulated compositions. See details.
 #' 
-#' @return a \code{list} containing:
+#' @return a `list` containing:
 #' 
-#' \itemize{
-#'  \item{\code{samples}} - {\code{data.frame} of simulated sand, silt, clay values}
-#'  \item{\code{mean}} - {compositional mean}
-#'  \item{\code{var}} - {compositional variance-covariance matrix}
-#'  \item{\code{D.alpha}} - {(fitted) alpha parameters of the Dirichlet distribution, \code{NULL} when \code{method = 'normal'}}
-#' }
+#'  * `samples` - `data.frame` of simulated sand, silt, clay values
+#'  * `mean` - compositional mean
+#'  * `var` - compositional variance-covariance matrix
+#'  * `D.alpha` - (fitted) alpha parameters of the Dirichlet distribution, `NULL` when `method = 'normal'`
 #' 
 #' @details Simulations from the multivariate normal distribution will more closely track the marginal distributions of sand, silt, and clay--possibly a better fit for "squished" compositions (TODO elaborate). However, these simulations can result in extreme (unlikely) estimates. 
 #' 
-#' Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in \code{ssc} (\code{n >= 30}?) for a reliable fit.
+#' Simulations from the Dirichlet distribution will usually be a better fit (fewer extreme estimates) but require a fairly large number of records in `ssc` (`n >= 30`?) for a reliable fit.
 #' 
 #' Additional examples will be added to [this tutorial](http://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html).
 #' 

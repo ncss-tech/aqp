@@ -148,15 +148,11 @@
 #' Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 #' 
 #' 
+#'  * [inspiration / calculations based on the work of Scott Burns](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf)
 #'
-#' \itemize{
-#'    \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
+#'  * [related discussion on Stack Overflow](https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630)
 #'
-#'    \item{related discussion on Stack Overflow: }{\url{https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630}}
-#'
-#'    \item{spectral library source: }{\url{https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}}
-#'
-#' }
+#'  * [spectral library source](https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt)
 #'
 #'
 #' @details

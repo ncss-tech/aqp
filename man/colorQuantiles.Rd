@@ -13,10 +13,9 @@ colorQuantiles(soilColors, p = c(0.05, 0.5, 0.95))
 }
 \value{
 A List containing the following elements:
-
 \itemize{
-\item{marginal: }{\code{data.frame} containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00}
-\item{L1: }{L1 median CIELAB (D65) values, closest Munsell chip, and dE00}
+\item \code{marginal}: \code{data.frame} containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00
+\item \code{L1}: L1 median CIELAB (D65) values, closest Munsell chip, and dE00
 }
 }
 \description{
