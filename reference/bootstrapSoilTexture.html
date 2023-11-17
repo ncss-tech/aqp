@@ -78,11 +78,11 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ssc</dt>
-<dd><p>a <code>data.frame</code> object with 3 columns: <code>sand</code>, <code>silt</code>, <code>clay</code> and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.</p></dd>
+<dd><p>a <code>data.frame</code> object with 3 columns: 'sand', 'silt', 'clay' and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>type of simulation: <code>dirichlet</code> or <code>normal</code>. See details.</p></dd>
+<dd><p>type of simulation: 'dirichlet' or 'normal'. See details.</p></dd>
 
 
 <dt>n</dt>
@@ -93,10 +93,7 @@
     <h2>Value</h2>
     
 
-<p>a <code>list</code> containing:</p>
-
-
-<ul><li><p><code>samples</code> - <code>data.frame</code> of simulated sand, silt, clay values</p></li>
+<p>a <code>list</code> containing:</p><ul><li><p><code>samples</code> - <code>data.frame</code> of simulated sand, silt, clay values</p></li>
 <li><p><code>mean</code> - compositional mean</p></li>
 <li><p><code>var</code> - compositional variance-covariance matrix</p></li>
 <li><p><code>D.alpha</code> - (fitted) alpha parameters of the Dirichlet distribution, <code>NULL</code> when <code>method = 'normal'</code></p></li>
