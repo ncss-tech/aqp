@@ -26,7 +26,7 @@ x <- structure(
   class = "data.frame", row.names = c(NA, -16L)
 )
 
-m <- rgb2munsell(x)
+m <- col2Munsell(x)
 m$label <- sprintf("%s %s/%s", m$hue, m$value, m$chroma)
 m$color <- rgb(x)
 

@@ -100,7 +100,16 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     nClosest <- 20
   }
   
-  # sacrafice to CRAN gods
+  # empty DF for NA-padding
+  .empty <- data.frame(
+    hue = NA, 
+    value = NA, 
+    chroma = NA, 
+    sigma = NA, 
+    stringsAsFactors = FALSE
+  )
+  
+  # sacrifice to CRAN gods
   munsell <- NULL
   
   # note: this is incompatible with LazyData: true
@@ -110,10 +119,27 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
   
   # col can be either character vector or numeric matrix
   
-  # convert numeric vector of colors -> sRGB -> CIELAB
+  # a vector implies that it should be a character vector
+  if(is.vector(col)) {
+    col <- as.character(col)
+  }
+  
+  # convert character vector of colors -> sRGB -> CIELAB
   if(inherits(col, 'character')) {
     
+    # generate index to NA and not-NA
+    na.idx <- which(is.na(col))
+    not.na.idx <- setdiff(1:length(col), na.idx)
+    
+    # all NA short-circuit
+    if(length(not.na.idx) < 1) {
+      res <- .empty[na.idx, ]
+      row.names(res) <- NULL
+      return(res)
+    }
+    
     # sRGB matrix [0,1]
+    # not NA-safe: NA are converted to [1,1,1]
     col <- t(col2rgb(col) / 255)
     
     # sRGB [0,1] -> CIELAB
@@ -126,6 +152,17 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
       col <- as.matrix(col)
     }
     
+    # generate index to NA and not-NA
+    na.idx <- which(apply(col, 1, function(i) any(is.na(i))))
+    not.na.idx <- setdiff(1:nrow(col), na.idx)
+    
+    # all NA short-circuit
+    if(length(not.na.idx) < 1) {
+      res <- .empty[na.idx, ]
+      row.names(res) <- NULL
+      return(res)
+    }
+    
     # interpret space argument
     space <- match.arg(space)
     
@@ -134,7 +171,8 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     if(space == 'sRGB') {
       
       # detect 0-1 vs. 0-255 sRGB range
-      if(range(col)[2] > 2) {
+      # not NA-safe
+      if(range(col[not.na.idx])[2] > 2) {
         col <- col / 255
       }
       
@@ -144,21 +182,14 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     
     # CIELAB input
     # nothing left to do
-    # if(space == 'CIELAB') {
-    #   message('no conversion required')
-    # }
   }
   
   # vectorize via for-loop
   n <- nrow(col)
   res <- vector(length = n, mode = 'list')
   
-  # accounting for the possibility of NA
-  # result should be an empty record
-  not.na.idx <- which(apply(col, 1, function(i) ! any(is.na(i))))
-  
-  
-  # iterate over colors
+  # iterate over non-NA colors
+  # this will leave NULL "gaps"
   for(i in not.na.idx) {
     # convert current color to matrix, this will allow matrix and DF as input
     this.color <- as.matrix(col[i, , drop = FALSE])
@@ -185,19 +216,11 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     
   }
   
-  # pad records with NA in the sRGB input
-  # https://github.com/ncss-tech/aqp/issues/160
-  na.idx <- which(sapply(res, is.null))
-  
-  if(length(na.idx) > 0) {
-    for(i in na.idx){
-      res[[i]] <- data.frame(
-        hue = NA, 
-        value = NA, 
-        chroma = NA, 
-        sigma = NA, 
-        stringsAsFactors = FALSE
-      )
+  # fill NULL gaps with empty DF, all NA
+  null.idx <- which(sapply(res, is.null))
+  if(length(null.idx) > 0) {
+    for(i in null.idx){
+      res[[i]] <- .empty
     }
   }
   
@@ -210,7 +233,6 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
   attr(res, which = 'sigma') <- 'CIE delta-E 2000'
   
   return(res)
-  
 }
 
 

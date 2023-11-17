@@ -46,6 +46,9 @@
 #'
 rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest = 1) {
   
+  # 2023-11-17
+  .Deprecated(new = 'col2Munsell', msg = 'please use col2Munsell() instead.')
+  
   # argument check
   colorSpace <- match.arg(colorSpace)
   

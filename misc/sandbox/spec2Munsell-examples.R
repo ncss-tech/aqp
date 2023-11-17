@@ -4,7 +4,7 @@ library(aqp)
 data("munsell.spectra.wide")
 
 # convert to closest Munsell chip
-# sRGB -> Munsell conversion via rgb2Munsell()
+# sRGB -> Munsell conversion via col2Munsell()
 spec2Munsell(munsell.spectra.wide[, '10YR 3/3'])
 
 # attempt several
@@ -64,7 +64,7 @@ spec2Munsell(res$spec)
 
 
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
-plotColorMixture(cols, swatch.cex = 5, showMixedSpec = TRUE)
+plotColorMixture(cols, swatch.cex = 1.5, showMixedSpec = TRUE)
 
 res <- mixMunsell(cols, keepMixedSpec = TRUE)
 spec2Munsell(res$spec)
@@ -74,7 +74,7 @@ mixMunsell(cols, mixingMethod = 'estimate')
 mixMunsell(cols, mixingMethod = 'reference')
 mixMunsell(cols, mixingMethod = 'exact')
 
-plotColorMixture(c('10YR 6/2', '5YR 5/6'), w = c(2,1), swatch.cex = 5, showMixedSpec = TRUE)
+plotColorMixture(c('10YR 6/2', '5YR 5/6'), w = c(2,1), swatch.cex = 1.5, showMixedSpec = TRUE)
 
 res <- mixMunsell(c('10YR 6/2', '5YR 5/6'), w = c(2,1), keepMixedSpec = TRUE)
 spec2Munsell(res$spec)
@@ -84,7 +84,7 @@ colorContrastPlot(m1 = '5Y 6/3', m2 = '7.5YR 6/4')
 
 
 cols <- c('10YR 6/2', '5YR 5/6')
-wts <- c(2,1)
+wts <- c(2, 1)
 
 mx1 <- mixMunsell(cols, w = wts, mixingMethod = 'reference')
 mx2 <- mixMunsell(cols, w = wts, mixingMethod = 'exact')
@@ -94,8 +94,8 @@ soilPalette(parseMunsell(c(cols, mx2$munsell)), lab = c(cols, mx2$munsell))
 
 colorContrastPlot(m1 = mx1$munsell, m2 = mx2$munsell, labels = c('reference', 'exact'))
 
-plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE)
-plotColorMixture(cols, w = wts, swatch.cex = 5, showMixedSpec = TRUE, mixingMethod = 'exact')
+plotColorMixture(cols, w = wts, swatch.cex = 1.5, showMixedSpec = TRUE, mixingMethod = 'reference')
+plotColorMixture(cols, w = wts, swatch.cex = 1.5, showMixedSpec = TRUE, mixingMethod = 'exact')
 
 
 
@@ -141,7 +141,7 @@ g <- make.groups(
   'not matching' = z[idx, ]
 )
 
-# dE00 is reported by rgb2Munsell()
+# dE00 is reported by col2Munsell()
 bwplot(
   which ~ sigma,
   data = g,

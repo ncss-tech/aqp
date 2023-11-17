@@ -9,9 +9,9 @@ m <- munsell2rgb(x.p$hue, x.p$value, x.p$chroma)
 m.rgb <- munsell2rgb(x.p$hue, x.p$value, x.p$chroma, return_triplets = TRUE)
 
 # sRGB --> Munsell
-x.back <- rgb2munsell(color = m.rgb, colorSpace = 'LAB', nClosest = 1)
+x.back <- col2Munsell(col = m.rgb, nClosest = 1)
 # using truncated sRGB values
-x.back.trunc <- rgb2munsell(data.frame(r = 0.36, g = 0.26, b = 0.13))
+x.back.trunc <- col2Munsell(col = data.frame(r = 0.36, g = 0.26, b = 0.13))
 
 # neutral colors map to shades of gray
 x.neutral <- parseMunsell('N 2/', return_triplets = TRUE)
@@ -133,7 +133,7 @@ test_that("non-integer value and chroma are selectively rounded", {
   
   # no rounding of 2.5 values
   res <- parseMunsell('10YR 2.5/2')
-  res.test <- rgb2munsell(t(col2rgb('#493A2BFF')/255))
+  res.test <- col2Munsell(col = '#493A2BFF')
   
   expect_true(res.test$value == 2.5)
 })
@@ -178,13 +178,32 @@ test_that("missing data", {
   )
   
   # conversion should work without error
-  res <- rgb2munsell(color)
+  res <- col2Munsell(color, space = 'sRGB')
   
   # same number of rows in / out
   expect_true(nrow(res) == nrow(color))
   
   # row order preserved
   expect_true(is.na(res$hue[1]) & is.na(res$hue[4]))
+  
+  # data with missing character representation
+  color <- c('red', NA, NA, 'blue')
+  res <- col2Munsell(color, space = 'sRGB')
+  expect_true(nrow(res) == length(color))
+  
+  
+  # all NA
+  color <- c(NA, NA, NA, NA)
+  res <- col2Munsell(color, space = 'sRGB')
+  expect_true(nrow(res) == length(color))
+  
+  color <- rbind(
+    cbind(NA, NA, NA),
+    cbind(NA, NA, NA)
+  )
+  
+  res <- col2Munsell(color, space = 'sRGB')
+  expect_true(nrow(res) == nrow(color))
   
 })
 
@@ -261,7 +280,7 @@ test_that("Munsell --> LAB + sRGB coordinates", {
 test_that("similar colors result in same, closest chip", {
   
   cols <- t(col2rgb(c('#5F5335', '#5F5236'))) / 255
-  res <-  rgb2munsell(cols)
+  res <-  col2Munsell(cols)
   
   expect_equal(res$hue[1], res$hue[2])
   expect_equal(res$value[1], res$value[2])
