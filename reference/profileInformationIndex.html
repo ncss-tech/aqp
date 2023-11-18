@@ -78,8 +78,8 @@
 <span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"joint"</span>, <span class="st">"individual"</span><span class="op">)</span>,</span>
 <span>  baseline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  numericDigits <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  removeNA <span class="op">=</span> <span class="op">!</span><span class="va">padNA</span>,</span>
 <span>  padNA <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  scaleNumeric <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  compression <span class="op">=</span> <span class="st">"gzip"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -106,12 +106,12 @@
 <dd><p>integer, number of significant digits to retain in numeric -&gt; character conversion</p></dd>
 
 
-<dt>removeNA</dt>
-<dd><p>remove NA before compression</p></dd>
-
-
 <dt>padNA</dt>
-<dd><p>pad all profiles with NA to deepest lower depth in <code>x</code> (<code>max(x)</code>)</p></dd>
+<dd><p>logical, pad depths to <code>max(x)</code>, supplied to <code>dice(fill = padNA)</code></p></dd>
+
+
+<dt>scaleNumeric</dt>
+<dd><p>logical, <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> each numeric variable, causing "profile information" to vary based on other profiles in the collection</p></dd>
 
 
 <dt>compression</dt>
