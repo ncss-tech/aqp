@@ -1,7 +1,7 @@
 
 #' @title sRGB to Munsell Color Conversion
 #' 
-#' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the `munsell` lookup table. This function will be replaced by `col2Munsell()` in future versions of aqp.
+#' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the `munsell` lookup table. This function will be replaced by `col2Munsell()` in **aqp 2.1**.
 #'  
 #'
 #' @param color a `data.frame` or `matrix` object containing sRGB coordinates in the range of (0,1)
@@ -46,8 +46,10 @@
 #'
 rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest = 1) {
   
-  # 2023-11-17
-  .Deprecated(new = 'col2Munsell', msg = 'please use col2Munsell() instead.')
+  ## !! will deprecate in aqp 2.1
+  # .Deprecated(new = 'col2Munsell', msg = 'please use col2Munsell() instead.')
+  message('rgb2munsell() will be deprecated in aqp 2.1, please use col2Munsell() instead.')
+  
   
   # argument check
   colorSpace <- match.arg(colorSpace)
