@@ -1,4 +1,4 @@
-# generate transition probability matrix from horizon designations
+
 #' @title Horizon Transition Probabilities
 #'
 #' @description Functions for creating and working with horizon (sequence) transition
@@ -9,7 +9,7 @@
 #'   * [horizon designation TP](http://ncss-tech.github.io/AQP/aqp/hz-transition-probabilities.html)
 #'   * [soil color TP](http://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html)
 #'
-#' @aliases hzTransitionProbabilities genhzTableToAdjMat mostLikelyHzSequence
+#' @aliases hzTransitionProbabilities mostLikelyHzSequence
 #' 
 #' @param x a `SoilProfileCollection` object.
 #' 

@@ -170,9 +170,9 @@ setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, ne
 #' @description Convert a cross-tabulation: {original, genhz} to adjacency matrix.
 #' 
 #' @param tab table, cross-tabulation of original and generalized horizon labels e.g. `table(original, genhz)`
-#'
+#' @return adjacency matrix
+#' @author D.E. Beaudette
 #' @export
-#' @rdname hzTransitionProbabilities
 genhzTableToAdjMat <- function(tab) {
   tab <- as.matrix(tab)
   # extract unique set of names
