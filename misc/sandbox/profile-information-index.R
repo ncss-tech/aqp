@@ -30,6 +30,18 @@ aqp:::.prepareVector(1:10, d = 4)
 aqp:::.prepareVariable(1:10, numericDigits = 4)
 aqp:::.prepareVariable(c('A', 'A', 'A', 'B', 'C'), numericDigits = 4)
 
+# empty strings should always be 0
+# adjusted for each compression type
+aqp:::.compressedLength('', m = 'gzip')
+aqp:::.compressedLength('', m = 'bzip2')
+aqp:::.compressedLength('', m = 'xz')
+
+# compression types
+aqp:::.compressedLength(rep(letters, 100), m = 'gzip')
+aqp:::.compressedLength(rep(letters, 100), m = 'bzip2')
+aqp:::.compressedLength(rep(letters, 100), m = 'xz')
+
+
 # note usage
 aqp:::.compressedLength(1:10)
 aqp:::.compressedLength(aqp:::.prepareVector(1:10))
@@ -180,8 +192,8 @@ z <- combine(z, a, b)
 
 
 vars <- c('p', 'name')
-pi <- profileInformationIndex(z, vars = vars, method = 'j')
-pi.b <- profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
+pi <- profileInformationIndex(z, vars = vars, method = 'j', compression = 'gzip')
+pi.b <- profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE, compression = 'gzip')
 
 
 # visual check
@@ -200,8 +212,14 @@ mtext('Profile Complexity Ratio', side = 1, line = -0.5)
 
 
 # effect of aggregation function
-profileInformationIndex(z, vars = vars, method = 'i', baseline = TRUE)
-profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
+profileInformationIndex(z, vars = vars, method = 'i', baseline = FALSE)
+profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE)
+
+# effect of compression
+profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE, compression = 'gzip')
+profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE, compression = 'bzip2')
+profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE, compression = 'xz')
+profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE, compression = 'none')
 
 # effect of baseline
 profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
@@ -275,14 +293,14 @@ x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = FALSE')
+title('Profile Information Index (bytes)')
 
 
 x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE')
+title('Profile Complexity Ratio')
 
 
 

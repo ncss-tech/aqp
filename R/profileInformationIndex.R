@@ -93,8 +93,14 @@
   # length of compressed vector is the metric
   res <- length(memCompress(x, type = m))
   
-  # length of empty string ('') is 8 bits
-  res <- res - 8
+  # remove length of empty string ('')
+  res <- res - switch(
+    m,
+    'gzip' = 8, 
+    'bzip2' = 14,
+    'xz' = 32,
+    'none' = 0
+  )
   
   return(res)
 }
