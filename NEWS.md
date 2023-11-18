@@ -1,5 +1,6 @@
 # aqp 2.0.2 (2023-11-18)
  * CRAN release
+ * bug fix / enhancements in `evalMissingData()`
  * new function `col2Munsell()` generalizes and replaces `rgb2munsell()` (thanks Shawn Salley for the suggestion)
    - `rgb2munsell()` will be deprecated in aqp 2.1 
  * new function `warpHorizons()` for warping horizon thickness (inflate/deflate) (thanks Shawn Salley for idea / inspiration)
