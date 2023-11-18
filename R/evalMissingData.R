@@ -176,17 +176,23 @@
 
 
 evalMissingData <- function(x, vars, name = hzdesgnname(x), p = 'Cr|R|Cd', method = c('relative', 'absolute', 'horizon')) {
-  # sanity check
+  # sanity checks
   method <- match.arg(method)
-
-  hn <- horizonNames(x)
-  sdv <- setdiff(vars, hn)
 
   # check for missing horizon name
   if(name == '') {
     stop('horizon name not set, specify with `name` argument or set with `hzdesgnname()`', call. = FALSE)
   }
   
+  # warn about empty pattern
+  if(p == '') {
+    warning('an empty pattern `p` will ignore all horizons')
+  }
+  
+  # extract pieces
+  hn <- horizonNames(x)
+  sdv <- setdiff(vars, hn)
+
   # check for bad horizon name
   if(! name %in% hn) {
     stop(sprintf('`%s` not a horizon level attribute', name), call. = FALSE)
