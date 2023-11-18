@@ -27,8 +27,8 @@ length(memCompress(a, type = 'gzip')) / length(memCompress(b, type = 'gzip'))
 
 
 aqp:::.prepareVector(1:10, d = 4)
-aqp:::.prepareVariable(1:10, numericDigits = 4, removeNA = FALSE)
-aqp:::.prepareVariable(c('A', 'A', 'A', 'B', 'C'), numericDigits = 4, removeNA = FALSE)
+aqp:::.prepareVariable(1:10, numericDigits = 4)
+aqp:::.prepareVariable(c('A', 'A', 'A', 'B', 'C'), numericDigits = 4)
 
 # note usage
 aqp:::.compressedLength(1:10)
@@ -43,6 +43,11 @@ aqp:::.compressedLength(letters)
 aqp:::.compressedLength('A')
 aqp:::.compressedLength(factor('A'))
 
+
+# NA should not "add" information
+aqp:::.compressedLength(c('A', 'B', NA))
+aqp:::.compressedLength(c('A', 'B', 'C'))
+aqp:::.compressedLength(NA)
 
 aqp:::.compressedLength(0)
 aqp:::.compressedLength(1000)
@@ -137,7 +142,7 @@ p2 <- data.frame(
 p3 <- data.frame(
   id = 3, top = c(0, 10, 20, 30, 40, 50),
   bottom = c(10, 20, 30, 40, 50, 100),
-  p = c(1, 5, 10, 35, 6, 2),
+  p = c(5, 8, 10, 35, 6, 2),
   name = c('A1', 'A2', 'Bw', 'Bt1', 'Bt2', 'C')
 )
 
@@ -145,7 +150,7 @@ p3 <- data.frame(
 p4 <- data.frame(
   id = 4, top = c(0, 10, 20, 30, 40, 50),
   bottom = c(10, 20, 30, 40, 50, 100),
-  p = c(1, NA, NA, NA, NA, NA),
+  p = c(5, NA, NA, NA, NA, NA),
   name = c('A1', 'A2', 'Bw', 'Bt1', 'Bt2', 'C')
 )
 
@@ -194,7 +199,6 @@ mtext('Profile Complexity Ratio', side = 1, line = -0.5)
 
 
 
-
 # effect of aggregation function
 profileInformationIndex(z, vars = vars, method = 'i', baseline = TRUE)
 profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
@@ -203,14 +207,11 @@ profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
 profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE)
 profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE)
 
-# effect of removing NA
-profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE, removeNA = TRUE, padNA = FALSE)
-profileInformationIndex(z, vars = vars, method = 'j', baseline = FALSE, removeNA = FALSE, padNA = FALSE)
+# effect of padding depths, only when vars includes top/bottom
+profileInformationIndex(z, vars = c(vars, 'top'), method = 'j', baseline = FALSE, padNA = TRUE)
+profileInformationIndex(z, vars = c(vars, 'top'), method = 'j', baseline = FALSE, padNA = FALSE)
 
-
-profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE, padNA = TRUE, removeNA = FALSE)
-profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE, padNA = FALSE, removeNA = FALSE)
-
+# effect of number digits in character representation
 profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE, numericDigits = 1)
 profileInformationIndex(z, vars = vars, method = 'j', baseline = TRUE, numericDigits = 10)
 
@@ -265,31 +266,23 @@ x <- fetchOSD(s)
 
 # vars <- c('hue', 'value', 'chroma', 'texture_class', 'cf_class', 'pH', 'pH_class', 'distinctness', 'topography')
 
+
 par(mar = c(3, 0, 1, 2), mfrow = c(2, 1))
 
 vars <- c('hue', 'value', 'chroma', 'hzname')
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = TRUE, removeNA = FALSE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE, removeNA = FALSE, padNA = TRUE')
+title('baseline = FALSE')
 
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = FALSE, removeNA = TRUE)
-
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE, removeNA = TRUE, padNA = FALSE')
-
-
-
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = FALSE, removeNA = TRUE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = FALSE, removeNA = FALSE, padNA = FALSE')
-
+title('baseline = TRUE')
 
 
 
@@ -300,69 +293,65 @@ par(mar = c(3, 0, 1, 2), mfrow = c(2, 1))
 
 vars <- c('hue', 'value', 'chroma', 'hzname')
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = FALSE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('method = j, baseline = FALSE, padNA = FALSE', cex.main = 1)
+title('method = j, baseline = FALSE', cex.main = 1)
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = FALSE, padNA = FALSE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = FALSE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('method = i, baseline = FALSE, padNA = FALSE', cex.main = 1)
+title('method = i, baseline = FALSE', cex.main = 1)
 
 
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE)
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = TRUE, removeNA = FALSE)
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
+title('method = j, baseline = TRUE', cex.main = 1)
+
+x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = TRUE)
+
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
+title('method = i, baseline = TRUE', cex.main = 1)
+
+
+# add top depth to test padNA = TRUE
+vars <- c('hue', 'value', 'chroma', 'hzname', 'top')
+
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = TRUE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('method = j, baseline = FALSE, padNA = TRUE', cex.main = 1)
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = FALSE, padNA = TRUE, removeNA = FALSE)
+x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = FALSE, padNA = TRUE)
 
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
 axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
 title('method = i, baseline = FALSE, padNA = TRUE', cex.main = 1)
 
+
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE, padNA = TRUE)
+
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
+title('method = j, baseline = TRUE, padNA = TRUE', cex.main = 1)
+
+x$pi <- profileInformationIndex(x, vars = vars, method = 'i', baseline = TRUE, padNA = TRUE)
+
+plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE, max.depth = 200)
+axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
+title('method = i, baseline = TRUE, padNA = TRUE', cex.main = 1)
+
+
 dev.off()
 
 
 
-
-
-
-x$pi <- profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'median')
-
-par(mar = c(3, 0, 1, 2))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE, method = median')
-
-
-x$pi <- profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'sum')
-
-par(mar = c(3, 0, 1, 2))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = FALSE, method = sum')
-
-
-x$pi <- profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'sum')
-
-par(mar = c(3, 0, 1, 2))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE, method = sum')
-
-
-x$pi <- profileInformationIndex(x, vars = 'hue', baseline = TRUE, method = 'sum')
-
-par(mar = c(3, 0, 1, 2))
-plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
-axis(side = 1, at = 1:length(x), labels = format(x$pi, digits = 3)[order(x$pi)], cex.axis = 0.75, las = 1)
-title('baseline = TRUE, method = sum')
 
 
 
@@ -375,7 +364,7 @@ x$A <- .lab[, 2]
 x$B <- .lab[, 3]
 
 
-x$pi <- profileInformationIndex(x, vars = c('L', 'A', 'B'), baseline = FALSE, method = 'j', padNA = FALSE, removeNA = TRUE)
+x$pi <- profileInformationIndex(x, vars = c('L', 'A', 'B'), baseline = FALSE, method = 'j')
 
 par(mar = c(3, 0, 1, 2), mfrow = c(1,1))
 plotSPC(x, width = 0.3, name.style = 'center-center', plot.order = order(x$pi), cex.names = 0.66, shrink = TRUE)
@@ -420,10 +409,10 @@ vars <- c('hzname', 'hue', 'value', 'chroma', 'texture_class')
 
 
 z <- data.frame(
-  baseline.joint = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'j', padNA = FALSE, removeNA = TRUE),
-  baseline.individual = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'i', padNA = FALSE, removeNA = TRUE),
-  joint = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'j', padNA = FALSE, removeNA = TRUE),
-  individual = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'i', padNA = FALSE, removeNA = TRUE)
+  baseline.joint = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'j', padNA = FALSE),
+  baseline.individual = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'i', padNA = FALSE),
+  joint = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'j', padNA = FALSE),
+  individual = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'i', padNA = FALSE)
 )
 
 cor(z)
@@ -434,11 +423,21 @@ cor(z)
 hexplom(z, par.settings = tactile.theme(axis.text = list(cex = 0.66)), trans = log, inv = exp, xbins = 30, colramp = .cp, colorkey = FALSE, varname.cex = 0.75, varname.font = 2, main = 'Profile Information Index', xlab = '')
 
 
+## interesting... very little difference between joint vs. individual
+
+
 plot(joint ~ individual, data = z, las = 1)
 plot(baseline.joint ~ baseline.individual, data = z, las = 1)
 hexbinplot(baseline.joint ~ joint, data = z, par.settings = tactile.theme(), trans = log, inv = exp, xbins = 30, colramp = .cp, colorkey = FALSE, varname.cex = 0.75, varname.font = 2, main = 'Profile Information Index')
 
-x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = TRUE, padNA = FALSE, removeNA = TRUE)
+
+## Profile Complexity Ratio (baseline = TRUE): less influenced by number of horizons
+## --> cor ~ 0.44
+
+## Profile Complexity Index (baseline = FALSE): more influenced by number of horizons 
+## --> cor ~ 0.71
+
+x$pi <- profileInformationIndex(x, vars = vars, method = 'j', baseline = FALSE, padNA = FALSE)
 x$nhz <- profileApply(x, FUN = nrow, simplify = TRUE)
 
 x$greatgroup <- factor(x$greatgroup, levels = c('palexeralfs', 'haploxeralfs', 'haploxerepts', 'xerorthents', 'haploxererts', 'endoaquolls'))
@@ -504,7 +503,9 @@ site(z2)$g <- 'RW'
 
 z <- combine(z1, z2)
 
-z$pi <- profileInformationIndex(z, vars = c('p1', 'p2', 'p3'), method = 'j', baseline = FALSE, padNA = FALSE, removeNA = TRUE)
+## important: scales may be very different, scale() -> compress
+
+z$pi <- profileInformationIndex(z, vars = c('p1', 'p2', 'p3'), method = 'j', scaleNumeric = TRUE)
 z$nhz <- profileApply(z, FUN = nrow, simplify = TRUE)
 
 z$g <- factor(z$g)
@@ -514,6 +515,13 @@ z$nhz
 
 par(mar = c(0, 0, 3, 2))
 groupedProfilePlot(z, groups = 'g', color = 'p1')
+
+lsp <- get('last_spc_plot', envir = aqp.env)
+
+o <- lsp$plot.order
+.b <- z[, , .LAST, .BOTTOM]
+
+text(x = o, y = .b, labels = z$pi, cex = 0.66, pos = 1)
 
 
 bwplot(g ~ pi, data = site(z))
@@ -540,54 +548,16 @@ z1 <- lapply(
 z1 <- combine(z1)
 # z1 <- trunc(z1, 0, min(z1))
 
-z1$pi <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', baseline = TRUE, padNA = FALSE, removeNA = TRUE)
+z1$pi <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', scale = TRUE, baseline = TRUE, padNA = FALSE)
 
 par(mar = c(3, 0, 0, 2))
 plotSPC(z1, color = 'p1', plot.order = order(z1$pi), print.id = FALSE, width = 0.35, divide.hz = FALSE)
 axis(side = 1, at = 1:length(z1), labels = format(z1$pi[order(z1$pi)], digits = 3), cex.axis = 0.66)
 
 
-# simulate three profiles of increasing complexity
-p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5)
-p2 <- data.frame(id = 2, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = rep(5, times = 6))
-p3 <- data.frame(id = 3, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = c(1, 5, 10, 3, 6, 2))
+z1$pi <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', scale = TRUE, baseline = FALSE, padNA = FALSE)
 
-# combine and upgrade to SPC
-z <- rbind(p1, p2, p3)
-depths(z) <- id ~ top + bottom
-
-# visual check
-plotSPC(z, color = 'p')
-
-# compute information index several ways
-profileInformationIndex(z, vars = c('p'), method = 'sum')
-profileInformationIndex(z, vars = c('p'), method = 'mean')
-
-profileInformationIndex(z, vars = c('p'), method = 'mean', baseline = FALSE)
-profileInformationIndex(z, vars = c('p'), method = 'sum', baseline = FALSE)
-
-
-
-## ... need to resolve this
-# effect of profile depth
-p1 <- data.frame(id = 1, top = 0, bottom = 75, p = 5)
-p2 <- data.frame(id = 2, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 100), p = rep(5, times = 6))
-p3 <- data.frame(id = 3, top = c(0, 10, 20, 30, 40, 50), bottom = c(10, 20, 30, 40, 50, 150), p = c(1, 5, 10, 3, 6, 2))
-
-# combine and upgrade to SPC
-z <- rbind(p1, p2, p3)
-depths(z) <- id ~ top + bottom
-
-# visual check
-plotSPC(z, color = 'p')
-
-# compute information index several ways
-profileInformationIndex(z, vars = c('p'), method = 'sum')
-profileInformationIndex(z, vars = c('p'), method = 'mean')
-
-profileInformationIndex(z, vars = c('p'), method = 'mean', baseline = FALSE)
-profileInformationIndex(z, vars = c('p'), method = 'sum', baseline = FALSE)
-
-
-
+par(mar = c(3, 0, 0, 2))
+plotSPC(z1, color = 'p1', plot.order = order(z1$pi), print.id = FALSE, width = 0.35, divide.hz = FALSE)
+axis(side = 1, at = 1:length(z1), labels = format(z1$pi[order(z1$pi)], digits = 3), cex.axis = 0.66)
 
