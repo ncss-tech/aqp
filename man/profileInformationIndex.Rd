@@ -10,8 +10,8 @@ profileInformationIndex(
   method = c("joint", "individual"),
   baseline = FALSE,
   numericDigits = 8,
-  removeNA = !padNA,
   padNA = FALSE,
+  scaleNumeric = FALSE,
   compression = "gzip"
 )
 }
@@ -26,9 +26,9 @@ profileInformationIndex(
 
 \item{numericDigits}{integer, number of significant digits to retain in numeric -> character conversion}
 
-\item{removeNA}{remove NA before compression}
+\item{padNA}{logical, pad depths to \code{max(x)}, supplied to \code{dice(fill = padNA)}}
 
-\item{padNA}{pad all profiles with NA to deepest lower depth in \code{x} (\code{max(x)})}
+\item{scaleNumeric}{logical, \code{scale()} each numeric variable, causing "profile information" to vary based on other profiles in the collection}
 
 \item{compression}{character, compression method as used by \code{\link[=memCompress]{memCompress()}}: 'gzip', 'bzip2', 'xz', 'none'}
 }
