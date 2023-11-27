@@ -10,10 +10,10 @@ genhzTableToAdjMat(tab)
 \item{tab}{table, cross-tabulation of original and generalized horizon labels e.g. \code{table(original, genhz)}}
 }
 \value{
-adjacency matrix
+matrix of numeric values
 }
 \description{
-Convert a cross-tabulation: {original, genhz} to adjacency matrix.
+Convert a cross-tabulation of e.g. original horizon designations vs. generalized horizon labels to adjacency matrix form.
 }
 \author{
 D.E. Beaudette

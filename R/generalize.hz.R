@@ -167,10 +167,10 @@ setMethod("generalizeHz", signature(x = "SoilProfileCollection"), function(x, ne
 })
 
 #' @title Convert cross-tabulation to adjacency matrix.
-#' @description Convert a cross-tabulation: {original, genhz} to adjacency matrix.
+#' @description Convert a cross-tabulation of e.g. original horizon designations vs. generalized horizon labels to adjacency matrix form.
 #' 
 #' @param tab table, cross-tabulation of original and generalized horizon labels e.g. `table(original, genhz)`
-#' @return adjacency matrix
+#' @return matrix of numeric values
 #' @author D.E. Beaudette
 #' @export
 genhzTableToAdjMat <- function(tab) {
@@ -178,7 +178,7 @@ genhzTableToAdjMat <- function(tab) {
   # extract unique set of names
   nm <- sort(unique(unlist(dimnames(tab))))
   # generate full matrix with named dimensions
-  m <- matrix(nrow=length(nm), ncol=length(nm), data=0)
+  m <- matrix(nrow = length(nm), ncol = length(nm), data = 0)
   dimnames(m) <- list(nm, nm)
   # set adjacency information via sub-matrix containing the original cross-tab
   m[rownames(tab), colnames(tab)] <- tab
