@@ -48,7 +48,7 @@
 #' hzdesgnname(d) <- 'name'
 #' 
 #' # visual check
-#' par(mar = c(0, 0, 0, 1))
+#' par(mar = c(0, 0, 0, 2))
 #' plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1, width = 0.1)
 #' 
 #' # top of the first Cd
