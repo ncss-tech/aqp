@@ -42,6 +42,7 @@ The `replace_na` and `add_soil_flag` arguments to `profile_compare()` are not pr
  * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive color mixtures
  * `gower` package moved to SUGGESTS
  * `plotColorMixture()` now using grid graphics functions to determine color swatch geometry and setting overlap detection threshold
+ * Planned deprecation of `rgb2munsell()`, use `col2Munsell()` instead
  * Removal of `PMS2Munsell()` and support data
  * Deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * Removal of `rruff.sample` example XRD patterns
