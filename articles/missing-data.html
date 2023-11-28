@@ -181,7 +181,11 @@
 <span>  side <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="../reference/length.html">length</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span>, </span>
 <span>  labels <span class="op">=</span> <span class="va">jacobs2000</span><span class="op">$</span><span class="va">data.complete.abs</span><span class="op">[</span><span class="va">new.order</span><span class="op">]</span>,</span>
 <span>  line <span class="op">=</span> <span class="fl">2.5</span>, cex.axis<span class="op">=</span><span class="fl">0.75</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># label axes</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'Relative\nCompleteness'</span>, side <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="fl">0.25</span>, line <span class="op">=</span> <span class="fl">0.25</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'Absolute\nCompleteness (cm)'</span>, side <span class="op">=</span> <span class="fl">1</span>, at <span class="op">=</span> <span class="fl">0.25</span>, line <span class="op">=</span> <span class="fl">2.75</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
 <p><img src="missing-data_files/figure-html/unnamed-chunk-2-5.png" width="768" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://ncss-tech.github.io/soilDB/reference/fetchKSSL.html" class="external-link">fetchKSSL</a></span><span class="op">(</span>series <span class="op">=</span> <span class="st">'pierre'</span><span class="op">)</span></span>
