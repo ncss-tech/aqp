@@ -7,8 +7,7 @@
 #' @description Soil color is typically described at dry and moist conditions. This function attempts to estimate soil color at dry or moist condition when one is missing. Estimation proceeds as:
 #'   * convert Munsell notation to CIELAB color coordinates via `munsell2rgb()`
 #'   * apply scaling, rotation, and translation parameters in CIELAB color space
-#'   * convert CIELAB to sRGB coordinates
-#'   * locate closest Munsell chip to sRGB coordinates via `col2munsell()`
+#'   * locate closest Munsell chip to CIELAB coordinates via `col2munsell()`
 #'   
 #' Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.
 #' 
