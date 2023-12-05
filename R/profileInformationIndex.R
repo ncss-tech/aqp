@@ -323,31 +323,54 @@ profileInformationIndex <- function(x, vars, method = c('joint', 'individual'), 
   }
   
   
-  ## TODO: this will error / drop profiles in the presence of bad horizonation
+  ## note: this will error / drop profiles in the presence of bad horizonation
   
-  # dice() to 1cm intervals for common baseline
+  ## dice() to 1cm intervals for common baseline
   #  -> 10 horizons of the same data NOT more informative than 1 horizon 
   #  -> causes data corruption when bad hz depths present (lots of messages)
   x <- dice(x, fill = padNA)
   
-  ## TODO: convert to data.table
-  # SPC = FALSE
-  # data.table()
-  # dt[, ]
-  # as.vector()
-  
-  # iterate over profiles
+  ## iterate over profiles
   # result is a vector suitable for site-level attribute
-  res <- profileApply(
-    x, 
-    simplify = TRUE, 
-    FUN = .PII_by_profile, 
-    vars = vars, 
-    baseline = baseline, 
-    method = method,
-    numericDigits = numericDigits, 
-    compression = compression
-  )
+  
+  ## slow / but simple to understand and test
+  # res <- profileApply(
+  #   x,
+  #   simplify = TRUE,
+  #   FUN = .PII_by_profile,
+  #   vars = vars,
+  #   baseline = baseline,
+  #   method = method,
+  #   numericDigits = numericDigits,
+  #   compression = compression
+  # )
+  # return(res)
+  
+  ## fast via data.table
+  .idn <- idname(x)
+  .pIDs <- profile_id(x)
+  
+  # result is data.table: id + PII
+  # work on horizon data as data.frame
+  x <- data.table(horizons(x))
+  res <- x[ , 
+            .PII_by_profile(
+              x = .SD, 
+              vars = vars, 
+              baseline = baseline, 
+              method = method, 
+              numericDigits = numericDigits, 
+              compression = compression
+            ), 
+            by = .idn
+  ]
+  
+  # double check order is preserved
+  stopifnot(all(res$id == .pIDs))
+  
+  # down-grade data.table to named numeric vector
+  res <- as.vector(res$V1)
+  names(res) <- .pIDs
   
   # done
   return(res)

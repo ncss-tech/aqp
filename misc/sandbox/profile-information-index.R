@@ -86,7 +86,7 @@ y <- cbind(
   runif(n, min = min(x), max = max(x)), 
   runif(n, min = min(x), max = max(x)),
   runif(n, min = min(x), max = max(x))
-  )
+)
 cor(y)
 
 .cols <- hcl.colors(n = 100, palette = 'zissou 1')
@@ -425,12 +425,15 @@ x <- combine(x)
 
 vars <- c('hzname', 'hue', 'value', 'chroma', 'texture_class')
 
-
-z <- data.frame(
-  baseline.joint = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'j', padNA = FALSE),
-  baseline.individual = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'i', padNA = FALSE),
-  joint = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'j', padNA = FALSE),
-  individual = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'i', padNA = FALSE)
+# data.table: 44 seconds
+# profileApply:
+system.time(
+  z <- data.frame(
+    baseline.joint = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'j', padNA = FALSE),
+    baseline.individual = profileInformationIndex(x, vars = vars, baseline = TRUE, method = 'i', padNA = FALSE),
+    joint = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'j', padNA = FALSE),
+    individual = profileInformationIndex(x, vars = vars, baseline = FALSE, method = 'i', padNA = FALSE)
+  )
 )
 
 cor(z)
@@ -502,7 +505,7 @@ ggplot(site(x), aes(x = pi, y = greatgroup)) +
   stat_summary(geom = 'point', fun = median, shape = 21, fill = 'black', col = 'white', cex = 3) +
   scale_color_brewer() + 
   scale_x_continuous(n.breaks = 16) +
-  xlab('Profile Information Index') + ylab('') +
+  xlab('Profile Information Index (bytes)') + ylab('') +
   labs(title = 'Profile Information Index for Select Greatgroup Taxa', color = 'Interval')
 
 
@@ -578,4 +581,38 @@ z1$pi <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', s
 par(mar = c(3, 0, 0, 2))
 plotSPC(z1, color = 'p1', plot.order = order(z1$pi), print.id = FALSE, width = 0.35, divide.hz = FALSE)
 axis(side = 1, at = 1:length(z1), labels = format(z1$pi[order(z1$pi)], digits = 3), cex.axis = 0.66)
+
+
+
+z1 <- lapply(
+  1:10000, 
+  random_profile, 
+  n = 5, 
+  exact = TRUE, 
+  n_prop = 3, 
+  SPC = TRUE, 
+  method = 'LPP', 
+  lpp.a = 5, 
+  lpp.b = 10, 
+  lpp.d = 5, 
+  lpp.e = 5, 
+  lpp.u = 25, 
+  min_thick = 2, 
+  max_thick = 50
+)
+
+z1 <- combine(z1)
+
+# 1k  : 4.6 seconds
+# 10k : 55 seconds
+system.time(
+  old <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', scale = TRUE, baseline = TRUE, padNA = FALSE)
+)
+
+# 1k  : 1.56 seconds
+# 10k : 18 seconds
+system.time(
+  new <- profileInformationIndex(z1, vars = c('p1', 'p2', 'p3'), method = 'j', scale = TRUE, baseline = TRUE, padNA = FALSE)
+)
+
 

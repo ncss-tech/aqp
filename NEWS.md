@@ -1,3 +1,6 @@
+# aqp 2.0.3 (2023-12-05)
+ * performance improvements in `profileInformationIndex()`
+
 # aqp 2.0.2 (2023-11-18)
  * CRAN release
  * bug fix / enhancements in `evalMissingData()`
