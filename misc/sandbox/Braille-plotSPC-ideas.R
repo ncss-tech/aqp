@@ -24,7 +24,7 @@ SoilTaxonomyDendrogram(h, y.offset = 0.325, name = 'newname', width = 0.3, cex.t
 
 
 
-font_add('BRAILLE1', regular = 'E:/working-from-home-to-file/SPC-visually-impaired/BRAILLE1.ttf')
+font_add('BRAILLE1', regular = 'S:/NRCS/Archive_Dylan_Beaudette/AQP-related/SPC-visually-impaired/BRAILLE1.ttf')
 
 showtext_auto()
 
@@ -38,6 +38,6 @@ par(mar = c(0, 0, 0, 0), family = 'BRAILLE1')
 # SoilTaxonomyDendrogram(h, y.offset = 0.325, name = 'newname', width = 0.3, cex.taxon.labels = 0.55, name.style = 'center-center', hz.depths =  TRUE, plot.depth.axis = FALSE, cex.id = 0.66, cex.names = 0.55)
 
 # plot profiles
-plotSPC(h, width = 0.3, name.style = 'center-center', hz.depths =  TRUE, plot.depth.axis = FALSE, cex.id = 0.66, cex.names = 0.55, color = NA)
+plotSPC(h, width = 0.3, name.style = 'center-center', hz.depths =  TRUE, depth.axis = FALSE, cex.id = 0.66, cex.names = 0.55, color = NA)
 
 dev.off()
