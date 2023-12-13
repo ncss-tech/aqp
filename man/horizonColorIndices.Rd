@@ -34,15 +34,19 @@ depths(sp1) <- id ~ top + bottom
 # move site data
 site(sp1) <- ~ group
 
+# use Munsell color notation as horizon name
+sp1$m <- sprintf("\%s \%s/\%s", sp1$hue, sp1$value, sp1$chroma)
+
 # compute indices
 # merged into `sp1` with left-join on hzidname(sp1)
 horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
 
 # visualize
-par(mar=c(0, 1, 3, 1))
-plot(sp1, color='hurst_redness')
-plot(sp1, color='barron_torrent_redness')
-plot(sp1, color='buntley_westin')
+par(mar = c(0, 1, 3, 1))
+plotSPC(sp1, color='hurst_redness', name = 'm')
+plotSPC(sp1, color='barron_torrent_redness', name = 'm')
+plotSPC(sp1, color='buntley_westin', name = 'm')
+
 }
 \seealso{
 \code{\link{hurst.redness}} \code{\link{barron.torrent.redness.LAB}} \code{\link{buntley.westin.index}}
