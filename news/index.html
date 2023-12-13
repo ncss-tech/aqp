@@ -399,7 +399,7 @@
 </ul></li>
 <li>new function <code>bootstrapSoilTexture</code> for simulating realistic sand/silt/clay compositions</li>
 <li>
-<code>combine</code> replaces/expands <code><a href="https://Rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">base::union</a></code>
+<code>combine</code> replaces/expands <code><a href="https://rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">base::union</a></code>
 </li>
 <li>
 <code>split</code> receives some upgrades to the S4 definition to increase parity with <code>split.default</code>
@@ -431,7 +431,7 @@
 <code>depths&lt;-</code> has been optimized and minimally validates input data</li>
 <li>default horizon ID (<code>hzID</code>) is now a <code>character</code> data type</li>
 <li>
-<code><a href="https://Rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
+<code><a href="https://rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
 <li>new experimental method is <code>permute_profile</code>; similar to <code>sim</code> but for boundaries. The interface to this function is likely to change/be expanded.</li>
 <li>added <code>segment</code> c/o <a href="https://github.com/smroecker" class="external-link">@smroecker</a></li>
 <li>fix for unit-length and zero-length legends in <code>plotSPC</code>
