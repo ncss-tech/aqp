@@ -1,5 +1,6 @@
-# aqp 2.0.3 (2023-12-05)
+# aqp 2.0.3 (2023-12-19)
  * performance improvements in `profileInformationIndex()`
+ * aesthetic improvements in `huePositionCircle()`
 
 # aqp 2.0.2 (2023-11-18)
  * CRAN release
