@@ -2,7 +2,7 @@
 % Please edit documentation in R/checkSPC.R
 \name{checkSPC}
 \alias{checkSPC}
-\title{Test for a valid SoilProfileCollection}
+\title{Test for a valid \code{SoilProfileCollection}}
 \usage{
 checkSPC(x)
 }
@@ -13,7 +13,7 @@ checkSPC(x)
 TRUE or FALSE. Consider using \code{rebuildSPC()} if FALSE.
 }
 \description{
-Test for a valid SoilProfileCollection
+Test for a valid \code{SoilProfileCollection}
 }
 \details{
 Test for valid \code{SoilProfileCollection} by checking for slots defined in

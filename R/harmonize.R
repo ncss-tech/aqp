@@ -29,16 +29,16 @@
 #' ### single source "harmonization" of single-profile with range -> single attribute, multi-profile
 #'
 #' # make some test data
-#' spc <- pbindlist(lapply(1:10, random_profile, SPC = TRUE))
+#' spc <- combine(lapply(1:10, random_profile, SPC = TRUE))
 #'
 #' # assume that p1, p2 and p3 are the low RV and high quantiles for a hypothetical property "foo"
 #' h1 <- harmonize(spc, x.names = list(foo = c(q05 = "p1", q50 = "p2", q95 = "p3")))
 #'
 #' # inspect result
-#' plot(h1, color = "foo")
+#' plotSPC(h1, color = "foo")
 #'
 #' # filter with calculated "harmonized group" to get just RV profiles
-#' plot(subset(h1, hgroup == "q50"), color="foo")
+#' plotSPC(subset(h1, hgroup == "q50"), color="foo")
 #'
 #' ### single source, two properties at once; with common labels: "method1" "method2"
 #'
@@ -46,33 +46,33 @@
 #' #             p3, p4 are measurements by same two methods for a hypothetical property "bar"
 #' h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),
 #'                                     bar = c(method1 = "p3", method2 = "p4")))
-#' plot(h3, color = "foo")
-#' plot(h3, color = "bar")
+#' plotSPC(h3, color = "foo")
+#' plotSPC(h3, color = "bar")
 #' head(horizons(h3))
 #'
 #' # a slight modification, "method 1" onlyused for "foo" and "method 3" for "bar"
 #' h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),
 #'                                     bar = c(method2 = "p3", method3 = "p4")))
-#' plot(h3, color = "foo") # note the pattern of values missing for foo (*_method3)
-#' plot(h3, color = "bar") #  likewise for bar (*_method1)
+#' plotSPC(h3, color = "foo") # note the pattern of values missing for foo (*_method3)
+#' plotSPC(h3, color = "bar") #  likewise for bar (*_method1)
 #'
 #' #' the new labels need not match across harmonizations -- not sure how useful this is but it works
 #' h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),
 #'                                     bar = c(method3 = "p3", method4 = "p4")))
-#' plot(h3, color = "foo") # note the pattern of values missing for foo (*_method 3 + 4)
-#' plot(h3, color = "bar") #  likewise for bar (*_method 1 + 2)
+#' plotSPC(h3, color = "foo") # note the pattern of values missing for foo (*_method 3 + 4)
+#' plotSPC(h3, color = "bar") #  likewise for bar (*_method 1 + 2)
 #'
 #' ### two-source harmonization
 #'
 #' # make test data
-#' spc1 <- pbindlist(lapply(LETTERS[1:5], random_profile, SPC = TRUE))
-#' spc2 <- pbindlist(lapply(letters[1:5], random_profile, SPC = TRUE))
+#' spc1 <- combine(lapply(LETTERS[1:5], random_profile, SPC = TRUE))
+#' spc2 <- combine(lapply(letters[1:5], random_profile, SPC = TRUE))
 #'
-#' h4 <- pbindlist(list(harmonize(spc1, list(foo = c(transect1 = "p4"))),   # foo is p4 in dataset 1
+#' h4 <- combine(list(harmonize(spc1, list(foo = c(transect1 = "p4"))),   # foo is p4 in dataset 1
 #'                       harmonize(spc2, list(foo = c(transect2 = "p2")))))  # foo is p2 in dataset 2
 #'
 #' # same property with different name in two different datasets
-#' plot(h4, color = "foo")
+#' plotSPC(h4, color = "foo")
 #'
 #' ### many source harmonization
 #'
@@ -83,7 +83,7 @@
 #' rcolname <- paste0("p", round(runif(10, 0.5, 5.5)))
 #'
 #' # iterate over data sources
-#' bigspc <- pbindlist(lapply(1:length(spcs), function(i) {
+#' bigspc <- combine(lapply(1:length(spcs), function(i) {
 #'
 #'   # assume each data source has a unique name for the property "foo"
 #'   xn <- rcolname[i]
@@ -97,7 +97,7 @@
 #' }))
 #'
 #' # inspect a subset
-#' plot(bigspc[1:30,], color = "foo")
+#' plotSPC(bigspc[1:30,], color = "foo")
 #'
 setMethod("harmonize", signature(x = "SoilProfileCollection"),
           function(x, x.names, keep.cols = NULL, grp.name = "hgroup") {

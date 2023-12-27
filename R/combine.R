@@ -9,25 +9,7 @@
 # * is it possible to implement an S4 interface for a list of SPC? (cleaner code)
 
 # 2020/09/25: yes it is possible [for a list] with the caveat that the y argument _must_ be missing in order to use the base::union generic but dispatch to the aqp method.
-# The problem with this is IDEs like Rstudio that probe the generics to identify missing required arguments will erroneously warn about the aqp-usage of union
-
-# @title (DEPRECATED) union
-#
-# @param x a list of SoilProfileCollection objects
-# @param y Necessary for proper S4 dispatch.
-#
-# @return a SoilProfileCollection
-# @export union
-# @seealso \link{pbindlist}
-#
-# @examples
-#
-# # deprecated, see aqp::combine and aqp::pbindlist
-#
-# setMethod("union", signature(x = "list", y = "missing"), function(x, y)  {
-#   .Deprecated("combine")
-#   pbindlist(x)
-# })
+# The problem with this is IDEs like Rstudio that probe the generics to identify missing required arguments will erroneously warn about the aqp-usage of union.
 
 # if (!isGeneric("combine"))
   setGeneric("combine", function(...)

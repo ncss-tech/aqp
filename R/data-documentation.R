@@ -223,6 +223,7 @@ NULL
 #'
 #'
 NULL
+
 #' Soil Profile Data Example 3
 #'
 #' Soil samples from 10 soil profiles, taken from the Sierra Foothill Region of

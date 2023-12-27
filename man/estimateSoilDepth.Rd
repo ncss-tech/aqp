@@ -30,7 +30,7 @@ estimateSoilDepth(
 single value representing the depth to \code{contact} or \code{no.contact.assigned}
 }
 \description{
-Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}}.
+Estimate the soil depth of a single profile within a \code{SoilProfileCollection} object. This function would typically be called by \code{\link[=profileApply]{profileApply()}}.
 }
 \details{
 The choice of a \code{selection} function usually follows:

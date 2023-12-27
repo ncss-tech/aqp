@@ -24,7 +24,7 @@ SPC top depth variable) within which increase must be met}
 Returns a square logical matrix reflecting where the increase
 criteria were met.
 
-\code{get.increase.depths} converts to horizon dop depth by using above
+\code{get.increase.depths} converts to horizon top depth by using above
 matrix output to determine depths where increase is met.
 
 Returns a numeric vector of depths where the increase requirement is
@@ -55,7 +55,7 @@ either a constant or a vector of equal length to its input.
 Note that the \code{threshold.fun} result is allowed to contain NA, but that will
 result in no output for affected cells.
 
-\code{get.increase.depths} performs the conversion of the square matrix
+\code{get.increase.depths()} performs the conversion of the square matrix
 output of \code{get.increase.matrix} back to horizon top depth for where
 criteria were met.
 
@@ -87,7 +87,7 @@ foo
 
 }
 \seealso{
-\code{getArgillicBounds}, \code{crit.clay.argillic}
+\code{\link[=getArgillicBounds]{getArgillicBounds()}}, \code{\link[=crit.clay.argillic]{crit.clay.argillic()}}
 
 \code{\link[=getArgillicBounds]{getArgillicBounds()}} \code{\link[=crit.clay.argillic]{crit.clay.argillic()}}
 }

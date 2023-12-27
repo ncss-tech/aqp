@@ -48,7 +48,7 @@
 #' ## plot TP matrix with functions from sharpshootR package
 #' library(sharpshootR)
 #' par(mar=c(0,0,0,0), mfcol=c(1,2))
-#' plot(sp4)
+#' plotSPC(sp4, name = 'name', name.style = 'center-center')
 #' plotSoilRelationGraph(tp, graph.mode = 'directed', edge.arrow.size=0.5)
 #'
 #' ## demonstrate genhzTableToAdjMat usage
