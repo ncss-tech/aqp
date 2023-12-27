@@ -71,8 +71,7 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 
   
 ### Utility
-  * `combine()`
-  * `c()`
+  * `combine()`, `c()`
   * `compositeSPC()`
   * `denormalize()`
   * `duplicate()`
