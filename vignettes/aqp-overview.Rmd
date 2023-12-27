@@ -24,40 +24,49 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
 
-
-
-## Numerical Classification of Soil Profiles
-
-  * `compareSites()`
-  * `NCSP()`
-
-## Misc. Vizualization
-  * `panel.depth_function()`
+# Function Index by Topic
 
 
 ## SoilProfileCollection Objects
 
 ### Creation
+  * `depths()`
+  * `site()`
   * `quickSPC()`
   * `random_profile()`
+  
+  * `hzdesgnname()`
+  * `hzDesgn()`
+  * `hztexclname()`
 
 
 ### Change of Support
   * `dice()`
   * `slab()`
+  * `spc2mpspline()`
   * `segment()`
   * `L1_profiles()`
   * `slicedHSD()`
+  
 
 ### Subset
   * `glom()`
   * `subset()`
+  * `subsetHz()`
   * `[`
+  * `[[`
+  * `i, j, k indices`
+  * `keywords`
+  
   * `HzDepthLogicSubset()`
   
+  
 ### Iteration
+  * `profileApply()`
   * `glomApply()`
   * `mutate_profile()`
+  * `summarizeSPC()`
+  * `transform()`
 
 
 ### Depth
@@ -66,6 +75,7 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `minDepthOf()`
   * `maxDepthOf()`
   * `getSoilDepthClass()`
+
   
 ### Utility
   * `combine()`
@@ -75,11 +85,33 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `duplicate()`
   
   * `perturb()`
+  * `warpHorizons()`
 
   * `harmonize()`
   
   * `hzAbove()`
   * `hzBelow()`
+  
+  * `names()`
+  * `min()`
+  * `max()`
+  * `length()`
+  * `nrow()`
+  
+  * `unique()`
+  * `split()`
+  
+  * `horizons()`
+  * `replaceHorizons()`
+  
+  * `diagnostic_hz()`
+  * `restrictions()`
+
+### Spatial Data
+  * `prj()`
+  * `initSpatial()`
+  * `getSpatial()`
+  
 
 ### Validity
 
@@ -89,6 +121,7 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `flagOverlappingHz()`
   
   * `checkHzDepthLogic()`
+  * `splitLogicErrors()`
   
   * `checkSPC()`
   * `rebuildSPC()`
@@ -99,14 +132,19 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `missingDataGrid()`
 
 
+### Coercion
+  * `as(SPC, 'list')`
+  * `as(SPC, 'data.frame')`
+  * `as(SPC, 'sf')`
+
+
+
 ### Misc.
   * `hzTransitionProbabilities()`
   * `mostLikelyHzSequence()`
   
   * `profileInformationIndex()`
   
-
-
 
 ## Soil Profile Sketches
 
@@ -124,11 +162,14 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 
 ## Soil Color / Color Science
   
-### Conversion
+### Color Conversion
 
   * `col2Munsell()`
   * `munsell2rgb()`
   * `parseMunsell()`
+  
+  * `spec2Munsell()`
+  
   * `getClosestMunsellChip()`
   
   * `estimateSoilColor()` moist / dry
@@ -164,23 +205,24 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `plotColorMixture()`
 
 
-## Misc.
-  * `shannonEntropy()`
-  * `confusionIndex()`
-  * `brierScore()`
-  
-  * `findOverlap()`
-  * `overlapMetrics()`
-  * `fixOverlap()`
-  
-  * `invertLabelColor()`
+## Numerical Classification of Soil Profiles
+
+  * `compareSites()`
+  * `NCSP()`
 
 
 ## Pedology
 
   * `allocate()`
   * `fragmentSieve()`
+  * `texcl_to_ssc()`
+  * `ssc_to_texcl()`
+  * `texmod_to_fragvoltot()`
+  * `texture_to_taxpartsize()`
+  * `texture_to_texmod()`
+  * `fragvol_to_texmod()`
   
+  * `textureTriangleSummary()`
   * `bootstrapSoilTexture()`
   
   * `SoilTextureLevels()`
@@ -217,6 +259,23 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `genhzTableToAdjMat()`
   * `get.ml.hz()`
   * `guessGenHzLevels()`
+  * `GHL()`
+
+
+
+## Misc.
+  * `shannonEntropy()`
+  * `confusionIndex()`
+  * `brierScore()`
+  * `tauW()`
+  
+  * `findOverlap()`
+  * `overlapMetrics()`
+  * `fixOverlap()`
+  
+  * `invertLabelColor()`
+  
+  * `panel.depth_function()`
 
 
 
@@ -241,6 +300,7 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   
   * `us.state.soils`
   * `soil_minerals`
+  * `soiltexture`
   
   * `munsell`
   * `equivalent_munsell`
@@ -250,6 +310,6 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   
   * `reactionclass`
 
-  
+
 
 
