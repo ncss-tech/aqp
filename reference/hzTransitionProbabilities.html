@@ -47,6 +47,9 @@ soil color TP
       <a href="../articles/NCSP.html">Numerical Classification of Soil Profiles</a>
     </li>
     <li>
+      <a href="../articles/aqp-overview.html">An Overview of the aqp Package</a>
+    </li>
+    <li>
       <a href="../articles/label-placement.html">Overlapping Annotation</a>
     </li>
     <li>
@@ -179,7 +182,7 @@ transition probabilities and an initial state, <code>t0</code>. See examples.</p
 <span class="r-in"><span><span class="co">## plot TP matrix with functions from sharpshootR package</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfcol<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'name'</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotSoilRelationGraph.html" class="external-link">plotSoilRelationGraph</a></span><span class="op">(</span><span class="va">tp</span>, graph.mode <span class="op">=</span> <span class="st">'directed'</span>, edge.arrow.size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## demonstrate genhzTableToAdjMat usage</span></span></span>
