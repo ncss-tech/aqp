@@ -1,0 +1,255 @@
+---
+title: "An Overview of the aqp Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{An Overview of the aqp Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo=FALSE, results='hide', warning=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  background = '#F7F7F7',
+  fig.align = 'center',
+  dev = 'png',
+  comment = "#>"
+)
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
+options(width = 100, stringsAsFactors = FALSE, timeout = 600)
+```
+
+
+
+
+## Numerical Classification of Soil Profiles
+
+  * `compareSites()`
+  * `NCSP()`
+
+## Misc. Vizualization
+  * `panel.depth_function()`
+
+
+## SoilProfileCollection Objects
+
+### Creation
+  * `quickSPC()`
+  * `random_profile()`
+
+
+### Change of Support
+  * `dice()`
+  * `slab()`
+  * `segment()`
+  * `L1_profiles()`
+  * `slicedHSD()`
+
+### Subset
+  * `glom()`
+  * `subset()`
+  * `[`
+  * `HzDepthLogicSubset()`
+  
+### Iteration
+  * `glomApply()`
+  * `mutate_profile()`
+
+
+### Depth
+  * `aggregateSoilDepth()`
+  * `depthOf()`
+  * `minDepthOf()`
+  * `maxDepthOf()`
+  * `getSoilDepthClass()`
+  
+### Utility
+  * `combine()`
+  * `c()`
+  * `compositeSPC()`
+  * `denormalize()`
+  * `duplicate()`
+  
+  * `perturb()`
+
+  * `harmonize()`
+  
+  * `hzAbove()`
+  * `hzBelow()`
+
+### Validity
+
+  * `accumulateDepths()`
+  * `fillHzGaps()`
+  * `repairMissingHzDepths()`
+  * `flagOverlappingHz()`
+  
+  * `checkHzDepthLogic()`
+  
+  * `checkSPC()`
+  * `rebuildSPC()`
+  
+
+### Data QC
+  * `evalMissingData()`
+  * `missingDataGrid()`
+
+
+### Misc.
+  * `hzTransitionProbabilities()`
+  * `mostLikelyHzSequence()`
+  
+  * `profileInformationIndex()`
+  
+
+
+
+## Soil Profile Sketches
+
+  * `plotSPC()`
+  * `explainPlotSPC()`
+  * `groupedProfilePlot()`
+  * `plotMultipleSPC()`
+
+  * `addBracket()`
+  * `addDiagnosticBracket()`
+  * `addVolumeFraction()`
+  
+  * `alignTransect()`
+
+
+## Soil Color / Color Science
+  
+### Conversion
+
+  * `col2Munsell()`
+  * `munsell2rgb()`
+  * `parseMunsell()`
+  * `getClosestMunsellChip()`
+  
+  * `estimateSoilColor()` moist / dry
+
+### Comparison
+
+  * `contrastClass()`
+  * `colorContrast()`
+  * `colorContrastPlot()`
+  * `contrastChart()`
+  * `soilColorSignature()`
+
+### Aggregation
+
+  * `colorChart()`
+  * `aggregateColor()`
+  * `colorQuantiles()`
+  
+
+### Utility
+  * `huePosition()`
+  * `huePositionCircle()`
+  * `previewColors()`
+  * `soilPalette()`
+  
+  * `equivalentMunsellChips()`
+  
+  * `simulateColor()`
+
+
+### Simulation of Mixtures
+  * `mixMunsell()`
+  * `plotColorMixture()`
+
+
+## Misc.
+  * `shannonEntropy()`
+  * `confusionIndex()`
+  * `brierScore()`
+  
+  * `findOverlap()`
+  * `overlapMetrics()`
+  * `fixOverlap()`
+  
+  * `invertLabelColor()`
+
+
+## Pedology
+
+  * `allocate()`
+  * `fragmentSieve()`
+  
+  * `bootstrapSoilTexture()`
+  
+  * `SoilTextureLevels()`
+  * `fragmentClasses()`
+  
+  * `estimateAWC()`
+  * `correctAWC()`
+  
+  * `estimatePSCS()`
+  
+  * `hzDistinctnessCodeToOffset()`
+  * `hzTopographyCodeToLineType()`
+  * `hzTopographyCodeToOffset()`
+  
+  * `ph_to_rxnclass()`
+  * `rxnclass_to_ph()`
+  * `ReactionClassLevels()`
+  
+  * `horizonColorIndices()`
+  
+  
+
+### Soil Taxonomy
+  * `getArgillicBounds()`
+  * `getCambicBounds()`
+  * `getSurfaceHorizonDepth()`
+  * `getMineralSoilSurfaceDepth()`
+  * `getPlowLayerDepth()`
+  * `hasDarkColors()`
+
+### Generalized Horizon Labels
+  * `evalGenHZ()`
+  * `generalize.hz()`
+  * `genhzTableToAdjMat()`
+  * `get.ml.hz()`
+  * `guessGenHzLevels()`
+
+
+
+## Example Data 
+
+  * `sp1`
+  * `sp2`
+  * `sp3`
+  * `sp4`
+  * `sp5`
+  * `sp6`
+  
+  * `sierraTransect`
+  * `wilson2022`
+  * `rowley2019`
+  * `jacobs2000`
+  
+  * `osd`
+  * `SPC.with.overlap`
+  
+  * `ROSETTA.centroids`
+  
+  * `us.state.soils`
+  * `soil_minerals`
+  
+  * `munsell`
+  * `equivalent_munsell`
+  * `munsellHuePosition`
+  * `munsell.spectra`
+  * `spectral.reference`
+  
+  * `reactionclass`
+
+  
+
+
