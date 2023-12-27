@@ -20,7 +20,7 @@ grepSPC(object, attr, pattern, ...)
 A SoilProfileCollection.
 }
 \description{
-\code{grepSPC()} is a shorthand function for subsetting SoilProfileCollections. For example, by \code{filter(grepl(spc, ...))} or \code{filter(stringr::str_detect(spc, ...))}. It provides pattern matching for a single text-based site or horizon level attribute.
+\code{grepSPC()} is a shorthand function for subsetting \code{SoilProfileCollection} objects. For example, by \code{filter(grepl(spc, ...))} or \code{filter(stringr::str_detect(spc, ...))}. It provides pattern matching for a single text-based site or horizon level attribute.
 }
 \author{
 Andrew G. Brown.
