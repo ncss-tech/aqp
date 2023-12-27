@@ -2,12 +2,12 @@
 #'
 #' @aliases summarizeSPC,SoilProfileCollection-method, summarize
 #'
-#' @description \code{summarize()} is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
+#' @description \code{summarize()} is a function used for summarizing a `SoilProfileCollection` object. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
 #'
-#' @param object A SoilProfileCollection
+#' @param object A `SoilProfileCollection`
 #' @param ... A set of (named) comma-delimited R expressions that resolve to a summary value. e.g \code{groupmean = mean(clay, na.rm = TRUE)}
 #'
-#' @return A data.frame with one row per level in the grouping variable, and one column for each summary
+#' @return A `data.frame` with one row per level in the grouping variable, and one column for each summary
 #'
 #' @author Andrew G. Brown
 #' @export
