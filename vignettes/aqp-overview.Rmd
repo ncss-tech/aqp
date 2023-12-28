@@ -159,55 +159,54 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `soilColorSignature()`: derive soil color signatures for profiles within an SPC
 
 ### Aggregation
-  * `colorChart()`
-  * `aggregateColor()`
-  * `colorQuantiles()`
+  * `colorChart()`: Munsell color book representation of color frequency
+  * `aggregateColor()`: estimate color proportions within an SPC according within groups of horizons
+  * `colorQuantiles()`: marginal and L1 quantiles of color in CIELAB coordinates
   
 
 ### Utility
-  * `huePosition()`
-  * `huePositionCircle()`
-  * `simulateColor()`
-  * `previewColors()`
-  * `soilPalette()`
-  * `equivalentMunsellChips()`
+  * `huePosition()`: generate an ordered factor of the standard Munsell hues
+  * `huePositionCircle()`: graphical representation of the standard Munsell hues, with optional simulation of common color vision deficiency
+  * `simulateColor()`: simulate a range of Munsell colors given measures of central tendency and spread
+  * `previewColors()`: graphical preview of colors as a grid or via nMDS
+  * `soilPalette()`: generate swatch-like arrangements of colors and labels
+  * `equivalentMunsellChips()`: for a specified Munsell color, identify other Munsell colors with a very lower CIE2000 color contrast difference
 
 ### Simulation of Mixtures
-  * `mixMunsell()`
-  * `plotColorMixture()`
+  * `mixMunsell()`: simulate an subtractive mixture of pigments specified in Munsell notation 
+  * `plotColorMixture()`: simulate a subtractive mixture of pigments, display reflectance spectra
 
 
 ## Numerical Classification of Soil Profiles
-  * `compareSites()`
-  * `NCSP()`
-
-
+  * `NCSP()`: numerical classification of soil profiles, within a `SoilProfileCollection`
+  * `compareSites()`: pair-wise comparison of site-level data from a `SoilProfileCollection`
+  
 ## Pedology
-  * `allocate()`
-  * `estimateAWC()`
-  * `correctAWC()`
-  * `hzDistinctnessCodeToOffset()`
-  * `hzTopographyCodeToLineType()`
-  * `hzTopographyCodeToOffset()`
-  * `ph_to_rxnclass()`
-  * `rxnclass_to_ph()`
-  * `ReactionClassLevels()`
-  * `horizonColorIndices()`
+  * `allocate()`: perform one of several classification systems to soil property data
+  * `estimateAWC()`: estimate plant-available water holding capacity
+  * `correctAWC()`: apply rock fragment or soluble salt corrections to AWC estimates
+  * `hzDistinctnessCodeToOffset()`: convert horizon boundary distinctness codes to vertical offset
+  * `hzTopographyCodeToLineType()`: convert horizon boundary topography codes to line types
+  * `hzTopographyCodeToOffset()`: convert horizon boundary topography codes to offset
+  * `ph_to_rxnclass()`: convert pH to reaction class
+  * `rxnclass_to_ph()`: convert reaction class to pH range
+  * `ReactionClassLevels()`: ordered factor of reaction classes
+  * `horizonColorIndices()`: compute various soil color-based indices to horizons within an SPC 
 
 ### Soil Texture
-  * `textureTriangleSummary()`
-  * `bootstrapSoilTexture()`
-  * `SoilTextureLevels()`
-  * `texcl_to_ssc()`
-  * `ssc_to_texcl()`
-  * `texture_to_taxpartsize()`
+  * `textureTriangleSummary()`: graphical summary of sand, silt, clay fractions on a soil texture triangle  
+  * `bootstrapSoilTexture()`: simulation of realistic compositions (sand, silt, clay) from a small set of example data
+  * `SoilTextureLevels()`: ordered factor of soil texture classes
+  * `texcl_to_ssc()`: convert soil texture classes to sand, silt, clay centroids
+  * `ssc_to_texcl()`: convert sand, silt, clay values to soil texture class
+  * `texture_to_taxpartsize()`: convert soil texture to Soil Taxonomy particle size class
   
 ### Coarse Fragments
-  * `fragmentSieve()`
-  * `texmod_to_fragvoltot()`
-  * `texture_to_texmod()`
-  * `fragvol_to_texmod()`
-  * `fragmentClasses()`
+  * `fragmentSieve()`: classify coarse fragments by fragment diameter
+  * `texmod_to_fragvoltot()`: 
+  * `texture_to_texmod()`:
+  * `fragvol_to_texmod()`:
+  * `fragmentClasses()`: coarse fragment diameter thresholds used by USDA-NRCS
 
 ### Soil Taxonomy
   * `getArgillicBounds()`
@@ -219,8 +218,8 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `estimatePSCS()`
 
 ### Generalized Horizon Labels
-  * `evalGenHZ()`
   * `generalize.hz()`
+  * `evalGenHZ()`
   * `genhzTableToAdjMat()`
   * `get.ml.hz()`
   * `guessGenHzLevels()`
