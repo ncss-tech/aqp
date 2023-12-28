@@ -145,19 +145,18 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ## Soil Color / Color Science
   
 ### Color Conversion
-  * `col2Munsell()`
-  * `munsell2rgb()`
-  * `parseMunsell()`
-  * `spec2Munsell()`
-  * `getClosestMunsellChip()`
-  * `estimateSoilColor()` moist / dry
+  * `col2Munsell()`: convert various color notations to Munsell notation
+  * `munsell2rgb()`: convert Munsell notation to sRGB or CIELAB color coordinates
+  * `parseMunsell()`: parse and optionally convert a munsell color
+  * `spec2Munsell()`: estimate the closest Munsell color given reflectance spectra in the visible range 
+  * `getClosestMunsellChip()`: estimate a reasonably close Munsell color given non-standard notation 
+  * `estimateSoilColor()`: estimate moist soil color from dry soil color (and vice versa) 
 
 ### Comparison
-  * `contrastClass()`
-  * `colorContrast()`
-  * `colorContrastPlot()`
-  * `contrastChart()`
-  * `soilColorSignature()`
+  * `colorContrast()`: pair-wise color contrast and CIE2000 (dE00) based on colors in Munsell notation 
+  * `colorContrastPlot()`: visual explanation of soil color contrast and dE00
+  * `contrastChart()`: Munsell color book style explanation of soil color contrast and dE00
+  * `soilColorSignature()`: derive soil color signatures for profiles within an SPC
 
 ### Aggregation
   * `colorChart()`
