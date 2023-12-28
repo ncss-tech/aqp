@@ -116,60 +116,110 @@
 <h4 id="creation">Creation<a class="anchor" aria-label="anchor" href="#creation"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/depths.html">depths()</a></code></li>
-<li><code><a href="../reference/site.html">site()</a></code></li>
-<li><code><a href="../reference/quickSPC.html">quickSPC()</a></code></li>
-<li><code><a href="../reference/random_profile.html">random_profile()</a></code></li>
+<li>
+<code><a href="../reference/depths.html">depths()</a></code>: init an SPC from <code>data.frame</code>
+</li>
+<li>
+<code><a href="../reference/site.html">site()</a></code>: set or add site-level attributes of an
+SPC<br>
+</li>
+<li>
+<code><a href="../reference/quickSPC.html">quickSPC()</a></code>: quickly build an SPC from simple text
+templates</li>
+<li>
+<code><a href="../reference/random_profile.html">random_profile()</a></code>: generate random SPC from suite of
+depth functions</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="metadata">Metadata<a class="anchor" aria-label="anchor" href="#metadata"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/hzdesgnname.html">hzdesgnname()</a></code></li>
-<li><code><a href="../reference/hzDesgn.html">hzDesgn()</a></code></li>
-<li><code><a href="../reference/hztexclname.html">hztexclname()</a></code></li>
-<li><code><a href="../reference/metadata.html">metadata()</a></code></li>
-<li><code><a href="../reference/hzID.html">hzID()</a></code></li>
-<li><code><a href="../reference/hzidname.html">hzidname()</a></code></li>
-<li><code><a href="../reference/horizonDepths.html">horizonDepths()</a></code></li>
+<li>
+<code><a href="../reference/hzdesgnname.html">hzdesgnname()</a></code>: get/set column containing horizon
+designations</li>
+<li>
+<code><a href="../reference/hzDesgn.html">hzDesgn()</a></code>: get vector of horizon designations</li>
+<li>
+<code><a href="../reference/hztexclname.html">hztexclname()</a></code>: get/set column containing horizon
+texture class</li>
+<li>
+<code><a href="../reference/metadata.html">metadata()</a></code>: get/set SPC metadata (list)</li>
+<li>
+<code><a href="../reference/hzID.html">hzID()</a></code>: get vector of horizon IDs</li>
+<li>
+<code><a href="../reference/hzidname.html">hzidname()</a></code>: get/set column containing horizon IDs</li>
+<li>
+<code><a href="../reference/horizonDepths.html">horizonDepths()</a></code> get/set columns containing horizon top
+and bottom depths</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="properties">Properties<a class="anchor" aria-label="anchor" href="#properties"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/length.html">length()</a></code></li>
-<li><code><a href="../reference/nrow.html">nrow()</a></code></li>
-<li><code><a href="../reference/names.html">names()</a></code></li>
-<li><code><a href="../reference/siteNames.html">siteNames()</a></code></li>
-<li><code><a href="../reference/horizonNames.html">horizonNames()</a></code></li>
+<li>
+<code><a href="../reference/length.html">length()</a></code>: number of profiles in a SPC</li>
+<li>
+<code><a href="../reference/nrow.html">nrow()</a></code>: number of horizons in a SPC</li>
+<li>
+<code><a href="../reference/names.html">names()</a></code>: list of horizon and site names</li>
+<li>
+<code><a href="../reference/siteNames.html">siteNames()</a></code>: site-level column names</li>
+<li>
+<code><a href="../reference/horizonNames.html">horizonNames()</a></code>: horizon-level column names</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="subset">Subset<a class="anchor" aria-label="anchor" href="#subset"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/glom.html">glom()</a></code></li>
-<li><code><a href="../reference/subset-SoilProfileCollection-method.html">subset()</a></code></li>
-<li><code><a href="../reference/subsetHz-SoilProfileCollection-method.html">subsetHz()</a></code></li>
-<li><code>[</code></li>
-<li><code>[[</code></li>
-<li><code>i, j, k indices</code></li>
-<li><code>keywords</code></li>
+<li>
+<code><a href="../reference/glom.html">glom()</a></code>: extract horizons based on single depth or depth
+interval</li>
+<li>
+<code><a href="https://rdrr.io/r/base/Round.html" class="external-link">trunc()</a></code>: truncate SPC to given depth interval</li>
+<li>
+<code><a href="../reference/subset-SoilProfileCollection-method.html">subset()</a></code>: subset profiles based on logical
+expressions</li>
+<li>
+<code><a href="../reference/subsetHz-SoilProfileCollection-method.html">subsetHz()</a></code>: subset horizons based on logical
+expressions</li>
+<li>
+<code>[</code>: <code>data.frame</code>-like subsetting of profiles
+and/or horizons</li>
+<li>
+<code>[[</code>: access site or horizon-level columns by name</li>
+<li>
+<code>horizon keywords</code>:</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="depth">Depth<a class="anchor" aria-label="anchor" href="#depth"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/aggregateSoilDepth.html">aggregateSoilDepth()</a></code></li>
-<li><code><a href="../reference/depthOf.html">depthOf()</a></code></li>
-<li><code><a href="../reference/depthOf.html">minDepthOf()</a></code></li>
-<li><code><a href="../reference/depthOf.html">maxDepthOf()</a></code></li>
-<li><code><a href="../reference/getSoilDepthClass.html">getSoilDepthClass()</a></code></li>
-<li><code><a href="../reference/min.html">min()</a></code></li>
-<li><code><a href="../reference/max.html">max()</a></code></li>
+<li>
+<code><a href="../reference/min.html">min()</a></code>: minimum bottom depth within a SPC</li>
+<li>
+<code><a href="../reference/max.html">max()</a></code>: maximum bottom depth within a SPC</li>
+<li>
+<code><a href="../reference/depthOf.html">depthOf()</a></code>: generalized “depth to” based on REGEX
+matching</li>
+<li>
+<code><a href="../reference/depthOf.html">minDepthOf()</a></code>: special case of
+<code><a href="../reference/depthOf.html">depthOf()</a></code>
+</li>
+<li>
+<code><a href="../reference/depthOf.html">maxDepthOf()</a></code>: special case of
+<code><a href="../reference/depthOf.html">depthOf()</a></code>
+</li>
+<li>
+<code><a href="../reference/getSoilDepthClass.html">getSoilDepthClass()</a></code>: estimate soil depth based on REGEX
+matching applied to horizon designation and associated depth class</li>
+<li>
+<code><a href="../reference/aggregateSoilDepth.html">aggregateSoilDepth()</a></code>: statistical estimation of soil
+depth (REGEX matching of horizon designation) within groups of
+profiles</li>
 </ul>
 </div>
 <div class="section level4">
@@ -177,77 +227,146 @@
 </h4>
 <ul>
 <li>
-<code><a href="../reference/combine-SoilProfileCollection-method.html">combine()</a></code>, <code><a href="../reference/combine-SoilProfileCollection-method.html">c()</a></code>
+<code><a href="../reference/combine-SoilProfileCollection-method.html">combine()</a></code>, <code><a href="../reference/combine-SoilProfileCollection-method.html">c()</a></code>: combine multiple SPCs into
+a single SPC</li>
+<li>
+<code><a href="../reference/duplicate.html">duplicate()</a></code>: duplicate profiles within a SPC</li>
+<li>
+<code><a href="../reference/perturb.html">perturb()</a></code>: randomly adjust horizon thickness or depths
+to simulate from a template SPC</li>
+<li>
+<code><a href="../reference/warpHorizons.html">warpHorizons()</a></code>: expand / contract horizon
+thickness</li>
+<li>
+<code><a href="../reference/harmonize-SoilProfileCollection-method.html">harmonize()</a></code>: create new profiles within a SPC based
+sets of related horizon-level data</li>
+<li>
+<code><a href="../reference/hzOffset.html">hzAbove()</a></code>, <code><a href="../reference/hzOffset.html">hzBelow()</a></code>: locate horizons
+above or below some criteria</li>
+<li>
+<code><a href="../reference/unique.html">unique()</a></code>: determine uniqueness among profiles of an SPC
+via MD5 hash</li>
+<li>
+<code><a href="https://rdrr.io/r/base/split.html" class="external-link">split()</a></code>: split SPC into list of SPCs based on grouping
+factor</li>
+<li>
+<code><a href="../reference/site.html">site()</a></code>: get site data as <code>data.frame</code>
 </li>
-<li><code><a href="../reference/compositeSPC.html">compositeSPC()</a></code></li>
-<li><code><a href="../reference/denormalize.html">denormalize()</a></code></li>
-<li><code><a href="../reference/duplicate.html">duplicate()</a></code></li>
-<li><code><a href="../reference/perturb.html">perturb()</a></code></li>
-<li><code><a href="../reference/warpHorizons.html">warpHorizons()</a></code></li>
-<li><code><a href="../reference/harmonize-SoilProfileCollection-method.html">harmonize()</a></code></li>
-<li><code><a href="../reference/hzOffset.html">hzAbove()</a></code></li>
-<li><code><a href="../reference/hzOffset.html">hzBelow()</a></code></li>
-<li><code><a href="../reference/unique.html">unique()</a></code></li>
-<li><code><a href="https://rdrr.io/r/base/split.html" class="external-link">split()</a></code></li>
-<li><code><a href="../reference/site.html">site()</a></code></li>
-<li><code><a href="../reference/horizons.html">horizons()</a></code></li>
-<li><code>replaceHorizons()</code></li>
-<li><code><a href="../reference/diagnostic_hz.html">diagnostic_hz()</a></code></li>
-<li><code><a href="../reference/restrictions.html">restrictions()</a></code></li>
+<li>
+<code><a href="../reference/horizons.html">horizons()</a></code>: get horizon data as
+<code>data.frame</code>
+</li>
+<li>
+<code>replaceHorizons()</code>: replace horizon data</li>
+<li>
+<code><a href="../reference/diagnostic_hz.html">diagnostic_hz()</a></code>: get/set diagnostic features</li>
+<li>
+<code><a href="../reference/restrictions.html">restrictions()</a></code>: get/set restrictions</li>
+<li>
+<code><a href="../reference/denormalize.html">denormalize()</a></code>: convert site-level data into
+horizon-level data via replication</li>
+<li>
+<code><a href="../reference/compositeSPC.html">compositeSPC()</a></code>: downgrade an SPC to list of site and
+horizon-level data</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="iteration">Iteration<a class="anchor" aria-label="anchor" href="#iteration"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/profileApply.html">profileApply()</a></code></li>
-<li><code><a href="../reference/glomApply.html">glomApply()</a></code></li>
-<li><code><a href="../reference/mutate_profile.html">mutate_profile()</a></code></li>
-<li><code><a href="../reference/summarizeSPC.html">summarizeSPC()</a></code></li>
-<li><code><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform()</a></code></li>
+<li>
+<code><a href="../reference/profileApply.html">profileApply()</a></code>: apply a function to each profile within
+an SPC (slow but simple interface)</li>
+<li>
+<code><a href="../reference/glomApply.html">glomApply()</a></code>:</li>
+<li>
+<code>mutate_profiles()</code>:</li>
+<li>
+<code><a href="../reference/summarizeSPC.html">summarizeSPC()</a></code>:</li>
+<li>
+<code><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform()</a></code>:</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="change-of-support">Change of Support<a class="anchor" aria-label="anchor" href="#change-of-support"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code></li>
-<li><code><a href="../reference/slab.html">slab()</a></code></li>
-<li><code><a href="../reference/spc2mpspline-SoilProfileCollection-method.html">spc2mpspline()</a></code></li>
-<li><code><a href="../reference/segment.html">segment()</a></code></li>
-<li><code><a href="../reference/L1_profiles.html">L1_profiles()</a></code></li>
-<li><code><a href="../reference/slicedHSD.html">slicedHSD()</a></code></li>
+<li>
+<code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>: convert SPC to 1 depth-unit intervals by
+replication</li>
+<li>
+<code><a href="../reference/slab.html">slab()</a></code>: apply an aggregate function over groups within
+a “dice()-ed” SPC</li>
+<li>
+<code><a href="../reference/spc2mpspline-SoilProfileCollection-method.html">spc2mpspline()</a></code>: interface to equal-area spline fitting
+from mpspline2 package</li>
+<li>
+<code><a href="../reference/segment.html">segment()</a></code>: generate segment lables for depth-weighted
+aggregation</li>
+<li>
+<code><a href="../reference/L1_profiles.html">L1_profiles()</a></code>: create representative profiles via
+multivariate median (L1 estimator)</li>
+<li>
+<code><a href="../reference/slicedHSD.html">slicedHSD()</a></code>: apply Tukey’s HSD over groups within a
+“dice()-ed” SPC</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="horizon-depth-logic">Horizon Depth Logic<a class="anchor" aria-label="anchor" href="#horizon-depth-logic"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/accumulateDepths.html">accumulateDepths()</a></code></li>
-<li><code><a href="../reference/fillHzGaps.html">fillHzGaps()</a></code></li>
-<li><code><a href="../reference/repairMissingHzDepths.html">repairMissingHzDepths()</a></code></li>
-<li><code><a href="../reference/flagOverlappingHz.html">flagOverlappingHz()</a></code></li>
-<li><code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code></li>
-<li><code><a href="../reference/splitLogicErrors.html">splitLogicErrors()</a></code></li>
-<li><code><a href="../reference/HzDepthLogicSubset.html">HzDepthLogicSubset()</a></code></li>
+<li>
+<code><a href="../reference/accumulateDepths.html">accumulateDepths()</a></code>: fix horizon depths when old-style O
+horizon notation has been used</li>
+<li>
+<code><a href="../reference/fillHzGaps.html">fillHzGaps()</a></code>: fill topological gaps in horizon
+depth</li>
+<li>
+<code><a href="../reference/repairMissingHzDepths.html">repairMissingHzDepths()</a></code>: attempt fixing missing or
+duplicated horizon bottom depths</li>
+<li>
+<code><a href="../reference/flagOverlappingHz.html">flagOverlappingHz()</a></code>: flag horizons with perfect
+overlap</li>
+<li>
+<code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code>: apply battery of horizon depth
+toplogical tests</li>
+<li>
+<code><a href="../reference/splitLogicErrors.html">splitLogicErrors()</a></code>: split an SPC according to variety
+of possibly horizon depth errors</li>
+<li>
+<code><a href="../reference/HzDepthLogicSubset.html">HzDepthLogicSubset()</a></code>: remove profiles from an SPC if
+any depth logic errors are present</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="data-qc">Data QC<a class="anchor" aria-label="anchor" href="#data-qc"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/evalMissingData.html">evalMissingData()</a></code></li>
-<li><code><a href="../reference/missingDataGrid.html">missingDataGrid()</a></code></li>
-<li><code><a href="../reference/profileInformationIndex.html">profileInformationIndex()</a></code></li>
+<li>
+<code><a href="../reference/evalMissingData.html">evalMissingData()</a></code>: report metrics of missing data by
+profile within SPC</li>
+<li>
+<code><a href="../reference/missingDataGrid.html">missingDataGrid()</a></code>: visual indication of missing
+data</li>
+<li>
+<code><a href="../reference/profileInformationIndex.html">profileInformationIndex()</a></code>: experimental indices of
+“information content” by profile</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="object-coercion">Object Coercion<a class="anchor" aria-label="anchor" href="#object-coercion"></a>
 </h4>
 <ul>
-<li><code>as(SPC, 'list')</code></li>
-<li><code>as(SPC, 'data.frame')</code></li>
-<li><code>as(SPC, 'sf')</code></li>
+<li>
+<code>as(SPC, 'list')</code>: convert SPC to <code>list</code>
+</li>
+<li>
+<code>as(SPC, 'data.frame')</code>: convert site and horizon data to
+<code>data.frame</code>
+</li>
+<li>
+<code>as(SPC, 'sf')</code>: convert site and spatial data to sf
+object</li>
 </ul>
 </div>
 <div class="section level4">
@@ -263,8 +382,11 @@
 <h4 id="internal-consistency">Internal Consistency<a class="anchor" aria-label="anchor" href="#internal-consistency"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/checkSPC.html">checkSPC()</a></code></li>
-<li><code><a href="../reference/rebuildSPC.html">rebuildSPC()</a></code></li>
+<li>
+<code><a href="../reference/checkSPC.html">checkSPC()</a></code>: check SPC for internal consistency</li>
+<li>
+<code><a href="../reference/rebuildSPC.html">rebuildSPC()</a></code>: re-make an SPC from a previous version of
+aqp (rarely required)</li>
 </ul>
 </div>
 </div>
@@ -272,14 +394,30 @@
 <h3 id="soil-profile-sketches">Soil Profile Sketches<a class="anchor" aria-label="anchor" href="#soil-profile-sketches"></a>
 </h3>
 <ul>
-<li><code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code></li>
-<li><code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code></li>
-<li><code><a href="../reference/groupedProfilePlot.html">groupedProfilePlot()</a></code></li>
-<li><code><a href="../reference/plotMultipleSPC.html">plotMultipleSPC()</a></code></li>
-<li><code><a href="../reference/addBracket.html">addBracket()</a></code></li>
-<li><code><a href="../reference/addDiagnosticBracket.html">addDiagnosticBracket()</a></code></li>
-<li><code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code></li>
-<li><code><a href="../reference/alignTransect.html">alignTransect()</a></code></li>
+<li>
+<code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>: create sketches of soil profiles from an
+SPC</li>
+<li>
+<code><a href="../reference/explainPlotSPC.html">explainPlotSPC()</a></code>: explain various elements of a soil
+profile sketch</li>
+<li>
+<code><a href="../reference/groupedProfilePlot.html">groupedProfilePlot()</a></code>: create grouped sketches of soil
+profiles</li>
+<li>
+<code><a href="../reference/plotMultipleSPC.html">plotMultipleSPC()</a></code>: create sketches from multiple,
+possibly non-conformal SPCs</li>
+<li>
+<code><a href="../reference/addBracket.html">addBracket()</a></code>: add vertical brackets beside soil profile
+sketches</li>
+<li>
+<code><a href="../reference/addDiagnosticBracket.html">addDiagnosticBracket()</a></code>: add vertical brackets beside
+soil profile sketches based on diagnostic features</li>
+<li>
+<code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code>: add visual explanation of coarse
+fragment volume to soil profile sketches</li>
+<li>
+<code><a href="../reference/alignTransect.html">alignTransect()</a></code>: align soil profiles to an external
+gradient such as topographic sequence</li>
 </ul>
 </div>
 <div class="section level3">
