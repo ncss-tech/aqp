@@ -24,14 +24,14 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
 
-# Function Index by Topic
+# Index by Topic
 
 
 ## SoilProfileCollection Objects
 
 ### Creation
-  * `depths() <-`
-  * `site() <-`
+  * `depths()`
+  * `site()`
   * `quickSPC()`
   * `random_profile()`
 
@@ -68,29 +68,22 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `getSoilDepthClass()`
   * `min()`
   * `max()`
-
   
 ### Utility
   * `combine()`, `c()`
   * `compositeSPC()`
   * `denormalize()`
   * `duplicate()`
-  
   * `perturb()`
   * `warpHorizons()`
-
   * `harmonize()`
-  
   * `hzAbove()`
   * `hzBelow()`
-  
   * `unique()`
   * `split()`
-  
   * `site()`
   * `horizons()`
   * `replaceHorizons()`
-  
   * `diagnostic_hz()`
   * `restrictions()`
   
@@ -139,35 +132,27 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `rebuildSPC()`
 
 ## Soil Profile Sketches
-
   * `plotSPC()`
   * `explainPlotSPC()`
   * `groupedProfilePlot()`
   * `plotMultipleSPC()`
-
   * `addBracket()`
   * `addDiagnosticBracket()`
   * `addVolumeFraction()`
-  
   * `alignTransect()`
 
 
 ## Soil Color / Color Science
   
 ### Color Conversion
-
   * `col2Munsell()`
   * `munsell2rgb()`
   * `parseMunsell()`
-  
   * `spec2Munsell()`
-  
   * `getClosestMunsellChip()`
-  
   * `estimateSoilColor()` moist / dry
 
 ### Comparison
-
   * `contrastClass()`
   * `colorContrast()`
   * `colorContrastPlot()`
@@ -175,7 +160,6 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `soilColorSignature()`
 
 ### Aggregation
-
   * `colorChart()`
   * `aggregateColor()`
   * `colorQuantiles()`
@@ -184,13 +168,10 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ### Utility
   * `huePosition()`
   * `huePositionCircle()`
+  * `simulateColor()`
   * `previewColors()`
   * `soilPalette()`
-  
   * `equivalentMunsellChips()`
-  
-  * `simulateColor()`
-
 
 ### Simulation of Mixtures
   * `mixMunsell()`
@@ -198,34 +179,26 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 
 
 ## Numerical Classification of Soil Profiles
-
   * `compareSites()`
   * `NCSP()`
 
 
 ## Pedology
-
   * `allocate()`
-  
   * `estimateAWC()`
   * `correctAWC()`
-  
   * `hzDistinctnessCodeToOffset()`
   * `hzTopographyCodeToLineType()`
   * `hzTopographyCodeToOffset()`
-  
   * `ph_to_rxnclass()`
   * `rxnclass_to_ph()`
   * `ReactionClassLevels()`
-  
   * `horizonColorIndices()`
 
 ### Soil Texture
   * `textureTriangleSummary()`
   * `bootstrapSoilTexture()`
-  
   * `SoilTextureLevels()`
-  
   * `texcl_to_ssc()`
   * `ssc_to_texcl()`
   * `texture_to_taxpartsize()`
@@ -254,14 +227,9 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `guessGenHzLevels()`
   * `GHL()`
 
-
-
 ## Misc.
-
   * `invertLabelColor()`
-  
   * `panel.depth_function()`
-  
   * `hzTransitionProbabilities()`
   * `mostLikelyHzSequence()`
 
@@ -271,46 +239,32 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `brierScore()`
   * `tauW()`
 
-### Overlap  
+### Overlapping Annotation  
   * `findOverlap()`
   * `overlapMetrics()`
   * `fixOverlap()`
 
-  
-  
-
-
-
 ## Example Data 
-
   * `sp1`
   * `sp2`
   * `sp3`
   * `sp4`
   * `sp5`
   * `sp6`
-  
   * `sierraTransect`
   * `wilson2022`
   * `rowley2019`
   * `jacobs2000`
-  
   * `osd`
   * `SPC.with.overlap`
-  
   * `us.state.soils`
   * `soil_minerals`
-  
   * `munsell`
   * `equivalent_munsell`
   * `munsellHuePosition`
   * `munsell.spectra`
   * `spectral.reference`
-  
   * `ROSETTA.centroids`
   * `reactionclass`
   * `soiltexture`
-
-
-
 
