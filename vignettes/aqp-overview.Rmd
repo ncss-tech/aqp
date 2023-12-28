@@ -30,97 +30,97 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ## SoilProfileCollection Objects
 
 ### Creation
-  * `depths()`
-  * `site()`
-  * `quickSPC()`
-  * `random_profile()`
+  * `depths()`: init an SPC from `data.frame`
+  * `site()`: set or add site-level attributes of an SPC  
+  * `quickSPC()`: quickly build an SPC from simple text templates
+  * `random_profile()`: generate random SPC from suite of depth functions
 
 ### Metadata  
-  * `hzdesgnname()`
-  * `hzDesgn()`
-  * `hztexclname()`
-  * `metadata()`
-  * `hzID()`
-  * `hzidname()`
-  * `horizonDepths()`
+  * `hzdesgnname()`: get/set column containing horizon designations
+  * `hzDesgn()`: get vector of horizon designations
+  * `hztexclname()`: get/set column containing horizon texture class
+  * `metadata()`: get/set SPC metadata (list)
+  * `hzID()`: get vector of horizon IDs
+  * `hzidname()`: get/set column containing horizon IDs
+  * `horizonDepths()` get/set columns containing horizon top and bottom depths
 
 ### Properties
-  * `length()`
-  * `nrow()`
-  * `names()`
-  * `siteNames()`
-  * `horizonNames()`
+  * `length()`: number of profiles in a SPC
+  * `nrow()`: number of horizons in a SPC
+  * `names()`: list of horizon and site names
+  * `siteNames()`: site-level column names
+  * `horizonNames()`: horizon-level column names
 
 ### Subset
-  * `glom()`
-  * `subset()`
-  * `subsetHz()`
-  * `[`
-  * `[[`
-  * `i, j, k indices`
-  * `keywords`
+  * `glom()`: extract horizons based on single depth or depth interval
+  * `trunc()`: truncate SPC to given depth interval
+  * `subset()`: subset profiles based on logical expressions
+  * `subsetHz()`: subset horizons based on logical expressions
+  * `[`: `data.frame`-like subsetting of profiles and/or horizons
+  * `[[`: access site or horizon-level columns by name
+  * `horizon keywords`: 
 
 ### Depth
-  * `aggregateSoilDepth()`
-  * `depthOf()`
-  * `minDepthOf()`
-  * `maxDepthOf()`
-  * `getSoilDepthClass()`
-  * `min()`
-  * `max()`
+  * `min()`: minimum bottom depth within a SPC
+  * `max()`: maximum bottom depth within a SPC
+  * `depthOf()`: generalized "depth to" based on REGEX matching
+  * `minDepthOf()`: special case of `depthOf()`
+  * `maxDepthOf()`: special case of `depthOf()`
+  * `getSoilDepthClass()`: estimate soil depth based on REGEX matching applied to horizon designation and associated depth class
+  * `aggregateSoilDepth()`: statistical estimation of soil depth (REGEX matching of horizon designation) within groups of profiles
+  
   
 ### Utility
-  * `combine()`, `c()`
-  * `compositeSPC()`
-  * `denormalize()`
-  * `duplicate()`
-  * `perturb()`
-  * `warpHorizons()`
-  * `harmonize()`
-  * `hzAbove()`
-  * `hzBelow()`
-  * `unique()`
-  * `split()`
-  * `site()`
-  * `horizons()`
-  * `replaceHorizons()`
-  * `diagnostic_hz()`
-  * `restrictions()`
+  * `combine()`, `c()`: combine multiple SPCs into a single SPC
+  * `duplicate()`: duplicate profiles within a SPC
+  * `perturb()`: randomly adjust horizon thickness or depths to simulate from a template SPC
+  * `warpHorizons()`: expand / contract horizon thickness
+  * `harmonize()`: create new profiles within a SPC based sets of related horizon-level data
+  * `hzAbove()`, `hzBelow()`: locate horizons above or below some criteria
+  * `unique()`: determine uniqueness among profiles of an SPC via MD5 hash
+  * `split()`: split SPC into list of SPCs based on grouping factor
+  * `site()`: get site data as `data.frame`
+  * `horizons()`: get horizon data as `data.frame`
+  * `replaceHorizons()`: replace horizon data
+  * `diagnostic_hz()`: get/set diagnostic features
+  * `restrictions()`: get/set restrictions
+  * `denormalize()`: convert site-level data into horizon-level data via replication
+  * `compositeSPC()`: downgrade an SPC to list of site and horizon-level data
   
 ### Iteration
-  * `profileApply()`
-  * `glomApply()`
-  * `mutate_profile()`
-  * `summarizeSPC()`
-  * `transform()`
+  * `profileApply()`: apply a function to each profile within an SPC (slow but simple interface)
+  * `glomApply()`: 
+  * `mutate_profiles()`: 
+  * `summarizeSPC()`: 
+  * `transform()`: 
 
 ### Change of Support
-  * `dice()`
-  * `slab()`
-  * `spc2mpspline()`
-  * `segment()`
-  * `L1_profiles()`
-  * `slicedHSD()`
+  * `dice()`: convert SPC to 1 depth-unit intervals by replication
+  * `slab()`: apply an aggregate function over groups within a "dice()-ed" SPC
+  * `spc2mpspline()`: interface to equal-area spline fitting from mpspline2 package
+  * `segment()`: generate segment lables for depth-weighted aggregation 
+  * `L1_profiles()`: create representative profiles via multivariate median (L1 estimator)
+  * `slicedHSD()`: apply Tukey's HSD over groups within a "dice()-ed" SPC
 
 ### Horizon Depth Logic
-  * `accumulateDepths()`
-  * `fillHzGaps()`
-  * `repairMissingHzDepths()`
-  * `flagOverlappingHz()`
-  * `checkHzDepthLogic()`
-  * `splitLogicErrors()`
-  * `HzDepthLogicSubset()`
+  * `accumulateDepths()`: fix horizon depths when old-style O horizon notation has been used
+  * `fillHzGaps()`: fill topological gaps in horizon depth
+  * `repairMissingHzDepths()`: attempt fixing missing or duplicated horizon bottom depths
+  * `flagOverlappingHz()`: flag horizons with perfect overlap
+  * `checkHzDepthLogic()`: apply battery of horizon depth toplogical tests
+  * `splitLogicErrors()`: split an SPC according to variety of possibly horizon depth errors
+  * `HzDepthLogicSubset()`: remove profiles from an SPC if any depth logic errors are present
 
 ### Data QC
-  * `evalMissingData()`
-  * `missingDataGrid()`
-  * `profileInformationIndex()`
+  * `evalMissingData()`: report metrics of missing data by profile within SPC
+  * `missingDataGrid()`: visual indication of missing data
+  * `profileInformationIndex()`: experimental indices of "information content" by profile
 
 
 ### Object Coercion
-  * `as(SPC, 'list')`
-  * `as(SPC, 'data.frame')`
-  * `as(SPC, 'sf')`
+  * `as(SPC, 'list')`: convert SPC to `list`
+  * `as(SPC, 'data.frame')`: convert site and horizon data to `data.frame`
+  * `as(SPC, 'sf')`: convert site and spatial data to sf object
 
 ### Spatial Data
   * `prj()`
@@ -128,18 +128,18 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `getSpatial()`
 
 ### Internal Consistency
-  * `checkSPC()`
-  * `rebuildSPC()`
+  * `checkSPC()`: check SPC for internal consistency 
+  * `rebuildSPC()`: re-make an SPC from a previous version of aqp (rarely required)
 
 ## Soil Profile Sketches
-  * `plotSPC()`
-  * `explainPlotSPC()`
-  * `groupedProfilePlot()`
-  * `plotMultipleSPC()`
-  * `addBracket()`
-  * `addDiagnosticBracket()`
-  * `addVolumeFraction()`
-  * `alignTransect()`
+  * `plotSPC()`: create sketches of soil profiles from an SPC
+  * `explainPlotSPC()`: explain various elements of a soil profile sketch
+  * `groupedProfilePlot()`: create grouped sketches of soil profiles
+  * `plotMultipleSPC()`: create sketches from multiple, possibly non-conformal SPCs
+  * `addBracket()`: add vertical brackets beside soil profile sketches
+  * `addDiagnosticBracket()`: add vertical brackets beside soil profile sketches based on diagnostic features
+  * `addVolumeFraction()`: add visual explanation of coarse fragment volume to soil profile sketches
+  * `alignTransect()`: align soil profiles to an external gradient such as topographic sequence
 
 
 ## Soil Color / Color Science
