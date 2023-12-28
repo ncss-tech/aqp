@@ -469,29 +469,53 @@ profiles within an SPC</li>
 <h4 id="aggregation">Aggregation<a class="anchor" aria-label="anchor" href="#aggregation"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/colorChart.html">colorChart()</a></code></li>
-<li><code><a href="../reference/aggregateColor.html">aggregateColor()</a></code></li>
-<li><code><a href="../reference/colorQuantiles.html">colorQuantiles()</a></code></li>
+<li>
+<code><a href="../reference/colorChart.html">colorChart()</a></code>: Munsell color book representation of
+color frequency</li>
+<li>
+<code><a href="../reference/aggregateColor.html">aggregateColor()</a></code>: estimate color proportions within an
+SPC according within groups of horizons</li>
+<li>
+<code><a href="../reference/colorQuantiles.html">colorQuantiles()</a></code>: marginal and L1 quantiles of color in
+CIELAB coordinates</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="utility-1">Utility<a class="anchor" aria-label="anchor" href="#utility-1"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/huePosition.html">huePosition()</a></code></li>
-<li><code><a href="../reference/huePositionCircle.html">huePositionCircle()</a></code></li>
-<li><code><a href="../reference/simulateColor.html">simulateColor()</a></code></li>
-<li><code><a href="../reference/previewColors.html">previewColors()</a></code></li>
-<li><code><a href="../reference/soilPalette.html">soilPalette()</a></code></li>
-<li><code><a href="../reference/equivalentMunsellChips.html">equivalentMunsellChips()</a></code></li>
+<li>
+<code><a href="../reference/huePosition.html">huePosition()</a></code>: generate an ordered factor of the
+standard Munsell hues</li>
+<li>
+<code><a href="../reference/huePositionCircle.html">huePositionCircle()</a></code>: graphical representation of the
+standard Munsell hues, with optional simulation of common color vision
+deficiency</li>
+<li>
+<code><a href="../reference/simulateColor.html">simulateColor()</a></code>: simulate a range of Munsell colors
+given measures of central tendency and spread</li>
+<li>
+<code><a href="../reference/previewColors.html">previewColors()</a></code>: graphical preview of colors as a grid
+or via nMDS</li>
+<li>
+<code><a href="../reference/soilPalette.html">soilPalette()</a></code>: generate swatch-like arrangements of
+colors and labels</li>
+<li>
+<code><a href="../reference/equivalentMunsellChips.html">equivalentMunsellChips()</a></code>: for a specified Munsell
+color, identify other Munsell colors with a very lower CIE2000 color
+contrast difference</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="simulation-of-mixtures">Simulation of Mixtures<a class="anchor" aria-label="anchor" href="#simulation-of-mixtures"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/mixMunsell.html">mixMunsell()</a></code></li>
-<li><code><a href="../reference/plotColorMixture.html">plotColorMixture()</a></code></li>
+<li>
+<code><a href="../reference/mixMunsell.html">mixMunsell()</a></code>: simulate an subtractive mixture of
+pigments specified in Munsell notation</li>
+<li>
+<code><a href="../reference/plotColorMixture.html">plotColorMixture()</a></code>: simulate a subtractive mixture of
+pigments, display reflectance spectra</li>
 </ul>
 </div>
 </div>
@@ -499,46 +523,91 @@ profiles within an SPC</li>
 <h3 id="numerical-classification-of-soil-profiles">Numerical Classification of Soil Profiles<a class="anchor" aria-label="anchor" href="#numerical-classification-of-soil-profiles"></a>
 </h3>
 <ul>
-<li><code><a href="../reference/compareSites.html">compareSites()</a></code></li>
-<li><code><a href="../reference/NCSP.html">NCSP()</a></code></li>
+<li>
+<code><a href="../reference/NCSP.html">NCSP()</a></code>: numerical classification of soil profiles,
+within a <code>SoilProfileCollection</code>
+</li>
+<li>
+<code><a href="../reference/compareSites.html">compareSites()</a></code>: pair-wise comparison of site-level data
+from a <code>SoilProfileCollection</code>
+</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="pedology">Pedology<a class="anchor" aria-label="anchor" href="#pedology"></a>
 </h3>
 <ul>
-<li><code><a href="../reference/allocate.html">allocate()</a></code></li>
-<li><code><a href="../reference/estimateAWC.html">estimateAWC()</a></code></li>
-<li><code><a href="../reference/correctAWC.html">correctAWC()</a></code></li>
-<li><code><a href="../reference/hzDistinctnessCodeToOffset.html">hzDistinctnessCodeToOffset()</a></code></li>
-<li><code><a href="../reference/hzTopographyCodeToLineType.html">hzTopographyCodeToLineType()</a></code></li>
-<li><code><a href="../reference/hzTopographyCodeToOffset.html">hzTopographyCodeToOffset()</a></code></li>
-<li><code><a href="../reference/reaction.html">ph_to_rxnclass()</a></code></li>
-<li><code><a href="../reference/reaction.html">rxnclass_to_ph()</a></code></li>
-<li><code><a href="../reference/reaction.html">ReactionClassLevels()</a></code></li>
-<li><code><a href="../reference/horizonColorIndices.html">horizonColorIndices()</a></code></li>
+<li>
+<code><a href="../reference/allocate.html">allocate()</a></code>: perform one of several classification
+systems to soil property data</li>
+<li>
+<code><a href="../reference/estimateAWC.html">estimateAWC()</a></code>: estimate plant-available water holding
+capacity</li>
+<li>
+<code><a href="../reference/correctAWC.html">correctAWC()</a></code>: apply rock fragment or soluble salt
+corrections to AWC estimates</li>
+<li>
+<code><a href="../reference/hzDistinctnessCodeToOffset.html">hzDistinctnessCodeToOffset()</a></code>: convert horizon boundary
+distinctness codes to vertical offset</li>
+<li>
+<code><a href="../reference/hzTopographyCodeToLineType.html">hzTopographyCodeToLineType()</a></code>: convert horizon boundary
+topography codes to line types</li>
+<li>
+<code><a href="../reference/hzTopographyCodeToOffset.html">hzTopographyCodeToOffset()</a></code>: convert horizon boundary
+topography codes to offset</li>
+<li>
+<code><a href="../reference/reaction.html">ph_to_rxnclass()</a></code>: convert pH to reaction class</li>
+<li>
+<code><a href="../reference/reaction.html">rxnclass_to_ph()</a></code>: convert reaction class to pH
+range</li>
+<li>
+<code><a href="../reference/reaction.html">ReactionClassLevels()</a></code>: ordered factor of reaction
+classes</li>
+<li>
+<code><a href="../reference/horizonColorIndices.html">horizonColorIndices()</a></code>: compute various soil color-based
+indices to horizons within an SPC</li>
 </ul>
 <div class="section level4">
 <h4 id="soil-texture">Soil Texture<a class="anchor" aria-label="anchor" href="#soil-texture"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code></li>
-<li><code><a href="../reference/bootstrapSoilTexture.html">bootstrapSoilTexture()</a></code></li>
-<li><code><a href="../reference/SoilTextureLevels.html">SoilTextureLevels()</a></code></li>
-<li><code><a href="../reference/texture.html">texcl_to_ssc()</a></code></li>
-<li><code><a href="../reference/texture.html">ssc_to_texcl()</a></code></li>
-<li><code><a href="../reference/texture.html">texture_to_taxpartsize()</a></code></li>
+<li>
+<code><a href="../reference/textureTriangleSummary.html">textureTriangleSummary()</a></code>: graphical summary of sand,
+silt, clay fractions on a soil texture triangle<br>
+</li>
+<li>
+<code><a href="../reference/bootstrapSoilTexture.html">bootstrapSoilTexture()</a></code>: simulation of realistic
+compositions (sand, silt, clay) from a small set of example data</li>
+<li>
+<code><a href="../reference/SoilTextureLevels.html">SoilTextureLevels()</a></code>: ordered factor of soil texture
+classes</li>
+<li>
+<code><a href="../reference/texture.html">texcl_to_ssc()</a></code>: convert soil texture classes to sand,
+silt, clay centroids</li>
+<li>
+<code><a href="../reference/texture.html">ssc_to_texcl()</a></code>: convert sand, silt, clay values to soil
+texture class</li>
+<li>
+<code><a href="../reference/texture.html">texture_to_taxpartsize()</a></code>: convert soil texture to Soil
+Taxonomy particle size class</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="coarse-fragments">Coarse Fragments<a class="anchor" aria-label="anchor" href="#coarse-fragments"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/fragmentSieve.html">fragmentSieve()</a></code></li>
-<li><code><a href="../reference/texture.html">texmod_to_fragvoltot()</a></code></li>
-<li><code><a href="../reference/texture.html">texture_to_texmod()</a></code></li>
-<li><code><a href="../reference/texture.html">fragvol_to_texmod()</a></code></li>
-<li><code><a href="../reference/fragmentClasses.html">fragmentClasses()</a></code></li>
+<li>
+<code><a href="../reference/fragmentSieve.html">fragmentSieve()</a></code>: classify coarse fragments by fragment
+diameter</li>
+<li>
+<code><a href="../reference/texture.html">texmod_to_fragvoltot()</a></code>:</li>
+<li>
+<code><a href="../reference/texture.html">texture_to_texmod()</a></code>:</li>
+<li>
+<code><a href="../reference/texture.html">fragvol_to_texmod()</a></code>:</li>
+<li>
+<code><a href="../reference/fragmentClasses.html">fragmentClasses()</a></code>: coarse fragment diameter thresholds
+used by USDA-NRCS</li>
 </ul>
 </div>
 <div class="section level4">
@@ -558,8 +627,8 @@ profiles within an SPC</li>
 <h4 id="generalized-horizon-labels">Generalized Horizon Labels<a class="anchor" aria-label="anchor" href="#generalized-horizon-labels"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/evalGenHZ.html">evalGenHZ()</a></code></li>
 <li><code><a href="../reference/generalize.hz.html">generalize.hz()</a></code></li>
+<li><code><a href="../reference/evalGenHZ.html">evalGenHZ()</a></code></li>
 <li><code><a href="../reference/genhzTableToAdjMat.html">genhzTableToAdjMat()</a></code></li>
 <li><code><a href="../reference/get.ml.hz.html">get.ml.hz()</a></code></li>
 <li><code><a href="../reference/guessGenHzLevels.html">guessGenHzLevels()</a></code></li>
