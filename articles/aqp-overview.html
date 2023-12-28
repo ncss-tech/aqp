@@ -427,24 +427,42 @@ gradient such as topographic sequence</li>
 <h4 id="color-conversion">Color Conversion<a class="anchor" aria-label="anchor" href="#color-conversion"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/col2Munsell.html">col2Munsell()</a></code></li>
-<li><code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code></li>
-<li><code><a href="../reference/parseMunsell.html">parseMunsell()</a></code></li>
-<li><code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code></li>
-<li><code><a href="../reference/getClosestMunsellChip.html">getClosestMunsellChip()</a></code></li>
 <li>
-<code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code> moist / dry</li>
+<code><a href="../reference/col2Munsell.html">col2Munsell()</a></code>: convert various color notations to
+Munsell notation</li>
+<li>
+<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code>: convert Munsell notation to sRGB or
+CIELAB color coordinates</li>
+<li>
+<code><a href="../reference/parseMunsell.html">parseMunsell()</a></code>: parse and optionally convert a munsell
+color</li>
+<li>
+<code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code>: estimate the closest Munsell color
+given reflectance spectra in the visible range</li>
+<li>
+<code><a href="../reference/getClosestMunsellChip.html">getClosestMunsellChip()</a></code>: estimate a reasonably close
+Munsell color given non-standard notation</li>
+<li>
+<code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code>: estimate moist soil color from dry
+soil color (and vice versa)</li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="comparison">Comparison<a class="anchor" aria-label="anchor" href="#comparison"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/contrastClass.html">contrastClass()</a></code></li>
-<li><code><a href="../reference/colorContrast.html">colorContrast()</a></code></li>
-<li><code><a href="../reference/colorContrastPlot.html">colorContrastPlot()</a></code></li>
-<li><code><a href="../reference/contrastChart.html">contrastChart()</a></code></li>
-<li><code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code></li>
+<li>
+<code><a href="../reference/colorContrast.html">colorContrast()</a></code>: pair-wise color contrast and CIE2000
+(dE00) based on colors in Munsell notation</li>
+<li>
+<code><a href="../reference/colorContrastPlot.html">colorContrastPlot()</a></code>: visual explanation of soil color
+contrast and dE00</li>
+<li>
+<code><a href="../reference/contrastChart.html">contrastChart()</a></code>: Munsell color book style explanation
+of soil color contrast and dE00</li>
+<li>
+<code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>: derive soil color signatures for
+profiles within an SPC</li>
 </ul>
 </div>
 <div class="section level4">
