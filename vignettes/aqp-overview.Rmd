@@ -23,6 +23,9 @@ data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 ```
 
+# 
+
+
 
 # Index by Topic
 
@@ -217,30 +220,28 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
   * `hasDarkColors()`
   * `estimatePSCS()`
 
-### Generalized Horizon Labels
-  * `generalize.hz()`
-  * `evalGenHZ()`
-  * `genhzTableToAdjMat()`
-  * `get.ml.hz()`
-  * `guessGenHzLevels()`
-  * `GHL()`
+### Generalized Horizon Labels (GHL)
+  * `generalize.hz()`: apply REGEX rules to group horizon designations into a reduced set of "generalized horizon labels"
+  * `evalGenHZ()`: evaluate internal consistency of assigned GHL
+  * `genhzTableToAdjMat()`: convert a cross-tabulation of GHL vs. original horizon designations to adjacency matrix
+  * `get.ml.hz()`: extract most likely horizon boundary depths from probability depth functions 
+  * `guessGenHzLevels()`: estimate the correct ordering of GHL given horizon depths
+  * `GHL()`: get/set GHL metadata for a `SoilProfileCollection`
 
 ## Misc.
-  * `invertLabelColor()`
-  * `panel.depth_function()`
-  * `hzTransitionProbabilities()`
-  * `mostLikelyHzSequence()`
+  * `invertLabelColor()`: automatic adjustment of label color for maximum contrast, based on specified background color
+  * `hzTransitionProbabilities()`: derive transition probability matrix from horizon level data
+  * `mostLikelyHzSequence()`: use Markov Chains to predict the most likely sequence of horizons
 
 ### Accuracy and Uncertainty
-  * `shannonEntropy()`
-  * `confusionIndex()`
-  * `brierScore()`
-  * `tauW()`
+  * `shannonEntropy()`: Shannon entropy
+  * `brierScore()`: Brier's score
+  * `tauW()`: weighted tau statistic
 
 ### Overlapping Annotation  
-  * `findOverlap()`
-  * `overlapMetrics()`
-  * `fixOverlap()`
+  * `findOverlap()`: identify overlap within a vector of positions based on a given threshold
+  * `overlapMetrics()`: metrics of overlap within a vecgtor or positions based on a given threshold 
+  * `fixOverlap()`: attempt the minimum of adjustments to vector of positions such that a given distance threshold is enforced 
 
 ## Example Data 
   * `sp1`
