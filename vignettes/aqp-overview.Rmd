@@ -106,9 +106,9 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `trunc()`: truncate SPC to given depth interval
   * `subset()`: subset profiles based on logical expressions
   * `subsetHz()`: subset horizons based on logical expressions
-  * `[`: `data.frame`-like subsetting of profiles and/or horizons
+  * `[`: `data.frame`-like subsetting of profiles (i-index) and/or horizons (j-index)
   * `[[`: access site or horizon-level columns by name
-  * `horizon keywords`: 
+  * `k-index expressions`: `.FIRST`, `.LAST`, `.HZID`, `.NHZ`
 
 ### Depth
   * `min()`: minimum bottom depth within a SPC
