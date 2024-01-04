@@ -296,8 +296,8 @@ and bottom depths</li>
 </h4>
 <ul>
 <li>
-<code><a href="../reference/glom.html">glom()</a></code>: extract horizons based on single depth or depth
-interval</li>
+<code><a href="../reference/glom.html">glom()</a></code>: extract horizons based on overlap criteria
+defined by point or interval</li>
 <li>
 <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">trunc()</a></code>: truncate SPC to given depth interval</li>
 <li>
@@ -401,13 +401,11 @@ horizon-level data</li>
 <code><a href="../reference/profileApply.html">profileApply()</a></code>: apply a function to each profile within
 an SPC (slow but simple interface)</li>
 <li>
-<code><a href="../reference/glomApply.html">glomApply()</a></code>:</li>
+<code><a href="../reference/summarizeSPC.html">summarizeSPC()</a></code>: perform group-wise summaries over
+profiles within an SPC</li>
 <li>
-<code>mutate_profiles()</code>:</li>
-<li>
-<code><a href="../reference/summarizeSPC.html">summarizeSPC()</a></code>:</li>
-<li>
-<code><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform()</a></code>:</li>
+<code><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform()</a></code>: modify a SPC using expressions that
+operation on site or horizon-level data</li>
 </ul>
 </div>
 <div class="section level4">
@@ -424,7 +422,7 @@ a “dice()-ed” SPC</li>
 <code><a href="../reference/spc2mpspline-SoilProfileCollection-method.html">spc2mpspline()</a></code>: interface to equal-area spline fitting
 from mpspline2 package</li>
 <li>
-<code><a href="../reference/segment.html">segment()</a></code>: generate segment lables for depth-weighted
+<code><a href="../reference/segment.html">segment()</a></code>: generate segment labels for depth-weighted
 aggregation</li>
 <li>
 <code><a href="../reference/L1_profiles.html">L1_profiles()</a></code>: create representative profiles via
@@ -452,7 +450,7 @@ duplicated horizon bottom depths</li>
 overlap</li>
 <li>
 <code><a href="../reference/checkHzDepthLogic.html">checkHzDepthLogic()</a></code>: apply battery of horizon depth
-toplogical tests</li>
+topological tests</li>
 <li>
 <code><a href="../reference/splitLogicErrors.html">splitLogicErrors()</a></code>: split an SPC according to variety
 of possibly horizon depth errors</li>
@@ -496,9 +494,15 @@ object</li>
 <h4 id="spatial-data">Spatial Data<a class="anchor" aria-label="anchor" href="#spatial-data"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/SoilProfileCollection-crs.html">prj()</a></code></li>
-<li><code>initSpatial()</code></li>
-<li><code><a href="../reference/initSpatial.html">getSpatial()</a></code></li>
+<li>
+<code><a href="../reference/SoilProfileCollection-crs.html">prj()</a></code>: get/set coordinate reference system (CRS)
+metadata</li>
+<li>
+<code>initSpatial()</code>: set (site-level) column names containing
+coordinates</li>
+<li>
+<code><a href="../reference/initSpatial.html">getSpatial()</a></code>: get spatial data (site + coordinates)
+from an SPC</li>
 </ul>
 </div>
 <div class="section level4">
@@ -723,11 +727,10 @@ Taxonomy particle size class</li>
 <code><a href="../reference/fragmentSieve.html">fragmentSieve()</a></code>: classify coarse fragments by fragment
 diameter</li>
 <li>
-<code><a href="../reference/texture.html">texmod_to_fragvoltot()</a></code>:</li>
-<li>
-<code><a href="../reference/texture.html">texture_to_texmod()</a></code>:</li>
-<li>
-<code><a href="../reference/texture.html">fragvol_to_texmod()</a></code>:</li>
+<code><a href="../reference/texture.html">texmod_to_fragvoltot()</a></code>: estimate ranges in coarse
+fragment volume based on a soil texture modifier</li>
+<li><code><a href="../reference/texture.html">texture_to_texmod()</a></code></li>
+<li><code><a href="../reference/texture.html">fragvol_to_texmod()</a></code></li>
 <li>
 <code><a href="../reference/fragmentClasses.html">fragmentClasses()</a></code>: coarse fragment diameter thresholds
 used by USDA-NRCS</li>
@@ -737,8 +740,12 @@ used by USDA-NRCS</li>
 <h4 id="soil-taxonomy-1">Soil Taxonomy<a class="anchor" aria-label="anchor" href="#soil-taxonomy-1"></a>
 </h4>
 <ul>
-<li><code><a href="../reference/getArgillicBounds.html">getArgillicBounds()</a></code></li>
-<li><code><a href="../reference/getCambicBounds.html">getCambicBounds()</a></code></li>
+<li>
+<code><a href="../reference/getArgillicBounds.html">getArgillicBounds()</a></code>: estimate the upper and lower
+boundaries of an argillic horizon</li>
+<li>
+<code><a href="../reference/getCambicBounds.html">getCambicBounds()</a></code>: estimate the upper and lower
+boundaries of a cambic horizon</li>
 <li><code><a href="../reference/getSurfaceHorizonDepth.html">getSurfaceHorizonDepth()</a></code></li>
 <li><code><a href="../reference/getSurfaceHorizonDepth.html">getMineralSoilSurfaceDepth()</a></code></li>
 <li><code><a href="../reference/getSurfaceHorizonDepth.html">getPlowLayerDepth()</a></code></li>
