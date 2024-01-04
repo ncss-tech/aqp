@@ -102,7 +102,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `horizonNames()`: horizon-level column names
 
 ### Subset
-  * `glom()`: extract horizons based on single depth or depth interval
+  * `glom()`: extract horizons based on overlap criteria defined by point or interval
   * `trunc()`: truncate SPC to given depth interval
   * `subset()`: subset profiles based on logical expressions
   * `subsetHz()`: subset horizons based on logical expressions
@@ -139,16 +139,14 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   
 ### Iteration
   * `profileApply()`: apply a function to each profile within an SPC (slow but simple interface)
-  * `glomApply()`: 
-  * `mutate_profiles()`: 
-  * `summarizeSPC()`: 
-  * `transform()`: 
+  * `summarizeSPC()`: perform group-wise summaries over profiles within an SPC
+  * `transform()`: modify a SPC using expressions that operation on site or horizon-level data
 
 ### Change of Support
   * `dice()`: convert SPC to 1 depth-unit intervals by replication
   * `slab()`: apply an aggregate function over groups within a "dice()-ed" SPC
   * `spc2mpspline()`: interface to equal-area spline fitting from mpspline2 package
-  * `segment()`: generate segment lables for depth-weighted aggregation 
+  * `segment()`: generate segment labels for depth-weighted aggregation 
   * `L1_profiles()`: create representative profiles via multivariate median (L1 estimator)
   * `slicedHSD()`: apply Tukey's HSD over groups within a "dice()-ed" SPC
 
@@ -157,7 +155,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `fillHzGaps()`: fill topological gaps in horizon depth
   * `repairMissingHzDepths()`: attempt fixing missing or duplicated horizon bottom depths
   * `flagOverlappingHz()`: flag horizons with perfect overlap
-  * `checkHzDepthLogic()`: apply battery of horizon depth toplogical tests
+  * `checkHzDepthLogic()`: apply battery of horizon depth topological tests
   * `splitLogicErrors()`: split an SPC according to variety of possibly horizon depth errors
   * `HzDepthLogicSubset()`: remove profiles from an SPC if any depth logic errors are present
 
@@ -173,9 +171,9 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `as(SPC, 'sf')`: convert site and spatial data to sf object
 
 ### Spatial Data
-  * `prj()`
-  * `initSpatial()`
-  * `getSpatial()`
+  * `prj()`: get/set coordinate reference system (CRS) metadata
+  * `initSpatial()`: set (site-level) column names containing coordinates
+  * `getSpatial()`: get spatial data (site + coordinates) from an SPC
 
 ### Internal Consistency
   * `checkSPC()`: check SPC for internal consistency 
@@ -253,14 +251,14 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   
 ### Coarse Fragments
   * `fragmentSieve()`: classify coarse fragments by fragment diameter
-  * `texmod_to_fragvoltot()`: 
-  * `texture_to_texmod()`:
-  * `fragvol_to_texmod()`:
+  * `texmod_to_fragvoltot()`: estimate ranges in coarse fragment volume based on a soil texture modifier
+  * `texture_to_texmod()`
+  * `fragvol_to_texmod()`
   * `fragmentClasses()`: coarse fragment diameter thresholds used by USDA-NRCS
 
 ### Soil Taxonomy
-  * `getArgillicBounds()`
-  * `getCambicBounds()`
+  * `getArgillicBounds()`: estimate the upper and lower boundaries of an argillic horizon
+  * `getCambicBounds()`: estimate the upper and lower boundaries of a cambic horizon
   * `getSurfaceHorizonDepth()`
   * `getMineralSoilSurfaceDepth()`
   * `getPlowLayerDepth()`
