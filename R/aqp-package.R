@@ -21,7 +21,6 @@
 #'
 #' @name aqp-package
 #' @aliases aqp-package aqp aqp.env
-#' @docType package
 #' @author Dylan E. Beaudette <debeaudette@@ucdavis.edu>, Pierre Roudier, Andrew G. Brown
 #' @seealso `depths<-()`, `SoilProfileCollection()`, \code{\link{sp1}}, \code{\link{sp2}}, \code{\link{sp3}}, \code{\link{sp4}}, \code{\link{sp5}}, \code{\link{sp6}}
 #' @keywords package
@@ -35,7 +34,7 @@
 #' @importFrom grid grid.text gpar unit
 #' @importFrom graphics plot
 #' @importFrom lattice levelplot xyplot panel.abline panel.grid panel.lines panel.points panel.polygon panel.rect panel.segments panel.text strip.custom trellis.par.get
-NULL
+"_PACKAGE"
 
 #' @export aqp.env
 #' @noRd
