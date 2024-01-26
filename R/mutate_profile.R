@@ -22,6 +22,9 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
     .dots <- .dots[2:length(.dots)]
     .names <- names(.dots)
 
+    idn <- idname(object)
+    hzidn <- hzidname(object)
+    
     if (is.null(.names)) {
       .names <- as.character(.dots)
     }
@@ -32,6 +35,12 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
       horizon_level <- rep(FALSE, length(.dots))
     }
     
+    x <- data.table::data.table(object@site)[object@horizons, on = idn]
+    o1 <- object[1, ]
+    o2 <- object[nrow(object), ]  
+    o1c <- compositeSPC(o1)
+    o2c <- compositeSPC(o2)
+    
     # iterate over expressions left to right
     for (i in 1:length(.dots)) {
       
@@ -39,34 +48,34 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"), functio
       # decide whether we are adding/modifying a site or horizon level variable so
       #  that degenerate cases do not create identical columns in site and horizon table or get put in unexpected slot
       #  2021-10-29: updated to use first and last profile, and allowing user override via argument
-      res_eval1 <- .data_dots(compositeSPC(object[1, ]), eval(.dots[[i]]))[[1]]
-      res_eval2 <- .data_dots(compositeSPC(object[nrow(object), ]), eval(.dots[[i]]))[[1]]
+      di <- .dots[[i]]
+      res_eval1 <- .data_dots(o1c, eval(di))[[1]]
+      res_eval2 <- .data_dots(o2c, eval(di))[[1]]
       
       # allow user to override the determination
       # check length of first/last profile result against number of horizons
-      if (length(res_eval1) == nrow(object[1,]) &&
-          length(res_eval2) == nrow(object[nrow(object),])) {
+      if (length(res_eval1) == nrow(o1) && length(res_eval2) == nrow(o2)) {
         horizon_level[i] <- TRUE
       }
-      
-      x <- data.table::data.table(object@site)[object@horizons, on = idname(object)]
       .SD <- NULL
       
-      res <- x[, list(.hzidname = .SD[[hzidname(object)]], 
-                      eval(.dots[[i]], envir = .SD)), by = c(idname(object))]
-      colnames(res) <- c(idname(object), hzidname(object), .names[i])
+      # remove any existing columnnames before joining in result
       if (any(.names[i] %in% names(object))) {
         for (n in .names[i]) {
           object[[n]] <- NULL
         }
       }
+      
       if (isFALSE(hzin) || !horizon_level[i]) {
-        if (nrow(unique(res[, .SD, .SDcols = colnames(res)[colnames(res) != hzidname(object)]])) > length(object)) {
+        res <- x[, list(eval(.dots[[i]], envir = .SD)), by = c(idn)]
+        if (length(res[[2]]) > length(object)) {
           stop("mutate_profile: some profiles returned more than one result and `horizon_level=FALSE`", call. = FALSE)
         }
-        res[[hzidname(object)]] <- NULL
-        site(object) <- unique(res)
+        colnames(res) <- c(idn, .names[i])
+        site(object) <- res
       } else {
+        res <- x[, list(.hzidname = .SD[[hzidn]], eval(.dots[[i]], envir = .SD)), by = c(idn)]
+        colnames(res) <- c(idn, hzidn, .names[i])
         horizons(object) <- res
       }
       
