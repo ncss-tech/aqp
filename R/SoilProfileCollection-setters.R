@@ -185,7 +185,7 @@ setReplaceMethod("depths", "data.frame",
   data <- data[id_tdep_order,]
 
   # create a site table with just IDs
-  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]),
+  nusite <- .as.data.frame.aqp(data.frame(rle(data[[nm[1]]])$values,
                                           stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
 
@@ -284,7 +284,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 
     # get profile IDs from horizon table
     ids <- as.character(horizons(object)[[idname(object)]])
-    pid <- .coalesce.idx(ids)
+    pid <- rle(ids)$values
     idn <- idname(object)
     adf <- aqp_df_class(object)
     
@@ -581,7 +581,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   }
   
   h.id <- as.character(object@horizons[[hdn]])
-  original.site.order <- match(.coalesce.idx(object@site[[idn]]),
+  original.site.order <- match(rle(object@site[[idn]])$values,
                                object@site[[idn]])
 
   # in keeping with tradition of site<-, we let the join happen
@@ -597,7 +597,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   #       which might cause some backwards compatibility problems (requiring type conversion)
   #       this is a problem because the join is completely open ended -- not just based on ID
   
-  chnew <- .coalesce.idx(horizon.new[[idn]])
+  chnew <- rle(horizon.new[[idn]])$values
   if (length(chnew) != length(original.site.order) |
      suppressWarnings(any(original.site.order != chnew))) {
     new.horizon.order <- order(horizon.new[[idn]], 
