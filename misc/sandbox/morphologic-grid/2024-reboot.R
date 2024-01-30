@@ -193,20 +193,27 @@ initHzDepthFunctions <- function(hz, plot = TRUE) {
   # normalize probability
   p <- zapsmall(sweep(p, MARGIN = 1, STATS = rowSums(p), FUN = '/'))
   
-  # check
-  matplot(
-    x = z.i, 
-    y = p, 
-    type = 'b', 
-    pch = 1, 
-    cex = 0.5,
-    xlab = 'Depth (cm)',
-    ylab = 'Pr(H | depth)',
-    axes = FALSE
-  )
+  if(plot) {
+    # mask 0 via NA, in temp copy
+    pp <- p
+    pp[pp < 1e-5] <- NA
+    
+    matplot(
+      x = z.i, 
+      y = pp, 
+      type = 'b', 
+      pch = 1, 
+      cex = 0.5,
+      xlab = 'Depth (cm)',
+      ylab = 'Pr(H | depth)',
+      axes = FALSE
+    )
+    
+    axis(side = 1, at = pretty(z.i, n = 12), cex.axis = 0.75)
+    axis(side = 2, at = seq(0, 1, by = 0.1), cex.axis = 0.75, las = 1)
+  }
   
-  axis(side = 1, at = pretty(z.i, n = 12), cex.axis = 0.75)
-  axis(side = 2, at = seq(0, 1, by = 0.1), cex.axis = 0.75, las = 1)
+  
   
   return(p)
 }
@@ -318,6 +325,7 @@ hz <- data.frame(
 )
 
 # build depth-function matrix
+par(mar = c(3, 4.5, 3, 1))
 p <- initHzDepthFunctions(hz)
 
 
