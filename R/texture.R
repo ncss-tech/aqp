@@ -247,7 +247,6 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
     }) ->.;
     do.call("rbind", .) -> df
     df$silt <- 100 - df$clay - df$sand
-    row.names(df) <- NULL
   }
 
 
@@ -256,12 +255,12 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
   df <- df[(order(as.integer(df$rn))), vars]
   df$rn    <- NULL
   df$texcl <- NULL
-
+  rownames(df) <- NULL
   return(df)
 }
 
 #' Convert sand, silt and clay to texture class
-#' @param simplify Passed to `SoilTextureLevels()` to set the nu mber of possible texture classes. If `TRUE`, the ordered factor has a maximum of 12 levels, if `FALSE` (default) the ordered factor has a maximum of 21 levels (including e.g. very fine/fine/coarse variants)
+#' @param simplify Passed to `SoilTextureLevels()` to set the number of possible texture classes. If `TRUE`, the ordered factor has a maximum of 12 levels, if `FALSE` (default) the ordered factor has a maximum of 21 levels (including e.g. very fine/fine/coarse variants)
 #' @rdname texture
 #' @return  - `ssc_to_texcl`: A `character` vector containing texture class
 #' @export
