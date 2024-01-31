@@ -53,7 +53,7 @@ flagOverlappingHz <- function(x) {
     ## TODO: tests required
     # index affected horizons
     .m <- outer(.ot, .tops, '==')
-    idx <- as.vector(apply(.m, 1, which))
+    idx <- unlist(as.vector(apply(.m, 1, which)))
     
     # generate flag vector along sequence of horizons 
     .res <- rep(FALSE, times = length(.tops))
