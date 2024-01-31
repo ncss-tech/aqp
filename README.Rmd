@@ -44,6 +44,16 @@ Get the development version from Github, after installing the CRAN version + dep
 remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
 ```
 
+Install suggested packages:
+```{r eval=FALSE}
+p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+"sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
+"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+
+install.packages(p)
+```
+
 ## Website
 [http://ncss-tech.github.io/AQP/](http://ncss-tech.github.io/AQP/)
 
@@ -77,16 +87,6 @@ plotSPC(
   hz.depths = TRUE
 )
 
-```
-
-## Install Suggested Packages
-```r
-p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
-"sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
-"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
-
-install.packages(p)
 ```
 
 ## Citation
