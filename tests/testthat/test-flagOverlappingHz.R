@@ -26,3 +26,23 @@ test_that("flagOverlappingHz", {
   
 })
 
+
+# more complex edge case
+x <- data.frame(peiid = c("1373969", "1373969", "1373969", "1373969", 
+"1373969", "1373969", "1373969", "1373969", "1373969", "1373969", 
+"1373969", "1373969"), hzdept = c(0L, 0L, 0L, 0L, 
+26L, 45L, 77L, 102L, 102L, 102L, 185L, 205L), hzdepb = c(26L, 
+26L, 26L, 26L, 45L, 77L, 102L, 185L, 185L, 185L, 205L, 220L), 
+    hzname = c("Ap", "Ap", "Ap", "Ap", "Bt1", "Bt2", "BCt", "Cd", 
+    "Cd", "Cd", "2C1", "2C2"), texture = c("L", "L", "L", "L", 
+    "CL", "CL", "CL", "L", "L", "L", "SR- VFSL L", "S"))
+
+depths(x) <- peiid ~ hzdept + hzdepb
+
+test_that("edge case", {
+  expect_equal(as.logical(flagOverlappingHz(x)), 
+               c(TRUE, TRUE, TRUE, TRUE, 
+                 FALSE, FALSE, FALSE, 
+                 TRUE, TRUE, TRUE, 
+                 FALSE, FALSE))
+})
