@@ -110,7 +110,7 @@ citation("aqp")
   * [Visualization of Horizon Boundaries](https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html)
   * [Mixing Munsell Colors in {aqp}](https://ncss-tech.github.io/AQP/aqp/mix-colors.html)
   * [Theoretical Water Retention Curves](https://ncss-tech.github.io/AQP/aqp/water-retention-curves.html)
-  * [Soil Texture Vizualization Ideas](https://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html)
+  * [Soil Texture Visualization Ideas](https://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html)
 
 ## Related Presentations / Posters
   * [Numerical Classification of Soil Profiles (2023 NCSS Meetings)](https://ncss-tech.github.io/AQP/presentations/2023-NCSS-NCSP-poster.pdf)
