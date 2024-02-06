@@ -22,7 +22,7 @@
 #' @keywords manip
 #' 
 #' @references 
-#' Beaudette, D. E., Roudier, P., & Skovlin, J. (2016). Probabilistic representation of genetic soil horizons. Digital soil morphometrics, 281-293. 
+#' Beaudette, D.E., Roudier, P., Skovlin, J. (2016). Probabilistic Representation of Genetic Soil Horizons. In: Hartemink, A., Minasny, B. (eds) Digital Soil Morphometrics. Progress in Soil Science. Springer, Cham. https://doi.org/10.1007/978-3-319-28295-4_18
 #' 
 #' @export
 #' @examples

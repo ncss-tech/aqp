@@ -220,10 +220,10 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' 
 #' @note Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.
 #' 
-#' @references \url{http://ncss-tech.github.io/AQP/}
-#' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-#' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
-#' http://www.cis.rit.edu/mcsl/online/munsell.php
+#' @references 
+#'  - \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
+#'  - \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#'  - \url{https://www.rit.edu/science/munsell-color-lab}
 #' 
 #' @author D.E. Beaudette
 #' 

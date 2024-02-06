@@ -9,7 +9,7 @@ Mountains, CA, USA.}
 An object of class \code{SoilProfileCollection} of length 14.
 }
 \source{
-Original manuscripts and person communication with authors.
+Original manuscripts and personal communication with authors.
 }
 \usage{
 data(sierraTransect)
