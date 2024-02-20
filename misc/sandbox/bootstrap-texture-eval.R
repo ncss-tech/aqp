@@ -2,8 +2,6 @@ library(aqp)
 library(soilDB)
 library(compositions)
 library(soiltexture)
-library(dplyr)
-
 
 # sand loam
 .sand <- jitter(rep(65, times = 10), amount = 5)
@@ -111,10 +109,9 @@ TT.points(tri.data = ssc, geo = TT, col = 'royalblue', pch = 16, cex = 0.5, lwd 
 # hmm..
 data(sp5)
 
-ssc <- trunc(sp5, 0, 10) %>%
-  horizons(.) %>%
-  select(
-    .,
+ssc <- trunc(sp5, 0, 10) |>
+  horizons() |> 
+  dplyr::select(
     SAND = sand,
     SILT = silt,
     CLAY = clay

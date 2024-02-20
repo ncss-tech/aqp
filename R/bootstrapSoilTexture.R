@@ -1,4 +1,6 @@
 
+## TODO: compute mean, covariance, Dirichlet parameters for all samples 'soil-texture-separate-sim-by-class.R'
+##       use those to bootstrap by soil texture class label
 
 #'
 #' @title Bootstrap Soil Texture Data
