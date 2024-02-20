@@ -7,7 +7,7 @@
 thicknessOf(
   x,
   pattern = NULL,
-  hzdesgn = guessHzDesgnName(x),
+  hzdesgn = guessHzDesgnName(x, required = TRUE),
   method = "cumulative",
   FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]]),
   na.rm = FALSE,
