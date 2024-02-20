@@ -129,7 +129,7 @@
 #' character vector} \item{field_ph}{a numeric vector}
 #' \item{hue}{a character vector} \item{value}{a numeric
 #' vector} \item{chroma}{a numeric vector} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
+#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
 #' @keywords datasets
 #' @examples
 #'
@@ -190,7 +190,7 @@ NULL
 #' \item{b}{RGB blue component} \item{soil_color}{R-friendly
 #' encoding of soil color} }
 #' @author Dylan E. Beaudette
-#' @references http://casoilresource.lawr.ucdavis.edu/
+#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
 #' @source Busacca, Alan J.; Singer, Michael J.; Verosub, Kenneth L. 1989. Late
 #' Cenozoic stratigraphy of the Feather and Yuba rivers area, California, with
 #' a section on soil development in mixed alluvium at Honcut Creek. USGS
@@ -266,8 +266,8 @@ NULL
 #' \item{A}{color: a-coordinate, CIE-LAB colorspace (dry)}
 #' \item{B}{color: b-coordinate, CIE-LAB colorspace (dry)}
 #' \item{name}{horizon name} \item{soil_color}{horizon color} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
 #' @keywords datasets
+#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
 #' @examples
 #'
 #' ## this example investigates the concept of a "median profile"
@@ -695,7 +695,7 @@ NULL
 #' Rasmussen, C., Matsuyama, N., Dahlgren, R.A., Southard, R.J. and Brauer, N.
 #' (2007), Soil Genesis and Mineral Transformation Across an Environmental
 #' Gradient on Andesitic Lahar. Soil Sci. Soc. Am. J., 71: 225-237.
-#' @source Original manuscripts and person communication with authors.
+#' @source Original manuscripts and personal communication with authors.
 #' @keywords datasets
 #' @examples
 #'
@@ -1007,7 +1007,7 @@ NULL
 #'
 #' @references Jacobs, P. M., L. T. West, and J. N. Shaw. 2002. Redoximorphic
 #' Features as Indicators of Seasonal Saturation, Lowndes County, Georgia. Soil
-#' Sci. Soc. Am. J. 66:315-323. doi:10.2136/sssaj2002.3150
+#' Sci. Soc. Am. J. 66:315-323. doi:\doi{10.2136/sssaj2002.3150}
 #' @usage data(jacobs2000)
 #'
 #' @keywords datasets
@@ -1174,31 +1174,31 @@ NULL
 #'
 #' A lookup table of interpolated Munsell color chips for common soil colors.
 #'
-#' See \code{munsell2rgb} for conversion examples. Note that this table does
-#' not currently have entries for values of 2.5--common in most soil color
-#' books. These chips should be added in the next major release of aqp. Values
+#' See \code{munsell2rgb} for conversion examples. Values
 #' are referenced to the D65 standard illuminant.
 #'
 #' @name munsell
 #' @docType data
 #'
-#' @format A data frame with 8825 rows.  \describe{ \item{hue}{Munsell
-#' Hue, upper case} \item{value}{Munsell Value}
-#' \item{chroma}{Munsell Chroma} \item{r}{sRGB "red" value
-#' (0-1)} \item{g}{sRGB "green" value (0-1)} \item{b}{sRGB
-#' "blue" value (0-1)} \item{L}{CIE LAB "L" coordinate}
-#' \item{A}{CIE LAB "A" coordinate} \item{B}{CIE LAB "B"
-#' coordinate} }
+#' @format A data.frame with 8825 rows.  
+#'  - `hue`: Munsell Hue, upper case
+#'  - `value`: Munsell Value
+#'  - `chroma`: Munsell Chroma
+#'  - `r`: sRGB "red" value (0-1)
+#'  - `g`: sRGB "green" value (0-1)
+#'  - `b`: sRGB "blue" value (0-1)
+#'  - `L`: CIELAB "L" coordinate
+#'  - `A`: CIELAB "A" coordinate
+#'  - `B`: CIELAB "B" coordinate
 #'
 #' @usage data(munsell)
 #'
-#' @references \describe{
-#' \item{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}{Color
-#' conversion equations}
-#' \item{http://dx.doi.org/10.1016/j.cageo.2012.10.020}{Methods used to
-#' generate this table} }
-#' @source Color chip XYZ values:
-#' http://www.rit.edu/cos/colorscience/rc_munsell_renotation.php
+#' @references 
+#'  - Color conversion equations
+#'    + http://www.brucelindbloom.com/index.html?ColorCalcHelp.html
+#'  - Methods used to generate this table
+#'    + http://dx.doi.org/10.1016/j.cageo.2012.10.020
+#' @source Color chip XYZ values: \url{https://www.rit.edu/science/munsell-color-science-lab-educational-resources#munsell-renotation-data}
 #' @keywords datasets
 #' @examples
 #'

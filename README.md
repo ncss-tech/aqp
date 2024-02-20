@@ -145,7 +145,7 @@ citation("aqp")
   {aqp}](https://ncss-tech.github.io/AQP/aqp/mix-colors.html)
 - [Theoretical Water Retention
   Curves](https://ncss-tech.github.io/AQP/aqp/water-retention-curves.html)
-- [Soil Texture Vizualization
+- [Soil Texture Visualization
   Ideas](https://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html)
 
 ## Related Presentations / Posters
