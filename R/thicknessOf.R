@@ -66,8 +66,8 @@ thicknessOf <- function(x,
     h$.internalTHK <- x[[hzd[2]]] - x[[hzd[1]]]
     res <- h[, list(thickness = sum(.internalTHK[.internalHZM], na.rm = na.rm)), by = lid]
   } else if (method == "minmax") {
-    res <- h[, list(tmin = suppressWarnings(max(.SD[[2]][.internalHZM], na.rm = na.rm)),
-                     tmax = suppressWarnings(min(.SD[[1]][.internalHZM], na.rm = na.rm))),
+    res <- h[, list(tmin = suppressWarnings(min(.SD[[1]][.internalHZM], na.rm = na.rm)),
+                    tmax = suppressWarnings(max(.SD[[2]][.internalHZM], na.rm = na.rm))),
               by = lid, .SDcols = c(hzd, ".internalHZM")]
     res$thickness <- res$tmax - res$tmin
     res$thickness[!is.finite(res$thickness)] <- 0L
