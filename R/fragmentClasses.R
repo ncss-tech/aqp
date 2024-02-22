@@ -13,7 +13,7 @@
 #' @return named vector of fragment diameter in mm
 #' @export
 #' 
-#' @seealso [sieve()]
+#' @seealso [fragmentSieve()]
 #'
 #' @examples
 #' 

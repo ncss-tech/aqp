@@ -5,6 +5,7 @@
 \alias{plotSPC}
 \alias{plot,SoilProfileCollection,ANY-method,plot.SoilProfileCollection}
 \alias{plot}
+\alias{plot,SoilProfileCollection-method}
 \alias{plot,SoilProfileCollection,ANY-method}
 \title{Create Soil Profile Sketches}
 \usage{
@@ -15,13 +16,14 @@ plotSPC(
   name = hzdesgnname(x),
   name.style = "right-center",
   label = idname(x),
+  raggedBottom = NULL,
   hz.depths = FALSE,
   hz.depths.offset = ifelse(fixLabelCollisions, 0.03, 0),
   hz.depths.lines = fixLabelCollisions,
+  depth.axis = list(style = "traditional", cex = cex.names * 1.15),
   alt.label = NULL,
   alt.label.col = "black",
   cex.names = 0.5,
-  cex.depth.axis = cex.names,
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
   srt.id = 0,
@@ -35,7 +37,7 @@ plotSPC(
   x.idx.offset = 0,
   n = length(x),
   max.depth = ifelse(is.infinite(max(x)), 200, max(x)),
-  n.depth.ticks = 5,
+  n.depth.ticks = 10,
   shrink = FALSE,
   shrink.cutoff = 3,
   shrink.thin = NULL,
@@ -45,8 +47,6 @@ plotSPC(
   hz.distinctness.offset = NULL,
   hz.topography.offset = NULL,
   hz.boundary.lty = NULL,
-  axis.line.offset = -2.5,
-  plot.depth.axis = TRUE,
   density = NULL,
   show.legend = TRUE,
   col.label = color,
@@ -58,8 +58,11 @@ plotSPC(
   lwd = 1,
   lty = 1,
   default.color = grey(0.95),
-  fixLabelCollisions = FALSE,
-  maxLabelAdjustmentIndex = 4,
+  fixLabelCollisions = hz.depths,
+  fixOverlapArgs = list(method = "E", q = 1),
+  cex.depth.axis = cex.names,
+  axis.line.offset = -2,
+  plot.depth.axis = TRUE,
   ...
 )
 
@@ -78,19 +81,28 @@ plotSPC(
 
 \item{label}{quoted column name of the (site-level) attribute used to identify profile sketches}
 
+\item{raggedBottom}{either quoted column name of the (site-level) attribute (logical) used to mark profiles with a truncated lower boundary, or \code{FALSE} suppress ragged bottom depths when \code{max.depth < max(x)}}
+
 \item{hz.depths}{logical, annotate horizon top depths to the right of each sketch (\code{FALSE})}
 
 \item{hz.depths.offset}{numeric, user coordinates for left-right adjustment for horizon depth annotation; reasonable values are usually within 0.01-0.05 (default: 0)}
 
 \item{hz.depths.lines}{logical, draw segments between horizon depth labels and actual horizon depth; this is useful when including horizon boundary distinctness and/or \code{fixLabelCollisions = TRUE}}
 
+\item{depth.axis}{logical or list. Use a logical to suppress (\code{FALSE}) or add depth axis using defaults (\code{TRUE}). Use a list to specify one or more of:
+\itemize{
+\item \code{style}: character, one of 'traditional', 'compact', or 'tape'
+\item \code{line}: numeric, negative values move axis to the left (does not apply to \code{style = 'tape'})
+\item \code{cex}: numeric, scaling applied to entire depth axis
+\item \code{interval}: numeric, axis interval
+See examples.
+}}
+
 \item{alt.label}{quoted column name of the (site-level) attribute used for secondary annotation}
 
 \item{alt.label.col}{color used for secondary annotation text}
 
 \item{cex.names}{baseline character scaling applied to all text labels}
-
-\item{cex.depth.axis}{character scaling applied to depth scale}
 
 \item{cex.id}{character scaling applied to \code{label}}
 
@@ -116,7 +128,7 @@ plotSPC(
 
 \item{n}{integer describing amount of space along x-axis to allocate, defaults to \code{length(x)}}
 
-\item{max.depth}{suggested lower depth boundary of plot}
+\item{max.depth}{numeric. The lower depth for all sketches, deeper profiles are truncated at this depth. Use larger values to arbitrarily extend the vertical dimension, convenient for leaving extract space for annotation.}
 
 \item{n.depth.ticks}{suggested number of ticks in depth scale}
 
@@ -138,10 +150,6 @@ plotSPC(
 
 \item{hz.boundary.lty}{quoted column name (horizon-level attribute) containing line style (integers) used to encode horizon topography}
 
-\item{axis.line.offset}{horizontal offset applied to depth axis (default is -2.5, larger numbers move the axis to the right)}
-
-\item{plot.depth.axis}{logical, plot depth axis? (default is \code{TRUE})}
-
 \item{density}{fill density used for horizon color shading, either a single integer or a quoted column name (horizon-level attribute) containing integer values (default is \code{NULL}, no shading)}
 
 \item{show.legend}{logical, show legend? (default is \code{TRUE})}
@@ -162,9 +170,15 @@ plotSPC(
 
 \item{default.color}{default horizon fill color used when \code{color} attribute is \code{NA}}
 
-\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling fixes also sets \code{hz.depths.lines = TRUE}}
+\item{fixLabelCollisions}{use \code{\link[=fixOverlap]{fixOverlap()}} to attempt fixing hz depth labeling collisions, will slow plotting of large collections; enabling also sets \code{hz.depths.lines = TRUE}. Additional arguments to \code{\link[=fixOverlap]{fixOverlap()}} can be passed via \code{fixOverlapArgs}. Overlap collisions cannot be fixed within profiles containing degenerate or missing horizon depths (e.g. top == bottom).}
 
-\item{maxLabelAdjustmentIndex}{numeric, maximum (total) adjustments allowed when \code{fixLabelCollisions = TRUE}, typical values range from 0.1 (only slight adjustments allowed) - 5 (extreme adjustments allowed).}
+\item{fixOverlapArgs}{a named list of arguments to \code{\link[=fixOverlap]{fixOverlap()}}. Overlap adjustments are attempted using electrostatic simulation with arguments: \code{list(method = 'E', q = 1)}. Alternatively, select adjustment by simulated annealing via \code{list(method = 'S')}. See \code{\link[=electroStatics_1D]{electroStatics_1D()}} and \code{\link[=SANN_1D]{SANN_1D()}} for details.}
+
+\item{cex.depth.axis}{(deprecated, use \code{depth.axis} instead) character scaling applied to depth scale}
+
+\item{axis.line.offset}{(deprecated, use \code{depth.axis} instead) horizontal offset applied to depth axis (default is -2, larger numbers move the axis to the right)}
+
+\item{plot.depth.axis}{(deprecated, use \code{depth.axis} instead) logical, plot depth axis?}
 
 \item{\dots}{other arguments passed into lower level plotting functions}
 
@@ -191,16 +205,22 @@ Profile sketches can be added according to relative positions along the x-axis (
 Relative positions that are too close will result in overplotting of sketches. Adjustments to relative positions such that overlap is minimized can be performed with \code{fixOverlap(pos)}, where \code{pos} is the original vector of relative positions.
 
 The \code{x.idx.offset} argument can be used to shift a collection of pedons from left to right in the figure. This can be useful when plotting several different \code{SoilProfileCollection} objects within the same figure. Space must be pre-allocated in the first plotting call, with an offset specified in the second call. See examples below.
+
+Horizon depths (e.g. cm) are converted to figure y-coordinates via: y = (depth * scaling.factor) + y.offset.
 }
 \note{
 A new plot of soil profiles is generated, or optionally added to an existing plot.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
+
 # example data
 data(sp1)
 # usually best to adjust margins
-par(mar=c(0,0,3,0))
+par(mar = c(0,0,3,0))
 
 # add color vector
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
@@ -212,13 +232,13 @@ depths(sp1) <- id ~ top + bottom
 hzdesgnname(sp1) <- 'name'
 
 # plot profiles
-plotSPC(sp1, id.style='side')
+plotSPC(sp1, id.style = 'side')
 
 # title, note line argument:
-title('Sample Data 1', line=1, cex.main=0.75)
+title('Sample Data 1', line = 1, cex.main = 0.75)
 
 # plot profiles without horizon-line divisions
-plotSPC(sp1, divide.hz=FALSE)
+plotSPC(sp1, divide.hz = FALSE)
 
 # diagonal lines encode horizon boundary distinctness
 sp1$hzD <- hzDistinctnessCodeToOffset(sp1$bound_distinct)
@@ -228,7 +248,7 @@ plotSPC(sp1, hz.distinctness.offset = 'hzD', name.style = 'center-center')
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 hzdesgnname(sp4) <- 'name'
-plotSPC(sp4, color='clay')
+plotSPC(sp4, color = 'clay')
 
 # another example
 data(sp2)
@@ -236,21 +256,24 @@ depths(sp2) <- id ~ top + bottom
 hzdesgnname(sp2) <- 'name'
 site(sp2) <- ~ surface
 
-# label with site-level attribute: `surface`
-plotSPC(sp2, label='surface', plot.order=order(sp2$surface))
+# some of these profiles are very deep, truncate plot at 400cm
+# label / re-order with site-level attribute: `surface`
+plotSPC(sp2, label = 'surface', plot.order = order(sp2$surface), 
+max.depth = 400)
 
 # example using a categorical attribute
-plotSPC(sp2, color = "plasticity")
+plotSPC(sp2, color = "plasticity", 
+max.depth = 400)
 
 # plot two SPC objects in the same figure
-par(mar=c(1,1,1,1))
-# plot the first SPC object and
+par(mar = c(1,1,1,1))
 
+# plot the first SPC object and
 # allocate space for the second SPC object
-plotSPC(sp1, n=length(sp1) + length(sp2))
+plotSPC(sp1, n = length(sp1) + length(sp2))
 
 # plot the second SPC, starting from the first empty space
-plotSPC(sp2, x.idx.offset=length(sp1), add=TRUE)
+plotSPC(sp2, x.idx.offset = length(sp1), add = TRUE)
 
 
 ##
@@ -335,6 +358,7 @@ plotSPC(
   y.offset = y.offset, 
   color = 'matrix_color', 
   cex.names = 0.75, 
+  shrink = TRUE,
   hz.depths = TRUE, 
   hz.depths.offset = 0.05,
   fixLabelCollisions = TRUE,
@@ -349,7 +373,7 @@ yoff <- runif(n = length(x), min = 1, max = 100)
 # random gradient of x-positions
 xoff <- runif(n = length(x), min = 1, max = length(x))
 
-
+# note profiles overlap
 plotSPC(x, 
         relative.pos = xoff, 
         y.offset = yoff, 
@@ -362,7 +386,7 @@ plotSPC(x,
 
 # align / adjust relative x positions
 set.seed(111)
-pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.5)
+pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.65)
 
 # y-offset is automatically re-ordered according to
 # plot.order
@@ -379,6 +403,7 @@ plotSPC(x,
 )
 
 box()
+
 }
 \references{
 Beaudette, D.E., Roudier P., and A.T. O'Geen. 2013. Algorithms for Quantitative Pedology: A Toolkit for

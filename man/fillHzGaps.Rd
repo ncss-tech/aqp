@@ -16,7 +16,7 @@ fillHzGaps(x, flag = TRUE, to_top = 0, to_bottom = max(x))
 \item{to_bottom}{numeric, fill from deepest bottom depth in each profile to specified depth? default: \code{aqp::max(x)}}
 }
 \value{
-\code{SoilProfileCollection} object
+a possibly modified \code{SoilProfileCollection} object
 }
 \description{
 This function attempts to find "gaps" in the horizon records of a \code{SoilProfileCollection} object and fill with placeholder horizons (profile ID, horizon ID, to/bottom depths, all else \code{NA}). Missing horizon records between the top of each profile and \code{to_top}, or the bottom of each profile and \code{to_bottom} are treated as gaps when those arguments are not \code{NULL}. You can use this function to prepare a potentially messy \code{SoilProfileCollection} for subsequent analyses that are sensitive to horizon sequence inconsistencies or require a conformal "rectangle" of data spanning known depths.
@@ -42,13 +42,22 @@ horizons(sp4)[idx, ]
 # create gaps by removing logic errors
 x <- HzDepthLogicSubset(sp4, byhz = TRUE)
 
-# inspect
-par(mar = c(0, 0, 0, 1))
-plotSPC(x, width = 0.3, default.color = 'royalblue', name = 'hzID')
+# check on removed horizons (hzID values)
+metadata(x)$removed.horizons
 
+# inspect
+par(mar = c(0, 0, 0, 2))
+plotSPC(x, width = 0.3, default.color = 'royalblue', 
+name = 'hzID', name.style = 'center-center', cex.names = 0.8,
+cex.id = 0.66)
+
+# fill gaps left by HzDepthLogicSubset()
 z <- fillHzGaps(x, flag = TRUE)
 
-plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
+# graphical check
+plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', 
+show.legend = FALSE, name.style = 'center-center', cex.names = 0.8,
+cex.id = 0.66)
 
 # fill top to 0 cm
 z2 <- fillHzGaps(x, flag = TRUE, to_top = 0)

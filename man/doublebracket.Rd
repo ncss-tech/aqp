@@ -3,7 +3,8 @@
 \docType{methods}
 \name{[[}
 \alias{[[}
-\alias{[[,SoilProfileCollection,ANY-method,}
+\alias{[[,SoilProfileCollection-method}
+\alias{[[,SoilProfileCollection,ANY-method}
 \alias{[[,SoilProfileCollection,ANY,ANY-method}
 \title{Get column of horizon or site data in a SoilProfileCollection}
 \usage{

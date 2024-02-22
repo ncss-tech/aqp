@@ -35,6 +35,9 @@ test_that("hzOffset works", {
   
   # the second horizon is always right after the first (if profile has more than 1 horizon)
   expect_equal(hzOffset(h, first, offset = 1), first + 1)
+  
+  # single profile SPC has one value in result
+  expect_equal(length(hzOffset(h[1,], first, offset = 1)), 1)
 })
 
 test_that("hzAbove/hzBelow works", {

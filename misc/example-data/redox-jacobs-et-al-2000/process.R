@@ -102,16 +102,19 @@ h$hz_depths <- NULL
 ## init SPC
 depths(h) <- id ~ top + bottom
 
+# hzname
+hzdesgnname(h) <- 'name'
+
 ## save copy to /data
 jacobs2000 <- h
-save(jacobs2000, file='../../../data/jacobs2000.rda')
+save(jacobs2000, file='../../../data/jacobs2000.rda', compress = 'xz')
 
 
 par(mar=c(0,1,3,3))
-plot(h, name='name', color='matrix_color', width=0.3)
+plot(h, color='matrix_color', width = 0.3)
 addVolumeFraction(h, 'concentration_pct', col = h$concentration_color, pch = 16, cex.max = 0.5)
 
-plot(h, name='name', color='matrix_color', width=0.3)
+plot(h, color='matrix_color', width = 0.3)
 addVolumeFraction(h, 'depletion_pct', col = h$depletion_color, pch = 16, cex.max = 0.5)
 
 plotSPC(h, color='time_saturated', cex.names=0.8, col.label = 'Time Saturated')

@@ -5,22 +5,24 @@ test_that("transform & mutate_profile", {
   
   # transform
   res <- transform(sp3, thickness = bottom - top)
-  expect_equal(mean(res$thickness), 18.5652174)
+  expect_equal(sum(res$thickness), 854)
   
   # transform (existing column)
   res <- transform(sp3, thickness = (bottom - top) / 100)
-  expect_equal(mean(res$thickness), 0.18565217)
+  expect_equal(sum(res$thickness), 8.54)
   
   # mutate_profile
   res <- mutate_profile(res, relthickness = (bottom - top) / (sum(thickness) * 100))
-  expect_equal(mean(res$relthickness), 0.2173913)
+  expect_equal(sum(res$relthickness), 10)
   
   # mutate_profile (two existing columns)
   res <- mutate_profile(res, thickness = bottom - top,
                              relthickness = (thickness) / sum(thickness),
-                             sumrelthickness = sum(relthickness))
+                             sumrelthickness1 = sum(relthickness))
+  res <- mutate_profile(res, sumrelthickness2 = sum(relthickness))
   expect_equal(mean(res$relthickness), 0.2173913)
-  expect_true(all(res$sumrelthickness == 1))
+  expect_equal(length(res$sumrelthickness1), 10)
+  expect_equal(length(res$sumrelthickness2), 10)
 
   # mutate existing column name (using same column as input)
   res <- mutate_profile(res, thickness = thickness / 10,

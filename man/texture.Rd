@@ -59,7 +59,7 @@ conventions (e.g. c|C, sil|SIL, sl|SL, cos|COS)}
 
 \item{sand}{vector of sand percentages}
 
-\item{simplify}{Passed to \code{SoilTextureLevels()} to set the nu mber of possible texture classes. If \code{TRUE}, the ordered factor has a maximum of 12 levels, if \code{FALSE} (default) the ordered factor has a maximum of 21 levels (including e.g. very fine/fine/coarse variants)}
+\item{simplify}{Passed to \code{SoilTextureLevels()} to set the number of possible texture classes. If \code{TRUE}, the ordered factor has a maximum of 12 levels, if \code{FALSE} (default) the ordered factor has a maximum of 21 levels (including e.g. very fine/fine/coarse variants)}
 
 \item{as.is}{logical: should character vectors be converted to factors?
 (default: TRUE)}

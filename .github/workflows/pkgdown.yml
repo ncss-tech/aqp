@@ -30,6 +30,11 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+          
+      - name: Install soilDB/sharpshootR from r-universe 
+        run: |
+          install.packages(c("soilDB", "sharpshootR"), repos = 'https://ncss-tech.r-universe.dev')
+        shell: Rscript {0}
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

@@ -48,11 +48,14 @@ colorContrastPlot(
 A simple display of two sets of colors, NCSS color contrast class and CIE
 delta-E00.
 }
-\details{
+\note{
 This function requires the \code{farver} package for calculation of CIE
-delta-E00
+delta-E00.
 }
 \examples{
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 
 # two sets of colors to compare
 m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', '7.5YR 3/4')
@@ -66,7 +69,7 @@ colorContrastPlot(m1, m2)
 
 }
 \seealso{
-\code{\link{colorContrast}}
+\code{\link[=colorContrast]{colorContrast()}}
 }
 \author{
 D.E. Beaudette

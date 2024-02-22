@@ -18,18 +18,21 @@ features.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 # load
 data(jacobs2000)
 
 # basic plot
-par(mar=c(0,1,3,3))
-plot(jacobs2000, name='name', color='matrix_color', width=0.3)
+par(mar=c(0, 1, 3, 1.5))
+plotSPC(jacobs2000, name='name', color='matrix_color', width=0.3)
 # add concentrations
 addVolumeFraction(jacobs2000, 'concentration_pct',
 col = jacobs2000$concentration_color, pch = 16, cex.max = 0.5)
 
 # add depletions
-plot(jacobs2000, name='name', color='matrix_color', width=0.3)
+plotSPC(jacobs2000, name='name', color='matrix_color', width=0.3)
 addVolumeFraction(jacobs2000, 'depletion_pct',
 col = jacobs2000$depletion_color, pch = 16, cex.max = 0.5)
 
@@ -63,6 +66,6 @@ colorContrastPlot(cc$m1, cc$m2, labels = c('depletion', 'concentration'))
 \references{
 Jacobs, P. M., L. T. West, and J. N. Shaw. 2002. Redoximorphic
 Features as Indicators of Seasonal Saturation, Lowndes County, Georgia. Soil
-Sci. Soc. Am. J. 66:315-323. doi:10.2136/sssaj2002.3150
+Sci. Soc. Am. J. 66:315-323. doi:\doi{10.2136/sssaj2002.3150}
 }
 \keyword{datasets}

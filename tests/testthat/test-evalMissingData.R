@@ -17,13 +17,13 @@ sobrante,A,0,5,18,0,5.8
 sobrante,Ab,5,10,16,2,5.7
 sobrante,Bt1,10,28,15,21,5.8
 sobrante,Bt2,28,51,NA,NA,NA
-sobrante,Cd,51,74,20,12,6.2'), stringsAsFactors=FALSE)
+sobrante,Cd,51,74,20,12,6.2'), stringsAsFactors = FALSE)
 
 # establish site-level data
 s <- data.frame(
-  series=c('auburn', 'dunstone', 'sobrante'), 
-  precip=c(24, 30, 32),
-  stringsAsFactors=FALSE
+  series = c('auburn', 'dunstone', 'sobrante'), 
+  precip = c(24, 30, 32),
+  stringsAsFactors = FALSE
 )
 
 # upgrade to SoilProfile Collection object
@@ -38,24 +38,34 @@ test_that("runs as expected", {
   # does it run?
   e.rel <- evalMissingData(d, vars = c('clay', 'frags', 'ph'), name = 'name', method = 'relative')
   e.abs <- evalMissingData(d, vars = c('clay', 'frags', 'ph'), name = 'name', method = 'absolute')
+  e.hz <- evalMissingData(d, vars = c('clay', 'frags', 'ph'), name = 'name', method = 'horizon')
   
   # result is a numeric vector
   expect_true(inherits(e.rel, 'numeric'))
   expect_true(inherits(e.abs, 'numeric'))
+  expect_true(inherits(e.hz, 'numeric'))
   
-  # there should be no NA
+  # there should be no NA in profile-level summaries
   expect_true(all(is.na(e.rel) == FALSE))
   expect_true(all(is.na(e.abs) == FALSE))
+  
+  # expected lengths
+  expect_true(length(e.rel) == length(d))
+  expect_true(length(e.abs) == length(d))
+  expect_true(length(e.hz) == nrow(d))
   
   # check against hand-computed results
   # as.vector removes names attr
   # auburn
-  expect_equal(as.vector(e.rel[1]), 22 / 25, tolerance=0.001)
-  expect_equal(as.vector(e.abs[1]), 22 , tolerance=0.001)
+  expect_equal(as.vector(e.rel[1]), 22 / 25, tolerance = 0.001)
+  expect_equal(as.vector(e.abs[1]), 22 , tolerance = 0.001)
+  # first hz of auburn is missing pH
+  expect_equal(as.vector(e.hz[1]), 2/3, tolerance = 0.001)
+  
   
   # dunstone
-  expect_equal(as.vector(e.rel[2]), 1.000, tolerance=0.001)
-  expect_equal(as.vector(e.abs[2]), 31, tolerance=0.001)
+  expect_equal(as.vector(e.rel[2]), 1.000, tolerance = 0.001)
+  expect_equal(as.vector(e.abs[2]), 31, tolerance = 0.001)
   
   # sobrante
   expect_equal(as.vector(e.rel[3]), 28 / 51, tolerance=0.001)

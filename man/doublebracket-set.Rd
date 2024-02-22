@@ -3,6 +3,7 @@
 \docType{methods}
 \name{[[<-}
 \alias{[[<-}
+\alias{[[<-,SoilProfileCollection-method}
 \alias{[[<-,SoilProfileCollection,ANY,ANY-method}
 \title{Add or change column of horizon or site data in a SoilProfileCollection}
 \usage{

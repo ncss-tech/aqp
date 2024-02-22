@@ -36,6 +36,9 @@ Creek, California.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 data(sp2)
 
 # convert into SoilProfileCollection object
@@ -78,7 +81,7 @@ legend('topleft', legend=levels(sp2$surface), col=1:6, pch=15, bty='n', bg='whit
 
 }
 \references{
-http://casoilresource.lawr.ucdavis.edu/
+\url{http://casoilresource.lawr.ucdavis.edu/}
 }
 \author{
 Dylan E. Beaudette

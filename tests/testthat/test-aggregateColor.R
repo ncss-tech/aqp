@@ -40,19 +40,18 @@ test_that("expected error conditions", {
   skip_if_not_installed('gower')
   expect_error(aggregateColor(x, groups='foo', col='soil_color'))
   expect_error(aggregateColor(x, groups='genhz', col='foo'))
-  expect_error(aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'foo'))
   expect_error(aggregateColor(x, groups='genhz', col='soil_color', k=NA))
 })
 
 ## TODO: add a couple more of these
-test_that("manual calculation using CIE2000 and LAB, single profile", {
+test_that("manual calculation using CIE2000, single profile", {
   skip_if_not_installed('gower')
 
   x <- sp1[1, ]
   x$genhz <- rep('A', times=nrow(x))
   a <- aggregateColor(x, groups='genhz', col='soil_color')
-  a2 <- aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'LAB')
-  a3 <- aggregateColor(x, groups='genhz', col='soil_color', colorSpace = 'LAB', k=1)
+  a2 <- aggregateColor(x, groups='genhz', col='soil_color')
+  a3 <- aggregateColor(x, groups='genhz', col='soil_color', k=1)
 
   # known number of horizons / color
   # table(x$soil_color)
@@ -65,7 +64,7 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
   test <- with(a$aggregate.data, paste0(hue, ' ', value, '/', chroma))
   test2 <- with(a2$aggregate.data, paste0(hue, ' ', value, '/', chroma))
 
-  if(requireNamespace('farver', quietly = TRUE) & packageVersion("farver") >= '2.0.2') {
+  if(requireNamespace('farver', quietly = TRUE) && packageVersion("farver") >= '2.0.2') {
     expect_equal(test, '7.5YR 3/2')
     expect_equal(test2, '7.5YR 3/2')
   } else {
@@ -75,7 +74,7 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
 })
 
 
-test_that("manual calculation using CIE2000 and LAB, single profile", {
+test_that("manual calculation, single profile", {
   skip_if_not_installed('gower')
   
   data(sp3)
@@ -87,7 +86,7 @@ test_that("manual calculation using CIE2000 and LAB, single profile", {
   site(x)$group <- 'A'
   
   # do the work
-  a <- aggregateColor(x, groups = 'group', col = 'soil_color', colorSpace = 'CIE2000')
+  a <- aggregateColor(x, groups = 'group', col = 'soil_color')
   
   # manually verified
   expect_true(a$aggregate.data$hue == '5YR')

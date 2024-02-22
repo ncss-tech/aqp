@@ -9,8 +9,8 @@ quickSPC(
   id = "id",
   d = "depths",
   n = "name",
-  interval = 10,
-  m = "soil_color"
+  m = "soil_color",
+  interval = 10
 )
 }
 \arguments{
@@ -22,9 +22,9 @@ quickSPC(
 
 \item{n}{character, specified when \code{x} is a \code{list}, name of horizon name list element}
 
-\item{interval, }{numeric, typically an integer and only specified when using character templates in mode 2. See Details.}
-
 \item{m}{character, specified when \code{x} is a \code{list}, name of list element containing Munsell color notation}
+
+\item{interval, }{numeric, typically an integer and only specified when using character templates in mode 2. See Details.}
 }
 \value{
 \code{SoilProfileCollection} object
@@ -41,11 +41,13 @@ The character template can be provided in one of several formats:
 \item 'ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'
 }
 
-Format 1 is interpreted as a horizon sequence delimited by '-'. Random integer thickness are assigned to horizons, and profile ID created via \code{digest::digest(..., algo = 'xxhash32')}. Iteration over templates in this format is automatic when \code{x} is a character vector of \code{length > 1}.
+Format 1 is interpreted as a horizon sequence delimited by '-' or newline character (\\n). Random integer thickness are assigned to horizons, and profile ID created via \code{digest::digest(..., algo = 'xxhash32')}. Iteration over templates in this format is automatic when \code{x} is a character vector of \code{length > 1}.
 
 Format 2 is interpreted as a horizon sequence delimited by '|'. Horizon thickness is proportional to replication of horizon designation and scaled by the \code{interval} argument. Profile ID is created via \code{digest::digest(..., algo = 'xxhash32')}. Iteration over templates in this format is automatic when \code{x} is a character vector of \code{length > 1}.
 
 Explicit naming of profile IDs can be accomplished by specifying an ID via prefix, as in "ID:A-Bt1-Bt2-Cr-R" or "ID:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC". Labels specified before a ":" will be interpreted as a profile ID. These labels are optional but if specified must be unique within \code{x}.
+
+Single-horizon profile templates must include a trailing horizon delimiter: '-', '\\n', or '|' depending on the format.
 }
 \examples{
 
@@ -55,7 +57,7 @@ id = 'P1',
 depths = c(25, 33, 100, 150),
 name = c('A', 'Bw', 'Bt', 'Cr'),
 clay = c(12, 15, 22, 25),
-soil_color = '10YR 3/3'
+soil_color = c('10YR 3/3', '10YR 4/4', '10YR 4/6', '5G 6/2')
 )
 
 s <- quickSPC(x)
@@ -81,7 +83,7 @@ s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', cex.names = 1)
 
 
-# specify profile IDs using "ID:" prefix
+# optionally specify profile IDs using "ID:" prefix
 x <- c(
 'P1:A-Bt1-Bt2-Bt3-Cr-R',
 'P2:A-C1-C2-C3-C4-Ab',
@@ -90,6 +92,28 @@ x <- c(
 
 s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', cex.names = 1)
+
+
+# optionally specify:
+# horizon bottom depths in cm
+# soil color in Munsell notation
+x <- c(
+'1. simple:Oe-A-E-Bhs',
+'2. full:Oe,10,10YR 2/2-A,20,10YR 3/3-E,30,2.5Y 8/2-Bhs,60,7.5YR 4/6'
+)
+
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', cex.names = 1)
+
+# use newline character as delimiter, more compact
+x <- 'Oe,10,10YR 2/2
+A,20,10YR 3/3
+E,30,2.5Y 8/2
+Bhs,60,7.5YR 4/6
+BC,125,7.5YR 6/4
+C,150,10YR 6/2'
+
+plotSPC(quickSPC(x), name.style = 'center-center', cex.names = 1)
 
 
 # character template, mode 2
@@ -106,14 +130,14 @@ x <- c(
 # each horizon label is '10' depth-units (default)
 s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', 
-        cex.names = 1, plot.depth.axis = FALSE, 
+        cex.names = 1, depth.axis = FALSE, 
         hz.depths = TRUE
 )
 
 # each horizon label is '5' depth-units
 s <- quickSPC(x, interval = 5)
 plotSPC(s, name.style = 'center-center', 
-        cex.names = 1, plot.depth.axis = FALSE, 
+        cex.names = 1, depth.axis = FALSE, 
         hz.depths = TRUE
 )
 
@@ -126,7 +150,19 @@ x <- c(
 
 s <- quickSPC(x)
 plotSPC(s, name.style = 'center-center', 
-        cex.names = 1, plot.depth.axis = FALSE, 
+        cex.names = 1, depth.axis = FALSE, 
         hz.depths = TRUE
 )
+
+
+# make a NODATA profile, with a random hash ID
+#  note the use of trailing horizon delimiter
+#  note the use of NA soil color field
+x <- 'NODATA,150,NA-'
+s <- quickSPC(x)
+plotSPC(s, name.style = 'center-center', 
+        cex.names = 1, depth.axis = FALSE, 
+        hz.depths = TRUE)
+
+
 }

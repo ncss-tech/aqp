@@ -81,7 +81,7 @@ x <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
 
 # Euclidean distance via sweep / colSums: 85 seconds 
 # Gower distance via gower package: 25 seconds (mixingMethod = 'reference')
-# 28 secpmds (mixingMethod = 'exact')
+# 25 seconds (mixingMethod = 'exact')
 system.time(g <- mixtureGrid(x))
 plotMixtureGrid(g)
 
@@ -100,8 +100,8 @@ plotColorMixture(c('5B 6/6', '10Y 8/4'))
 
 plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'reference')
 
-# not quite right...
-plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'exact')
+
+plotColorMixture(c('5B 5/10', '5Y 8/8'), mixingMethod = 'exact')
 
 
 # iterate over all hues @ 6/8
@@ -109,7 +109,7 @@ plotColorMixture(c('5B 5/10', '5Y 8/8'), showMixedSpec = TRUE, mixingMethod = 'e
 x <- sprintf("%s 6/8", huePosition(returnHues = TRUE))
 g <- mixtureGrid(x)
 
-agg_png(filename = 'spilled-paint3.png', width = 1600, height = 1600, scaling = 1.5)
+agg_png(filename = 'e:/temp/spilled-paint3.png', width = 1600, height = 1600, scaling = 1.5)
 
 plotMixtureGrid(g, fig.title = 'Clown Barf (Exact)')
 

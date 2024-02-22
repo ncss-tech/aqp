@@ -164,7 +164,7 @@ groupedProfilePlot <- function(x, groups, group.name.offset = -5, group.name.cex
   }
 
   # setup plot with plot.SoilProfileCollection
-  plot(x, plot.order=new.order, ...)
+  plotSPC(x, plot.order = new.order, ...)
 
   # get last plot parameters
   lsp <- get('last_spc_plot', envir=aqp.env)

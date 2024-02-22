@@ -5,3 +5,5 @@ aqp.Rproj
 docs/reference/*.pdf
 *Rplots.pdf
 inst/doc
+CRAN-SUBMISSION
+cran-comments.md

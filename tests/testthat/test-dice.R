@@ -271,6 +271,35 @@ test_that("overlapping horizons", {
   expect_equal(nrow(x3), 289)
 })
 
+test_that("perfectly overlapping horizons", {
+  
+  # two overlapping horizons
+  z <- data.frame(
+    id = 'SPC',
+    top = c(0, 25, 25, 50, 75, 100, 100),
+    bottom = c(25, 50, 50, 75, 100, 125, 125),
+    property = 1:7
+  )
+  
+  depths(z) <- id ~ top + bottom
+  
+  # formula specified
+  # single slice within zone of overlapping horizons
+  d <- dice(z, fm = 30 ~ property , SPC = FALSE)
+  
+  # two rows, one for each overlapping horizon
+  expect_equal(nrow(d), 2)
+  
+  # slices within and beyond zone of overlap
+  d <- dice(z, fm = 40:54 ~ property , SPC = FALSE)
+  
+  # 10 slices of hzID 2/3
+  # 5 slices of hzID 4
+  tab <- table(d$hzID)
+  expect_equal(as.vector(tab), c(10, 10, 5))
+  
+})
+
 test_that("dropped profile IDs", {
   
   # corrupt depth

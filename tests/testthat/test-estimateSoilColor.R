@@ -1,6 +1,6 @@
 context("estimateSoilColor")
 
-## hmm... these aren't symmetric
+# note, not symmetric
 
 test_that("works as expected", {
   

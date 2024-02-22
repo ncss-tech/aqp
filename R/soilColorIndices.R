@@ -10,6 +10,10 @@
 #' @author Andrew G. Brown
 #' @seealso \code{\link{hurst.redness}} \code{\link{barron.torrent.redness.LAB}} \code{\link{buntley.westin.index}}
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' data(sp1)
 #'
 #' # promote sp1 data to SoilProfileCollection
@@ -17,16 +21,20 @@
 #'
 #' # move site data
 #' site(sp1) <- ~ group
-#'
+#' 
+#' # use Munsell color notation as horizon name
+#' sp1$m <- sprintf("%s %s/%s", sp1$hue, sp1$value, sp1$chroma)
+#' 
 #' # compute indices
 #' # merged into `sp1` with left-join on hzidname(sp1)
 #' horizons(sp1) <- horizonColorIndices(sp1, hue="hue", value="value", chroma="chroma")
 #'
 #' # visualize
-#' par(mar=c(0, 1, 3, 1))
-#' plot(sp1, color='hurst_redness')
-#' plot(sp1, color='barron_torrent_redness')
-#' plot(sp1, color='buntley_westin')
+#' par(mar = c(0, 1, 3, 1))
+#' plotSPC(sp1, color='hurst_redness', name = 'm')
+#' plotSPC(sp1, color='barron_torrent_redness', name = 'm')
+#' plotSPC(sp1, color='buntley_westin', name = 'm')
+#' 
 #' @rdname horizonColorIndices
 #' @export horizonColorIndices
 horizonColorIndices <- function(p, hue="m_hue", value="m_value", chroma="m_chroma") {
@@ -61,6 +69,9 @@ hurst.redness <-  function(hue, value, chroma) {
   return(hstar * value / chroma)
 }
 
+
+## TODO for some future time: consider ln(R_{Lab} due to the extreme differences in scale as Munsell value varies by even a single chip)
+
 #' @title Barron & Torrent (1986) Redness Index in LAB color space
 #' @description Calculate Redness Index after Barron & Torrent (1986) "Use of the Kubelka—Munk Theory to Study the Influence of Iron Oxides on Soil Colour" using Munsell colors converted to LAB. DOI: 10.1111/j.1365-2389.1986.tb00382.x. Accepts vectorized inputs for hue, value and chroma, produces vector output.
 #' @param hue A character vector containing Munsell hues (e.g. "7.5YR")
@@ -68,14 +79,15 @@ hurst.redness <-  function(hue, value, chroma) {
 #' @param chroma A numeric vector containing Munsell chromas
 #' @return A numeric vector of horizon redness index (higher values = redder).
 #' @author Andrew G. Brown
-#' @references Barron, V. and Torrent, J. (1986), Use of the Kubelka—Munk theory to study the influence of iron oxides on soil colour. Journal of Soil Science, 37: 499-510. doi:10.1111/j.1365-2389.1986.tb00382.x
+#' @references Barron, V. and Torrent, J. (1986), Use of the Kubelka-Munk theory to study the influence of iron oxides on soil colour. Journal of Soil Science, 37: 499-510. doi:10.1111/j.1365-2389.1986.tb00382.x
 #' @rdname barron.torrent.redness.LAB
 #' @export barron.torrent.redness.LAB
 barron.torrent.redness.LAB <- function(hue, value, chroma) {
-  # after Barron & Torrent (1986) "Use of the Kubelka—Munk Theory to Study the Influence of Iron Oxides on Soil Colour"
+  # after Barron & Torrent (1986) "Use of the Kubelka-Munk Theory to Study the Influence of Iron Oxides on Soil Colour"
   # 10.1111/j.1365-2389.1986.tb00382.x
   lab <- munsell2rgb(hue, value, chroma, returnLAB = TRUE)
-  return(lab$A * sqrt(lab$A^2 + lab$B^2) * 10 ^ 10 / (lab$B * (lab$L ^ 6)))
+  res <- with(lab, (A * sqrt(A^2 + B^2) * 10^10) / (B * L^6))
+  return(res)
 }
 
 #' @title Harden (1982) Rubification
@@ -93,6 +105,10 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' @rdname harden.rubification
 #' @export harden.rubification
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' library(aqp)
 #' data("jacobs2000", package="aqp")
 #'
@@ -138,13 +154,21 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #'
 #' # Plot in order of increasing Rubification index
 #'
-#' plotSPC(jacobs2000, axis.line.offset = -1,
-#'         color = "matrix_color",
-#'         label = "rubif",
-#'         plot.order = jacobs2000$rubiforder)
-#'
-#' abline(h = c(0,100,150,200), lty = 2)
-#'
+#' plotSPC(jacobs2000,
+#' color = "matrix_color",
+#' label = "rubif",
+#' plot.order = jacobs2000$rubiforder,
+#' max.depth = 250
+#' )
+#' 
+#' segments(
+#'   x0 = 0.5, 
+#'   x1 = length(jacobs2000) + 0.5, 
+#'   y0 = c(0,100,150,200), 
+#'   y1 = c(0,100,150,200), 
+#'   lty = 2
+#' )
+#' 
 #' # Add [estimated] parent material color swatches
 #' trash <- sapply(seq_along(jacobs2000$c_horizon_color), function(i) {
 #'   rect(i - 0.15, 250, i + 0.15, 225,
@@ -174,6 +198,10 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' @rdname harden.melanization
 #' @export harden.melanization
 #' @examples
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' library(aqp)
 #' data("jacobs2000", package="aqp")
 #'
@@ -213,12 +241,20 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #'
 #' # Plot in order of increasing Melanization index
 #'
-#' plotSPC(jacobs2000, axis.line.offset = -1,
+#' plotSPC(jacobs2000, 
 #'         color = "matrix_color",
 #'         label = "melan",
-#'         plot.order = jacobs2000$melanorder)
+#'         plot.order = jacobs2000$melanorder,
+#'         max.depth = 250
+#'         )
 #'
-#' abline(h = c(0,100,150,200), lty = 2)
+#' segments(
+#'   x0 = 0.5, 
+#'   x1 = length(jacobs2000) + 0.5, 
+#'   y0 = c(0,100,150,200), 
+#'   y1 = c(0,100,150,200), 
+#'   lty = 2
+#' )
 #'
 #' # Add [estimated] parent material color swatches
 #' lapply(seq_along(jacobs2000$c_horizon_color), function(i) {

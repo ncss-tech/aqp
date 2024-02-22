@@ -3,7 +3,7 @@
 ## method for mixMunsell() when reference spectra are missing
 
 .estimateColorMixture <- function(chips, w) {
- 
+  
   # convert to CIELAB
   .lab <- parseMunsell(chips, returnLAB = TRUE)
   
@@ -13,11 +13,18 @@
   .B <- weighted.mean(.lab[['B']], w = w, na.rm = TRUE)
   
   # LAB -> sRGB
-  mixed.color <- data.frame(convertColor(cbind(.L, .A, .B), from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65'))
+  mixed.color <- data.frame(
+    convertColor(
+      color = cbind(.L, .A, .B), 
+      from = 'Lab', 
+      to = 'sRGB', 
+      from.ref.white = 'D65',
+      to.ref.white = 'D65')
+  )
   names(mixed.color) <- c('r', 'g', 'b')
   
   # back to Munsell
-  m <- rgb2munsell(mixed.color[, c('r', 'g', 'b')])
+  m <- col2Munsell(mixed.color[, c('r', 'g', 'b')], space = 'sRGB')
   
   # pack into expected structure
   # scaled distance is only for spectral distance evaluated against the entire library
@@ -29,7 +36,7 @@
     mixingMethod = 'estimate',
     stringsAsFactors = FALSE
   )
-   
+  
   return(res)
 }
 
@@ -37,36 +44,36 @@
 
 # helper function for printing out value / chroma ranges by hue
 .summarizeMunsellSpectraRanges <- function() {
-
+  
   # make R CMD CHECK happy
   munsell.spectra <- NULL
-
+  
   # note: this is incompatible with LazyData: true
   # load look-up table from our package
   load(system.file("data/munsell.spectra.rda", package="aqp")[1])
-
+  
   # set hue position
   munsell.spectra$hue <- factor(munsell.spectra$hue, levels = huePosition(returnHues = TRUE))
-
+  
   # remove non-standard hues (what are they for?)
   munsell.spectra <- na.omit(munsell.spectra)
-
+  
   x <- split(munsell.spectra, munsell.spectra$hue)
-
+  
   x <- lapply(x, function(i) {
-
+    
     data.frame(
       hue = i$hue[1],
       value = sprintf("%s-%s", min(i$value), max(i$value)),
       chroma = sprintf("%s-%s", min(i$chroma), max(i$chroma)),
       stringsAsFactors = FALSE
     )
-
+    
   })
-
-
+  
+  
   x <- do.call('rbind', x)
-
+  
   return(x)
 }
 
@@ -141,18 +148,16 @@
 #' Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 #' 
 #' 
+#'  * [inspiration / calculations based on the work of Scott Burns](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf)
 #'
-#' \itemize{
-#'    \item{inspiration / calculations based on the work of Scott Burns: }{\url{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}}
+#'  * [related discussion on Stack Overflow](https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630)
 #'
-#'    \item{related discussion on Stack Overflow: }{\url{https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630}}
-#'
-#'    \item{spectral library source: }{\url{https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}}
-#'
-#' }
+#'  * [spectral library source](https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt)
 #'
 #'
 #' @details
+#' See the [expanded tutorial](https://ncss-tech.github.io/AQP/aqp/mix-colors.html) for examples.
+#' 
 #' An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.
 #' 
 #' Thankfully, [Scott Burns has outlined the entire process](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf), and Paul Centore has provided a Munsell color chip [reflectance spectra library](https://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:
@@ -190,27 +195,9 @@
 #'
 #' @seealso [munsell.spectra]
 #' @export
-#' @examples 
-#' 
-#' 
-#' # try a couple different methods
-#' cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
-#' if(requireNamespace("gower")) {
-#' mixMunsell(cols, mixingMethod = 'reference')
-#' }
-#' mixMunsell(cols, mixingMethod = 'exact')
-#' mixMunsell(cols, mixingMethod = 'estimate')
-#' 
-#' # 2.5 values
-#' cols <- c('10YR 2.5/2', '5YR 5/6')
-#' if(requireNamespace("gower")) {
-#' mixMunsell(cols, mixingMethod = 'reference')
-#' }
-#' mixMunsell(cols, mixingMethod = 'exact')
-#' mixMunsell(cols, mixingMethod = 'estimate')
 #' 
 mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMethod = c('exact', 'reference', 'estimate', 'adaptive'), n = 1, keepMixedSpec = FALSE, distThreshold = 0.025, ...) {
-
+  
   # satisfy R CMD check
   munsell.spectra.wide <- NULL
   
@@ -232,7 +219,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
     stop("package `gower` is required for `mixingMethod='reference'`", call. = FALSE)
   }
   
-
+  
   # can't mix a single color, just give it back at 0 distance
   if (length(unique(x)) == 1) {
     
@@ -244,45 +231,45 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       mixingMethod = NA,
       stringsAsFactors = FALSE
     )
-      
+    
     return(res)
   }
-
+  
   # must have as many weights as length of x
   if (length(x) != length(w) && length(w) != 1) {
-
+    
     stop('w should have same length as x or length one')
-
+    
   } else if (length(w) == 1) {
-
+    
     # cannot mix with zero weights
     stopifnot(w > 0)
-
+    
     # a recycled weight is same as function default
     w <- rep(1, times = length(x)) / length(x)
   }
-
+  
   ## TODO: move 0-weight / NA handling up in the logic
   
   # more informative error for colors missing
   if (any(w[is.na(x)] > 0)) {
     stop('cannot mix missing (NA) colors with weight greater than zero')
   }
-
+  
   # more informative error for weights missing
   if (any(is.na(w))) {
     stop('cannot mix colors with missing (NA) weight')
   }
-
+  
   # remove 0-weighted colors
   x <- x[w > 0]
   w <- w[w > 0]
-
+  
   # x with weights > 0 must contain valid Munsell
   if (any(is.na(parseMunsell(x)))) {
     stop('input must be valid Munsell notation, neutral hues and missing not supported')
   }
-
+  
   
   ## main branch: mixing method
   
@@ -372,7 +359,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # XYZ -> sRGB -> Munsell
       mx <- spec2Munsell(mixed, ...)
       
-      # NOTE: ... are passed to rgb2munsell()
+      # NOTE: ... are passed to col2munsell()
       #       convert = TRUE: mx is a data.frame
       #       convert = FALSE: mx is a matrix
       
@@ -415,7 +402,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       # https://cran.r-project.org/web/packages/gower/vignettes/intro.pdf
       # would make sense to reshape reference data
       
-      # NOTE: arguments to rgb2munsell() are silently ignored
+      # NOTE: arguments to col2munsell() are silently ignored
       
       ## TODO: time wasted here
       # reshape reference spectra: wavelength to columns
@@ -466,6 +453,6 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
   
   
   
-
+  
 }
 

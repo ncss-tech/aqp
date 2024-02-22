@@ -1,4 +1,4 @@
-# split,SoilProfileCollection method is redundant aside from the ability to enter a site var by name
+# NOTE: split,SoilProfileCollection method is redundant aside from the ability to enter a site var by name
 #
 # data("loafercreek", package = "soilDB")
 #
@@ -14,10 +14,10 @@
 #'
 #' @description This function splits a `SoilProfileCollection` into a list of `SoilProfileCollection` objects using a site-level attribute to define groups or profile ID (`idname(x)`).
 #'
-#' @param x a `SoilProfileCollection` object
-#' @param f a character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that `as.factor(f)` defines the grouping, or a list of such factors in which case their interaction is used for the grouping.
-#' @param drop logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When `drop=FALSE` and `f` contains missing values an additional group "<missing>" is returned.
-#' @param ...	Additional arguments are ignored
+#' @param x `SoilProfileCollection` object
+#' @param f character vector naming a single site-level attribute that defines groups, a ‘factor’ in the sense that `as.factor(f)` defines the grouping, or a list of such factors in which case their interaction is used for the grouping.
+#' @param drop logical indicating if levels that do not occur should be dropped (if f is a factor or a list). When `drop=FALSE` and `f` contains missing values an additional group "missing" is returned.
+#' @param ...	additional arguments are ignored
 #'
 #' @details As of aqp 1.25, omission of `f` argument is no longer possible, as the base R generic is overloaded by this `SoilProfileCollection` method. This used to result in an "identity" split, according to `idname(x)`, e.g. a list as long as `length(x)`, with a single-profile `SoilProfileCollection` per list element. Replicate this behavior using `f = idname(x)` or `f = profile_id(x)`.
 #'

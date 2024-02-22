@@ -296,7 +296,7 @@ xyplot(top ~ value | variable,
 
 
 # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
-gen.hz.ml <- get.ml.hz(a, "variable", c('O','A','B','C'))
+gen.hz.ml <- get.ml.hz(a, c('O','A','B','C'))
 
 
 \dontrun{

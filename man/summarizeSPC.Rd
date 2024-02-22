@@ -9,15 +9,15 @@
 summarizeSPC(object, ...)
 }
 \arguments{
-\item{object}{A SoilProfileCollection}
+\item{object}{A \code{SoilProfileCollection}}
 
 \item{...}{A set of (named) comma-delimited R expressions that resolve to a summary value. e.g \code{groupmean = mean(clay, na.rm = TRUE)}}
 }
 \value{
-A data.frame with one row per level in the grouping variable, and one column for each summary
+A \code{data.frame} with one row per level in the grouping variable, and one column for each summary
 }
 \description{
-\code{summarize()} is a function used for summarizing SoilProfileCollections. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
+\code{summarize()} is a function used for summarizing a \code{SoilProfileCollection} object. Specify the groups using the group_by verb, and then (named) expressions to evaluate on each group. The result is a data.frame with one row per categorical level in the grouping variable and one column for each summary variable.
 }
 \author{
 Andrew G. Brown

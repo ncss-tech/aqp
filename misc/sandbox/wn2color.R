@@ -2,12 +2,12 @@
 # https://aty.sdsu.edu/explain/optics/rendering.html
 
 
-## simulate the color of materials that refelect light (D65) within very narrow bands of select wavelength(s)
+## simulate the color of materials that reflect light (D65) within very narrow bands of select wavelength(s)
 
 library(aqp)
 library(gifski)
 
-?spec2Munsell
+# ?spec2Munsell
 cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
 res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
 

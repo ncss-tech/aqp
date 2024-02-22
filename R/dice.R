@@ -1,9 +1,11 @@
 
-## https://github.com/ncss-tech/aqp/issues/115
+## details on slice() -> dice()
+# https://github.com/ncss-tech/aqp/issues/115
 
 ## TODO: 
 ##   * DT full outer join ideas
 ##     https://stackoverflow.com/questions/15170741/how-does-one-do-a-full-join-using-data-table
+##   * fully test / document compatibility with overlapping horizons: https://github.com/ncss-tech/aqp/issues/296
 
 setGeneric("dice", function(x,
                             fm = NULL,
@@ -31,9 +33,10 @@ setGeneric("dice", function(x,
   # find / flag / remove invalid profiles or horizons
   # this will generate an error if there are no valid profiles remaining
   if (strict) {
+    # NOTE: this will not find/remove perfectly overlapping horizons
     x <- HzDepthLogicSubset(x, byhz = byhz)
     
-    ## TODO: this could invoke 2x calls to fillHzGaps
+    ## TODO: this could invoke 2x calls to fillHzGaps()
     # removed horizons will trigger an automatic gap-filling
     if (!is.null(metadata(x)$removed.horizons)) {
       message('filling gaps left by HzDepthLogicSubset')

@@ -148,8 +148,9 @@ test_that("checkHzDepthLogic() gap", {
   expect_false(res$valid[1])
   
   # NOTE: OVERLAP OR GAP NOT MEANINGFUL FOR byhz=TRUE
+  # result is NA
   res2 <- checkHzDepthLogic(x, byhz = TRUE)
-  expect_false(res2$overlapOrGap[1])
+  expect_true(is.na(res2$overlapOrGap[1]))
   expect_true(res2$valid[1])
 })
 
@@ -158,7 +159,7 @@ test_that("checkHzDepthLogic() overlap", {
 
   # local copy
   x <- sp3[8, ]
-  # create a gap
+  # create overlap
   x$top[4] <- 75
   res <- checkHzDepthLogic(x)
 
@@ -167,10 +168,12 @@ test_that("checkHzDepthLogic() overlap", {
   expect_false(res$valid[1])
   
   # NOTE: OVERLAP OR GAP NOT MEANINGFUL FOR byhz=TRUE
+  # result is NA
   res2 <- checkHzDepthLogic(x, byhz = TRUE)
-  expect_false(res2$overlapOrGap[1])
+  expect_true(is.na(res2$overlapOrGap[1]))
   expect_true(res2$valid[1])
 })
+
 
 test_that("splitLogicErrors", {
   data(sp4)

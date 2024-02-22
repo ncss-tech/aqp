@@ -17,12 +17,15 @@ rgb2munsell(color, colorSpace = c("CIE2000", "LAB", "sRGB"), nClosest = 1)
 an (NA-padded) \code{data.frame} containing \code{hue}, \code{value}, \code{chroma}, and distance (dE00 when \code{colorSpace = 'CIE2000'}, Euclidean distance otherwise) to nearest matching color.
 }
 \description{
-Convert sRGB color coordinates to the closest \code{n} Munsell chips in the \code{munsell} lookup table.
+Convert sRGB color coordinates to the closest \code{n} Munsell chips in the \code{munsell} lookup table. This function will be replaced by \code{col2Munsell()} in \strong{aqp 2.1}.
 }
 \note{
 This function is fully vectorized and will pad output with NA-records when NA are present in \code{color}.
 }
 \examples{
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 
 # Munsell notation to sRGB triplets [0-1] 
 color <- munsell2rgb(
@@ -43,8 +46,8 @@ rgb2munsell(color)
 \references{
 \url{http://ncss-tech.github.io/AQP/}
 \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-\url{http://www.cis.rit.edu/mcsl/online/munsell.php}
 \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+http://www.cis.rit.edu/mcsl/online/munsell.php
 }
 \author{
 D.E. Beaudette

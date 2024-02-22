@@ -2,7 +2,9 @@
 
 #' @title Compare Site Level Attributes of a SoilProfileCollection
 #' 
-#' @description Compare site level attributes of a `SoilProfileCollection` object, returning a distance matrix conformal with the output from [NCSP()].
+#' @description Compare site level attributes of a `SoilProfileCollection` object, returning a distance matrix conformal with the output from [NCSP()]. Values are within the range of 0-1.
+#' 
+#' @details This function is typically used in conjunction with the output from [NCSP()].
 #' 
 #' @param x `SoilProfileCollection` object
 #' @param vars character vector listing one or more site level attributes of `x`
@@ -17,7 +19,7 @@
 #' 
 compareSites <- function(x, vars, weights = rep(1, times = length(vars)), ...) {
   
-  # extract 1 or more site variabels
+  # extract 1 or more site variables
   .s <- site(x)[, vars, drop = FALSE]
   
   # transfer profile IDs -> row names
@@ -26,6 +28,7 @@ compareSites <- function(x, vars, weights = rep(1, times = length(vars)), ...) {
   # wrap cluster::daisy
   .d <- cluster::daisy(.s, metric = 'gower', weights = weights, ...)
   
+  # convert to base class
   .d <- as.dist(.d)
   
   # standardize attributes to match NCSP()

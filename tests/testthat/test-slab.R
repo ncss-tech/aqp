@@ -171,14 +171,14 @@ test_that("slab calculations: mean, several profiles", {
   
   # aggregate single profile
   # custom slabs
-  a <- slab(sp1, fm = ~ prop, strict=TRUE, slab.structure=c(0,5,10,25,100), slab.fun = mean, na.rm=TRUE)
+  a <- slab(sp1, fm = ~ prop, strict = TRUE, slab.structure = c(0, 5, 10, 25, 100), slab.fun = mean, na.rm = TRUE)
   
   # weighted mean calculations done by 1-unit slices
-  # note slice formula notiation works from horizon "tops"
-  s.1 <- slice(sp1, 0:4 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
-  s.2 <- slice(sp1, 5:9 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
-  s.3 <- slice(sp1, 10:24 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
-  s.4 <- slice(sp1, 25:99 ~ prop, just.the.data = TRUE, strict = TRUE, top.down = TRUE)$prop
+  # note slice formula notation works from horizon "tops"
+  s.1 <- dice(sp1, 0:4 ~ prop, SPC = FALSE)$prop
+  s.2 <- dice(sp1, 5:9 ~ prop, SPC = FALSE)$prop
+  s.3 <- dice(sp1, 10:24 ~ prop, SPC = FALSE)$prop
+  s.4 <- dice(sp1, 25:99 ~ prop, SPC = FALSE)$prop
   
   # 0-5
   expect_equal(a$value[1], mean(s.1, na.rm=TRUE), tolerance=0.0001)
@@ -215,6 +215,39 @@ test_that("edge case: slab.structure[2] > max(x)", {
   expect_equivalent(a$value, 13.58427, tolerance=0.001)
 })
 
+test_that("edge case: slab.structure[1] > 0 (w/ custom slab function)", {
+  data(sp3, package = "aqp")
+  depths(sp3) <- id ~ top + bottom
+  
+  # custom 'slab' function, returning mean +/- 1SD
+  mean.and.sd <- function(values) {
+    m <- mean(values, na.rm = TRUE)
+    s <- sd(values, na.rm = TRUE)
+    upper <- m + s
+    lower <- m - s
+    res <- c(mean = m,
+             lower = lower,
+             upper = upper)
+    return(res)
+  }
+  
+  ## this time, compute the weighted mean of selected properties, by profile ID
+  a <- slab(sp3,
+            fm = id ~ L + A + B,
+            slab.structure = c(40, 60), 
+            slab.fun = mean.and.sd
+  )
+  
+  # convert long -> wide
+  res <- data.table::dcast(
+    data.table::as.data.table(a),
+    formula = id + top + bottom ~ variable,
+    value.var = 'mean'
+  )
+  
+  expect_equal(nrow(res), length(sp3))
+  expect_equal(ncol(res), 6L)
+})
 
 test_that("overlapping horizons", {
   data(sp4, package = 'aqp')

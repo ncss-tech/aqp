@@ -106,9 +106,10 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
   ## Plan:
   #   1. message about future deprecation -> dice()
-  message('Note: aqp::slice() will be deprecated in aqp version 2.0\n--> Please consider using the more efficient aqp::dice()')
+  # message('Note: aqp::slice() will be deprecated in aqp version 2.0\n--> Please consider using the more efficient aqp::dice()')
   
   #   2. deprecation -> dice() in aqp 2.0
+  .Deprecated(new = 'dice', msg = 'slice() has been deprecated, please use the more efficient aqp::dice()')
   
   #   3. masking / removal of slice(), shortly there after
   
@@ -262,19 +263,19 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
   return(hd.slices)
 }
 
-setGeneric("slice", function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TRUE) 
+setGeneric("slice", function(object, fm, top.down = TRUE, just.the.data = FALSE, strict = TRUE) 
   standardGeneric("slice"))
 
 #' @export
 #' @rdname slice
-setMethod(f='slice', signature(object = 'SoilProfileCollection'), slice.fast)
+setMethod(f = 'slice', signature(object = 'SoilProfileCollection'), slice.fast)
 
 
 # this function is run on the horizon data, once for each depth slice
 #' @param h Horizon data.frame
 #' @param id Profile ID
 #' @param top Top Depth Column Name
-#' @param bottom Bottom Depth Column Nmae
+#' @param bottom Bottom Depth Column Name
 #' @param vars Variables of Interest
 #' @param z Slice Depth (index).
 #' @param include Either `'top'` or `'bottom'`. Boundary to include in slice. Default: `'top'`

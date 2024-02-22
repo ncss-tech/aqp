@@ -35,7 +35,7 @@ lab_kmeans <- getKMeanColors('fragipan-soil-color-example.png', n = 7, sample.si
                              color.space = "lab", ref.white = "D65")
 
 
-aqp::rgb2munsell(convertColor(lab_kmeans$centers, from='Lab', to='sRGB'))
+aqp::col2Munsell(convertColor(lab_kmeans$centers, from = 'Lab', to = 'sRGB'))
 
 
 

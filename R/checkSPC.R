@@ -1,12 +1,9 @@
 
-# test for valid SPC, based on presence / absense of slots as compared to
-# class prototype
-# likely only used between major versions of aqp where internal structure of SPC has changed
-#' Test for a valid SoilProfileCollection
+#' @title Test for a valid `SoilProfileCollection`
 #'
-#' Test for a valid SoilProfileCollection
+#' @description Test for a valid `SoilProfileCollection`
 #'
-#' Test for valid \code{SoilProfileCollection} by checking for slots defined in
+#' @details Test for valid \code{SoilProfileCollection} by checking for slots defined in
 #' the class prototype. Likely only used between major versions of `aqp` where
 #' internal structure of \code{SoilProfileCollection} has changed. Use
 #' \code{checkHzDepthLogic} to check for common errors in horizon depths.

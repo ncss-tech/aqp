@@ -1,9 +1,8 @@
-## https://github.com/ncss-tech/aqp/issues/67
-# closest Munsell chip to LAB coordinates and error: sigma is dE00 when colorSpace = 'CIE2000'
-.closestMunselltoCIELAB <- function(lab) {
-  lab <- as.matrix(lab)
-  srgb <- grDevices::convertColor(lab, from = 'Lab', to = 'sRGB', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
-  res <- rgb2munsell(srgb, colorSpace = 'CIE2000')
+# simple wrapper around col2Munsell(..., space = 'CIELAB')
+# closest Munsell chip to LAB coordinates and error
+# sigma is dE00 
+.formatClosestMunsell <- function(lab) {
+  res <- col2Munsell(lab, space = 'CIELAB', nClosest = 1)
   res.txt <- sprintf("%s %s/%s\n(%.3f)", res$hue, res$value, res$chroma, res$sigma)
   return(res.txt)
 }
@@ -21,18 +20,16 @@
 #'
 #' @description Estimate central tendency and spread of soil color using marginal quantiles and L1 median of CIELAB coordinates.
 #' 
-#' @details Colors are converted from sRGB to CIELAB (D65 illuminant), marginal quantiles of L,A,B coordinates are estimated, and L1 median {L,A,B} is estimates. The closest Munsell chips (via Munsell/CIELAB lookup table provided by \code{munsell}) and R colors are determined by locating chips closest to the marginal quantiles and L1 median.
+#' @details Colors are converted from sRGB to CIELAB (D65 illuminant), marginal quantiles of (L,A,B) coordinates are estimated, and L1 median (L,A,B) is estimates. The closest Munsell chips (via Munsell/CIELAB lookup table provided by `munsell`) and R colors are determined by locating chips closest to the marginal quantiles and L1 median.
 #' 
-#' The results can be conveniently inspected using \code{plotColorQuantiles}.
+#' The results can be conveniently inspected using [plotColorQuantiles()].
 #' 
 #' @author D.E. Beaudette
 #' 
 #' @return A List containing the following elements:
 #' 
-#' \itemize{
-#' \item{marginal: }{\code{data.frame} containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00}
-#' \item{L1: }{L1 median CIELAB (D65) values, closest Munsell chip, and dE00}
-#' }
+#'   * `marginal`: `data.frame` containing marginal quantiles in CIELAB (D65), closest Munsell chips, and dE00
+#'   * `L1`: L1 median CIELAB (D65) values, closest Munsell chip, and dE00
 #' 
 #' @export
 #'
@@ -63,13 +60,17 @@
 colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   # sanity check, need this for L1 median
-  if(!requireNamespace('Gmedian'))
-    stop('package `Gmedian` is required', call.=FALSE)
+  if(!requireNamespace('Gmedian')) {
+    stop('package `Gmedian` is required', call. = FALSE)
+  }
+    
 
-  # hex represntation -> sRGB
+  # hex representation -> sRGB
   soilColors.srgb <- t(col2rgb(soilColors)) / 255
+  
   # sRGB -> CIE LAB
-  soilColors.lab <- convertColor(soilColors.srgb, from = 'sRGB', to = 'Lab', from.ref.white='D65', to.ref.white='D65', clip=FALSE)
+  soilColors.lab <- convertColor(soilColors.srgb, from = 'sRGB', to = 'Lab', from.ref.white = 'D65', to.ref.white = 'D65', clip = FALSE)
+  
   # convert to DF for use in diana
   soilColors.lab <- as.data.frame(soilColors.lab)
   names(soilColors.lab) <- c('L', 'A', 'B')
@@ -107,17 +108,17 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   ## find closest Munsell chips via CIE LAB coordinates
   # this is the closest Munsell chip to the L1 median color
-  L1.closest <- .closestMunselltoCIELAB(L1)
+  L1.closest <- .formatClosestMunsell(L1)
 
   # closest munsell chip to marginal L,A,B quantiles
-  L.closest <- .closestMunselltoCIELAB(soilColors.lab[L.q.idx, ])
-  A.closest <- .closestMunselltoCIELAB(soilColors.lab[A.q.idx, ])
-  B.closest <- .closestMunselltoCIELAB(soilColors.lab[B.q.idx, ])
+  L.closest <- .formatClosestMunsell(soilColors.lab[L.q.idx, ])
+  A.closest <- .formatClosestMunsell(soilColors.lab[A.q.idx, ])
+  B.closest <- .formatClosestMunsell(soilColors.lab[B.q.idx, ])
 
 
   ## find closest observed color to L1 median via CIE2000 distance metric
   ## requires farver >= 2.0.3
-  if( !requireNamespace('farver', quietly = TRUE) | packageVersion("farver") < '2.0.3' ) {
+  if( !requireNamespace('farver', quietly = TRUE) || packageVersion("farver") < '2.0.3' ) {
     message('CIE2000 comparisons require `farver` version 2.0.3 or greater, using Euclidean distance in CIELAB instead', call.=FALSE)
     d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
   } else {
@@ -142,26 +143,26 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 
   # combine into single DF for plotting
   res <- list(
-    marginal=data.frame(
-      p=p,
-      L=q.L.values,
-      A=q.A.values,
-      B=q.B.values,
-      L_colors=q.L.colors,
-      A_colors=q.A.colors,
-      B_colors=q.B.colors,
-      L_chip=L.closest,
-      A_chip=A.closest,
-      B_chip=B.closest,
+    marginal = data.frame(
+      p = p,
+      L = q.L.values,
+      A = q.A.values,
+      B = q.B.values,
+      L_colors = q.L.colors,
+      A_colors = q.A.colors,
+      B_colors = q.B.colors,
+      L_chip = L.closest,
+      A_chip = A.closest,
+      B_chip = B.closest,
       stringsAsFactors = FALSE
     ),
-    L1=data.frame(
-      p=0.5,
-      L=L1[, 1],
-      A=L1[, 2],
-      B=L1[, 3],
-      L1_color=L1.color,
-      L1_chip=L1.closest,
+    L1 = data.frame(
+      p = 0.5,
+      L = L1[, 1],
+      A = L1[, 2],
+      B = L1[, 3],
+      L1_color = L1.color,
+      L1_chip = L1.closest,
       stringsAsFactors = FALSE
     )
   )
@@ -179,9 +180,9 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
 #' @param pt.cex scaling factor for color chips
 #' @param lab.cex chip label scaling factor
 #'
-#' @return a \code{lattice} graphics object
+#' @return a `lattice` graphics object
 #' 
-#' @details Marginal percentiles and L1 median CIELAB values from \code{colorQuantiles} are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via \code{rgb2Munsell}. 
+#' @details Marginal percentiles and L1 median CIELAB values from `colorQuantiles()` are combined into a single plot, arranged in panels according to L, A, and B coordinates. Munsell "chips" (colors and labels) are based on the closest Munsell color found via [col2Munsell()]. 
 #' 
 #' @author D.E. Beaudette
 #'

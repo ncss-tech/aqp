@@ -10,3 +10,5 @@ README.md
 ^README\.Rmd$
 ^man/figures$
 ^revdep$
+^CRAN-SUBMISSION$
+^cran-comments\.md$

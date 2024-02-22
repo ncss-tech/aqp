@@ -125,6 +125,9 @@
 #' 
 #' @examples 
 #' 
+#' # restrict examples to 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' # m: representative or most likely color
 #' # thresh: dE00 threshold
 #' # hues: allowed Munsell hues

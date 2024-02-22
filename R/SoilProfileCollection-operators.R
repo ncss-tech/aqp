@@ -362,7 +362,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),
 #' @param x a SoilProfileCollection
 #' @param i an expression resolving to a single column name in site or horizon table
 #' @param j (not used)
-#' @aliases [[,SoilProfileCollection,ANY-method, [[,SoilProfileCollection,ANY,ANY-method
+#' @aliases [[,SoilProfileCollection-method [[,SoilProfileCollection,ANY-method [[,SoilProfileCollection,ANY,ANY-method 
 #' @docType methods
 #' @rdname doublebracket
 #' @examples
@@ -443,7 +443,7 @@ setMethod("[[", signature(x = "SoilProfileCollection",
 #' @param value New value to replace -- unit length or equal in length to number
 #'   of sites or horizons in the collection.
 #'
-#' @aliases [[<-,SoilProfileCollection,ANY,ANY-method
+#' @aliases [[<-,SoilProfileCollection-method [[<-,SoilProfileCollection,ANY,ANY-method 
 #' @docType methods
 #' @rdname doublebracket-set
 setReplaceMethod("[[", signature(x = "SoilProfileCollection",

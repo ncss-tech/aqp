@@ -33,8 +33,6 @@ library(aqp)
 data(sp4)
 str(sp4)
 sp4$idbak <- sp4$id
-#sp4 <- sp4[order(match(sp4$id, aqp:::.coalesce.idx(sort(sp4$id))), sp4$top),]
-
 
 # upgrade to SoilProfileCollection
 # 'id' is the name of the column containing the profile ID

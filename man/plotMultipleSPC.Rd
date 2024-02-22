@@ -174,7 +174,7 @@ plotMultipleSPC(
   label.offset = 3,
   args = arg.list, 
   merged.legend = 'clay', merged.legend.title = 'Clay (\%)',
-  axis.line.offset = 0
+  depth.axis = list(line = 0)
 )
 }
 \seealso{

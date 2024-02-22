@@ -7,8 +7,7 @@
 #' @description Soil color is typically described at dry and moist conditions. This function attempts to estimate soil color at dry or moist condition when one is missing. Estimation proceeds as:
 #'   * convert Munsell notation to CIELAB color coordinates via `munsell2rgb()`
 #'   * apply scaling, rotation, and translation parameters in CIELAB color space
-#'   * convert CIELAB to sRGB coordinates
-#'   * locate closest Munsell chip to sRGB coordinates via `rgb2munsell()`
+#'   * locate closest Munsell chip to CIELAB coordinates via `col2munsell()`
 #'   
 #' Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.
 #' 
@@ -31,6 +30,9 @@
 #'
 #' @examples
 #' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' estimateSoilColor(hue = '10YR', value = 3, chroma = 3, sourceMoistureState = 'moist')
 #' 
 #' # note that estimation is not symmetric
@@ -44,34 +46,37 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   ## convert input to CIELAB
   z <- munsell2rgb(hue, value, chroma, returnLAB = TRUE)
   
+  # latest models
+  # load('../../SoilWeb-data/OSD/models/procrustes-models.rda')
+  
   # select transformation
   # transformation parameters via vegan::procrustes()
   params <- switch(sourceMoistureState,
          dry = {
            # dry -> moist
            list(
-             scale = 0.813113909258287,
+             scale = 0.812898619142037,
              
-             rotation = structure(c(0.995726413877236, 0.0257258575317077, -0.0886966118937879, 
-                                    -0.0198592989419549, 0.997595348898966, 0.0664012658063297, 0.0901915569923982, 
-                                    -0.0643560417475089, 0.993842936755039), .Dim = c(3L, 3L)),
+             rotation = structure(c(0.995675622919053, 0.0257258722497405, -0.0892649618929251, 
+                                    -0.0197691154694856, 0.997558105087928, 0.0669851404935216, 0.0907702374036196, 
+                                    -0.0649307821481665, 0.993752865420432), dim = c(3L, 3L)),
              
-             translation = structure(c(-4.1036881559009, 1.62003171022114, -0.738786964568888
-             ), .Dim = c(1L, 3L))
+             translation = structure(c(-4.08321328666085, 1.61159422497282, -0.753817567156023
+             ), dim = c(1L, 3L))
            )
          },
          
          moist = {
            # moist -> dry  
            list(
-             scale = 0.832382710140909,
+             scale = 0.832203042606691,
              
-             rotation = structure(c(0.995726413877236, -0.0198592989419543, 0.0901915569923983, 
-                                    0.0257258575317069, 0.997595348898967, -0.0643560417475067, -0.0886966118937878, 
-                                    0.0664012658063277, 0.993842936755039), .Dim = c(3L, 3L)),
+             rotation = structure(c(0.995675622919054, -0.0197691154694851, 0.0907702374036196, 
+                                    0.0257258722497396, 0.997558105087928, -0.0649307821481645, -0.0892649618929251, 
+                                    0.0669851404935191, 0.993752865420432), dim = c(3L, 3L)),
              
-             translation = structure(c(21.1881839195852, 0.403136273628388, 5.99548096284415
-             ), .Dim = c(1L, 3L))
+             translation = structure(c(21.1915203051648, 0.411048926770148, 6.01556883263775
+             ), dim = c(1L, 3L))
            )
            }
   )
@@ -82,19 +87,11 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   Y <- params$scale * Y %*% params$rotation
   Y <- sweep(Y, MARGIN = 2, STATS = params$translation, FUN = "+")
   
-  ## CIELAB -> sRGB
-  ## TODO: why does farver give slightly different results?
+  ## CIELAB -> closest Munsel
+  res <- col2Munsell(Y, space = 'CIELAB', nClosest = 1)
   
-  ## farver: results are scaled 0-255
-  # .srgb <- farver::convert_colour(Y, from = 'lab', to = 'rgb', white_from = 'D65', white_to = 'D65')
-  
-  ## grDevices: results are scaled 0-1
-  .srgb <- convertColor(Y, from = 'Lab', to = 'sRGB', from.ref.white='D65', to.ref.white = 'D65')
-  
-  ## sRGB -> Munsell
-  res <- rgb2munsell(color = .srgb, colorSpace = 'CIE2000', nClosest = 1)
-  
-  ## additional diagnostics... ?
+
+  ## TODO: post-processing or additional diagnostics?
   
   return(res)
   

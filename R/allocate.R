@@ -165,7 +165,7 @@
 #' )
 #' aggregate(featdept ~ id, data = df, summary)
 #' 
-allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"), droplevels = TRUE) {
+allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diagnostic Features"), droplevels = FALSE) {
   
   # sanity check
   to <- match.arg(to, several.ok = FALSE)
@@ -207,25 +207,37 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 # To do add USDA and other salt classes
 ## TODO consider optional object = NULL
 ## TODO safe handling of NA
-.rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, system = "FAO Salt Severity", droplevels = TRUE) {
+.rank_salts <- function(EC = NULL, pH = NULL, ESP = NULL, SAR = NULL, system = "FAO Salt Severity", droplevels = FALSE) {
   
   # EC = 1; pH = 3; ESP = 50
-  l <- list(EC = EC, pH = pH, ESP = ESP)
+  l <- list(EC = EC, pH = pH, ESP = ESP, SAR = SAR)
   
-  # tests
+  # tests ----
+  # ESP vs SAR
+  if (!is.null(SAR)) {
+    warning("SAR will be converted to ESP via Richards (1958) conversion formula.")
+  }
+  if (!is.null(ESP) & !is.null(SAR)) {
+    warning("Both ESP & SAR are present, SAR will only be used where ESP is missing.")
+  }
   # minimum dataset
-  if (any(sapply(l, is.null))) {
-    warning("the minimum dataset of soil properites for allocating to the Salt Severity classes are: EC (aka Electrial Conductivity), pH, ESP (aka Exchangable Sodium Percentage")
+  if (any(sapply(l[c(1, 3)], is.null)) & any(sapply(l[c(1, 4)], is.null))) {
+    warning("the minimum dataset of soil properites for allocating to the Salt Severity classes are: EC (aka Electrial Conductivity), and ESP (aka Exchangable Sodium Percentage) or SAR (aka Sodium Adsorption Ratio)")
+  }
+  # pH rule
+  if (any(!complete.cases(EC, ESP)) | any(!complete.cases(EC, SAR))) {
+    warning("pH is used in where both ESP and SAR are missing")
   }
   # length
   n <- sapply(l, length)
-  if (! all(max(n) == n)) {
+  if (! all(max(n) == n[1:3]) & ! all(max(n) == n[c(1:2, 4)])) {
     stop("all arguments must have the same length")
   }
   
   
+  # levels ----
   fao_lev <- c(
-    c("nonsaline", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
+    c("none", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
     c("none", "slightly sodic", "moderately sodic", "strongly sodic", "very strongly sodic")
     )
   
@@ -233,20 +245,33 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   ## TODO: why?
   sc <- rep("none", times = length(EC))
   
-  ## TODO: consider separate saline / sodic classifaction
+  ## TODO: consider separate saline / sodic classification
+  # estimate ESP from SAR ----
+  if (is.null(ESP)) ESP <- rep(NA_real_, times = length(EC))
+  if (is.null(SAR)) SAR <- rep(NA_real_, times = length(EC))
   
+  .esp <- function(SAR) {
+    (100 * (-0.0126 + 0.01475 * SAR)) / 
+      (1   + (-0.0126 + 0.01475 * SAR))
+  }
+  ESPx <- .esp(SAR)
+  ESP <- ifelse(is.na(ESP) & !is.na(SAR), ESPx, ESP)
+  
+  
+  # rank ----
   # saline soils
-  sc <- ifelse(ESP <= 15, # & EC > 4 & pH <= 8.5, 
+  sc <- ifelse(EC > -1 & (ESP <= 15 | (is.na(ESP) & pH <= 8.2)), # & EC > 4 & pH <= 8.5, 
                as.character(
                  cut(EC,
-                     breaks = c(-1, 0.75, 2, 4, 8, 15, 1000), 
+                     breaks = c(-1, 0.75, 2, 4, 8, 15, 1500), 
                      labels = fao_lev[1:6],
                      right  = FALSE
                      )),
                sc
                )
   # sodic soils
-  sc <- ifelse(EC <= 4 & (ESP > 15 | pH > 8.2),  
+  # ESP
+  sc <- ifelse(EC <= 4 & ESP > 15,  # | pH > 8.2
                as.character(
                  cut(ESP,
                      # breaks = c(0, 15, 30, 50, 70, 100),
@@ -258,11 +283,11 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
                sc
                )
   # saline-sodic soils
-  sc <- ifelse(EC > 4 & ESP > 15, "saline-sodic", sc)
+  sc <- ifelse(EC > 4 & (ESP > 15 | (is.na(ESP) & pH > 8.2)), "saline-sodic", sc)
   
   
   # convert to factor
-  sc <- factor(sc, levels = c(fao_lev[1:6], "saline-sodic", fao_lev[8:11]))
+  sc <- factor(sc, levels = c(fao_lev[6:1], fao_lev[8:11], "saline-sodic"))
 
   
   # droplevels
@@ -275,7 +300,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 
 
 
-.codify <- function(x, system = "salt severity", droplevels = TRUE) {
+.codify <- function(x, system = "salt severity", droplevels = FALSE) {
 
   if (system == "salt severity") {
 
@@ -284,11 +309,11 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   }
 
 
-.codify_salt_severity <- function(x, droplevels = TRUE) {
+.codify_salt_severity <- function(x, droplevels = FALSE) {
   
   # set levels
   fao_lev <- c(
-    c("nonsaline", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
+    c("none", "slightly saline", "moderately saline", "strongly saline", "very strongly saline", "extremely saline"),
     c("none", "slightly sodic", "moderately sodic", "strongly sodic", "very strongly sodic")
   )
   
@@ -296,7 +321,11 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   if (!is.integer(x)) stop("x is not an integer")
   if (!all(unique(x) %in% c(1:11, NA))) warning("some x values do not match the lookup table")
 
-  sc <- factor(x, levels = 1:11, labels = c(fao_lev[1:6], "saline-sodic", fao_lev[8:11]))
+  sc <- factor(
+    x, 
+    levels = 1:11, 
+    labels = c(fao_lev[6:1], fao_lev[8:11], "saline-sodic")
+    )
   
   if (droplevels == TRUE) {
     sc <- droplevels(sc)

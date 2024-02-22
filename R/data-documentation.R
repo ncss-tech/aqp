@@ -3,6 +3,25 @@
 ## don't forget: @usage data(XXX)
 
 
+#' @title Lookup tables for sand, silt, clay, texture class, and textural modifiers.
+#' 
+#' @description A list that contains a snapshot of the values generated using the logic from
+#' the particle size estimator calculation in NASIS, the average values per
+#' texture class, and average rock fragment values by textural modifier.
+#' 
+#' @usage data(soiltexture)
+#' @format A list with 3 data frames. The first named values which contains
+#' values for sand, silt and clay by texture class. The second with average
+#' values for sand, silt and clay per texture class. The third has fragvoltot
+#' low, rv and high values for texmod.  \describe{ \item{list("clay")}{clay
+#' percentage of the fine earth fraction, a integer vector}
+#' \item{list("sand")}{sand percentage of the fine earth fraction, a integer
+#' vector} \item{list("silt")}{silt percentage of the fine earth fraction, a
+#' integer vector} \item{list("texcl")}{texture class, a character vector}
+#' \item{list("texmod")}{textural modifiers, a character vector} }
+#' @keywords datasets
+"soiltexture"
+
 #' @title Example Output from soilDB::fetchOSD()
 #' @description An example `SoilProfileCollection` object created by `soilDB::fetchOSD()`, derived from the Cecil, Appling, and Bonneau Official Series Descriptions.
 #' @keywords datasets
@@ -10,6 +29,14 @@
 #' @format A `SoilProfileCollection`
 "osd"
 
+
+
+#' @title Example SoilProfileCollection with Overlapping Horizons
+#' @description A `SoilProfileCollection` with overlapping horizons, derived from a Dynamic Soil Properties project.
+#' @keywords datasets
+#' @usage data(SPC.with.overlap)
+#' @format A `SoilProfileCollection`
+"SPC.with.overlap"
 
 
 #' @title Example Data from Wilson et al. 2022
@@ -54,7 +81,9 @@
 #'   * biome: biome
 #'
 #' @references 
-#' Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{doi.org/10.1016/j.geoderma.2022.115809}
+#' Stewart G. Wilson, Randy A. Dahlgren, Andrew J. Margenot, Craig Rasmussen, Anthony T. O'Geen. 2022. Expanding the Paradigm: The influence of climate and lithology on soil phosphorus, Geoderma: 421. \doi{10.1016/j.geoderma.2022.115809}
+#' 
+#' 
 #' 
 #' @examples 
 #' 
@@ -64,13 +93,13 @@
 #' group.name.offset = -15, label = 'biome', 
 #' name.style = 'center-center', color = 'CIA', 
 #' cex.names = 0.66, cex.id = 0.66, width = 0.3, 
-#' plot.depth.axis = FALSE, hz.depths = TRUE)
+#' depth.axis = FALSE, hz.depths = TRUE)
 #' 
 #' groupedProfilePlot(wilson2022, groups = 'biome', 
 #' group.name.offset = -15, label = 'pm', 
 #' name.style = 'center-center', color = 'Fet', 
 #' cex.names = 0.66, cex.id = 0.66, width = 0.3, 
-#' plot.depth.axis = FALSE, hz.depths = TRUE)
+#' depth.axis = FALSE, hz.depths = TRUE)
 #' 
 "wilson2022"
 
@@ -100,7 +129,7 @@
 #' character vector} \item{field_ph}{a numeric vector}
 #' \item{hue}{a character vector} \item{value}{a numeric
 #' vector} \item{chroma}{a numeric vector} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
+#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
 #' @keywords datasets
 #' @examples
 #'
@@ -161,13 +190,16 @@ NULL
 #' \item{b}{RGB blue component} \item{soil_color}{R-friendly
 #' encoding of soil color} }
 #' @author Dylan E. Beaudette
-#' @references http://casoilresource.lawr.ucdavis.edu/
+#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
 #' @source Busacca, Alan J.; Singer, Michael J.; Verosub, Kenneth L. 1989. Late
 #' Cenozoic stratigraphy of the Feather and Yuba rivers area, California, with
 #' a section on soil development in mixed alluvium at Honcut Creek. USGS
 #' Bulletin 1590-G.
 #' @keywords datasets
 #' @examples
+#'
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 #'
 #' data(sp2)
 #'
@@ -210,6 +242,7 @@ NULL
 #'
 #'
 NULL
+
 #' Soil Profile Data Example 3
 #'
 #' Soil samples from 10 soil profiles, taken from the Sierra Foothill Region of
@@ -233,8 +266,8 @@ NULL
 #' \item{A}{color: a-coordinate, CIE-LAB colorspace (dry)}
 #' \item{B}{color: b-coordinate, CIE-LAB colorspace (dry)}
 #' \item{name}{horizon name} \item{soil_color}{horizon color} }
-#' @references http://casoilresource.lawr.ucdavis.edu/
 #' @keywords datasets
+#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
 #' @examples
 #'
 #' ## this example investigates the concept of a "median profile"
@@ -264,9 +297,9 @@ NULL
 #'   # convert back to wide format
 #'   library(data.table)
 #'
-#'   a.wide.q25 <- dcast(a, top + bottom ~ variable, value.var = c('p.q25'))
-#'   a.wide.q50 <- dcast(a, top + bottom ~ variable, value.var = c('p.q50'))
-#'   a.wide.q75 <- dcast(a, top + bottom ~ variable, value.var = c('p.q75'))
+#'   a.wide.q25 <- dcast(as.data.table(a), top + bottom ~ variable, value.var = c('p.q25'))
+#'   a.wide.q50 <- dcast(as.data.table(a), top + bottom ~ variable, value.var = c('p.q50'))
+#'   a.wide.q75 <- dcast(as.data.table(a), top + bottom ~ variable, value.var = c('p.q75'))
 #'
 #'   # add a new id for the 25th, 50th, and 75th percentile pedons
 #'   a.wide.q25$id <- 'Q25'
@@ -277,8 +310,12 @@ NULL
 #'   vars <- c('top', 'bottom', 'id', 'clay', 'cec', 'ph', 'h', 's', 'v')
 #'   # make data.frame version of sp3
 #'   sp3.df <- as(sp3, 'data.frame')
-#'   sp3.grouped <- rbind(sp3.df[, vars], a.wide.q25[, vars], a.wide.q50[, vars], a.wide.q75[, vars])
-#'
+#' 
+#'   sp3.grouped <- as.data.frame(rbind(as.data.table(horizons(sp3))[, .SD, .SDcol = vars], 
+#'                                      a.wide.q25[, .SD, .SDcol = vars],
+#'                                      a.wide.q50[, .SD, .SDcol = vars], 
+#'                                      a.wide.q75[, .SD, .SDcol = vars]))
+#'                                      
 #'   # re-constitute the soil color from HSV triplets
 #'   # convert HSV back to standard R colors
 #'   sp3.grouped$soil_color <- with(sp3.grouped, hsv(h, s, v))
@@ -383,8 +420,6 @@ NULL
 #' data(sp4)
 #' str(sp4)
 #' sp4$idbak <- sp4$id
-#' #sp4 <- sp4[order(match(sp4$id, aqp:::.coalesce.idx(sort(sp4$id))), sp4$top),]
-#'
 #'
 #' # upgrade to SoilProfileCollection
 #' # 'id' is the name of the column containing the profile ID
@@ -493,21 +528,7 @@ NULL
 #'
 #' @name sp5
 #' @docType data
-#' @format \preformatted{ Formal class 'SoilProfileCollection' [package "aqp"]
-#' with 6 slots ..@ idcol : chr "soil" ..@ depthcols: chr [1:2] "top" "bottom"
-#' ..@ metadata :'data.frame': 1 obs. of 1 variable: .. ..$ depth_units: chr
-#' "cm" ..@ horizons :'data.frame': 1539 obs. of 17 variables: .. ..$ soil :
-#' soil ID .. ..$ sand : sand .. ..$ silt : silt .. ..$ clay : clay .. ..$ R25
-#' : RGB r-coordinate .. ..$ G25 : RGB g-coordinate .. ..$ B25 : RGB
-#' b-coordinate .. ..$ pH : pH .. ..$ EC : EC .. ..$ CaCO3 : CaC03 content ..
-#' ..$ C : C content .. ..$ Ca : Ca .. ..$ Mg : Mg .. ..$ Na : Na .. ..$ top :
-#' horizon top boundary (cm) .. ..$ bottom : horizon bottom boundary (cm) ..
-#' ..$ soil_color: soil color in r-friendly format ..@ site :'data.frame': 296
-#' obs. of 1 variable: .. ..$ soil: chr [1:296] "soil1" "soil10" "soil100"
-#' "soil101" ...  ..@ sp :Formal class 'SpatialPoints' [package "sp"] with 3
-#' slots .. .. ..@ coords : num [1, 1] 0 .. .. ..@ bbox : logi [1, 1] NA .. ..
-#' ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slots .. .. .. ..
-#' ..@ projargs: chr NA }
+#' @format `SoilProfileCollection` object
 #' @references F. Carre, M.C. Girard. 2002. Quantitative mapping of soil types
 #' based on regression kriging of taxonomic distances with landform and land
 #' cover attributes. Geoderma. 110: 241--263.
@@ -517,6 +538,7 @@ NULL
 #' @keywords datasets
 #' @examples
 #'
+#' \dontrun{
 #' library(scales)
 #' data(sp5)
 #' par(mar=c(1,1,1,1))
@@ -597,32 +619,7 @@ NULL
 #' polygon(c(1:25, 25:1), c((100-r)+150, rep((300*sf)+yo, times=25)),
 #' border='black', col=rgb(0,0,0.8, alpha=0.25))
 #'
-#'
-#' ##
-#' # sample 25 profiles from the collection
-#' s <- sp5[sample(1:length(sp5), size=25), ]
-#' # compute pair-wise dissimilarity
-#' d <- NCSP(s, vars=c('R25','pH','clay','EC'), k = 0, maxDepth = 300)
-#' # keep only the dissimilarity between profile 1 and all others
-#' d.1 <- as.matrix(d)[1, ]
-#' # rescale dissimilarities
-#' d.1 <- rescale(d.1, to=c(80, 0))
-#' # sort in ascending order
-#' d.1.order <- rev(order(d.1))
-#' # plotting parameters
-#' yo <- 100 # y-offset
-#' sf <- 0.65 # scaling factor
-#' # plot sketches
-#' par(mar=c(0,0,0,0))
-#' plot(s, max.depth=300, y.offset=yo, scaling.factor=sf, plot.order=d.1.order)
-#' # add dissimilarity values with lines/points
-#' lines(1:25, d.1[d.1.order])
-#' points(1:25, d.1[d.1.order], pch=16)
-#' # link dissimilarity values with profile sketches via arrows
-#' arrows(1:25, d.1[d.1.order], 1:25, 95, len=0.1)
-#' # add an axis for the dissimilarity scale
-#' axis(2, at=pretty(0:80), labels=rev(pretty(0:80)), line=-1, cex.axis=0.75, las=2)
-#'
+#' }
 #'
 #'
 NULL
@@ -698,7 +695,7 @@ NULL
 #' Rasmussen, C., Matsuyama, N., Dahlgren, R.A., Southard, R.J. and Brauer, N.
 #' (2007), Soil Genesis and Mineral Transformation Across an Environmental
 #' Gradient on Andesitic Lahar. Soil Sci. Soc. Am. J., 71: 225-237.
-#' @source Original manuscripts and person communication with authors.
+#' @source Original manuscripts and personal communication with authors.
 #' @keywords datasets
 #' @examples
 #'
@@ -1010,25 +1007,28 @@ NULL
 #'
 #' @references Jacobs, P. M., L. T. West, and J. N. Shaw. 2002. Redoximorphic
 #' Features as Indicators of Seasonal Saturation, Lowndes County, Georgia. Soil
-#' Sci. Soc. Am. J. 66:315-323. doi:10.2136/sssaj2002.3150
+#' Sci. Soc. Am. J. 66:315-323. doi:\doi{10.2136/sssaj2002.3150}
 #' @usage data(jacobs2000)
 #'
 #' @keywords datasets
 #'
 #' @examples
-#'
+#' 
+#' # keep examples from using more than 2 cores
+#' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+#' 
 #' # load
 #' data(jacobs2000)
 #'
 #' # basic plot
-#' par(mar=c(0,1,3,3))
-#' plot(jacobs2000, name='name', color='matrix_color', width=0.3)
+#' par(mar=c(0, 1, 3, 1.5))
+#' plotSPC(jacobs2000, name='name', color='matrix_color', width=0.3)
 #' # add concentrations
 #' addVolumeFraction(jacobs2000, 'concentration_pct',
 #' col = jacobs2000$concentration_color, pch = 16, cex.max = 0.5)
 #'
 #' # add depletions
-#' plot(jacobs2000, name='name', color='matrix_color', width=0.3)
+#' plotSPC(jacobs2000, name='name', color='matrix_color', width=0.3)
 #' addVolumeFraction(jacobs2000, 'depletion_pct',
 #' col = jacobs2000$depletion_color, pch = 16, cex.max = 0.5)
 #'
@@ -1059,6 +1059,7 @@ NULL
 #'
 #'
 "jacobs2000"
+
 
 #' Average Hydraulic Parameters from the ROSETTA Model by USDA Soil Texture
 #' Class
@@ -1173,31 +1174,31 @@ NULL
 #'
 #' A lookup table of interpolated Munsell color chips for common soil colors.
 #'
-#' See \code{munsell2rgb} for conversion examples. Note that this table does
-#' not currently have entries for values of 2.5--common in most soil color
-#' books. These chips should be added in the next major release of aqp. Values
+#' See \code{munsell2rgb} for conversion examples. Values
 #' are referenced to the D65 standard illuminant.
 #'
 #' @name munsell
 #' @docType data
 #'
-#' @format A data frame with 8825 rows.  \describe{ \item{hue}{Munsell
-#' Hue, upper case} \item{value}{Munsell Value}
-#' \item{chroma}{Munsell Chroma} \item{r}{sRGB "red" value
-#' (0-1)} \item{g}{sRGB "green" value (0-1)} \item{b}{sRGB
-#' "blue" value (0-1)} \item{L}{CIE LAB "L" coordinate}
-#' \item{A}{CIE LAB "A" coordinate} \item{B}{CIE LAB "B"
-#' coordinate} }
+#' @format A data.frame with 8825 rows.  
+#'  - `hue`: Munsell Hue, upper case
+#'  - `value`: Munsell Value
+#'  - `chroma`: Munsell Chroma
+#'  - `r`: sRGB "red" value (0-1)
+#'  - `g`: sRGB "green" value (0-1)
+#'  - `b`: sRGB "blue" value (0-1)
+#'  - `L`: CIELAB "L" coordinate
+#'  - `A`: CIELAB "A" coordinate
+#'  - `B`: CIELAB "B" coordinate
 #'
 #' @usage data(munsell)
 #'
-#' @references \describe{
-#' \item{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}{Color
-#' conversion equations}
-#' \item{http://dx.doi.org/10.1016/j.cageo.2012.10.020}{Methods used to
-#' generate this table} }
-#' @source Color chip XYZ values:
-#' http://www.rit.edu/cos/colorscience/rc_munsell_renotation.php
+#' @references 
+#'  - Color conversion equations
+#'    + http://www.brucelindbloom.com/index.html?ColorCalcHelp.html
+#'  - Methods used to generate this table
+#'    + http://dx.doi.org/10.1016/j.cageo.2012.10.020
+#' @source Color chip XYZ values: \url{https://www.rit.edu/science/munsell-color-science-lab-educational-resources#munsell-renotation-data}
 #' @keywords datasets
 #' @examples
 #'

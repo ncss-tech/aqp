@@ -40,7 +40,7 @@ test_that("advanced pattern matching, requires perl", {
   expect_error(suppressWarnings(generalize.hz(x, new = n, pat = p, non.matching.code = 'not-used')))
 
   # this should work
-  res <- generalize.hz(x, new = n, pat = p, non.matching.code = 'not-used', perl=TRUE)
+  res <- generalize.hz(x, new = n, pat = p, non.matching.code = 'not-used', perl = TRUE)
 
   # matching only text, not factor levels
   expect_equal(as.character(res), c('A', 'A', 'not-used', '^AC', 'C', 'C', 'C'))

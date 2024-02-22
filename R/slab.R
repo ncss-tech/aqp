@@ -57,7 +57,7 @@
   if (!requireNamespace('Hmisc', quietly = TRUE))
     stop('please install the `Hmisc` package to use `hdquantile()` method', call. = FALSE)
   
-  res <- Hmisc::hdquantile(values, probs = probs, na.rm = na.rm)
+  res <- as.numeric(Hmisc::hdquantile(values, probs = probs, na.rm = na.rm))
   
   names(res) <- paste('p.q', round(probs * 100), sep = '')
   return(res)
@@ -128,6 +128,7 @@
 	}
 	
 	# slice into 1cm increments, result is a data.frame
+	# NOTE: when byhz = TRUE, overlapping horizons cannot be detected
 	data <- dice(x = object, fm = fm.slice, strict = strict, byhz = byhz, SPC = FALSE, pctMissing = TRUE)
   
 	# Note: in this case we need to subtract the extra slice included by slice()/dice()
@@ -560,7 +561,7 @@ setGeneric("slab", function(object,
 #'
 #'
 #' # apply slice-wise evaluation of max probability, and assign ML-horizon at each slice
-#' gen.hz.ml <- get.ml.hz(a, "variable", c('O','A','B','C'))
+#' gen.hz.ml <- get.ml.hz(a, c('O','A','B','C'))
 #'
 #'
 #' \dontrun{

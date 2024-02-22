@@ -47,5 +47,5 @@ fragmentClasses(sys = 'mod.wentworth')
 Schoeneberger, P.J., D.A. Wysocki, E.C. Benham, and Soil Survey Staff. 2012. Field book for describing and sampling soils, Version 3.0. Natural Resources Conservation Service, National Soil Survey Center, Lincoln, NE.
 }
 \seealso{
-\code{\link[=sieve]{sieve()}}
+\code{\link[=fragmentSieve]{fragmentSieve()}}
 }

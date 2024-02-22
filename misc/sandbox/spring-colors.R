@@ -38,5 +38,5 @@ colorContrastPlot('10P 4/8', '10P 4/7')
 cq <- colorQuantiles(dd[['nature']]$col)
 plotColorQuantiles(cq)
 
-devtplotColorMixture(c('10P 7/8', '7.5GY 6/7'), mixingMethod = 'exact')
+plotColorMixture(c('10P 7/8', '7.5GY 6/7'), mixingMethod = 'exact')
 

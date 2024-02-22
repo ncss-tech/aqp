@@ -1,0 +1,314 @@
+---
+title: "An Overview of the aqp Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{An Overview of the aqp Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo=FALSE, results='hide', warning=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  background = '#F7F7F7',
+  fig.align = 'center',
+  dev = 'png',
+  comment = "#>"
+)
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
+options(width = 100, stringsAsFactors = FALSE, timeout = 600)
+```
+
+
+Soil morphology, observed properties, and geomorphic context represent a complex package of interrelated information that can be difficult to analyze and communicate as a whole. Graphical methods such as soil profile sketches and cross-sections represent a few of the possible methods commonly used to report on these kind of data. The Algorithms for Quantitative Pedology (AQP) project encompasses several related R packages tailored to this style of work. A specialized data structure (SoilProfileCollection) maintains linkages between soil horizons, diagnostic features, above-ground data, and geomorphic context. SoilProfileCollection objects can be filtered, subset, resampled (over new depth intervals), and re-ordered; all while preserving links to above and below-ground, linked data. Functions are provided for the conversion of soil colors to and from Munsell notation and several other color space coordinates. Graphical methods for the SoilProfileCollection provide a simple but flexible framework for the design and layout of soil profile sketches, aligned to x and or y axes defined by linked data.
+
+
+# Related Tutorials by Topic
+
+
+## Soil Morphology
+  * [Soil Profile Sketches](https://ncss-tech.github.io/AQP/aqp/sketches.html)
+  * [Visualization of Horizon Boundaries](https://ncss-tech.github.io/AQP/aqp/hz-boundaries.html)
+  * [Assigning Generalized Horizon Labels](https://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.html)
+  * [Dealing With Troublesome Data](https://ncss-tech.github.io/AQP/aqp/dealing-with-bad-data.html)
+  * [Simulation of Soil Morphology by Perturbation](https://ncss-tech.github.io/AQP/aqp/perturb.html)
+  * [Soil Texture Visualization Ideas](https://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html)
+  * [SPC Sketch Tips](https://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html)
+  * [Vertical vs. Perpendicular Horizon Depths](https://ncss-tech.github.io/AQP/aqp/vertical_vs_perpendicular.html)
+
+## Soil Color
+  * [Mixing Munsell Colors](https://ncss-tech.github.io/AQP/aqp/mix-colors.html)
+  * [Soil Color Contrast](https://ncss-tech.github.io/AQP/aqp/color-contrast.html)
+  * [Some ideas on summarizing soil color](https://ncss-tech.github.io/AQP/sharpshootR/aggregate-soil-color.html)
+  * [Soil Color Tiles](https://ncss-tech.github.io/AQP/aqp/color-tiles.html)
+  * [Investigating Soil Color](https://ncss-tech.github.io/AQP/aqp/investigating-soil-color.html)
+  * [Some Ideas on Soil Color Signatures](https://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html)
+  * [Soil Color Transition Probability](https://ncss-tech.github.io/AQP/aqp/series-color-TP-graph.html)
+
+## Numerical Classification
+  * [Pair-Wise Distances by Generalized Horizon Labels](https://ncss-tech.github.io/AQP/aqp/genhz-distance-eval.html)
+  * [Pair-Wise Distance Between Profiles and Mixed Variable Types](https://ncss-tech.github.io/AQP/aqp/profile-compare-factors.html)
+
+## Soil Hydrology  
+  * [Theoretical Water Retention Curves](https://ncss-tech.github.io/AQP/aqp/water-retention-curves.html)
+  * [Water Retention Curve Development from KSSL Data](https://ncss-tech.github.io/AQP/soilDB/fetchKSSL-VG-demo.html)
+
+## Geomorphology
+  * [Hydrologic Ordering of Geomorphic Proportions](https://ncss-tech.github.io/AQP/sharpshootR/geomorphic-summaries-and-ordering.html)
+  * [Exploring Geomorphic Summaries](https://ncss-tech.github.io/AQP/soilDB/exploring-geomorph-summary.html)
+
+## Soil Taxonomy
+  * [What does a subgroup look like?](https://ncss-tech.github.io/AQP/soilDB/subgroup-series.html)
+  * [Querying Soil Series Data](https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+
+## Multivariate Summaries of Soil Property Data
+  * [L1 Profiles](https://ncss-tech.github.io/AQP/aqp/L1-profiles.html)
+  * [Getting and Comparing KSSL Data](https://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
+
+## Soil Spectroscopy
+  * [Soil Colors from VNIR Spectra](https://ncss-tech.github.io/AQP/aqp/VNIR-spectra-to-color.html)
+
+
+
+# Function Index by Topic
+
+
+## SoilProfileCollection Objects
+
+### Creation
+  * `depths()`: init an SPC from `data.frame`
+  * `site()`: set or add site-level attributes of an SPC  
+  * `quickSPC()`: quickly build an SPC from simple text templates
+  * `random_profile()`: generate random SPC from suite of depth functions
+
+### Metadata  
+  * `hzdesgnname()`: get/set column containing horizon designations
+  * `hzDesgn()`: get vector of horizon designations
+  * `hztexclname()`: get/set column containing horizon texture class
+  * `metadata()`: get/set SPC metadata (list)
+  * `hzID()`: get vector of horizon IDs
+  * `hzidname()`: get/set column containing horizon IDs
+  * `horizonDepths()` get/set columns containing horizon top and bottom depths
+
+### Properties
+  * `length()`: number of profiles in a SPC
+  * `nrow()`: number of horizons in a SPC
+  * `names()`: list of horizon and site names
+  * `siteNames()`: site-level column names
+  * `horizonNames()`: horizon-level column names
+
+### Subset
+  * `glom()`: extract horizons based on overlap criteria defined by point or interval
+  * `trunc()`: truncate SPC to given depth interval
+  * `subset()`: subset profiles based on logical expressions
+  * `subsetHz()`: subset horizons based on logical expressions
+  * `[`: `data.frame`-like subsetting of profiles (i-index) and/or horizons (j-index)
+  * `[[`: access site or horizon-level columns by name
+  * `k-index expressions`: `.FIRST`, `.LAST`, `.HZID`, `.NHZ`
+
+### Depth
+  * `min()`: minimum bottom depth within a SPC
+  * `max()`: maximum bottom depth within a SPC
+  * `depthOf()`: generalized "depth to" based on REGEX matching
+  * `minDepthOf()`: special case of `depthOf()`
+  * `maxDepthOf()`: special case of `depthOf()`
+  * `getSoilDepthClass()`: estimate soil depth based on REGEX matching applied to horizon designation and associated depth class
+  * `aggregateSoilDepth()`: statistical estimation of soil depth (REGEX matching of horizon designation) within groups of profiles
+  
+  
+### Utility
+  * `combine()`, `c()`: combine multiple SPCs into a single SPC
+  * `duplicate()`: duplicate profiles within a SPC
+  * `perturb()`: randomly adjust horizon thickness or depths to simulate from a template SPC
+  * `warpHorizons()`: expand / contract horizon thickness
+  * `harmonize()`: create new profiles within a SPC based sets of related horizon-level data
+  * `hzAbove()`, `hzBelow()`: locate horizons above or below some criteria
+  * `unique()`: determine uniqueness among profiles of an SPC via MD5 hash
+  * `split()`: split SPC into list of SPCs based on grouping factor
+  * `site()`: get site data as `data.frame`
+  * `horizons()`: get horizon data as `data.frame`
+  * `replaceHorizons()`: replace horizon data
+  * `diagnostic_hz()`: get/set diagnostic features
+  * `restrictions()`: get/set restrictions
+  * `denormalize()`: convert site-level data into horizon-level data via replication
+  * `compositeSPC()`: downgrade an SPC to list of site and horizon-level data
+  
+### Iteration
+  * `profileApply()`: apply a function to each profile within an SPC (slow but simple interface)
+  * `summarizeSPC()`: perform group-wise summaries over profiles within an SPC
+  * `transform()`: modify a SPC using expressions that operation on site or horizon-level data
+
+### Change of Support
+  * `dice()`: convert SPC to 1 depth-unit intervals by replication
+  * `slab()`: apply an aggregate function over groups within a "dice()-ed" SPC
+  * `spc2mpspline()`: interface to equal-area spline fitting from mpspline2 package
+  * `segment()`: generate segment labels for depth-weighted aggregation 
+  * `L1_profiles()`: create representative profiles via multivariate median (L1 estimator)
+  * `slicedHSD()`: apply Tukey's HSD over groups within a "dice()-ed" SPC
+
+### Horizon Depth Logic
+  * `accumulateDepths()`: fix horizon depths when old-style O horizon notation has been used
+  * `fillHzGaps()`: fill topological gaps in horizon depth
+  * `repairMissingHzDepths()`: attempt fixing missing or duplicated horizon bottom depths
+  * `flagOverlappingHz()`: flag horizons with perfect overlap
+  * `checkHzDepthLogic()`: apply battery of horizon depth topological tests
+  * `splitLogicErrors()`: split an SPC according to variety of possibly horizon depth errors
+  * `HzDepthLogicSubset()`: remove profiles from an SPC if any depth logic errors are present
+
+### Data QC
+  * `evalMissingData()`: report metrics of missing data by profile within SPC
+  * `missingDataGrid()`: visual indication of missing data
+  * `profileInformationIndex()`: experimental indices of "information content" by profile
+
+
+### Object Coercion
+  * `as(SPC, 'list')`: convert SPC to `list`
+  * `as(SPC, 'data.frame')`: convert site and horizon data to `data.frame`
+  * `as(SPC, 'sf')`: convert site and spatial data to sf object
+
+### Spatial Data
+  * `prj()`: get/set coordinate reference system (CRS) metadata
+  * `initSpatial()`: set (site-level) column names containing coordinates
+  * `getSpatial()`: get spatial data (site + coordinates) from an SPC
+
+### Internal Consistency
+  * `checkSPC()`: check SPC for internal consistency 
+  * `rebuildSPC()`: re-make an SPC from a previous version of aqp (rarely required)
+
+## Soil Profile Sketches
+  * `plotSPC()`: create sketches of soil profiles from an SPC
+  * `explainPlotSPC()`: explain various elements of a soil profile sketch
+  * `groupedProfilePlot()`: create grouped sketches of soil profiles
+  * `plotMultipleSPC()`: create sketches from multiple, possibly non-conformal SPCs
+  * `addBracket()`: add vertical brackets beside soil profile sketches
+  * `addDiagnosticBracket()`: add vertical brackets beside soil profile sketches based on diagnostic features
+  * `addVolumeFraction()`: add visual explanation of coarse fragment volume to soil profile sketches
+  * `alignTransect()`: align soil profiles to an external gradient such as topographic sequence
+
+
+## Soil Color / Color Science
+  
+### Color Conversion
+  * `col2Munsell()`: convert various color notations to Munsell notation
+  * `munsell2rgb()`: convert Munsell notation to sRGB or CIELAB color coordinates
+  * `parseMunsell()`: parse and optionally convert a munsell color
+  * `spec2Munsell()`: estimate the closest Munsell color given reflectance spectra in the visible range 
+  * `getClosestMunsellChip()`: estimate a reasonably close Munsell color given non-standard notation 
+  * `estimateSoilColor()`: estimate moist soil color from dry soil color (and vice versa) 
+
+### Comparison
+  * `colorContrast()`: pair-wise color contrast and CIE2000 (dE00) based on colors in Munsell notation 
+  * `colorContrastPlot()`: visual explanation of soil color contrast and dE00
+  * `contrastChart()`: Munsell color book style explanation of soil color contrast and dE00
+  * `soilColorSignature()`: derive soil color signatures for profiles within an SPC
+
+### Aggregation
+  * `colorChart()`: Munsell color book representation of color frequency
+  * `aggregateColor()`: estimate color proportions within an SPC according within groups of horizons
+  * `colorQuantiles()`: marginal and L1 quantiles of color in CIELAB coordinates
+  
+
+### Utility
+  * `huePosition()`: generate an ordered factor of the standard Munsell hues
+  * `huePositionCircle()`: graphical representation of the standard Munsell hues, with optional simulation of common color vision deficiency
+  * `simulateColor()`: simulate a range of Munsell colors given measures of central tendency and spread
+  * `previewColors()`: graphical preview of colors as a grid or via nMDS
+  * `soilPalette()`: generate swatch-like arrangements of colors and labels
+  * `equivalentMunsellChips()`: for a specified Munsell color, identify other Munsell colors with a very lower CIE2000 color contrast difference
+
+### Simulation of Mixtures
+  * `mixMunsell()`: simulate an subtractive mixture of pigments specified in Munsell notation 
+  * `plotColorMixture()`: simulate a subtractive mixture of pigments, display reflectance spectra
+
+
+## Numerical Classification of Soil Profiles
+  * `NCSP()`: numerical classification of soil profiles, within a `SoilProfileCollection`
+  * `compareSites()`: pair-wise comparison of site-level data from a `SoilProfileCollection`
+  
+## Pedology
+  * `allocate()`: perform one of several classification systems to soil property data
+  * `estimateAWC()`: estimate plant-available water holding capacity
+  * `correctAWC()`: apply rock fragment or soluble salt corrections to AWC estimates
+  * `hzDistinctnessCodeToOffset()`: convert horizon boundary distinctness codes to vertical offset
+  * `hzTopographyCodeToLineType()`: convert horizon boundary topography codes to line types
+  * `hzTopographyCodeToOffset()`: convert horizon boundary topography codes to offset
+  * `ph_to_rxnclass()`: convert pH to reaction class
+  * `rxnclass_to_ph()`: convert reaction class to pH range
+  * `ReactionClassLevels()`: ordered factor of reaction classes
+  * `horizonColorIndices()`: compute various soil color-based indices to horizons within an SPC 
+
+### Soil Texture
+  * `textureTriangleSummary()`: graphical summary of sand, silt, clay fractions on a soil texture triangle  
+  * `bootstrapSoilTexture()`: simulation of realistic compositions (sand, silt, clay) from a small set of example data
+  * `SoilTextureLevels()`: ordered factor of soil texture classes
+  * `texcl_to_ssc()`: convert soil texture classes to sand, silt, clay centroids
+  * `ssc_to_texcl()`: convert sand, silt, clay values to soil texture class
+  * `texture_to_taxpartsize()`: convert soil texture to Soil Taxonomy particle size class
+  
+### Coarse Fragments
+  * `fragmentSieve()`: classify coarse fragments by fragment diameter
+  * `texmod_to_fragvoltot()`: estimate ranges in coarse fragment volume based on a soil texture modifier
+  * `texture_to_texmod()`
+  * `fragvol_to_texmod()`
+  * `fragmentClasses()`: coarse fragment diameter thresholds used by USDA-NRCS
+
+### Soil Taxonomy
+  * `getArgillicBounds()`: estimate the upper and lower boundaries of an argillic horizon
+  * `getCambicBounds()`: estimate the upper and lower boundaries of a cambic horizon
+  * `getSurfaceHorizonDepth()`
+  * `getMineralSoilSurfaceDepth()`
+  * `getPlowLayerDepth()`
+  * `hasDarkColors()`
+  * `estimatePSCS()`
+
+### Generalized Horizon Labels (GHL)
+  * `generalize.hz()`: apply REGEX rules to group horizon designations into a reduced set of "generalized horizon labels"
+  * `evalGenHZ()`: evaluate internal consistency of assigned GHL
+  * `genhzTableToAdjMat()`: convert a cross-tabulation of GHL vs. original horizon designations to adjacency matrix
+  * `get.ml.hz()`: extract most likely horizon boundary depths from probability depth functions 
+  * `guessGenHzLevels()`: estimate the correct ordering of GHL given horizon depths
+  * `GHL()`: get/set GHL metadata for a `SoilProfileCollection`
+
+## Misc.
+  * `invertLabelColor()`: automatic adjustment of label color for maximum contrast, based on specified background color
+  * `hzTransitionProbabilities()`: derive transition probability matrix from horizon level data
+  * `mostLikelyHzSequence()`: use Markov Chains to predict the most likely sequence of horizons
+
+### Accuracy and Uncertainty
+  * `shannonEntropy()`: Shannon entropy
+  * `brierScore()`: Brier's score
+  * `tauW()`: weighted tau statistic
+
+### Overlapping Annotation  
+  * `findOverlap()`: identify overlap within a vector of positions based on a given threshold
+  * `overlapMetrics()`: metrics of overlap within a vector or positions based on a given threshold 
+  * `fixOverlap()`: attempt the minimum of adjustments to vector of positions such that a given distance threshold is enforced 
+
+## Example Data 
+  * `sp1`
+  * `sp2`
+  * `sp3`
+  * `sp4`
+  * `sp5`
+  * `sp6`
+  * `sierraTransect`
+  * `wilson2022`
+  * `rowley2019`
+  * `jacobs2000`
+  * `osd`
+  * `SPC.with.overlap`
+  * `us.state.soils`
+  * `soil_minerals`
+  * `munsell`
+  * `equivalent_munsell`
+  * `munsellHuePosition`
+  * `munsell.spectra`
+  * `spectral.reference`
+  * `ROSETTA.centroids`
+  * `reactionclass`
+  * `soiltexture`
+

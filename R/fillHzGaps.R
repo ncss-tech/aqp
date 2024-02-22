@@ -13,7 +13,7 @@
 #' @param to_top numeric, fill from shallowest top depth in each profile to specified depth? default: `0` 
 #' @param to_bottom numeric, fill from deepest bottom depth in each profile to specified depth? default: `aqp::max(x)` 
 #' 
-#' @return `SoilProfileCollection` object
+#' @return a possibly modified `SoilProfileCollection` object
 #' 
 #' @author A.G. Brown and D.E. Beaudette
 #' 
@@ -34,13 +34,22 @@
 #' # create gaps by removing logic errors
 #' x <- HzDepthLogicSubset(sp4, byhz = TRUE)
 #'
+#' # check on removed horizons (hzID values)
+#' metadata(x)$removed.horizons
+#'
 #' # inspect
-#' par(mar = c(0, 0, 0, 1))
-#' plotSPC(x, width = 0.3, default.color = 'royalblue', name = 'hzID')
+#' par(mar = c(0, 0, 0, 2))
+#' plotSPC(x, width = 0.3, default.color = 'royalblue', 
+#' name = 'hzID', name.style = 'center-center', cex.names = 0.8,
+#' cex.id = 0.66)
 #'
+#' # fill gaps left by HzDepthLogicSubset()
 #' z <- fillHzGaps(x, flag = TRUE)
-#'
-#' plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', show.legend = FALSE)
+#' 
+#' # graphical check
+#' plotSPC(z, width = 0.3, color = '.filledGap', name = 'hzID', 
+#' show.legend = FALSE, name.style = 'center-center', cex.names = 0.8,
+#' cex.id = 0.66)
 #' 
 #' # fill top to 0 cm
 #' z2 <- fillHzGaps(x, flag = TRUE, to_top = 0)
@@ -67,20 +76,24 @@
 #' plotSPC(d, color = '.filledGap', show.legend = FALSE)
 #' 
 fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
+  
+  # SPC details
   idn <- idname(x)
-  hzidn <- hzidname(x)
-
   htb <- horizonDepths(x)
-
   hznames <- horizonNames(x)
   hcnames <- c(idn, htb)
   
+  # just the horizons, convert to DT
   h <- data.table::as.data.table(horizons(x))
+  nh <- nrow(h)
+  
+  # indices used by gap-detection
+  lead.idx <- (2:nh)[seq_len(nh)]
+  lag.idx <- (1:(nh - 1))[seq_len(nh)]
 
-  lead.idx <- 2:nrow(h)
-  lag.idx <- 1:(nrow(h) - 1)
-
-  # identify bad horizons
+  # identify affected horizons
+  # this will include the first perfectly overlapping horizons
+  # in the case of multiple entries of e.g. E/B
   bad.idx <- which(h[[htb[2]]][lag.idx] != h[[htb[1]]][lead.idx]
                    & h[[idn]][lag.idx] == h[[idn]][lead.idx])
   
@@ -89,7 +102,23 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   #                     .SD[1:(.N - 1), 1] == .SD[2:.N, 1]],
   #                      .SDcols = hcnames]
 
+  ## BUG: need a short-circuit for single-profile / single-horizon objects
+  ## https://github.com/ncss-tech/aqp/issues/301
+  ## 
+  ## NOTE: do not short-circuit, a single profile, single-horizon may still need filling depending on the top/bottom depth and other params
+  
+  
+  # https://github.com/ncss-tech/aqp/issues/296
+  # do not attempt to fill gaps when there are perfectly overlapping horizons
+  # likely an intentional data modeling decision
+  # vector matches order and length of horizons
+  .ov <- flagOverlappingHz(x)
+  
+  # filter out perfectly overlapping horizons
+  bad.idx <- setdiff(bad.idx, which(.ov))
+  
   # create template data.frame
+  # NOTE: bad.idx could be 0-length, and implicitly h[0, ]
   hz.template <- h[bad.idx, ]
 
   if (nrow(hz.template) > 0) {
@@ -135,7 +164,7 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   
   # flag if needed
   if (flag) {
-    if (nrow(h) > 0) h[['.filledGap']] <- FALSE
+    if (nh > 0) h[['.filledGap']] <- FALSE
     if (nrow(hz.template) > 0) hz.template[['.filledGap']] <- TRUE
     if (nrow(surface.template) > 0) surface.template[['.filledGap']] <- TRUE
     if (nrow(bottom.template) > 0) bottom.template[['.filledGap']] <- TRUE

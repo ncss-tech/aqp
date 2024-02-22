@@ -1,7 +1,28 @@
-# aqp 2.0 (2023-03-31)
-This is major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`.
+# aqp 2.0.3 (2023-12-19)
+ * performance improvements in `profileInformationIndex()`
+ * aesthetic improvements in `huePositionCircle()`
+
+# aqp 2.0.2 (2023-11-18)
+ * CRAN release
+ * bug fix / enhancements in `evalMissingData()`
+ * new function `col2Munsell()` generalizes and replaces `rgb2munsell()` (thanks Shawn Salley for the suggestion)
+   - `rgb2munsell()` will be deprecated in aqp 2.1 
+ * new function `warpHorizons()` for warping horizon thickness (inflate/deflate) (thanks Shawn Salley for idea / inspiration)
+ * fixed minor bug in `plotColorMixture()` when final mixed color does not exist in spectral library
+ * fixed minor namespace collision in `groupedProfilePlot()`
+ * major updates to `profileInformationIndex()` (vignette pending)
+
+# aqp 2.0.1 (2023-09-03)
+ * CRAN release (CRAN check bugfix)
+ * new function `flagOverlappingHz()` for identifying horizons with perfect overlap
+ * `fillHzGaps()`, `dice()`, `slab()`, and several other functions now safely handle horizons with perfect overlap (#296)
+
+
+# aqp 2.0 (2023-08-28)
+This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp < 1.42, particularly those relying on `slice()`, `slab()`, and `profile_compare()`. `slice()` and `profile_compare()` are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of `slab()` is a drop-in replacement for the previous version of the function.
 
 Notable changes include:
+
  * deprecation of `slice()` in favor of the new, faster, more robust implementation in `dice()` 
  * complete overhaul of `slab()`, with new arguments, faster back-end, and weighted aggregation implemented (finally)
  * deprecation of `profile_compare()` in favor of the `NCSP()`--a complete overhaul based on Maynard et al., 2020
@@ -10,24 +31,42 @@ Notable changes include:
  * `perturb()` and `estimatePSCS()` are now vectorized, and optimized for larger collections
  * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive mixtures
  * `gower` package moved to SUGGESTS
+ * `plotColorMixture()` now using grid graphics functions to determine color swatch geometry and setting overlap detection threshold
  * removal of `PMS2Munsell()` and support data
  * deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * removal of `rruff.sample` example XRD patterns
- * new example data, `wilson2022`
+ * `get.ml.hz()` no longer uses the `name` argument
+ 
+Major changes to `plotSPC()`:
+
+ * The maximum depth range of the figure is now based on `max.depth` or `max(x)`. This means that sketches generated with aqp 2.x will generally have less white space at the bottom of the figure. Make more room for additional annotation or visual effect by setting the desired depth range with the `max.depth` argument.
+ * now uses `electroStatics_1D()` for fixing horizon depth label overlap, solutions are deterministic and almost always better
+ * better depth axis interval heuristics (if not specified), varying based on figure depth range
+ * depth axis adjustments via new argument `depth.axis`, logical or list
+ * deprecation of arguments:
+   - `plot.depth.axis`: set via `depth.axis = TRUE`, `depth.axis = FALSE`, or customize `depth.axis = list(...)`
+   - `cex.depth.axis`: set via `depth.axis = list(cex = 1)`
+   - `axis.line.offset`: set via `depth.axis = list(line = -2)`
+
+New features:
+
+ * example data, `wilson2022`
  * fast prototyping of SPCs via `quickSPC()` and list / character templates
  * re-use arguments to `plotSPC()` via `options(.aqp.plotSPC.args = list(...))`
- * coarse fragment classification via `sieve()` and `fragmentClasses()`
- 
- 
+ * coarse fragment classification via `fragmentSieve()` and `fragmentClasses()`
+ * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
+ * `plotSPC()` now marks truncated profiles with a ragged bottom
+ * `fixOverlap()` now has two label-placement solvers, based on 1) electrostatics and 2) simulated annealing
+ * new [depth axis styles](https://ncss-tech.github.io/AQP/aqp/sketches.html) in `plotSPC()`
+
 Incremental changes, should have no effect on previous code:
- * `plotSPC()` gains argument `maxLabelAdjustmentIndex` for controlling horizon depth label collisions
+
  * bug fix in `plotSPC()` when `fixLabelCollisions = TRUE`, adjustments suggested to `fixOverlap()` are now scaled correctly
  * `explainPlotSPC()` reports label adjustment index when label collision repair is enabled
  * aesthetic cleanup in `explainPlotSPC()`
  * `soilColorSignature()` gains arguments and perceptual color distances (dE00) via farver package
  * `as(<SPC>, "data.frame")`: Replace `plyr::join()` with `merge()`
- * Add S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
- * `correctAWC()`: NA handling  - return NA when frags are NA 
+ * `correctAWC()`: NA handling - return NA when frags are NA 
  * `mutate_profile()`: Faster (data.table-based) evaluation of profile-level expressions (#255)
  * `profileApply`: Add support for custom `lapply()`-like function (`APPLY.FUN`) for processing chunks (#256) 
  * Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()` (#254)
@@ -246,7 +285,7 @@ Incremental changes, should have no effect on previous code:
   * aqp 1.18 scheduled for next CRAN release
 
 # aqp 1.17.06 (2019-07-15)
-   * `plotSPC()` gains a new argument for relative positioning: relative.pos
+   * `plotSPC()` gains a new argument for relative positioning: `relative.pos`
    * relative positioning helper function: `fixOverlap()`, see manual page for examples
    * `explainPlotSPC()`, `addDiagnosticBracket()`, and `addVolumeFraction()` updated accordingly
 
@@ -398,8 +437,8 @@ Incremental changes, should have no effect on previous code:
    * texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method='closest', see manual page for details
 
 # aqp 1.7-7 (2014-11-06)
-   * bug fix c/o Jos? Padarian: SPC objects now understand logical indexing rules
-   * removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package
+   * bug fix c/o Jose Padarian: SPC objects now understand logical indexing rules
+   * removed `spatial_subset()`: this functionality can be accomplished outside of AQP and removes dependency on rgeos package
 
 # aqp 1.7-6 (2014-09-26)
    * bug fix c/o Jos? Padarian: when promoting coordinates from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!
@@ -413,13 +452,13 @@ Incremental changes, should have no effect on previous code:
    * When applied to a single categorical variable, the results from slab() now contain an attribute 'original.levels'
   that contains the original factor levels. This is important because when casting from long->wide format, illegal
   column names are scrubbed by make.names(). This process would convert horizon designations like '2Bt' into 'X2Bt'.
-  You can recover the original horizon names via attr(x, 'original.levels').
+  You can recover the original horizon names via `attr(x, 'original.levels')`.
 
 # aqp 1.6-3 (2014-02-04)
    * plotSPC() has a new argument: `label`, used to set site-level attribute containing profile labels
 
 # aqp 1.6-2 (2014-01-10)
-   * plotSPC() now registers plotting parameters in the environment aqp.env
+   * plotSPC() now registers plotting parameters in the environment `aqp.env`
    * new function addVolumeFraction() for annotating profile plots with volumetric information (e.g. rock fragment volume)
 
 # aqp 1.6-1 (2013-12-31)

@@ -1,5 +1,5 @@
 
-#' @title Probabalistic Estimation of Soil Depth within Groups
+#' @title Probabilistic Estimation of Soil Depth within Groups
 #'
 #' @description Estimate the most-likely depth to contact within a collection of soil profiles. Consider `getSoilDepthClass` followed by group-wise percentile estimation as a faster alternative.
 #'
@@ -12,7 +12,7 @@
 #'
 #' @details This function computes a probability-based estimate of soil depth by group. If no grouping variable exists, a dummy value can be used to compute a single estimate. The \code{crit.prob} argument sets the critical probability (e.g. 0.9) at which soil depth within a group of profiles is determined. For example, a \code{crit.prob} of 0.95 might result in an estimated soil depth (e.g. 120cm) where 95% of the profiles (by group) had depths that were less than or equal to 120cm.
 #'
-#' @return A \code{data.frame} is returned, with as many rows as there are unique group labels, as specified in \code{groups}.
+#' @return A `data.frame` is returned, with as many rows as there are unique group labels, as specified in `groups`.
 #'
 #' @author D.E. Beaudette
 #'

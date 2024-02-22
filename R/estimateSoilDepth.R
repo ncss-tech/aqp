@@ -3,7 +3,7 @@
 # * data.table optimization -> no iteration over profiles
 
 #' @title Estimate Soil Depth
-#' @description Estimate the soil depth of a single profile within a SoilProfileCollection object. This function would typically be called by \code{\link{profileApply}}.
+#' @description Estimate the soil depth of a single profile within a `SoilProfileCollection` object. This function would typically be called by [profileApply()].
 #' 
 #' @param f SoilProfileCollection object of length 1, e.g. a single profile
 #' @param name name of the column that contains horizon designations
@@ -48,7 +48,7 @@
 #' hzdesgnname(d) <- 'name'
 #' 
 #' # visual check
-#' par(mar = c(0, 0, 0, 1))
+#' par(mar = c(0, 0, 0, 2))
 #' plotSPC(d, hz.depths = TRUE, name.style = 'center-center', cex.names = 1, width = 0.1)
 #' 
 #' # top of the first Cd

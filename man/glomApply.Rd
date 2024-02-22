@@ -42,6 +42,9 @@ A SoilProfileCollection.
 }
 \examples{
 
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 data(sp3)
 depths(sp3) <- id ~ top + bottom
 

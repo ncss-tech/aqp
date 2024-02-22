@@ -118,7 +118,8 @@ pc <- function(s, vars, max_d, k, filter=NULL, sample_interval=NA, replace_na=TR
 add_soil_flag=TRUE, return_depth_distances=FALSE, strict_hz_eval=FALSE, progress='none',
 plot.depth.matrix=FALSE, rescale.result=FALSE, verbose=FALSE) {
 
-  .Deprecated('NCSP', old = "profile_compare")
+  # as of aqp 2.0
+  .Deprecated(new = 'NCSP', old = "profile_compare", msg = 'profile_compare() has been deprecated, please use NCSP()')
   
   if (!requireNamespace("plyr")) {
     stop("package `plyr` is required to use `profile_compare()`; use `NCSP()` instead or install the `plyr` package", call. = FALSE)

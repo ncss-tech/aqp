@@ -24,6 +24,10 @@ Calculate "rubification" component of "Profile Development Index" after Harden (
 In Harden (1982) "rubification" is calculated relative to a reference parent material. Several other non-color components are normalized relative to a maximum value and summed to obtain the overall Profile Development Index.
 }
 \examples{
+
+# keep examples from using more than 2 cores
+data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
+
 library(aqp)
 data("jacobs2000", package="aqp")
 
@@ -69,12 +73,20 @@ jacobs2000$rubiforder <- order(jacobs2000$rubif)
 
 # Plot in order of increasing Rubification index
 
-plotSPC(jacobs2000, axis.line.offset = -1,
-        color = "matrix_color",
-        label = "rubif",
-        plot.order = jacobs2000$rubiforder)
+plotSPC(jacobs2000,
+color = "matrix_color",
+label = "rubif",
+plot.order = jacobs2000$rubiforder,
+max.depth = 250
+)
 
-abline(h = c(0,100,150,200), lty = 2)
+segments(
+  x0 = 0.5, 
+  x1 = length(jacobs2000) + 0.5, 
+  y0 = c(0,100,150,200), 
+  y1 = c(0,100,150,200), 
+  lty = 2
+)
 
 # Add [estimated] parent material color swatches
 trash <- sapply(seq_along(jacobs2000$c_horizon_color), function(i) {

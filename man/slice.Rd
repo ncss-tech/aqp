@@ -34,7 +34,7 @@ variables are sliced according to \code{integer.vector}: \code{integer.vector ~ 
 
 \item{top}{Top Depth Column Name}
 
-\item{bottom}{Bottom Depth Column Nmae}
+\item{bottom}{Bottom Depth Column Name}
 
 \item{vars}{Variables of Interest}
 

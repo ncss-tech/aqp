@@ -77,14 +77,14 @@ jacobs2000$melan <- profileApply(jacobs2000, function(p) {
 jacobs2000$melanorder <- order(jacobs2000$melan)
 
 # Plot in order of increasing Rubification index
-par(mar=c(0,0,1,0))
+par(mar=c(1,0,1,0))
 plotSPC(jacobs2000, axis.line.offset = -1,
      color = "matrix_color",
      label = "rubif",
      plot.order = jacobs2000$rubiforder)
 title("Modified Harden Rubification Index")
 # Add [estimated] parent material color swatches
-lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
+.trash <- lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
   rect(i - 0.15, 230, i + 0.15, 220,
        col = parseMunsell(jacobs2000$surface_color[jacobs2000$rubiforder[i]]))
   rect(i - 0.15, 245, i + 0.15, 235,
@@ -95,7 +95,7 @@ lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
 
 # Plot in order of increasing Melanization index
 
-par(mar=c(0,0,1,0))
+par(mar=c(1,0,1,0))
 plotSPC(jacobs2000, axis.line.offset = -1,
         color = "matrix_color",
         label = "melan",
@@ -103,7 +103,7 @@ plotSPC(jacobs2000, axis.line.offset = -1,
 title("Modified Harden Melanization Index")
 
 # Add [estimated] parent material color swatches
-lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
+.trash <- lapply(seq_along(jacobs2000$c_horizon_color), function(i) {
   rect(i - 0.15, 230, i + 0.15, 220,
        col = parseMunsell(jacobs2000$surface_color[jacobs2000$melanorder[i]]))
   rect(i - 0.15, 245, i + 0.15, 235,
