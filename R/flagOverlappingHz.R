@@ -9,7 +9,7 @@
 #' 
 #' @export
 #' @details
-#' Horizons with `NA` depths are are not flagged as overlapping. Find and remove or fix these with `checkHzDepthLogic(byhz=TRUE)` if needed.
+#' Horizons with `NA` depths can be flagged as overlapping. Consider finding these horizons with `checkHzDepthLogic(byhz=TRUE)` and removing or fixing them.
 #' 
 #' @seealso [checkHzDepthLogic()] [fillHzGaps()]
 #'
@@ -36,20 +36,23 @@ flagOverlappingHz <- function(x) {
   h <- horizons(x)
   hzd <- horizonDepths(x)
   
-  # NOTE: horizons with NA depths are not flagged as overlapping
-  #  - rle gives length 1 for each NA; could recode NA values before rle?
-  
+  # extract horizon depths
   .tops <- h[[hzd[1]]]
   .bottoms <- h[[hzd[2]]]
+  
+  # recode missing depths so they will be recognized as runs with length >1
+  .topna <- is.na(.tops)
+  .botna <- is.na(.bottoms)
+  .tops[.topna] <- -9999
+  .botna[.botna] <- -9999
+  
   .rt <- rle(.tops) 
   .rb <- rle(.bottoms)
   
-  # TODO: need alternative to rle() lengths here
   .ot <- .rt$values[which(.rt$lengths > 1)]
   .ob <- .rb$values[which(.rb$lengths > 1)]
   
   # index affected horizons
-  # TODO: handle NA in logical comparisons?
   .m1 <- outer(.ot, .tops, '==') 
   .m2 <- outer(.ob, .bottoms, '==')
   idx1 <- unlist(as.vector(apply(.m1, 1, which)))
