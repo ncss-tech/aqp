@@ -34,27 +34,26 @@
 #' 
 flagOverlappingHz <- function(x) {
   h <- horizons(x)
+  idn <- idname(x)
   hzd <- horizonDepths(x)
   
-  # extract horizon depths
-  .tops <- h[[hzd[1]]]
-  .bottoms <- h[[hzd[2]]]
+  # extract horizon depths and profile ID
+  .id <- h[[idn]]
+  .fid <- as.numeric(factor(.id))
+  .tops <- paste0(.fid, ":", h[[hzd[1]]])
+  .bottoms <- paste0(.fid, ":", h[[hzd[2]]])
   
-  # recode missing depths so they will be recognized as runs with length >1
-  .topna <- is.na(.tops)
-  .botna <- is.na(.bottoms)
-  .tops[.topna] <- -9999
-  .botna[.botna] <- -9999
+  # missing depths are recoded so they will be recognized as runs with length >1
   
   .rt <- rle(.tops) 
   .rb <- rle(.bottoms)
-  
   .ot <- .rt$values[which(.rt$lengths > 1)]
   .ob <- .rb$values[which(.rb$lengths > 1)]
   
   # index affected horizons
   .m1 <- outer(.ot, .tops, '==') 
   .m2 <- outer(.ob, .bottoms, '==')
+  
   idx1 <- unlist(as.vector(apply(.m1, 1, which)))
   idx2 <- unlist(as.vector(apply(.m2, 1, which)))
   
