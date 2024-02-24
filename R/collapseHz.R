@@ -37,7 +37,7 @@ collapseHz <- function(x, pattern, hzdesgn = guessHzDesgnName(x, required = TRUE
       g <- unlist(sapply(seq(r$lengths), function(i) rep(i, r$lengths[i])))
       res <- h[g %in% unique(g[l]), c(list(hzdeptnew = min(.SD[[hzd[1]]], na.rm = na.rm), 
                                            hzdepbnew = max(.SD[[hzd[2]]], na.rm = na.rm)),
-                                           lapply(.SD, \(x, top, bottom) {
+                                           lapply(.SD, function(x, top, bottom) {
                                              if (is.numeric(x)) {
                                                 weighted.mean(x, bottom - top, na.rm = na.rm)
                                              } else {
