@@ -29,38 +29,32 @@
 #' depth.axis = FALSE, cex.names = 0.85)
 #' 
 flagOverlappingHz <- function(x) {
+  h <- horizons(x)
+  hzd <- horizonDepths(x)
   
-  # crude prototype, single profile at a time
-  .fo <- function(i, hzd) {
-    
-    # tops / bottoms
-    # NA not currently handled
-    .tops <- i[[hzd[1]]]
-    .bottoms <- i[[hzd[2]]]
-    
-    # find perfect overlap
-    .rt <- rle(.tops)
-    .rb <- rle(.bottoms)
-    
-    # id affected horizons
-    .ot <- .rt$values[which(.rt$lengths > 1)]
-    .ob <- .rb$values[which(.rb$lengths > 1)]
-    
-    ## TODO: tests required
-    # index affected horizons
-    .m <- outer(.ot, .tops, '==')
-    idx <- unlist(as.vector(apply(.m, 1, which)))
-    
-    # generate flag vector along sequence of horizons 
-    .res <- rep(FALSE, times = length(.tops))
-    .res[idx] <- TRUE
-    
-    return(.res)
-  }
+  # TODO: horizons with NA depths are not flagged as overlapping
+  # TODO: bottom depths are never used or compared
   
-  h <- data.table::data.table(horizons(x))
-  l <- list(h[[idname(x)]])
-  names(l) <- idname(x)
-  h[, .fo(.SD, horizonDepths(x)), by = l]$V1
+  .tops <- h[[hzd[1]]]
+  # .bottoms <- h[[hzd[2]]]
+  
+  .rt <- rle(.tops) # NOTE: rle gives length 1 for each NA
+  # .rb <- rle(.bottoms)
+  
+  .ot <- .rt$values[which(.rt$lengths > 1)]
+  # .ob <- .rb$values[which(.rt$lengths > 1)]
+  
+  # index affected horizons
+  # TODO: handle NA in logical comparisons
+  .m1 <- outer(.ot, .tops, '==') 
+  # .m2 <- outer(.ob, .bottoms, '==') 
+  idx1 <- unlist(as.vector(apply(.m1, 1, which)))
+  # idx2 <- unlist(as.vector(apply(.m2, 1, which)))
+  
+  # generate flag vector along sequence of horizons 
+  .res <- rep(FALSE, times = length(.tops))
+  # .res[intersect(idx1, idx2)] <- TRUE
+  .res[idx1] <- TRUE
+  .res
 }
 
