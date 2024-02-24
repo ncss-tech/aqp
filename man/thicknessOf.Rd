@@ -9,23 +9,26 @@ thicknessOf(
   pattern = NULL,
   hzdesgn = guessHzDesgnName(x, required = TRUE),
   method = "cumulative",
+  prefix = "",
   FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]]),
   na.rm = FALSE,
   ...
 )
 }
 \arguments{
-\item{x}{A SoilProfileCollection}
+\item{x}{A \emph{SoilProfileCollection}}
 
-\item{pattern}{character. A pattern to match in \code{hzdesgn}; used with the default \code{FUN} definition for regular expression pattern matching on horizons.}
+\item{pattern}{\emph{character}. A pattern to match in \code{hzdesgn}; used with the default \code{FUN} definition for regular expression pattern matching on horizons.}
 
-\item{hzdesgn}{character. A column containing horizon designations or other horizon-level character label used to identify matches; used with the default \code{FUN} definition.}
+\item{hzdesgn}{\emph{character}. A column containing horizon designations or other horizon-level character label used to identify matches; used with the default \code{FUN} definition.}
 
-\item{method}{character. Either \code{"cumulative"} (default) or \code{"minmax"}. See details.}
+\item{method}{\emph{character}. Either \code{"cumulative"} (default) or \code{"minmax"}. See details.}
 
-\item{FUN}{function. A function that returns a \emph{logical} vector equal in length to the number of horizons in \code{x}. See details.}
+\item{prefix}{\emph{character}. Column prefix for calculated \code{"thickness"} result, and \code{"min"}/\code{"max"} column results for \code{method="minmax"}. Default: \code{""}.}
 
-\item{na.rm}{logical. Omit \code{NA} values in summaries of thickness and in matching? Default: \code{FALSE}}
+\item{FUN}{\emph{function}. A function that returns a \emph{logical} vector equal in length to the number of horizons in \code{x}. See details.}
+
+\item{na.rm}{\emph{logical}. Omit \code{NA} values in summaries of thickness and in matching? Default: \code{FALSE}}
 
 \item{...}{Additional arguments passed to the matching function \code{FUN}.}
 }
@@ -52,18 +55,19 @@ data("jacobs2000")
 thicknessOf(jacobs2000, "Bt")
 
 # maximum bottom depth minus minimum top depth of horizon designations matching "Bt"
-thicknessOf(jacobs2000, "Bt", method = "minmax")
+thicknessOf(jacobs2000, "Bt", prefix = "Bt_", method = "minmax")
 
 # cumulative thickness of horizon designations matching "A|B"
-thicknessOf(jacobs2000, "A|B")
+thicknessOf(jacobs2000, "A|B", prefix = "AorB_")
 
 # maximum bottom depth minus minimum top depth of horizon designations matching "A|B"
-thicknessOf(jacobs2000, "A|B", method = "minmax")
+thicknessOf(jacobs2000, "A|B", method = "minmax", prefix = "AorB_")
 # note that the latter includes the thickness of E horizons between the A and the B
 
 # when using a custom function (be sure to accept ... and consider the effect of NA values)
 
 # calculate cumulative thickness of horizons containing >18\% clay
-thicknessOf(jacobs2000, FUN = function(x, ...) !is.na(x[["clay"]]) & x[["clay"]] > 18)
+thicknessOf(jacobs2000, prefix = "claygt18_", 
+            FUN = function(x, ...) !is.na(x[["clay"]]) & x[["clay"]] > 18)
 
 }
