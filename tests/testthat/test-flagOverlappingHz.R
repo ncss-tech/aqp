@@ -69,3 +69,47 @@ test_that("edge case", {
                  TRUE, TRUE, TRUE, 
                  FALSE, FALSE))
 })
+
+
+z3 <- data.frame(
+  id = 'SPC1',
+  top = c(0, 25, 25, 25, 50, 75, 100, 100),
+  bottom = c(25, 45, 50, 50, 75, 100, 125, 125)
+)
+
+z4 <- data.frame(
+  id = 'SPC2',
+  top = c(0, 25, 50, 75, 100),
+  bottom = c(25, 50, 75, 100, 125)
+)
+
+z5 <- rbind(z3, z4)
+depths(z5) <- id ~ top + bottom
+
+# test multiple profiles with some depths the same between both profiles
+# but only the first profile has overlap (1 imperfect, 2 perfect)
+test_that("multiple profiles, with and without overlap", {
+ .overlapFlag <- flagOverlappingHz(z5)
+ expect_false(any(.overlapFlag[9:13]))
+})
+
+z6 <- data.frame(
+  id = 'SPC1',
+  top = 0,
+  bottom = 100
+)
+
+z7 <- data.frame(
+  id = 'SPC2',
+  top = c(0, 0, 100),
+  bottom = c(100, 100, 200)
+)
+
+z8 <- rbind(z6, z7)
+depths(z8) <- id ~ top + bottom
+
+test_that("multiple profiles, edge case", {
+  # first single horizon profile matches depths that overlap in next profile
+  .overlapFlag <- flagOverlappingHz(z8)
+  expect_false(.overlapFlag[1])
+})
