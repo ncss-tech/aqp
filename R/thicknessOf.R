@@ -6,7 +6,9 @@
 #' @param pattern _character_. A pattern to match in `hzdesgn`; used with the default `FUN` definition for regular expression pattern matching on horizons.
 #' @param hzdesgn _character_. A column containing horizon designations or other horizon-level character label used to identify matches; used with the default `FUN` definition.
 #' @param method _character_. Either `"cumulative"` (default) or `"minmax"`. See details.
-#' @param prefix _character_. Column prefix for calculated `"thickness"` result, and `"min"`/`"max"` column results for `method="minmax"`. Default: `""`.
+#' @param prefix _character_. Column prefix for calculated `thickvar` (and `depthvar` for `method="minmax"`) column results. Default: `""`.
+#' @param thickvar _character_ Length `1`. Column name to use for calculated thickness column. Default: `"thickness"`
+#' @param depthvars _character_. Length `2`. Column names to use for calculated minimum top depth and maximum bottom depth in `method="minmax"`. Default: `horizonDepths(x)`
 #' @param FUN _function_. A function that returns a _logical_ vector equal in length to the number of horizons in `x`. See details.
 #' @param na.rm _logical_. Omit `NA` values in summaries of thickness and in matching? Default: `FALSE`
 #' @param ... Additional arguments passed to the matching function `FUN`.
@@ -50,13 +52,18 @@ thicknessOf <- function(x,
                         hzdesgn = guessHzDesgnName(x, required = TRUE), 
                         method = "cumulative",
                         prefix = "",
+                        thickvar = "thickness",
+                        depthvars = horizonDepths(x),
                         FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]]),
                         na.rm = FALSE,
                         ...) {
   .internalTHK <- NULL
   .interalHZM <- NULL
-  
   method <- match.arg(tolower(gsub("/", "", method)), c("cumulative", "minmax"))
+  
+  stopifnot(length(thickvar) == 1)
+  stopifnot(length(depthvars) == 2)
+  
   hzd <- horizonDepths(x)
   idn <- idname(x)
   
@@ -68,12 +75,15 @@ thicknessOf <- function(x,
   if (method == "cumulative") {
     h$.internalTHK <- x[[hzd[2]]] - x[[hzd[1]]]
     res <- h[, list(thickness = sum(.internalTHK[.internalHZM], na.rm = na.rm)), by = lid]
+    colnames(res)[2] <- thickvar
   } else if (method == "minmax") {
     res <- h[, list(`min` = suppressWarnings(min(.SD[[1]][.internalHZM], na.rm = na.rm)),
                     `max` = suppressWarnings(max(.SD[[2]][.internalHZM], na.rm = na.rm))),
               by = lid, .SDcols = c(hzd, ".internalHZM")]
     res$thickness <- res$`max` - res$`min`
     res$thickness[!is.finite(res$thickness)] <- 0L
+    colnames(res)[2:3] <- depthvars
+    colnames(res)[4] <- thickvar
   } else stop("unknown thickness method: ", shQuote(method), call. = FALSE)
   colnames(res)[2:ncol(res)] <- paste0(prefix, colnames(res)[2:ncol(res)])
   .as.data.frame.aqp(res, aqp_df_class(x))

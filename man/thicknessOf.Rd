@@ -10,6 +10,8 @@ thicknessOf(
   hzdesgn = guessHzDesgnName(x, required = TRUE),
   method = "cumulative",
   prefix = "",
+  thickvar = "thickness",
+  depthvars = horizonDepths(x),
   FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]]),
   na.rm = FALSE,
   ...
@@ -24,7 +26,11 @@ thicknessOf(
 
 \item{method}{\emph{character}. Either \code{"cumulative"} (default) or \code{"minmax"}. See details.}
 
-\item{prefix}{\emph{character}. Column prefix for calculated \code{"thickness"} result, and \code{"min"}/\code{"max"} column results for \code{method="minmax"}. Default: \code{""}.}
+\item{prefix}{\emph{character}. Column prefix for calculated \code{thickvar} (and \code{depthvar} for \code{method="minmax"}) column results. Default: \code{""}.}
+
+\item{thickvar}{\emph{character} Length \code{1}. Column name to use for calculated thickness column. Default: \code{"thickness"}}
+
+\item{depthvars}{\emph{character}. Length \code{2}. Column names to use for calculated minimum top depth and maximum bottom depth in \code{method="minmax"}. Default: \code{horizonDepths(x)}}
 
 \item{FUN}{\emph{function}. A function that returns a \emph{logical} vector equal in length to the number of horizons in \code{x}. See details.}
 
