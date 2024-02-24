@@ -31,16 +31,12 @@
 flagOverlappingHz <- function(x) {
   
   # crude prototype, single profile at a time
-  .fo <- function(i) {
-    
-    # for R CMD check
-    .TOP <- NULL
-    .BOTTOM <- NULL
+  .fo <- function(i, hzd) {
     
     # tops / bottoms
     # NA not currently handled
-    .tops <- i[, , .TOP]
-    .bottoms <- i[, , .BOTTOM]
+    .tops <- i[[hzd[1]]]
+    .bottoms <- i[[hzd[2]]]
     
     # find perfect overlap
     .rt <- rle(.tops)
@@ -62,10 +58,9 @@ flagOverlappingHz <- function(x) {
     return(.res)
   }
   
-  # TODO: can probably be made faster
-  #  * only hz data required
-  #  * split (profile ID) / apply (.fo()) / combine via DT (returns vector)
-  res <- profileApply(x, .fo, simplify = TRUE)
-  return(res)
+  h <- data.table::data.table(horizons(x))
+  l <- list(h[[idname(x)]])
+  names(l) <- idname(x)
+  h[, .fo(.SD, horizonDepths(x)), by = l]$V1
 }
 
