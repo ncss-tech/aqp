@@ -10,7 +10,7 @@ z <- data.frame(
 depths(z) <- id ~ top + bottom
 
 # basic functionality
-test_that("flagOverlappingHz", {
+test_that("flagOverlappingHz: perfect overlap in 2 horizons", {
   
   .overlapFlag <- flagOverlappingHz(z)
   
@@ -26,6 +26,29 @@ test_that("flagOverlappingHz", {
   
 })
 
+z2 <- data.frame(
+  id = 'SPC',
+  top = c(0, 25, 25, 25, 50, 75, 100, 100),
+  bottom = c(25, 45, 50, 50, 75, 100, 125, 125)
+)
+
+depths(z2) <- id ~ top + bottom
+
+test_that("flagOverlappingHz: imperfect in 1 horizon, perfect in 2 horizons", {
+  
+  .overlapFlag <- flagOverlappingHz(z2)
+  
+  # logical vector
+  expect_true(length(.overlapFlag) == nrow(z2))
+  expect_true(inherits(.overlapFlag, 'logical'))
+  
+  # not overlapping horizons
+  expect_true(all(!.overlapFlag[c(1, 2, 5, 6)]))
+  
+  # overlapping horizons
+  expect_true(all(.overlapFlag[c(3, 4, 7, 8)]))
+  
+})
 
 # more complex edge case
 x <- data.frame(peiid = c("1373969", "1373969", "1373969", "1373969", 
