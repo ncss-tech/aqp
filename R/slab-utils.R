@@ -107,7 +107,7 @@ genSlabLabels <- function(slab.structure = 1, max.d = NULL, n.profiles = NULL, s
   } else {
     idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x])))) + i[1]
     idx2 <- do.call('c', lapply(seq_along(j), function(x) rep(x, j[x])))
-    mt <- data.frame(idx1, slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
+    mt <- data.frame(as.integer(idx1), slab_id = idx2, slab_label = paste0(i[idx2], "-", i[idx2 + 1]))
   }
   colnames(mt) <- c(hzd[2], "slab_id", "slab_label")
   

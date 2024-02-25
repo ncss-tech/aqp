@@ -223,7 +223,7 @@ setGeneric("dice", function(x,
   ## TODO: perform z-index subset before slice sequence creation to save a lot of time
   if (!is.null(z)) {
     # selection via top depth within z-index
-    res <- res[which(res[[htb[1]]] %in% z), ]
+    res <- res[which(res[[htb[1]]] %in% as.integer(z)), ]
   }
   
   # slice-wise "percent missing" calculation

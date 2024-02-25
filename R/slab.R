@@ -193,7 +193,7 @@
 	# if there is no left-hand component in the formula, we are aggregating all data in the collection
 	if (g == '.') {
 		g <- 'all.profiles' # add new grouping variable to horizons
-		data[, g] <- 1
+		data[, g] <- rep(1, nrow(data)) 
 	}
  	
  	if (length(weights) > 1) {
