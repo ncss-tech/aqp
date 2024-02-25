@@ -49,7 +49,7 @@
 #' 
 thicknessOf <- function(x, 
                         pattern = NULL, 
-                        hzdesgn = guessHzDesgnName(x, required = TRUE), 
+                        hzdesgn = hzdesgnname(x, required = TRUE), 
                         method = "cumulative",
                         prefix = "",
                         thickvar = "thickness",
@@ -59,6 +59,10 @@ thicknessOf <- function(x,
                         ...) {
   .internalTHK <- NULL
   .interalHZM <- NULL
+  
+  if (is.null(hzdesgn) || !hzdesgn %in% horizonNames(x)) {
+    stop("Horizon designation column (", hzdesgn, ") does not exist.")
+  }
   
   # check inputs
   method <- match.arg(tolower(gsub("/", "", method)), c("cumulative", "minmax"))

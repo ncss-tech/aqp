@@ -7,7 +7,7 @@
 thicknessOf(
   x,
   pattern = NULL,
-  hzdesgn = guessHzDesgnName(x, required = TRUE),
+  hzdesgn = hzdesgnname(x, required = TRUE),
   method = "cumulative",
   prefix = "",
   thickvar = "thickness",
