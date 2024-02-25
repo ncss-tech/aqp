@@ -61,16 +61,6 @@ depths(c) <- id ~ top + bottom
 
 guessHzAttrName(c, attr="clay", optional=c("total", "_r"))
 
-
-a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), texture=c("A","Bw"))
-depths(a) <- id ~ top + bottom
-
-# store guess in metadata
-hztexclname(a) <- guessHzTexClName(a)
-
-# inspect result
-hztexclname(a)
-
 }
 \author{
 Andrew G. Brown
