@@ -99,7 +99,10 @@ genSlabLabels <- function(slab.structure = 1, max.d = NULL, n.profiles = NULL, s
   hzd <- horizonDepths(spc)
   if (length(j) == 0) {
     stop("Empty slab.structure", call. = FALSE)
-  } else if (length(j) == 1 && j == 0) {
+  } else if (any(is.na(j)) || any(j <= 0)) {
+    # missing intervals
+    # single interval: bottom depth < top depth; or bottom depth == top
+    # multiple interval: not ascending
     stop("Invalid slab.structure", call. = FALSE)
   } else {
     idx1 <- cumsum(do.call('c', lapply(seq_along(j), function(x) rep(1, j[x])))) + i[1]
