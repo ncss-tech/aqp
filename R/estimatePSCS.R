@@ -48,12 +48,13 @@
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #'
-#' p <- sp1
-#' attr <- 'prop' # clay contents
-#' foo <- estimatePSCS(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
-#' foo
-#'
-#'
+#' # set required metadata
+#' hzdesgnname(sp1) <- 'name'
+#' hztexclname(sp1) <- 'texture'
+#' hzmetaname(sp1, 'clay') <- 'prop'
+#' 
+#' x <- estimatePSCS(sp1)
+#' x
 estimatePSCS <- function(
     p,
     hzdesgn = hzdesgnname(p, required = TRUE),

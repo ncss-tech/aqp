@@ -38,9 +38,12 @@
 #'
 #' # promote to SoilProfileCollection
 #' depths(spc) <- id ~ hzdept + hzdepb
+#' 
+#' # set required metadata
 #' hzdesgnname(spc) <- 'hzname'
 #' hztexclname(spc) <- 'texcl'
-#'
+#' hzmetaname(spc, 'clay') <- 'clay'
+#' 
 #' # print results in table
 #' getCambicBounds(spc)
 #'
