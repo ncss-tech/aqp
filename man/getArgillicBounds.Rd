@@ -6,9 +6,9 @@
 \usage{
 getArgillicBounds(
   p,
-  hzdesgn = "hzname",
+  hzdesgn = hzdesgnname(p, required = TRUE),
   clay.attr = "clay",
-  texcl.attr = "texcl",
+  texcl.attr = hztexclname(p, required = TRUE),
   require_t = TRUE,
   bottom.pattern = "Cr|R|Cd",
   lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",

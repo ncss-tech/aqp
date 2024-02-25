@@ -6,8 +6,8 @@
 \usage{
 mollic.thickness.requirement(
   p,
-  hzdesgn = guessHzDesgnName(p),
-  texcl.attr = guessHzTexClName(p),
+  hzdesgn = hzdesgnname(p, required = TRUE),
+  texcl.attr = hztexclname(p, required = TRUE),
   clay.attr = guessHzAttrName(p, "clay", c("total", "_r")),
   truncate = TRUE
 )

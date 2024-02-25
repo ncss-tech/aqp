@@ -7,9 +7,9 @@
 \usage{
 estimatePSCS(
   p,
-  hzdesgn = "hzname",
+  hzdesgn = hzdesgnname(p, required = TRUE),
   clay.attr = "clay",
-  texcl.attr = "texcl",
+  texcl.attr = hztexclname(p, required = TRUE),
   tax_order_field = "tax_order",
   bottom.pattern = "Cr|R|Cd",
   simplify = TRUE,
