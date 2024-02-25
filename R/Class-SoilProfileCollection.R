@@ -200,15 +200,8 @@ setClass(
       aqp_hzdesgn = "",
       aqp_hztexcl = "",
       depth_units = 'cm',
-      stringsAsFactors = FALSE,
-
-      # calculate data order (original)
-      original.order = order(as.character(horizons[[idcol]]),
-                             horizons[[depthcols[1]]])
+      stringsAsFactors = FALSE
     )
-
-    # the target order to check/maintain is the default for a new SPC
-    # metadata$target.order <- metadata$original.order
 
     # add any custom metadata
     metadata <- c(metadata,
