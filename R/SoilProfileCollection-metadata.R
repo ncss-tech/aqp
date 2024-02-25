@@ -334,7 +334,11 @@ setGeneric('hzmetaname<-', function(object, attr, required = FALSE, value)
 #' # promote to SPC
 #' depths(sp1) <- id ~ top + bottom
 #'
-#' # set horizon clay content column
+#' # set important metadata columns
+#' hzdesgnname(sp1) <- "name"
+#' hztexclname(sp1) <- "texture"
+#' 
+#' # set custom horizon property (clay content) column
 #' hzmetaname(sp1, "clay") <- "prop"
 #' 
 #' # inspect metadata list
@@ -342,6 +346,9 @@ setGeneric('hzmetaname<-', function(object, attr, required = FALSE, value)
 #'
 #' # get horizon clay content column
 #' hzmetaname(sp1, "clay")
+#' 
+#' # uses hzdesgname(), hztexclname(), hzmetaname(attr="clay") in function definition
+#' estimatePSCS(sp1)
 setReplaceMethod("hzmetaname",
                  signature(object = "SoilProfileCollection"),
                  function(object, attr, required = FALSE, value) {

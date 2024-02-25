@@ -8,7 +8,7 @@ mollic.thickness.requirement(
   p,
   hzdesgn = hzdesgnname(p, required = TRUE),
   texcl.attr = hztexclname(p, required = TRUE),
-  clay.attr = guessHzAttrName(p, "clay", c("total", "_r")),
+  clay.attr = hzmetaname(p, "clay", required = TRUE),
   truncate = TRUE
 )
 }

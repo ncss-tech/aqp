@@ -8,7 +8,7 @@
 estimatePSCS(
   p,
   hzdesgn = hzdesgnname(p, required = TRUE),
-  clay.attr = "clay",
+  clay.attr = hzmetaname(p, "clay", required = TRUE),
   texcl.attr = hztexclname(p, required = TRUE),
   tax_order_field = "tax_order",
   bottom.pattern = "Cr|R|Cd",

@@ -57,7 +57,7 @@
 estimatePSCS <- function(
     p,
     hzdesgn = hzdesgnname(p, required = TRUE),
-    clay.attr = "clay",
+    clay.attr = hzmetaname(p, "clay", required = TRUE),
     texcl.attr = hztexclname(p, required = TRUE),
     tax_order_field = "tax_order",
     bottom.pattern = 'Cr|R|Cd',
@@ -81,7 +81,7 @@ estimatePSCS <- function(
   }
   
   if (is.null(clay.attr) | (!clay.attr %in% horizonNames(p))) {
-    stop("Horizon clay content column (", texcl.attr, ") does not exist.")
+    stop("Horizon clay content column (", clay.attr, ") does not exist.")
   }
 
   soildepth <- minDepthOf(p, hzdesgn = hzdesgn, pattern = bottom.pattern, simplify = FALSE)[[hz.depths[1]]]

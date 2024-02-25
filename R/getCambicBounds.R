@@ -47,7 +47,7 @@
 getCambicBounds <- function(p,
                             hzdesgn = hzdesgnname(p, required = TRUE),
                             texcl.attr = hztexclname(p, required = TRUE),
-                            clay.attr = guessHzAttrName(p, attr = 'clay', c("total", "_r")),
+                            clay.attr = hzmetaname(p, "clay", required = TRUE),
                             argi_bounds = NULL,
                             d_value = "d_value",
                             m_value = "m_value",
