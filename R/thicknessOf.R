@@ -59,33 +59,54 @@ thicknessOf <- function(x,
                         ...) {
   .internalTHK <- NULL
   .interalHZM <- NULL
-  method <- match.arg(tolower(gsub("/", "", method)), c("cumulative", "minmax"))
   
+  # check inputs
+  method <- match.arg(tolower(gsub("/", "", method)), c("cumulative", "minmax"))
   stopifnot(length(thickvar) == 1)
   stopifnot(length(depthvars) == 2)
   
+  # extract SPC column names and horizon data
   hzd <- horizonDepths(x)
   idn <- idname(x)
-  
   h <- data.table::data.table(horizons(x))
-  h$.internalHZM <- FUN(x, pattern = pattern, hzdesgn = hzdesgn, na.rm = na.rm, ...)
   
+  # determine horizons matching criteria of interest
+  h$.internalHZM <- FUN(x, pattern = pattern, hzdesgn = hzdesgn, na.rm = na.rm, ...)
+ 
+  # create a named list for data.table aggregation 
   lid <- list(h[[idn]])
   names(lid) <- idn
+  
   if (method == "cumulative") {
+    
+    # sum thicknesses of all matching horizons
     h$.internalTHK <- x[[hzd[2]]] - x[[hzd[1]]]
     res <- h[, list(thickness = sum(.internalTHK[.internalHZM], na.rm = na.rm)), by = lid]
     colnames(res)[2] <- thickvar
+    
   } else if (method == "minmax") {
+    
+    # determine minimum top depth and maximum bottom depth of matching horizons
     res <- h[, list(`min` = suppressWarnings(min(.SD[[1]][.internalHZM], na.rm = na.rm)),
                     `max` = suppressWarnings(max(.SD[[2]][.internalHZM], na.rm = na.rm))),
               by = lid, .SDcols = c(hzd, ".internalHZM")]
+    
+    # calculate thickness as MAX(bottom) - MIN(top)
     res$thickness <- res$`max` - res$`min`
+
+    # if a profile has no matching horizons min/max results will be +/- infinity 
+    # this means the profile has 0 thickness of matching horizons
     res$thickness[!is.finite(res$thickness)] <- 0L
+    
+    # use user-defined labels
     colnames(res)[2:3] <- depthvars
     colnames(res)[4] <- thickvar
   } else stop("unknown thickness method: ", shQuote(method), call. = FALSE)
+  
+  # add prefix
   colnames(res)[2:ncol(res)] <- paste0(prefix, colnames(res)[2:ncol(res)])
+  
+  # return as SPC data.frame class type
   .as.data.frame.aqp(res, aqp_df_class(x))
 }
 
