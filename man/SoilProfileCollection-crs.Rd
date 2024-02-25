@@ -3,10 +3,12 @@
 \name{prj,SoilProfileCollection-method}
 \alias{prj,SoilProfileCollection-method}
 \alias{prj}
+\alias{proj4string}
 \alias{prj<-,SoilProfileCollection-method}
 \alias{prj<-}
+\alias{proj4string<-}
 \alias{proj4string,SoilProfileCollection-method}
-\alias{proj4string<-,SoilProfileCollection,ANY-method}
+\alias{proj4string<-,SoilProfileCollection-method}
 \title{Get or Set Coordinate Reference System for SoilProfileCollection}
 \usage{
 \S4method{prj}{SoilProfileCollection}(object, ...)
@@ -15,7 +17,7 @@
 
 \S4method{proj4string}{SoilProfileCollection}(obj)
 
-\S4method{proj4string}{SoilProfileCollection,ANY}(obj) <- value
+\S4method{proj4string}{SoilProfileCollection}(obj) <- value
 }
 \arguments{
 \item{object}{A SoilProfileCollection}

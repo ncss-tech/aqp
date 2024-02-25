@@ -11,7 +11,7 @@ setGeneric("prj", function(object, ...)
 #' @export
 #' @seealso [initSpatial<-()]
 #' @rdname SoilProfileCollection-crs
-#' @aliases prj
+#' @aliases prj proj4string
 setMethod("prj", 'SoilProfileCollection',
           function(object, ...) {
             value <- metadata(object)$crs
@@ -26,7 +26,7 @@ setGeneric("prj<-", function(object, ..., value)
   standardGeneric("prj<-"))
 
 #' @description `prj()<-`: Set Coordinate Reference System metadata for the SoilProfileCollection
-#' @aliases prj<-
+#' @aliases prj<- proj4string<-
 #' @rdname SoilProfileCollection-crs
 #' @export
 setReplaceMethod("prj", 'SoilProfileCollection',
@@ -65,6 +65,9 @@ setReplaceMethod("prj", 'SoilProfileCollection',
                  }
 )
 
+setGeneric("proj4string", function(obj)
+  standardGeneric("proj4string"))
+
 #' @description `proj4string()`: (Deprecated) Get Coordinate Reference System as PROJ4 String
 #' @rdname SoilProfileCollection-crs
 #' @export
@@ -76,10 +79,14 @@ setMethod("proj4string", signature(obj = 'SoilProfileCollection'),
           }
 )
 
+setGeneric("proj4string<-", function(obj, value)
+  standardGeneric("proj4string<-"))
+
 #' @description `proj4string()<-`: (Deprecated) Set Coordinate Reference System metadata for the SoilProfileCollection
 #' @rdname SoilProfileCollection-crs
 #' @export
-setReplaceMethod("proj4string", signature(obj = 'SoilProfileCollection'),
+setReplaceMethod("proj4string", signature(obj = "SoilProfileCollection",
+                                          value = "ANY"),
                  function(obj, value) {
                    .Deprecated("prj<-", package = "aqp", 
                                msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?`prj<-`")
@@ -181,6 +188,9 @@ setMethod("getSpatial", signature(object = "SoilProfileCollection"),
             return(as.matrix(sapply(cn, function(x) object[[x]])))
           })
 
+setGeneric("coordinates", function(obj)
+  standardGeneric("coordinates"))
+
 #' @param obj A SoilProfileCollection
 #' @export
 #' @rdname initSpatial
@@ -192,6 +202,9 @@ setMethod("coordinates", signature(obj = "SoilProfileCollection"),
                         msg = "Methods based on sp class definitions have been deprecated and will be removed by October 1, 2023. See ?getSpatial")
             getSpatial(obj)
           })
+
+setGeneric("coordinates<-", function(object, value)
+  standardGeneric("coordinates<-"))
 
 #' @rdname initSpatial
 #' @export
