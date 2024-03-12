@@ -6,10 +6,22 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-p <- sp1[1]
+p <- sp1[1,]
 attr <- 'prop' # clay contents %
 
-q <- sp1[2]
+q <- sp1[2,]
+
+x <- data.frame(
+  peiid = 706300,
+  taxsubgrp = "Lithic Humicryods",
+  top = c(0, 13, 16, 18, 24, 40),
+  bottom = c(13, 16, 18, 24, 40, 65),
+  name = c("Oi", "A", "E", "Bhs", "2C", "2R"),
+  texture = c("SPM", "SIL", "SIL", "SIL", "SIL", "BR"),
+  prop = c(0, 6, 6, 6, 6, 6)
+)
+depths(x) <- peiid ~ top + bottom
+site(x) <- ~ taxsubgrp
 
 test_that("estimatePSCS()", {
 
@@ -62,6 +74,14 @@ test_that("estimatePSCS()", {
   q2 <- q
   q2$name <- NULL
   expect_error(estimatePSCS(q2, clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'foo'))
+})
+
+test_that("estimatePSCS() thin soil profile with O horizon", {
+  expect_equal(estimatePSCS(x, clay.attr = 'prop', texcl.attr = "foo", hzdesgn = 'name'), c(13, 40))
+  expect_equal(estimatePSCS(c(q,x), clay.attr = 'prop', texcl.attr = "foo", hzdesgn = 'name'),
+               data.frame(id = c("706300", "P002"), 
+                          pscs_top = c(13, 30),
+                          pscs_bottom = c(40, 59)))
 })
 
 test_that("estimatePSCS() multiple profiles",{

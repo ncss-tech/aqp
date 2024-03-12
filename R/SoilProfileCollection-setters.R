@@ -544,9 +544,10 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   if (!inherits(value, "data.frame"))
     stop("new horizon data input value must inherit from data.frame", call. = FALSE)
 
-  # allow short-circuit
-  if (all(colnames(value) %in% horizonNames(object)) &
-      all(c(idn, hdn, hzd) %in% colnames(value)) &
+  # allow short-circuit (handles NULL and non-op without going thru merge())
+  if ((all(horizonNames(object) %in% colnames(value)) ||
+       all(colnames(value) %in% horizonNames(object))) &&
+       all(c(idn, hdn, hzd) %in% colnames(value)) &&
       nrow(value) == nrow(object)) {
     if (!all(value[[idn]] %in% profile_id(object))) {
       message("Some profile IDs in input data are not present in object and no new columns to merge. Doing nothing.")
