@@ -1,4 +1,6 @@
-# aqp 2.0.3 (2023-12-19)
+# aqp 2.0.3 (2024-03-12)
+ * `simulateColor()` gains new method `mvnorm` for simulating plausible colors
+   - package mvtnorm added to SUGGESTS
  * performance improvements in `profileInformationIndex()`
  * aesthetic improvements in `huePositionCircle()`
 

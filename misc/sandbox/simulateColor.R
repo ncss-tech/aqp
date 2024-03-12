@@ -1,9 +1,54 @@
-
 library(aqp)
+library(mvtnorm)
+
+data(loafercreek, package = 'soilDB')
+
+.hvc <- data.frame(
+  hue = loafercreek$m_hue,
+  value = loafercreek$m_value,
+  chroma = loafercreek$m_chroma,
+  stringsAsFactors = FALSE
+)
+
+p <- list(
+  list(hvc = .hvc)
+)
+
+m <- simulateColor(method = 'mvnorm', n = 10, parameters = p)
+
+colorChart(m)
+
+
+
+# 
+# 
+# cols <- data.frame(
+#   m = sprintf('%s %s/%s', m$hue, m$value, m$chroma)
+# )
+# 
+# cols$col <- parseMunsell(cols$m)
+# 
+# colorChart(cols$m)
+# 
+# colorChart(cols$m, size = FALSE, chip.cex = 2, annotate = TRUE)
+# 
+# 
+# previewColors(cols$col, method = 'MDS')
+
+
+
+
+
+
+
+
+
+
+
 
 
 p <- list(
-  list(m = '2.5BG 6/6', thresh = 8, hues = c('2.5BG'))
+  list(m = '10YR 3/4', thresh = 10, hues = c('10YR'))
 )
 
 s <- simulateColor(method = 'dE00', n = 100, parameters = p)
@@ -40,8 +85,7 @@ colorChart(cols$m, g = cols$g, annotate = TRUE)
 colorChart(cols$m, g = cols$g)
 
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
-
-
+sharpshootR::aggregateColorPlot(a)
 
 ## aggregateColor proportions
 
@@ -110,7 +154,7 @@ p <- list(
   'Bt2' = list(m = '5YR 4/5', thresh = 8, hues = c('5YR', '7.5YR')),
   'Bt3' = list(m = '10YR 4/6', thresh = 10, hues = c('10YR', '7.5YR')),
   'Cr' = list(m = '2.5G 6/2', thresh = 15, hues = c('2.5G', '2.5GY', '2.5BG'))
-  )
+)
 
 # using dE00 threshold
 (cols <- simulateColor(method = 'dE00', n = n.sim, parameters = p))

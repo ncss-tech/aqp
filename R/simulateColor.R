@@ -1,4 +1,46 @@
 
+## simulate via multivariate normal distribution
+# n: number of simulations (typically horizons)
+# parameters: list of parameters
+#  data.frame with Munsell [hue, value, chroma]
+.simulateColorFromMV <- function(n, parameters) {
+  
+  # sanity check, need this for rmvnorm()
+  if(!requireNamespace('mvtnorm')) {
+    stop('package `mvtnorm` is required for multivariate simulation', call. = FALSE)
+  }
+  
+  ## TODO: iterate over list elements
+  .hvc <- parameters[[1]][['hvc']]
+  
+  # convert Munsell -> CIELAB
+  .lab <- munsell2rgb(the_hue = .hvc$hue, the_value = .hvc$value, the_chroma = .hvc$chroma, returnLAB = TRUE)
+  
+  # removing missing values which interfere with mean and covariance
+  .lab <- na.omit(.lab)
+  
+  ## TODO: stop if nrow(.lab) < 3
+  
+  # multivariate simulation
+  # assuming approx. joint normal distribution over L, A, B coordinates
+  s <- mvtnorm::rmvnorm(
+    n = n, 
+    mean = colMeans(.lab), 
+    sigma = cov(.lab),
+  )
+  
+  # CIELAB -> Munsell hue, value, chroma
+  m <- col2Munsell(s, space = 'CIELAB')
+  
+  # flatten to standard notation
+  m <- sprintf('%s %s/%s', m$hue, m$value, m$chroma)
+  
+  return(m)
+}
+
+
+
+
 ## simulate color via sampling with replacement and estimated proportions
 # n: number of simulations (typically horizons)
 # parameters: output from aqp::aggregateColor()
@@ -54,7 +96,7 @@
   cc <- colorContrast(x$munsell, rep(m$queryColor, times = nrow(x)))
   
   # join for plotting
-  z <- merge(x, cc, by.x='munsell', by.y='m1', all.x=TRUE, sort=FALSE)
+  z <- merge(x, cc, by.x = 'munsell', by.y = 'm1', all.x = TRUE, sort = FALSE)
   
   # dE00 threshold
   idx <- which(z$dE00 < thresh)
@@ -114,8 +156,9 @@
 #' @param parameters a `list`, format depends on `method`:
 #'   * `proportions`: output from [`aggregateColor`] 
 #'   * `dE00`: formatted as `list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))`
+#'   * `mvnorm`: formatted as `list(hvc = x)`
 #'   
-#'   Where `m` is a single representative Munsell chip, `thresh` is a threshold specified in CIE2000 color contrast (dE00), and `hues` is a vector of allowed Munsell hues.
+#'   Where `m` is a single representative Munsell chip, `thresh` is a threshold specified in CIE2000 color contrast (dE00), `hues` is a vector of allowed Munsell hues, and `x` is a `data.frame` representing columns of Munsell hue, value, and chroma having at least 3 rows.
 #' 
 #' @param SPC `SoilProfileCollection`, attempt to modify `SPC` with simulated colors
 #'
@@ -167,7 +210,7 @@
 #' # what does a dE00 threshold look like on 3 pages of hue?
 #' contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 20)
 #'
-simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC = NULL) {
+simulateColor <- function(method = c('dE00', 'proportions', 'mvnorm'), n, parameters, SPC = NULL) {
   
   # safely select method
   method <- match.arg(method)
@@ -186,6 +229,9 @@ simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC 
     },
     'proportions' = {
       .simulateColorFromProportions(n = n, parameters = parameters)
+    },
+    'mvnorm' = {
+      .simulateColorFromMV(n = n, parameters = parameters)
     }
   )
   
@@ -194,7 +240,7 @@ simulateColor <- function(method = c('dE00', 'proportions'), n, parameters, SPC 
     return(res)
   } else {
     
-    ## TODO: make this mor efficient
+    ## TODO: make this more efficient
     
     # result is a modified SPC
     

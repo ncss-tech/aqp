@@ -4,7 +4,12 @@
 \alias{simulateColor}
 \title{Simulate Soil Colors}
 \usage{
-simulateColor(method = c("dE00", "proportions"), n, parameters, SPC = NULL)
+simulateColor(
+  method = c("dE00", "proportions", "mvnorm"),
+  n,
+  parameters,
+  SPC = NULL
+)
 }
 \arguments{
 \item{method}{simulation method, see details}
@@ -15,9 +20,10 @@ simulateColor(method = c("dE00", "proportions"), n, parameters, SPC = NULL)
 \itemize{
 \item \code{proportions}: output from \code{\link{aggregateColor}}
 \item \code{dE00}: formatted as \code{list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))}
+\item \code{mvnorm}: formatted as \code{list(hvc = x)}
 }
 
-Where \code{m} is a single representative Munsell chip, \code{thresh} is a threshold specified in CIE2000 color contrast (dE00), and \code{hues} is a vector of allowed Munsell hues.}
+Where \code{m} is a single representative Munsell chip, \code{thresh} is a threshold specified in CIE2000 color contrast (dE00), \code{hues} is a vector of allowed Munsell hues, and \code{x} is a \code{data.frame} representing columns of Munsell hue, value, and chroma having at least 3 rows.}
 
 \item{SPC}{\code{SoilProfileCollection}, attempt to modify \code{SPC} with simulated colors}
 }
