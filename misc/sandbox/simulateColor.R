@@ -29,6 +29,10 @@ m <- simulateColor(method = 'mvnorm', n = 100, parameters = p)
 
 colorChart(m[[1]])
 
+# check original range of hue
+# may be narrower than simulation
+# may include a few hues outside original range
+table(.hvc$hue)
 
 
 # by genhz
