@@ -3,20 +3,62 @@ library(mvtnorm)
 
 data(loafercreek, package = 'soilDB')
 
+# generalize horizon names using REGEX rules
+n <- c('Oi', 'A', 'BA','Bt1','Bt2','Bt3','Cr','R')
+p <- c('O', '^A$|Ad|Ap|AB','BA$|Bw',
+       'Bt1$|^B$','^Bt$|^Bt2$','^Bt3|^Bt4|CBt$|BCt$|2Bt|2CB$|^C$','Cr','R')
+loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
+
+# remove non-matching generalized horizon names
+loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
+loafercreek$genhz <- factor(loafercreek$genhz)
+
+# all colors
 .hvc <- data.frame(
   hue = loafercreek$m_hue,
   value = loafercreek$m_value,
-  chroma = loafercreek$m_chroma,
-  stringsAsFactors = FALSE
+  chroma = loafercreek$m_chroma
 )
 
 p <- list(
   list(hvc = .hvc)
 )
 
-m <- simulateColor(method = 'mvnorm', n = 10, parameters = p)
+# result is a list
+m <- simulateColor(method = 'mvnorm', n = 100, parameters = p)
 
-colorChart(m)
+colorChart(m[[1]])
+
+
+
+# by genhz
+h <- horizons(loafercreek)
+h <- split(h, h$genhz)
+
+p <- lapply(h, function(i) {
+  .res <- data.frame(
+    hue = i$m_hue,
+    value = i$m_value,
+    chroma = i$m_chroma
+  )
+  
+  return(list(hvc = na.omit(.res)))
+})
+
+# some genhz have less than required (3) number of rows
+sapply(p, sapply, nrow)
+
+# safely handle parameters without enough data
+# 25 simulations of each
+m <- simulateColor(method = 'mvnorm', n = 25, parameters = p)
+
+# invert list -> labeled rows in data.frame
+# NULL elements dropped
+m <- stack(m)
+
+# inspect results
+colorChart(m$values, m$ind)
+colorChart(m$values, m$ind, annotate = TRUE, size = FALSE, chip.cex = 2)
 
 
 
@@ -60,17 +102,6 @@ update(pp, asp = 1)
 
 
 
-data(loafercreek, package = 'soilDB')
-
-# generalize horizon names using REGEX rules
-n <- c('Oi', 'A', 'BA','Bt1','Bt2','Bt3','Cr','R')
-p <- c('O', '^A$|Ad|Ap|AB','BA$|Bw',
-       'Bt1$|^B$','^Bt$|^Bt2$','^Bt3|^Bt4|CBt$|BCt$|2Bt|2CB$|^C$','Cr','R')
-loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
-
-# remove non-matching generalized horizon names
-loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
-loafercreek$genhz <- factor(loafercreek$genhz)
 
 
 cols <- data.frame(
@@ -128,7 +159,7 @@ zz <- combine(z, s)
 
 # cool
 par(mar = c(0, 0, 1, 0))
-plotSPC(zz, name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, width = 0.3)
+plotSPC(zz, name.style = 'center-center', hz.depths = TRUE, depth.axis = FALSE, width = 0.3)
 title('aggregateColor based simulation')
 
 
@@ -185,8 +216,12 @@ z <- simulateColor(method = 'dE00', n = n.sim, parameters = p, SPC = z)
 zz <- combine(z, s)
 
 # cool
-par(mar = c(0, 0, 1, 0))
-plotSPC(zz, name.style = 'center-center', hz.depths = TRUE, plot.depth.axis = FALSE, width = 0.3)
-title('dE00 based simulation')
+par(mar = c(0, 0, 0.5, 0))
+plotSPC(zz, name.style = 'center-center', hz.depths = TRUE, depth.axis = FALSE, width = 0.3, lwd = 0.5)
+title('dE00 based simulation', line = -2)
+
+par(mar = c(0, 0, 0.5, 2))
+plotSPC(zz, name.style = 'center-center', width = 0.35, lwd = 0.5, cex.names = 0.7, cex.id = 0.5, max.depth = 100)
+title('dE00 based simulation', line = -2)
 
 

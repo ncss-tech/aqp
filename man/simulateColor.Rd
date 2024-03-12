@@ -14,11 +14,11 @@ simulateColor(
 \arguments{
 \item{method}{simulation method, see details}
 
-\item{n}{number of simulated colors per horizon}
+\item{n}{number of simulated colors per group}
 
 \item{parameters}{a \code{list}, format depends on \code{method}:
 \itemize{
-\item \code{proportions}: output from \code{\link{aggregateColor}}
+\item \code{proportions}: output from \code{\link[=aggregateColor]{aggregateColor()}}
 \item \code{dE00}: formatted as \code{list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))}
 \item \code{mvnorm}: formatted as \code{list(hvc = x)}
 }
@@ -31,7 +31,12 @@ Where \code{m} is a single representative Munsell chip, \code{thresh} is a thres
 a \code{list}, unless \code{SPC} is specified, then a \code{SoilProfileCollection} object
 }
 \description{
-Simulate plausible soil colors based on proportions by Munsell "chip", or using a seed Munsell chip and threshold specified via CIE2000 color contrast metric.
+Simulate plausible soil colors based on several possible parameterization of a "range in characteristics" (RIC). Soil color RIC can be specified by a list of parameters:
+\itemize{
+\item soil color proportions, as output from \code{\link[=aggregateColor]{aggregateColor()}} -- \code{method = 'proportions'}
+\item most likely Munsell color, CIE2000 threshold, and vector of acceptable hues -- \code{method = 'dE00'}
+\item \code{data.frame} of Munsell hue, value, and chroma representing observed soil colors -- \code{method = 'mvnorm'}
+}
 }
 \examples{
 

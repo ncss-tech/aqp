@@ -10,8 +10,8 @@
     stop('package `mvtnorm` is required for multivariate simulation', call. = FALSE)
   }
   
-  ## TODO: iterate over list elements
-  .hvc <- parameters[[1]][['hvc']]
+  # extract parameters
+  .hvc <- parameters[['hvc']]
   
   # convert Munsell -> CIELAB
   .lab <- munsell2rgb(the_hue = .hvc$hue, the_value = .hvc$value, the_chroma = .hvc$chroma, returnLAB = TRUE)
@@ -20,6 +20,9 @@
   .lab <- na.omit(.lab)
   
   ## TODO: stop if nrow(.lab) < 3
+  if(nrow(.lab) < 3) {
+    return(NULL)
+  }
   
   # multivariate simulation
   # assuming approx. joint normal distribution over L, A, B coordinates
@@ -29,8 +32,11 @@
     sigma = cov(.lab),
   )
   
+  
   # CIELAB -> Munsell hue, value, chroma
   m <- col2Munsell(s, space = 'CIELAB')
+  
+  ## TODO: consider including only hues in reference set
   
   # flatten to standard notation
   m <- sprintf('%s %s/%s', m$hue, m$value, m$chroma)
@@ -111,12 +117,12 @@
   }
   
   
-  ## TODO: think about alternatives
+  ## TODO: think about alternatives:
+  #
+  #  * ? --> perform conversion without RV, then re-add just before sampling 
+  #  * z <- z[z$munsell != m$queryColor, ]
   
-  # ? --> perform conversion without RV, then re-add just before sampling 
-  # z <- z[z$munsell != m$queryColor, ]
-  
-  # convert distances -> similarities
+  ## convert distances -> similarities, interpret as sampling weights
   
   # standard conversion
   # too fast of a drop off between RV and simulated values
@@ -126,16 +132,15 @@
   # simulated values too close to RV
   # s <- 1 - (z$dE00 / max(z$dE00))
   
-  ## according to ?sample there is no need to convert weights -> probabilities
   
-
-  # ## diagnostics for dE00 -> probability
+  ## diagnostics for dE00 -> probability
   # plot(s, z$dE00, type = 'n', las = 1)
   # points(s, z$dE00, col = z$color, pch = 15)
   # text(s, 0, z$munsell, cex = 0.5, srt = 90)
 
   
   # sample with replacement
+  # according to ?sample, there is no need to convert weights -> probabilities
   # using translated dE00 as prior probabilities
   res <- sample(z$munsell, replace = TRUE, size = n, prob = s)
   
@@ -147,14 +152,21 @@
 
 #' @title Simulate Soil Colors
 #' 
-#' @description Simulate plausible soil colors based on proportions by Munsell "chip", or using a seed Munsell chip and threshold specified via CIE2000 color contrast metric.
+#' @description Simulate plausible soil colors based on several possible parameterization of a "range in characteristics" (RIC). Soil color RIC can be specified by a list of parameters:
+#'  * soil color proportions, as output from [aggregateColor()] -- `method = 'proportions'`
+#'  * most likely Munsell color, CIE2000 threshold, and vector of acceptable hues -- `method = 'dE00'`
+#'  * `data.frame` of Munsell hue, value, and chroma representing observed soil colors -- `method = 'mvnorm'`
+#' 
+#' 
 #' 
 #' @author D.E. Beaudette
 #'
 #' @param method simulation method, see details
-#' @param n number of simulated colors per horizon
+#' 
+#' @param n number of simulated colors per group
+#' 
 #' @param parameters a `list`, format depends on `method`:
-#'   * `proportions`: output from [`aggregateColor`] 
+#'   * `proportions`: output from [aggregateColor()] 
 #'   * `dE00`: formatted as `list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))`
 #'   * `mvnorm`: formatted as `list(hvc = x)`
 #'   
@@ -220,18 +232,26 @@ simulateColor <- function(method = c('dE00', 'proportions', 'mvnorm'), n, parame
     parameters <- list(parameters)
   }
   
+  ## TODO: basic error checking, depends on method
+  
+  # select method
   res <- switch(
     method,
     'dE00' = {
+      # manual iteration over parameters
       lapply(parameters, function(i) {
         .simulateColorFromDE00(n = n, parameters = i)
       })
     },
+    # automatic iteration over output from aggregateColor()
     'proportions' = {
       .simulateColorFromProportions(n = n, parameters = parameters)
     },
+    # manual iteration over parameters
     'mvnorm' = {
-      .simulateColorFromMV(n = n, parameters = parameters)
+      lapply(parameters, function(i) {
+        .simulateColorFromMV(n = n, parameters = i)
+      })
     }
   )
   
@@ -259,7 +279,6 @@ simulateColor <- function(method = c('dE00', 'proportions', 'mvnorm'), n, parame
     # flatten and done
     return(combine(l))
   }
-  
   
 }
 
