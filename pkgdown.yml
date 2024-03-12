@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -9,5 +9,5 @@ articles:
   label-placement: label-placement.html
   missing-data: missing-data.html
   new-in-aqp-2: new-in-aqp-2.html
-last_built: 2024-02-06T23:00Z
+last_built: 2024-03-12T18:43Z
 

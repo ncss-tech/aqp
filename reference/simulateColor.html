@@ -81,7 +81,12 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulateColor</span><span class="op">(</span>method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dE00"</span>, <span class="st">"proportions"</span><span class="op">)</span>, <span class="va">n</span>, <span class="va">parameters</span>, SPC <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulateColor</span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"dE00"</span>, <span class="st">"proportions"</span>, <span class="st">"mvnorm"</span><span class="op">)</span>,</span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">parameters</span>,</span>
+<span>  SPC <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -97,7 +102,8 @@
 <dt>parameters</dt>
 <dd><p>a <code>list</code>, format depends on <code>method</code>:</p><ul><li><p><code>proportions</code>: output from <code><a href="aggregateColor.html">aggregateColor</a></code></p></li>
 <li><p><code>dE00</code>: formatted as <code>list(m = '7.5YR 3/3', thresh = 5, hues = c('7.5YR'))</code></p></li>
-</ul><p>Where <code>m</code> is a single representative Munsell chip, <code>thresh</code> is a threshold specified in CIE2000 color contrast (dE00), and <code>hues</code> is a vector of allowed Munsell hues.</p></dd>
+<li><p><code>mvnorm</code>: formatted as <code>list(hvc = x)</code></p></li>
+</ul><p>Where <code>m</code> is a single representative Munsell chip, <code>thresh</code> is a threshold specified in CIE2000 color contrast (dE00), <code>hues</code> is a vector of allowed Munsell hues, and <code>x</code> is a <code>data.frame</code> representing columns of Munsell hue, value, and chroma having at least 3 rows.</p></dd>
 
 
 <dt>SPC</dt>
