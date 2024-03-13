@@ -229,3 +229,7 @@ plotSPC(zz, name.style = 'center-center', width = 0.35, lwd = 0.5, cex.names = 0
 title('dE00 based simulation', line = -2)
 
 
+
+
+
+

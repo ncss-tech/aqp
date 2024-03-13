@@ -10,6 +10,8 @@
     stop('package `mvtnorm` is required for multivariate simulation', call. = FALSE)
   }
   
+  ## TODO: consider pre-estimated mean vector + covariance matrix
+  
   # extract parameters
   .hvc <- parameters[['hvc']]
   
@@ -33,6 +35,11 @@
   )
   
   
+  ## TODO: consider returning CIELAB coordinates
+  # .cols <- convertColor(s, from = 'Lab', to = 'sRGB', from.ref.white = 'D65', to.ref.white = 'D65')
+  # previewColors(rgb(.cols, maxColorValue = 1), method = 'MDS')
+  
+  # this is slow
   # CIELAB -> Munsell hue, value, chroma
   m <- col2Munsell(s, space = 'CIELAB')
   
