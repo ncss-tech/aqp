@@ -8,7 +8,7 @@ depths(sp3) <- id ~ top + bottom
 test_that("basic functionality", {
 
   # historic horizon designation name (e.g. used by plotSPC)
-  expect_equal(guessHzDesgnName(sp3), "name")
+  expect_warning(expect_equal(guessHzDesgnName(sp3), "name"))
 
   # basic attribute name guessing
   expect_message(expect_equal(guessHzAttrName(sp3, "clay", ""), "clay"),
@@ -25,32 +25,31 @@ test_that("basic functionality", {
                  "guessing horizon attribute 'clay' is stored in `claytotal_r`")
 
   # basic attribute name guessing
-  expect_equal(guessHzTexClName(sp3), "")
+  expect_warning(expect_equal(guessHzTexClName(sp3), ""))
 
   # texcl
   horizons(sp3)$texcl <- "l"
-  expect_equal(guessHzTexClName(sp3), "texcl")
+  expect_warning(expect_equal(guessHzTexClName(sp3), "texcl"))
 
   # texture
   sp3$texture <-  sp3$texcl
   sp3$texcl <- NULL
-  expect_equal(guessHzTexClName(sp3), "texture")
+  expect_warning(expect_equal(guessHzTexClName(sp3), "texture"))
 
   # descriptive name
   sp3$hzdesgn <- sp3$name
   sp3$name <- NULL
   sp3$desgn <- 1:nrow(sp3)
-  expect_equal(guessHzDesgnName(sp3), "hzdesgn")
+  expect_warning(expect_equal(guessHzDesgnName(sp3), "hzdesgn"))
 
   # unable to guess name
   sp3$foo <- sp3$hzdesgn
   sp3$hzdesgn <- NULL
   sp3$desgn <- NULL
-  expect_message(expect_equal(guessHzDesgnName(sp3), NA),
-                 "unable to guess column containing horizon designations")
+  expect_warning(expect_equal(guessHzDesgnName(sp3), NA))
 
   # custom name
   hzdesgnname(sp3) <- "foo"
-  expect_equal(guessHzDesgnName(sp3), "foo")
+  expect_warning(expect_equal(guessHzDesgnName(sp3), "foo"))
 })
 

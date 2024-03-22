@@ -77,8 +77,8 @@ test_that("estimatePSCS()", {
 })
 
 test_that("estimatePSCS() thin soil profile with O horizon", {
-  expect_equal(estimatePSCS(x, clay.attr = 'prop', texcl.attr = "foo", hzdesgn = 'name'), c(13, 40))
-  expect_equal(estimatePSCS(c(q,x), clay.attr = 'prop', texcl.attr = "foo", hzdesgn = 'name'),
+  expect_equal(estimatePSCS(x, clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'name'), c(13, 40))
+  expect_equal(estimatePSCS(c(q,x), clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'name'),
                data.frame(id = c("706300", "P002"), 
                           pscs_top = c(13, 30),
                           pscs_bottom = c(40, 59)))

@@ -16,6 +16,7 @@ spc <- data.frame(id = 1, taxsubgrp = "Lithic Haploxerepts",
 depths(spc) <- id ~ hzdept + hzdepb
 hzdesgnname(spc) <- 'hzname'
 hztexclname(spc) <- 'texcl'
+hzmetaname(spc, "clay") <- 'clay'
 
 test_that("getCambicBounds - basic functionality", {
   dfbound <- getCambicBounds(spc)

@@ -15,11 +15,11 @@ guessHzTexClName(x, required = FALSE)
 \arguments{
 \item{x}{A SoilProfileCollection}
 
-\item{attr}{A regular expression containing required formative element of attribute name.}
+\item{attr}{\emph{character}. A regular expression containing required formative element of attribute name.}
 
-\item{optional}{A character vector of regular expression(s) containing optional formative elements of attribute name.}
+\item{optional}{\emph{character}. Vector of regular expression(s) containing optional formative elements of attribute name.}
 
-\item{verbose}{A boolean value for whether to produce message output about guesses.}
+\item{verbose}{\emph{logical}. Produce message output about guesses? Default: \code{TRUE}}
 
 \item{required}{logical Default: \code{FALSE}. Is this attribute required? If it is, set to \code{TRUE} to trigger error on invalid value.}
 }
@@ -31,9 +31,9 @@ Character containing horizon attribute column name. Result is the first match in
 
 e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (\code{claytotal_r == totalclay_r}) over (\code{clay_r == claytotal == totalclay}) over \code{clay}.
 
-\code{guessHzDesgnName()}: This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
+\code{guessHzDesgnName()}: \strong{DEPRECATED} This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
 
-\code{guessHzTexClName()}: This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
+\code{guessHzTexClName()}: \strong{DEPRECATED} This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
 }
 \examples{
 
@@ -60,26 +60,6 @@ c <- data.frame(id = 1, top = c(0,10), bottom=c(10,40),
 depths(c) <- id ~ top + bottom
 
 guessHzAttrName(c, attr="clay", optional=c("total", "_r"))
-
-
-a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), horizonname=c("A","Bw"))
-depths(a) <- id ~ top + bottom
-
-# store guess in metadata
-hzdesgnname(a) <- guessHzDesgnName(a)
-
-# inspect result
-hzdesgnname(a)
-
-
-a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), texture=c("A","Bw"))
-depths(a) <- id ~ top + bottom
-
-# store guess in metadata
-hztexclname(a) <- guessHzTexClName(a)
-
-# inspect result
-hztexclname(a)
 
 }
 \author{

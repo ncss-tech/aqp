@@ -7,9 +7,9 @@
 \usage{
 estimatePSCS(
   p,
-  hzdesgn = "hzname",
-  clay.attr = "clay",
-  texcl.attr = "texcl",
+  hzdesgn = hzdesgnname(p, required = TRUE),
+  clay.attr = hzmetaname(p, "clay", required = TRUE),
+  texcl.attr = hztexclname(p, required = TRUE),
   tax_order_field = "tax_order",
   bottom.pattern = "Cr|R|Cd",
   simplify = TRUE,
@@ -69,12 +69,13 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-p <- sp1
-attr <- 'prop' # clay contents
-foo <- estimatePSCS(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
-foo
+# set required metadata
+hzdesgnname(sp1) <- 'name'
+hztexclname(sp1) <- 'texture'
+hzmetaname(sp1, 'clay') <- 'prop'
 
-
+x <- estimatePSCS(sp1)
+x
 }
 \references{
 Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.

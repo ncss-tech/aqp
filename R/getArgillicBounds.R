@@ -42,15 +42,18 @@
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #'
-#' p <- sp1
-#' attr <- 'prop' # clay contents
-#' foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
-#' foo
+#' # set required metadata
+#' hzdesgnname(sp1) <- 'name'
+#' hztexclname(sp1) <- 'texture'
+#' hzmetaname(sp1, 'clay') <- 'prop'
+#' 
+#' x <- getArgillicBounds(sp1)
+#' x
 #'
 getArgillicBounds <- function(p,
-                              hzdesgn = 'hzname',
-                              clay.attr = 'clay',
-                              texcl.attr = 'texcl',
+                              hzdesgn = hzdesgnname(p, required = TRUE),
+                              clay.attr = hzmetaname(p, 'clay', required = TRUE),
+                              texcl.attr = hztexclname(p, required = TRUE),
                               require_t = TRUE,
                               bottom.pattern = "Cr|R|Cd",
                               lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
@@ -61,26 +64,18 @@ getArgillicBounds <- function(p,
   hz <- horizons(p)
   hzd <- horizonDepths(p)
 
-  # ease removal of attribute name arguments -- deprecate them later
-  # for now, just fix em if the defaults dont match the hzdesgn/texcl.attr
-  if (!hzdesgn %in% horizonNames(p)) {
-    hzdesgn <- guessHzDesgnName(p)
-    if (is.na(hzdesgn))
-      stop("horizon designation column not correctly specified")
+  if (is.null(hzdesgn) || !hzdesgn %in% horizonNames(p)) {
+    stop("Horizon designation column (", hzdesgn, ") does not exist.")
   }
-
-  if (!clay.attr %in% horizonNames(p)) {
-    clay.attr <- guessHzAttrName(p, attr = "clay", optional = c("total","_r"))
-    if (is.na(clay.attr))
-      stop("horizon clay content column not correctly specified")
+  
+  if (is.null(clay.attr) | (!clay.attr %in% horizonNames(p))) {
+    stop("Horizon clay content column (", texcl.attr, ") does not exist.")
   }
-
-  if (!texcl.attr %in% horizonNames(p)) {
-    texcl.attr <- guessHzTexClName(p)
-    if (is.na(texcl.attr))
-      stop("horizon texture class column not correctly specified")
+  
+  if (is.null(texcl.attr) || !texcl.attr %in% horizonNames(p)) {
+    stop("Horizon texture class column (", texcl.attr, ") does not exist.")
   }
-
+  
   # get upper bound...
   mss <- getMineralSoilSurfaceDepth(p, hzdesgn = hzdesgn, simplify = FALSE)
   pld <- getPlowLayerDepth(p, hzdesgn = hzdesgn, simplify = FALSE)

@@ -37,9 +37,9 @@
 #'                                         clay.attr='prop', truncate=FALSE))
 #'
 mollic.thickness.requirement <- function(p, 
-                                         hzdesgn = guessHzDesgnName(p),
-                                         texcl.attr = guessHzTexClName(p),
-                                         clay.attr = guessHzAttrName(p, 'clay', c('total','_r')),
+                                         hzdesgn = hzdesgnname(p, required = TRUE),
+                                         texcl.attr = hztexclname(p, required = TRUE),
+                                         clay.attr = hzmetaname(p, "clay", required = TRUE),
                                          truncate = TRUE) {
 
   hzd <- horizonDepths(p)

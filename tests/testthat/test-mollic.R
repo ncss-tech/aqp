@@ -28,10 +28,12 @@ spc2 <- data.frame(
 depths(spc) <- id ~ hzdept + hzdepb
 hzdesgnname(spc) <- 'hzname'
 hztexclname(spc) <- 'texcl'
+hzmetaname(spc, "clay") <- 'prop'
 
 depths(spc2) <- id ~ hzdept + hzdepb
 hzdesgnname(spc2) <- 'hzname'
 hztexclname(spc2) <- 'texcl'
+hzmetaname(spc2, "clay") <- 'claytotest'
 
 spc3 <- data.frame(pedon_key = c("10016", "10016", "10016", "10047",  "10047",
                                    "10047", "10047", "10047", "10047", "10047"), 
@@ -46,6 +48,7 @@ spc3 <- data.frame(pedon_key = c("10016", "10016", "10016", "10047",  "10047",
 depths(spc3) <-pedon_key ~ hzn_top + hzn_bot
 hzdesgnname(spc3) <- "hzn_desgn"
 hztexclname(spc3) <- "texture_lab"
+hzmetaname(spc3, "clay") <- "clay_total"
 
 test_that("mollic.thickness.requirement", {
   expect_equal(mollic.thickness.requirement(spc, clay.attr = 'prop'), 18)

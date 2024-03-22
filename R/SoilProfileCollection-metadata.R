@@ -293,3 +293,74 @@ setReplaceMethod("GHL",
                      allowednames = "horizon"
                    )
                  })
+
+setGeneric("hzmetaname", function(object, attr, required = FALSE)
+  standardGeneric("hzmetaname"))
+
+#' @title Get or Set Horizon Metadata Column Name
+#' @name hzmetaname
+#' @aliases hzmetaname hzmetaname,SoilProfileCollection-method hzmetaname<- hzmetaname,SoilProfileCollection-method
+#' @details Store the column name containing a specific type of horizon data in the metadata slot of the SoilProfileCollection.
+#' @description `hzmetaname()`: Get column name containing horizon data of interest 
+#' @param object a SoilProfileCollection
+#' @param attr character. Base name for attribute to be stored in metadata. This is prefixed with `"aqp_hz"` for horizon-level metadata for column attributes. e.g. `attr="clay"` results in metadata value retrieved from `"aqp_hzclay"`.
+#' @param required logical, is this attribute required? If it is, set to `TRUE` to trigger error on invalid result
+#' @docType methods
+#' @rdname hzmetaname
+#' @export
+setMethod("hzmetaname", signature(object = "SoilProfileCollection"),
+          function(object, attr, required = FALSE) {
+            .require.metadata.aqp(object,
+                                  attr = paste0("aqp_hz", attr),
+                                  attrlabel = paste0("Horizon metadata (", attr, ") column"),
+                                  message = "\nSee ??hzmetaname",
+                                  required = required)
+          })
+
+setGeneric('hzmetaname<-', function(object, attr, required = FALSE, value)
+  standardGeneric('hzmetaname<-'))
+
+#' @description `hzmetaname<-`: Set horizon designation column name
+#' @param object A _SoilProfileCollection_
+#' @param attr _character_. Base name for attribute to be stored in metadata. This is prefixed with `"aqp_hz"` for horizon-level metadata for column attributes. e.g. `attr="clay"` results in metadata value retrieved from `"aqp_hzclay"`.
+#' @param value _character_. Name of horizon-level column containing  data corresponding to `attr`.
+#' @param required _logical_. Is this attribute required? If it is, set to `TRUE` to trigger error on invalid `value`.
+#' @docType methods
+#' @seealso [guessHzAttrName()]
+#' @rdname hzmetaname
+#' @export
+#' @examples
+#'
+#' data(sp1)
+#'
+#' # promote to SPC
+#' depths(sp1) <- id ~ top + bottom
+#'
+#' # set important metadata columns
+#' hzdesgnname(sp1) <- "name"
+#' hztexclname(sp1) <- "texture"
+#' 
+#' # set custom horizon property (clay content) column
+#' hzmetaname(sp1, "clay") <- "prop"
+#' 
+#' # inspect metadata list
+#' metadata(sp1)
+#'
+#' # get horizon clay content column
+#' hzmetaname(sp1, "clay")
+#' 
+#' # uses hzdesgname(), hztexclname(), hzmetaname(attr="clay") in function definition
+#' estimatePSCS(sp1)
+setReplaceMethod("hzmetaname",
+                 signature(object = "SoilProfileCollection"),
+                 function(object, attr, required = FALSE, value) {
+                   .set.metadata.aqp(
+                     object = object,
+                     value = value,
+                     required =  required,
+                     attr = paste0("aqp_hz", attr),
+                     attrlabel = paste0("Horizon metadata (", attr, ") column"),
+                     message = "\nSee ??hzmetaname",
+                     allowednames = "horizon"
+                   )
+                 })
