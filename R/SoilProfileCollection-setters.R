@@ -702,7 +702,10 @@ setReplaceMethod("diagnostic_hz",
   # if data are already present, warn the user
   if(nrow(d) > 0)
   	warning('overwriting existing diagnostic horizon data!', call.=FALSE)
-
+  
+  # convert id column to character to match @site
+  value[[idn]] <- as.character(value[[idn]])
+  
   # copy data over
   object@diagnostic <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
 
@@ -784,7 +787,10 @@ setReplaceMethod("restrictions", signature(object = "SoilProfileCollection"),
                    # if data are already present, warn the user
                    if(nrow(d) > 0)
                      warning('overwriting existing restriction data!', call.=FALSE)
-
+                   
+                   # convert id column to character to match @site
+                   value[[idn]] <- as.character(value[[idn]])
+                  
                    # copy data over
                    object@restrictions <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
 
