@@ -683,25 +683,25 @@ setReplaceMethod("diagnostic_hz",
   # test for the special case where internally-used functions
   # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
   # short-circut, and return original object
-  if(nrow(d) == 0 & nrow(value) == 0)
+  if (nrow(d) == 0 && nrow(value) == 0)
   	return(object)
 
   # test to make sure that our common ID is present in the new data
-  if(! idn %in% nm)
-  	stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call.=FALSE)
+  if (!idn %in% nm)
+    stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call. = FALSE)
 
-  # test to make sure that at least one of the IDS in candidate data are present within SPC
-  if(all( ! unique(value[[idn]]) %in% pIDs) )
-  	warning('candidate diagnostic horizon data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
-
+  uidm <- unique(value[[idn]]) %in% pIDs
   # warn user if some of the IDs in the candidate data are missing
-  if(any( ! unique(value[[idn]]) %in% pIDs) ) {
-    warning('some records in candidate diagnostic horizon data have no matching IDs in target SoilProfileCollection object')
+  if (any(!uidm)) {
+    # test to make sure that at least one of the IDS in candidate data are present within SPC
+    if (all(!uidm)) {
+      warning('candidate diagnostic horizon data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
+    } else warning('some records in candidate diagnostic horizon data have no matching IDs in target SoilProfileCollection object', call. = FALSE)
   }
 
   # if data are already present, warn the user
-  if(nrow(d) > 0)
-  	warning('overwriting existing diagnostic horizon data!', call.=FALSE)
+  if (nrow(d) > 0)
+  	warning('overwriting existing diagnostic horizon data!', call. = FALSE)
   
   # convert id column to character to match @site
   value[[idn]] <- as.character(value[[idn]])
@@ -763,29 +763,30 @@ setReplaceMethod("restrictions", signature(object = "SoilProfileCollection"),
 
                    # testing the class of the new data
                    if (!inherits(value, "data.frame"))
-                     stop("restriction data must be a data.frame", call.=FALSE)
+                     stop("restriction data must be a data.frame", call. = FALSE)
 
                    # test for the special case where internally-used functions
                    # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
                    # short-circuit, and return original object
-                   if(nrow(d) == 0 & nrow(value) == 0)
+                   if (nrow(d) == 0 && nrow(value) == 0)
                      return(object)
 
                    # test to make sure that our common ID is present in the new data
-                   if(! idn %in% nm)
-                     stop(paste("restriction data are missing pedon ID column: ", idn), call.=FALSE)
-
-                   # test to make sure that at least one of the IDs in candidate data are present within SPC
-                   if(all(!unique(value[[idn]]) %in% pIDs) )
-                     warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
-
+                   if (!idn %in% nm)
+                     stop(paste("restriction data are missing pedon ID column: ", idn), call. = FALSE)
+                   
+                   uidm <- unique(value[[idn]]) %in% pIDs
                    # warn user if some of the IDs in the candidate data are missing
-                   if(any( ! unique(value[[idn]]) %in% pIDs) ) {
-                     warning('some records in restriction data have no matching IDs in target SoilProfileCollection object')
+                   if (any(!uidm)) {
+                     # test to make sure that at least one of the IDs in candidate data are present within SPC
+                     if (all(!uidm)) {
+                       warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
+                     } else warning('some records in restriction data have no matching IDs in target SoilProfileCollection object', call. = FALSE)
                    }
 
                    # if data are already present, warn the user
-                   if(nrow(d) > 0)
+
+                   if (nrow(d) > 0)
                      warning('overwriting existing restriction data!', call.=FALSE)
                    
                    # convert id column to character to match @site
