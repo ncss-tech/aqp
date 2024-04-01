@@ -1,5 +1,5 @@
 
-# x: vector of any type
+# x: vector of any type, NA removed
 # d: number of significant digits to retain for numeric x
 .prepareVector <- function(x, d) {
   
@@ -31,7 +31,8 @@
   return(x)
 }
 
-
+# x: vector of any type, ignoring NA
+# d: number of significant digits to retain for numeric x
 .prepareBaseline <- function(x, d, type) {
   
   if(type == 'numeric') {
@@ -57,7 +58,7 @@
     # integer-coded (factor, logical)
     # frequency weighted by hz thickness, 
     # non-NA value
-    b <- names(sort(table(x), decreasing = TRUE))[1]
+    b <- names(sort(table(x, useNA = 'no'), decreasing = TRUE))[1]
     b <- rep(b, times = length(x))
   }
   
@@ -87,20 +88,31 @@
     x <- .prepareVector(x, d = d)
   }
   
+  # otherwise using a single string, with NA removed
+  
   # length of compressed vector is the metric
   res <- length(memCompress(x, type = m))
+  
+  # remove length of empty string ('')
+  res <- res - switch(
+    m,
+    'gzip' = 8, 
+    'bzip2' = 14,
+    'xz' = 32,
+    'none' = 0
+  )
+  
   return(res)
 }
 
 
-## TODO: think more about NA handling
 
 # i: vector, any type
 # numericDigits: requested precision for numeric data
-# removeNA: remove NA before preparing
-.prepareVariable <- function(i, numericDigits, removeNA) {
+.prepareVariable <- function(i, numericDigits) {
   
-  ## TODO: what is appropriate return value when all NA?
+  # remove all NA
+  i <- as.vector(na.omit(i))
   
   # short-circuit for all NA
   if(all(is.na(i))) {
@@ -109,10 +121,6 @@
   
   # baseline is mean(i)
   if(is.numeric(i)) {
-    # optionally remove NA from length(gz())
-    if(removeNA) {
-      i <- na.omit(i)
-    }
     
     # baseline for numeric data: 1cm slice wt. mean
     b <- .prepareBaseline(i, d = numericDigits, type = 'numeric')
@@ -123,11 +131,6 @@
   } else {
     # categorical or logical
     # baseline is most-frequent, non-NA value
-    
-    # optionally remove NA from length(gz())
-    if(removeNA) {
-      i <- na.omit(i)
-    }
     
     # treating all categorical variables as nominal for now
     
@@ -143,7 +146,7 @@
 }
 
 
-.PII_by_profile <- function(x, vars, baseline, method, numericDigits, removeNA, compression) {
+.PII_by_profile <- function(x, vars, baseline, method, numericDigits, compression) {
   
   # diced SPC -> DF of horizon data
   # just variables of interest
@@ -153,8 +156,7 @@
   h <- lapply(
     h[, vars, drop = FALSE], 
     FUN = .prepareVariable, 
-    numericDigits = numericDigits,
-    removeNA = removeNA
+    numericDigits = numericDigits
   )
   
   # extract variables
@@ -219,9 +221,9 @@
 #' 
 #' @param numericDigits integer, number of significant digits to retain in numeric -> character conversion
 #' 
-#' @param removeNA remove NA before compression
+#' @param padNA logical, pad depths to `max(x)`, supplied to `dice(fill = padNA)`
 #' 
-#' @param padNA pad all profiles with NA to deepest lower depth in `x` (`max(x)`)
+#' @param scaleNumeric logical, `scale()` each numeric variable, causing "profile information" to vary based on other profiles in the collection
 #' 
 #' @param compression character, compression method as used by [memCompress()]: 'gzip', 'bzip2', 'xz', 'none'
 #'
@@ -293,55 +295,82 @@
 #' text(x = 1:5, y = 105, labels = pi, cex = 0.85)
 #' mtext('Profile Information Index (bytes)', side = 1, line = -1)
 #'
-profileInformationIndex <- function(x, vars, method = c('joint', 'individual'), baseline = FALSE, numericDigits = 8, removeNA = !padNA, padNA = FALSE, compression = 'gzip') {
+profileInformationIndex <- function(x, vars, method = c('joint', 'individual'), baseline = FALSE, numericDigits = 8, padNA = FALSE, scaleNumeric = FALSE, compression = 'gzip') {
   
   # sanity check
   method <- match.arg(method)
   
-  # scale numeric variables to mean of 0 and SD of 1
-  for(i in vars) {
-    if(inherits(x[[i]], 'numeric')) {
-      
-      # scale() will return NaN when SD() is NA or 0
-      .sd_i <- sd(x[[i]], na.rm = TRUE)
-      
-      # threshold for very small numbers 
-      if(!is.na(.sd_i)) {
-        if(.sd_i > 0.0001) {
-          x[[i]] <- scale(x[[i]])
+  ## TODO: think more about this
+  # scaling means that PII depends on collection and is not absolute
+  if(scaleNumeric) {
+    # scale numeric variables to mean of 0 and SD of 1
+    for(i in vars) {
+      if(inherits(x[[i]], 'numeric')) {
+        
+        # scale() will return NaN when SD() is NA or 0
+        .sd_i <- sd(x[[i]], na.rm = TRUE)
+        
+        # threshold for very small numbers 
+        if(!is.na(.sd_i)) {
+          if(.sd_i > 0.0001) {
+            x[[i]] <- scale(x[[i]])
+          }
         }
+        
+        # otherwise, use as-is
       }
-      
-      # otherwise, use as-is
     }
   }
   
-  ## TODO: this will error / drop profiles in the presence of bad horizonation
   
-  # dice() to 1cm intervals for common baseline
+  ## note: this will error / drop profiles in the presence of bad horizonation
+  
+  ## dice() to 1cm intervals for common baseline
   #  -> 10 horizons of the same data NOT more informative than 1 horizon 
   #  -> causes data corruption when bad hz depths present (lots of messages)
   x <- dice(x, fill = padNA)
   
-  ## TODO: convert to data.table
-  # SPC = FALSE
-  # data.table()
-  # dt[, ]
-  # as.vector()
-  
-  # iterate over profiles
+  ## iterate over profiles
   # result is a vector suitable for site-level attribute
-  res <- profileApply(
-    x, 
-    simplify = TRUE, 
-    FUN = .PII_by_profile, 
-    vars = vars, 
-    baseline = baseline, 
-    method = method,
-    numericDigits = numericDigits, 
-    removeNA = removeNA, 
-    compression = compression
-  )
+  
+  ## slow / but simple to understand and test
+  # res <- profileApply(
+  #   x,
+  #   simplify = TRUE,
+  #   FUN = .PII_by_profile,
+  #   vars = vars,
+  #   baseline = baseline,
+  #   method = method,
+  #   numericDigits = numericDigits,
+  #   compression = compression
+  # )
+  # return(res)
+  
+  ## fast via data.table
+  .idn <- idname(x)
+  .pIDs <- profile_id(x)
+  
+  # result is data.table: id + PII
+  # work on horizon data as data.frame
+  x <- data.table(horizons(x))
+  res <- x[ , 
+            .PII_by_profile(
+              x = .SD, 
+              vars = vars, 
+              baseline = baseline, 
+              method = method, 
+              numericDigits = numericDigits, 
+              compression = compression
+            ), 
+            by = .idn
+  ]
+  
+  # double check order is preserved
+  stopifnot(all(res$id == .pIDs))
+  
+  # down-grade data.table to named numeric vector
+  res <- as.vector(res$V1)
+  names(res) <- .pIDs
   
   # done
   return(res)

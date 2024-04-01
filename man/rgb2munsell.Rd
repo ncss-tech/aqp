@@ -17,7 +17,7 @@ rgb2munsell(color, colorSpace = c("CIE2000", "LAB", "sRGB"), nClosest = 1)
 an (NA-padded) \code{data.frame} containing \code{hue}, \code{value}, \code{chroma}, and distance (dE00 when \code{colorSpace = 'CIE2000'}, Euclidean distance otherwise) to nearest matching color.
 }
 \description{
-Convert sRGB color coordinates to the closest \code{n} Munsell chips in the \code{munsell} lookup table. This function will be replaced by \code{col2Munsell()} in future versions of aqp.
+Convert sRGB color coordinates to the closest \code{n} Munsell chips in the \code{munsell} lookup table. This function will be replaced by \code{col2Munsell()} in \strong{aqp 2.1}.
 }
 \note{
 This function is fully vectorized and will pad output with NA-records when NA are present in \code{color}.

@@ -73,7 +73,9 @@
   customattr <- customattr[!names(customattr) %in% c("sp", names(attributes(SoilProfileCollection())))]
   attributes(dest)[names(customattr)] <- attributes(src)[names(customattr)]
   
+  # original.order metadata no longer created, not transferred
   cols <- names(m)[names(m) != "original.order"]
+  
   metadata(dest)[cols] <- m[cols]
   dest
 }

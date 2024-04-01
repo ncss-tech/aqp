@@ -45,6 +45,9 @@ s$color.group <- factor(cutree(dd, 3))
 ## map distance matrix to 2D space via principal coordinates
 d.betadisper <- betadisper(d, group=s$color.group, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
 
+p <- plot(d.betadisper)
+ordilabel(p)
+
 anova(d.betadisper)
 boxplot(d.betadisper)
 
@@ -60,7 +63,7 @@ cols <- cols[c(1:5,7,9)]
 
 par(mar=c(0,0,1,1))
 
-plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2, scaling.factor = 0.45, y.offset = 6, width=0.3, cex.names=0.45, name.style='left-center')
+plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2, scaling.factor = 0.45, y.offset = 6, width=0.33, cex.names=0.45, name.style='left-center')
 
 ape::tiplabels(s$color.group, bg = NA, frame = 'none', offset = 2, font=2, cex=0.85)
 
@@ -85,22 +88,17 @@ s <- x$SPC
 s$taxonname <- toupper(s$taxonname)
 table(s$taxonname)
 
-spc_in_sync(s)
 
+z <- dice(s, 0:50 ~ ., SPC = TRUE)
+z <- subset(z, ! is.na(moist_soil_color) )
 
-# glomApply(s, function(p) c(0, 10))
-#
-# z <- trunc(s, 0, 15)
-
-z <- slice(s, 0:15 ~ ., strict = FALSE)
-
-# z <- filter(z, ! is.na(moist_soil_color) )
-
-groupedProfilePlot(z, groups = 'taxonname', color='moist_soil_color', name=NA, print.id=FALSE)
+par(mar = c(0, 0, 3, 2))
+groupedProfilePlot(z, groups = 'taxonname', color = 'moist_soil_color', name = NA, print.id = FALSE, lwd = 0, width = 0.4, divide.hz = FALSE)
 
 h <- as(z, 'data.frame')
+h <- na.omit(h[, c('pedon_key', 'taxonname', 'm_r', 'm_g', 'm_b')])
 
-d <- farver::compare_colour(h[, c('m_r', 'm_g', 'm_b')], from_space='rgb', white_from = 'D65', method='cie2000')
+d <- farver::compare_colour(h[, c('m_r', 'm_g', 'm_b')], from_space = 'rgb', white_from = 'D65', method='cie2000')
 
 # copy over SPC ids
 dimnames(d) <- list(h$pedon_key, h$pedon_key)
@@ -109,15 +107,13 @@ d <- as.dist(t(d))
 
 
 ## map distance matrix to 2D space via principal coordinates
-d.betadisper <- betadisper(d, group=h$taxonname, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
-
-
+d.betadisper <- betadisper(d, group = h$taxonname, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
 
 p <- plot(
-  d.betadisper, hull=FALSE, ellipse=TRUE, conf=0.9,
-  col=cols, main='Soil Color Groups\n90% Probability Ellipse', sub='MLRA 15, 18, 22A, 22B'
+  d.betadisper, hull = FALSE, ellipse = TRUE, conf = 0.9,
+  col = cols, main = 'Soil Color Groups\n90% Probability Ellipse'
 )
-# ordilabel(p, labels = h$taxonname, cex=0.6)
+
 
 
 ##

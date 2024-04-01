@@ -1,4 +1,6 @@
-# get.increase.matrix()
+
+## TODO: clarify, new title / description
+
 #' Compute Pair-wise Distances of Soil Properties over Depth
 #' 
 #' Computes pair-wise distance matrix to determine where an attribute increases within
@@ -17,12 +19,12 @@
 #' Note that the `threshold.fun` result is allowed to contain NA, but that will
 #' result in no output for affected cells.
 #'
-#' \code{get.increase.depths} performs the conversion of the square matrix
-#' output of \code{get.increase.matrix} back to horizon top depth for where
+#' `get.increase.depths()` performs the conversion of the square matrix
+#' output of `get.increase.matrix` back to horizon top depth for where
 #' criteria were met.
 #'
 #'
-#' @param p a SoilProfileCollection, containing a single profile
+#' @param p a `SoilProfileCollection`, containing a single profile
 #' @param attr horizon attribute name to get the "increase" of
 #' @param threshold.fun a function that returns the threshold (as a function of
 #' attr); may return a constant single value
@@ -31,10 +33,11 @@
 #' @return Returns a square logical matrix reflecting where the increase
 #' criteria were met.
 #'
-#' \code{get.increase.depths} converts to horizon dop depth by using above
+#' `get.increase.depths` converts to horizon top depth by using above
 #' matrix output to determine depths where increase is met.
+#' 
 #' @author Andrew Gene Brown
-#' @seealso \code{getArgillicBounds}, \code{crit.clay.argillic}
+#' @seealso [getArgillicBounds()], [crit.clay.argillic()]
 #' @keywords manip
 #' @export
 #' @examples

@@ -512,7 +512,7 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
 #' @title Subset SPC with pattern-matching for text-based attributes
 #' @name grepSPC
 #' @aliases grepSPC,SoilProfileCollection-method
-#' @description \code{grepSPC()} is a shorthand function for subsetting SoilProfileCollections. For example, by \code{filter(grepl(spc, ...))} or \code{filter(stringr::str_detect(spc, ...))}. It provides pattern matching for a single text-based site or horizon level attribute.
+#' @description \code{grepSPC()} is a shorthand function for subsetting `SoilProfileCollection` objects. For example, by \code{filter(grepl(spc, ...))} or \code{filter(stringr::str_detect(spc, ...))}. It provides pattern matching for a single text-based site or horizon level attribute.
 #' @param object A SoilProfileCollection
 #' @param attr A character vector (column in object) for matching patterns against.
 #' @param pattern REGEX pattern to match in \code{attr}

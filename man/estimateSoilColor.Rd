@@ -23,8 +23,7 @@ Soil color is typically described at dry and moist conditions. This function att
 \itemize{
 \item convert Munsell notation to CIELAB color coordinates via \code{munsell2rgb()}
 \item apply scaling, rotation, and translation parameters in CIELAB color space
-\item convert CIELAB to sRGB coordinates
-\item locate closest Munsell chip to sRGB coordinates via \code{col2munsell()}
+\item locate closest Munsell chip to CIELAB coordinates via \code{col2munsell()}
 }
 
 Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.

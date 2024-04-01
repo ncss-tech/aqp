@@ -9,6 +9,8 @@ library(RSQLite)
 
 library(ragg)
 
+library(purrr)
+
 ## load soil texture grid points
 data("soiltexture", package = 'aqp')
 
@@ -16,13 +18,13 @@ data("soiltexture", package = 'aqp')
 ## get all soil texture measurements from latest KSSL snapshot
 
 # connect
-db <- dbConnect(RSQLite::SQLite(), 'E:/NASIS-KSSL-LDM/LDM/LDM-compact.sqlite')
+db <- dbConnect(RSQLite::SQLite(), 'E:/NASIS-KSSL-LDM/ncss_labdata.sqlite')
 
 qq <- "
 SELECT
 sand_total AS sand, silt_total AS silt, clay_total AS clay
-FROM layer
-JOIN physical ON layer.labsampnum = physical.labsampnum
+FROM lab_layer AS l
+JOIN lab_physical_properties AS p ON l.labsampnum = p.labsampnum
 WHERE sand IS NOT NULL
 AND silt IS NOT NULL
 AND clay IS NOT NULL
@@ -60,12 +62,12 @@ idx <- which(
 x <- x[-idx, ]
 
 
-## ~380k recordsa
+## 368,546 records
 nrow(x)
 
 
 # check entire dataset
-png(file = 'KSSL-full-texture-distribution.png', width = 1000, height = 1000, res = 96, type = 'cairo', antialias = 'subpixel')
+ragg::agg_png(filename = 'KSSL-full-texture-distribution.png', width = 1000, height = 1000, scaling = 1.5)
 
 TT <- TT.plot(
   class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
@@ -229,19 +231,19 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
   
   
   TT <- TT.plot(
-    class.sys= "USDA-NCSS.TT",    # use "our" texture triangle
-    main= "Soil Textures",          # title
-    tri.sum.tst=FALSE,            # do not test for exact sum(sand, silt, clay) == 100
-    cex.lab=0.75,                 # scaling of label text
-    cex.axis=0.75,                # scaling of axis
-    frame.bg.col='white',         # background color
-    class.lab.col='black',        # color for texture class labels
-    lwd.axis=1.5,                    # line thickness for axis
-    arrows.show=TRUE
+    class.sys = "USDA-NCSS.TT",    # use "our" texture triangle
+    main = "Soil Textures",          # title
+    tri.sum.tst = FALSE,            # do not test for exact sum(sand, silt, clay) == 100
+    cex.lab = 0.75,                 # scaling of label text
+    cex.axis = 0.75,                # scaling of axis
+    frame.bg.col = 'white',         # background color
+    class.lab.col = 'black',        # color for texture class labels
+    lwd.axis = 1.5,                    # line thickness for axis
+    arrows.show = TRUE
   )
   
   # annotate grid samples
-  # TT.points(tri.data = zz, geo = TT, col='grey', pch = '.', cex = 0.01)
+  TT.points(tri.data = zz, geo = TT, col='grey', pch = '.', cex = 0.01)
   
   # full samples, these will extend beyond original class limits
   TT.points(tri.data = ssc$samples.full, geo = TT, col=alpha('royalblue', alpha[1]), cex = 0.5)
@@ -266,7 +268,7 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
   
   TT.points(tri.data = ss, geo = TT, col=alpha('darkgreen', alpha[2]), pch = 15, cex = 0.5)
   
-  legend('topright', legend = c('Uniform / Grid', 'Dirichlet'), bty = 'n', pch = 15, col = c('darkgreen', 'firebrick'), horiz = TRUE)
+  legend('topright', legend = c('Uniform / Grid', 'Dirichlet'), bty = 'n', pch = 15, col = c('darkgreen', 'firebrick'), horiz = TRUE, pt.cex = 1.5)
   
   txt <- sprintf("hit rate: %s%%", round(ssc$hit.rate[2] * 100))
   mtext(txt, side = 3, at = 0, line = -4)
@@ -274,9 +276,9 @@ plotSummary <- function(ssc, alpha = c(0.25, 0.5)) {
 
 
 
-texture.class.parameters <- lapply(cl, prepareCompositionalSummary)
+texture.class.parameters <- map(cl, .f = prepareCompositionalSummary, .progress = TRUE)
 
-z <- lapply(texture.class.parameters, sampleComposition, n = 250)
+z <- map(texture.class.parameters, .f = sampleComposition, n = 250, .progress = TRUE)
 
 
 
@@ -290,8 +292,15 @@ plotSummary(z[['sc']], alpha = c(0.215, 0.33))
 plotSummary(z[['s']], alpha = c(0.215, 0.33))
 plotSummary(z[['sicl']], alpha = c(0.215, 0.33))
 plotSummary(z[['l']], alpha = c(0.215, 0.33))
+plotSummary(z[['si']], alpha = c(0.215, 0.33))
+
 
 z[['l']]
 
 lapply(z, '[[', 'hit.rate')
+
+texture.class.parameters[['c']]
+
+## TODO: save texture.class.parameters -> aqp data object for use in soil texture functions
+
 

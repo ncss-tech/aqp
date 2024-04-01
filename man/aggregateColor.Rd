@@ -21,7 +21,7 @@ aggregateColor(
 
 \item{col}{the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")}
 
-\item{colorSpace}{the name of color space or color distance metric to use for conversion of aggregate colors to Munsell; either CIE2000 (color distance metric), LAB, or sRGB. Default = 'CIE2000'}
+\item{colorSpace}{(now deprecated, removed in aqp 2.1) 'CIE2000' used for all cases}
 
 \item{k}{single integer specifying the number of colors discretized via PAM (\code{\link[cluster:pam]{cluster::pam()}}), see details}
 

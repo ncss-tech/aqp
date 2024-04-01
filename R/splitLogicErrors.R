@@ -1,12 +1,12 @@
-#' Split a SoilProfileCollection into a list based on types of horizon logic errors
+#' Split a `SoilProfileCollection` into a list based on types of horizon logic errors
 #'
-#' Uses \code{checkHzDepthLogic} to identify presence of depth logic errors, same depths, missing depths, and overlaps/gaps between the horizons of each profile in a SoilProfileCollection.
+#' Uses `checkHzDepthLogic()` to identify presence of depth logic errors, same depths, missing depths, and overlaps/gaps between the horizons of each profile in a `SoilProfileCollection.`
 #' 
-#' @param object A SoilProfileCollection
+#' @param object A `SoilProfileCollection`
 #' @param interact Calculate interaction between the four logic errors for groups? Default: \code{FALSE} always returns 4 groups, one for each logic error type.
 #' @param ... Additional arguments to \code{split.default}, called when \code{interact = TRUE}
 #'
-#' @return A named list of SoilProfileCollections (or \code{NULL}), with names: "depthLogic", "sameDepth", "missingDepth", "overlapOrGap". If \code{interact = TRUE} then the list elements groups determined by \code{interaction()} of the error types.
+#' @return A named list of `SoilProfileCollections` (or \code{NULL}), with names: "depthLogic", "sameDepth", "missingDepth", "overlapOrGap". If \code{interact = TRUE} then the list elements groups determined by \code{interaction()} of the error types.
 #' @export
 #'
 #' @examples

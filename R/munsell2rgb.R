@@ -1,7 +1,7 @@
 
 #' @title sRGB to Munsell Color Conversion
 #' 
-#' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the `munsell` lookup table. This function will be replaced by `col2Munsell()` in future versions of aqp.
+#' @description Convert sRGB color coordinates to the closest `n` Munsell chips in the `munsell` lookup table. This function will be replaced by `col2Munsell()` in **aqp 2.1**.
 #'  
 #'
 #' @param color a `data.frame` or `matrix` object containing sRGB coordinates in the range of (0,1)
@@ -45,6 +45,11 @@
 #' rgb2munsell(color)
 #'
 rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nClosest = 1) {
+  
+  ## !! will deprecate in aqp 2.1
+  # .Deprecated(new = 'col2Munsell', msg = 'please use col2Munsell() instead.')
+  message('rgb2munsell() will be deprecated in aqp 2.1, please use col2Munsell() instead.')
+  
   
   # argument check
   colorSpace <- match.arg(colorSpace)
@@ -215,10 +220,10 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' 
 #' @note Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.
 #' 
-#' @references \url{http://ncss-tech.github.io/AQP/}
-#' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-#' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
-#' http://www.cis.rit.edu/mcsl/online/munsell.php
+#' @references 
+#'  - \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
+#'  - \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
+#'  - \url{https://www.rit.edu/science/munsell-color-lab}
 #' 
 #' @author D.E. Beaudette
 #' 

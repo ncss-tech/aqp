@@ -2,22 +2,22 @@
 % Please edit documentation in R/splitLogicErrors.R
 \name{splitLogicErrors}
 \alias{splitLogicErrors}
-\title{Split a SoilProfileCollection into a list based on types of horizon logic errors}
+\title{Split a \code{SoilProfileCollection} into a list based on types of horizon logic errors}
 \usage{
 splitLogicErrors(object, interact = FALSE, ...)
 }
 \arguments{
-\item{object}{A SoilProfileCollection}
+\item{object}{A \code{SoilProfileCollection}}
 
 \item{interact}{Calculate interaction between the four logic errors for groups? Default: \code{FALSE} always returns 4 groups, one for each logic error type.}
 
 \item{...}{Additional arguments to \code{split.default}, called when \code{interact = TRUE}}
 }
 \value{
-A named list of SoilProfileCollections (or \code{NULL}), with names: "depthLogic", "sameDepth", "missingDepth", "overlapOrGap". If \code{interact = TRUE} then the list elements groups determined by \code{interaction()} of the error types.
+A named list of \code{SoilProfileCollections} (or \code{NULL}), with names: "depthLogic", "sameDepth", "missingDepth", "overlapOrGap". If \code{interact = TRUE} then the list elements groups determined by \code{interaction()} of the error types.
 }
 \description{
-Uses \code{checkHzDepthLogic} to identify presence of depth logic errors, same depths, missing depths, and overlaps/gaps between the horizons of each profile in a SoilProfileCollection.
+Uses \code{checkHzDepthLogic()} to identify presence of depth logic errors, same depths, missing depths, and overlaps/gaps between the horizons of each profile in a \code{SoilProfileCollection.}
 }
 \examples{
 

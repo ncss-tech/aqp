@@ -96,10 +96,13 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
   default_t <- rep(25, length(soildepth))
   default_b <- rep(100, length(soildepth))
   
+  odepth <- getMineralSoilSurfaceDepth(p, hzdesgn, simplify = FALSE)[[hz.depths[2]]]
+  ohzidx <- which(odepth > 0)
+  
   # Key part A (soils with restriction in shallow depth)
-  lt36idx <- which(soildepth <= 36)
+  lt36idx <- which(soildepth - odepth <= 36)
   if (length(lt36idx) > 0) {
-    default_t[lt36idx] <- 0
+    default_t[lt36idx] <- 0 # O horizon correction applied below
     default_b[lt36idx] <- soildepth[lt36idx]
     shallow_flag[lt36idx] <- TRUE
   }
@@ -115,8 +118,6 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
   }
 
   # Adjust PSCS range downward if organic soil material is present at surface (i.e. mineral soil surface depth > 0)
-  odepth <- getMineralSoilSurfaceDepth(p, hzdesgn, simplify = FALSE)[[hz.depths[2]]]
-  ohzidx <- which(odepth > 0)
   if (length(ohzidx) > 0) {
     
     default_t[ohzidx] <- default_t[ohzidx] + odepth[ohzidx]

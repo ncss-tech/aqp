@@ -2,7 +2,7 @@
 % Please edit documentation in R/aggregateSoilDepth.R
 \name{aggregateSoilDepth}
 \alias{aggregateSoilDepth}
-\title{Probabalistic Estimation of Soil Depth within Groups}
+\title{Probabilistic Estimation of Soil Depth within Groups}
 \usage{
 aggregateSoilDepth(
   x,

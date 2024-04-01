@@ -46,6 +46,7 @@ mostLikelyHzSequence <- function(mc, t0, maxIterations = 10) {
     if(i > maxIterations)
       break
   }
+  
   return(s)
 }
 

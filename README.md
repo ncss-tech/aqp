@@ -49,6 +49,17 @@ version + dependencies:
 remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
 ```
 
+Install suggested packages:
+
+``` r
+p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+"sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
+"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+
+install.packages(p)
+```
+
 ## Website
 
 <http://ncss-tech.github.io/AQP/>
@@ -84,24 +95,12 @@ plotSPC(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.svg" style="display: block; margin: auto;" />
-
-## Install Suggested Packages
-
-``` r
-p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
-"sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
-"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
-
-install.packages(p)
-```
+<img src="man/figures/README-unnamed-chunk-3-1.svg" style="display: block; margin: auto;" />
 
 ## Citation
 
 ``` r
 citation("aqp")
-#> 
 #> To cite aqp in publications use:
 #> 
 #>   Beaudette, D., Roudier, P., Brown, A. (2023). aqp: Algorithms for
@@ -146,7 +145,7 @@ citation("aqp")
   {aqp}](https://ncss-tech.github.io/AQP/aqp/mix-colors.html)
 - [Theoretical Water Retention
   Curves](https://ncss-tech.github.io/AQP/aqp/water-retention-curves.html)
-- [Soil Texture Vizualization
+- [Soil Texture Visualization
   Ideas](https://ncss-tech.github.io/AQP/aqp/soiltexture-vizualization-ideas.html)
 
 ## Related Presentations / Posters

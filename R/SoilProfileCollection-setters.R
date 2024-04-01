@@ -185,7 +185,7 @@ setReplaceMethod("depths", "data.frame",
   data <- data[id_tdep_order,]
 
   # create a site table with just IDs
-  nusite <- .as.data.frame.aqp(data.frame(.coalesce.idx(data[[nm[1]]]),
+  nusite <- .as.data.frame.aqp(data.frame(rle(data[[nm[1]]])$values,
                                           stringsAsFactors = FALSE), class(data)[1])
   names(nusite) <- nm[1]
 
@@ -284,7 +284,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 
     # get profile IDs from horizon table
     ids <- as.character(horizons(object)[[idname(object)]])
-    pid <- .coalesce.idx(ids)
+    pid <- rle(ids)$values
     idn <- idname(object)
     adf <- aqp_df_class(object)
     
@@ -544,9 +544,10 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   if (!inherits(value, "data.frame"))
     stop("new horizon data input value must inherit from data.frame", call. = FALSE)
 
-  # allow short-circuit
-  if (all(colnames(value) %in% horizonNames(object)) &
-      all(c(idn, hdn, hzd) %in% colnames(value)) &
+  # allow short-circuit (handles NULL and non-op without going thru merge())
+  if ((all(horizonNames(object) %in% colnames(value)) ||
+       all(colnames(value) %in% horizonNames(object))) &&
+       all(c(idn, hdn, hzd) %in% colnames(value)) &&
       nrow(value) == nrow(object)) {
     if (!all(value[[idn]] %in% profile_id(object))) {
       message("Some profile IDs in input data are not present in object and no new columns to merge. Doing nothing.")
@@ -581,7 +582,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   }
   
   h.id <- as.character(object@horizons[[hdn]])
-  original.site.order <- match(.coalesce.idx(object@site[[idn]]),
+  original.site.order <- match(rle(object@site[[idn]])$values,
                                object@site[[idn]])
 
   # in keeping with tradition of site<-, we let the join happen
@@ -597,7 +598,7 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
   #       which might cause some backwards compatibility problems (requiring type conversion)
   #       this is a problem because the join is completely open ended -- not just based on ID
   
-  chnew <- .coalesce.idx(horizon.new[[idn]])
+  chnew <- rle(horizon.new[[idn]])$values
   if (length(chnew) != length(original.site.order) |
      suppressWarnings(any(original.site.order != chnew))) {
     new.horizon.order <- order(horizon.new[[idn]], 
@@ -682,26 +683,29 @@ setReplaceMethod("diagnostic_hz",
   # test for the special case where internally-used functions
   # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
   # short-circut, and return original object
-  if(nrow(d) == 0 & nrow(value) == 0)
+  if (nrow(d) == 0 && nrow(value) == 0)
   	return(object)
 
   # test to make sure that our common ID is present in the new data
-  if(! idn %in% nm)
-  	stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call.=FALSE)
+  if (!idn %in% nm)
+    stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call. = FALSE)
 
-  # test to make sure that at least one of the IDS in candidate data are present within SPC
-  if(all( ! unique(value[[idn]]) %in% pIDs) )
-  	warning('candidate diagnostic horizon data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
-
+  uidm <- unique(value[[idn]]) %in% pIDs
   # warn user if some of the IDs in the candidate data are missing
-  if(any( ! unique(value[[idn]]) %in% pIDs) ) {
-    warning('some records in candidate diagnostic horizon data have no matching IDs in target SoilProfileCollection object')
+  if (any(!uidm)) {
+    # test to make sure that at least one of the IDS in candidate data are present within SPC
+    if (all(!uidm)) {
+      warning('candidate diagnostic horizon data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
+    } else warning('some records in candidate diagnostic horizon data have no matching IDs in target SoilProfileCollection object', call. = FALSE)
   }
 
   # if data are already present, warn the user
-  if(nrow(d) > 0)
-  	warning('overwriting existing diagnostic horizon data!', call.=FALSE)
-
+  if (nrow(d) > 0)
+  	warning('overwriting existing diagnostic horizon data!', call. = FALSE)
+  
+  # convert id column to character to match @site
+  value[[idn]] <- as.character(value[[idn]])
+  
   # copy data over
   object@diagnostic <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
 
@@ -759,31 +763,35 @@ setReplaceMethod("restrictions", signature(object = "SoilProfileCollection"),
 
                    # testing the class of the new data
                    if (!inherits(value, "data.frame"))
-                     stop("restriction data must be a data.frame", call.=FALSE)
+                     stop("restriction data must be a data.frame", call. = FALSE)
 
                    # test for the special case where internally-used functions
                    # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
                    # short-circuit, and return original object
-                   if(nrow(d) == 0 & nrow(value) == 0)
+                   if (nrow(d) == 0 && nrow(value) == 0)
                      return(object)
 
                    # test to make sure that our common ID is present in the new data
-                   if(! idn %in% nm)
-                     stop(paste("restriction data are missing pedon ID column: ", idn), call.=FALSE)
-
-                   # test to make sure that at least one of the IDs in candidate data are present within SPC
-                   if(all(!unique(value[[idn]]) %in% pIDs) )
-                     warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
-
+                   if (!idn %in% nm)
+                     stop(paste("restriction data are missing pedon ID column: ", idn), call. = FALSE)
+                   
+                   uidm <- unique(value[[idn]]) %in% pIDs
                    # warn user if some of the IDs in the candidate data are missing
-                   if(any( ! unique(value[[idn]]) %in% pIDs) ) {
-                     warning('some records in restriction data have no matching IDs in target SoilProfileCollection object')
+                   if (any(!uidm)) {
+                     # test to make sure that at least one of the IDs in candidate data are present within SPC
+                     if (all(!uidm)) {
+                       warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
+                     } else warning('some records in restriction data have no matching IDs in target SoilProfileCollection object', call. = FALSE)
                    }
 
                    # if data are already present, warn the user
-                   if(nrow(d) > 0)
-                     warning('overwriting existing restriction data!', call.=FALSE)
 
+                   if (nrow(d) > 0)
+                     warning('overwriting existing restriction data!', call.=FALSE)
+                   
+                   # convert id column to character to match @site
+                   value[[idn]] <- as.character(value[[idn]])
+                  
                    # copy data over
                    object@restrictions <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
 

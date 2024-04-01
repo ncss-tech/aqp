@@ -9,7 +9,7 @@
 #' @param x a `SoilProfileCollection` object
 #' @param groups the name of a horizon or site attribute used to group horizons, see examples
 #' @param col the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")
-#' @param colorSpace the name of color space or color distance metric to use for conversion of aggregate colors to Munsell; either CIE2000 (color distance metric), LAB, or sRGB. Default = 'CIE2000'
+#' @param colorSpace (now deprecated, removed in aqp 2.1) 'CIE2000' used for all cases
 #' @param k single integer specifying the number of colors discretized via PAM ([cluster::pam()]), see details
 #' @param profile_wt the name of a site-level attribute used to modify weighting, e.g. area
 #' 
@@ -98,77 +98,79 @@
 #' 
 aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace = 'CIE2000', k = NULL, profile_wt = NULL, mixingMethod = c('estimate', 'exact')) {
   
+  # colorSpace argument is now deprecated
+  if(!missing(colorSpace)) {
+    message('colorSpace argument is now deprecated, CIE2000 distance is always used.')
+  }
+  
   # sanity check
   mixingMethod <- match.arg(mixingMethod)
   
   # sanity check
   if(!is.null(k)) {
     k <- round(k)
-
+    
     # sanity check, need this for color distance eval
     if (!requireNamespace('farver', quietly = TRUE))
       stop('please install the `farver` package.', call.=FALSE)
-
+    
     if(is.na(k)) {
       stop('k must be a single integer > 0')
     }
   }
-
+  
   # sanity check: profile weight must be a valid site-level attribute
   if(!is.null(profile_wt)) {
     if(! profile_wt %in% siteNames(x)) {
       stop('`profile_wt` must be a site-level attribute of `x`', call. = FALSE)
     }
   }
-
+  
   # sanity check: groups must be a horizon-level attribute
   if(! groups %in% names(x))
     stop('`groups` must be a site or horizon attribute of `x`', call. = FALSE)
-
+  
   # sanity check: col must be a horizon-level attribute
   if(! col %in% horizonNames(x))
     stop('`col` must be a horizon-level attribute of `x`', call. = FALSE)
-
-  if(!colorSpace %in% c("CIE2000","LAB","sRGB"))
-    stop('colorSpace must be either: CIE2000, LAB or sRGB', call. = FALSE)
-
+  
   ## hack to make R CMD check --as-cran happy
   top <- bottom <- thick <- NULL
-
+  
   # extract pieces
   h <- as(x, 'data.frame')
-
+  
   # keep track of just those variables we are using
   # profile_wt is NULL by default
   vars <- c(groups, horizonDepths(x), col, profile_wt)
-
+  
   # remove missing data
   # note: missing color data will result in 'white' when converting to sRGB, why?
   h.no.na <- na.omit(h[, vars])
-
+  
   # re-name depths
   names(h.no.na)[2:3] <- c('top', 'bottom')
-
+  
   # safely compute thickness
   # abs() used in rare cases where horizon logic is wrong: e.g. old-style O horizons
   h.no.na$thick <- abs(h.no.na$bottom - h.no.na$top)
-
+  
   # 0-thickness will result in NA weights
   # replace with a 1-unit slice
   idx <- which(h.no.na$thick == 0)
   if(length(idx) > 0) {
     h.no.na$thick[idx] <- 1
   }
-
+  
   # apply site-level weighting here, if present
   if(!is.null(profile_wt)) {
     # multiply thickness by site-level weight
     h.no.na$thick <- h.no.na$thick * h.no.na[[profile_wt]]
   }
-
+  
   # drop empty group levels
   h.no.na[[groups]] <- factor(h.no.na[[groups]])
-
+  
   # split by genhz
   ss <- split(h.no.na, h.no.na[[groups]])
   
@@ -197,15 +199,22 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
       v <- t(col2rgb(lut$col) / 255)
       
       # convert to LAB
-      v <- convertColor(v, from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65', clip = FALSE)
+      v <- convertColor(
+        v, 
+        from = 'sRGB', 
+        to = 'Lab', 
+        from.ref.white = 'D65', 
+        to.ref.white = 'D65', 
+        clip = FALSE
+      )
       
       # compute perceptually based distance matrix on unique colors
-      dE00 <- farver::compare_colour(v, v, from_space='lab', method='CIE2000', white_from='D65')
+      dE00 <- farver::compare_colour(v, v, from_space = 'lab', method = 'CIE2000', white_from = 'D65')
       dE00 <- as.dist(dE00)
       
       # clustering from distance matrix
       # TODO: save clustering results for later
-      v.pam <- cluster::pam(dE00, k = k.adj, diss = TRUE, pamonce=5)
+      v.pam <- cluster::pam(dE00, k = k.adj, diss = TRUE, pamonce = 5)
       
       # put clustering vector into LUT
       lut$cluster <- v.pam$clustering
@@ -242,7 +251,9 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
     
     ## TODO: this is wasteful, as we likely "knew" the munsell notation before-hand
     # back-calculate the closest Munsell color
-    m <- rgb2munsell(t(col2rgb(res[[col]])) / 255, colorSpace = colorSpace)
+    # m <- rgb2munsell(t(col2rgb(res[[col]])) / 255, colorSpace = colorSpace)
+    m <- col2Munsell(res[[col]])
+    
     
     # format as text
     res$munsell <- paste0(m[, 1], ' ', m[, 2], '/', m[, 3])
@@ -254,14 +265,14 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
   })
   
   
-
+  
   # rescale using the sum of the weights within the current horizon
   s.scaled <- lapply(s, function(i) {
     i$weight <- i$weight / sum(i$weight)
     return(i)
   })
   
-
+  
   # iteration over groups, estimation of:
   # aggregate colors via mixing
   # number of associated colors

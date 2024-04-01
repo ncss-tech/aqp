@@ -121,7 +121,7 @@ test_that("reference mixing methods", {
 
 test_that("additional arguments via ...", {
   
-  # NO conversion to closest Munsell chip via rgb2munsell()
+  # NO conversion to closest Munsell chip via col2munsell()
   m <- mixMunsell(c('10YR 6/2', '10YR 2/2'), mixingMethod = 'exact', convert = FALSE)
   
   # verified results

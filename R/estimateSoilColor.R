@@ -7,8 +7,7 @@
 #' @description Soil color is typically described at dry and moist conditions. This function attempts to estimate soil color at dry or moist condition when one is missing. Estimation proceeds as:
 #'   * convert Munsell notation to CIELAB color coordinates via `munsell2rgb()`
 #'   * apply scaling, rotation, and translation parameters in CIELAB color space
-#'   * convert CIELAB to sRGB coordinates
-#'   * locate closest Munsell chip to sRGB coordinates via `col2munsell()`
+#'   * locate closest Munsell chip to CIELAB coordinates via `col2munsell()`
 #'   
 #' Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.
 #' 
@@ -91,24 +90,8 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   ## CIELAB -> closest Munsel
   res <- col2Munsell(Y, space = 'CIELAB', nClosest = 1)
   
-  ## no longer required since col2Munsell() ##
-  
-  # ## CIELAB -> sRGB
-  # ## TODO: why does farver give slightly different results?
-  # 
-  # ## farver: results are scaled 0-255
-  # # .srgb <- farver::convert_colour(Y, from = 'lab', to = 'rgb', white_from = 'D65', white_to = 'D65')
-  # 
-  # ## grDevices: results are scaled 0-1
-  # .srgb <- convertColor(Y, from = 'Lab', to = 'sRGB', from.ref.white='D65', to.ref.white = 'D65')
-  # 
-  # ## sRGB -> Munsell
-  # res <- rgb2munsell(color = .srgb, colorSpace = 'CIE2000', nClosest = 1)
-  
-  ###
-  
-  
-  ## additional diagnostics... ?
+
+  ## TODO: post-processing or additional diagnostics?
   
   return(res)
   

@@ -14,7 +14,7 @@ test_that("spec2Munsell works as expected", {
   # object structure / contents
   expect_true(inherits(m, 'data.frame'))
   
-  # same output as rgb2Munsell
+  # same output as col2Munsell
   expect_true(
     all(
       names(m) == c('hue', 'value', 'chroma', 'sigma')

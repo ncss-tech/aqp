@@ -1,8 +1,8 @@
 ---
-title: "What is new in aqp 2.0?"
+title: "What is new in aqp 2.x?"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{What is new in aqp 2.0?}
+  %\VignetteIndexEntry{What is new in aqp 2.x?}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -42,6 +42,7 @@ The `replace_na` and `add_soil_flag` arguments to `profile_compare()` are not pr
  * `mixMunsell()` now uses `mixingMethod = 'exact'` by default for the simulation of subtractive color mixtures
  * `gower` package moved to SUGGESTS
  * `plotColorMixture()` now using grid graphics functions to determine color swatch geometry and setting overlap detection threshold
+ * Deprecation of `rgb2munsell()` in favor of the more general `col2Munsell()`
  * Removal of `PMS2Munsell()` and support data
  * Deprecation of `coordinates()<-` and `proj4string()<-` in favor of `initSpatial()<-`
  * Removal of `rruff.sample` example XRD patterns
@@ -66,10 +67,13 @@ The `replace_na` and `add_soil_flag` arguments to `profile_compare()` are not pr
  * Coarse fragment classification via `fragmentSieve()` and `fragmentClasses()`.
  * S4 `as.data.frame(<SPC>)` as shorthand for `as(<SPC>, 'data.frame')`
  * `plotSPC()` now marks truncated profiles with a ragged bottom.
- * `fixOverlap()` now has two label-placement solvers:
+ * `fixOverlap()` now has [two label-placement solvers](https://ncss-tech.github.io/aqp/articles/label-placement.html):
    - electrostatic simulation (`method = "E"`)
    - simulated annealing (`method = "S"`)
  * New [depth axis styles](https://ncss-tech.github.io/AQP/aqp/sketches.html) in `plotSPC()`.
+ * New function `flagOverlappingHz()` for identifying horizons with perfect overlap
+ * New function `warpHorizons()` for warping horizon thickness (inflate/deflate)
+ * `simulateColor()` adds multivariate simulation in CIELAB colorspace
  
 
 ## Incremental changes, should have no effect on previous code
@@ -84,4 +88,6 @@ The `replace_na` and `add_soil_flag` arguments to `profile_compare()` are not pr
  * `profileApply`: Add support for custom `lapply()`-like function (`APPLY.FUN`) for processing chunks. 
  * Add `.interpretHorizonColor()` outputs to `last_spc_plot` in `aqp.env` for use in custom `legend()`.
  * Add `simplify` argument to `SoilTextureLevels()` and `ssc_to_texcl()` to optionally convert to an ordered factor with maximum of 12 levels (rather than 21). This smaller list of classes excludes sand grain size variants such as fine sand, loamy coarse sand, and very fine sandy loam.
+ * Major updates to `profileInformationIndex()` methods and performance boost.
+ * Enhancements to `evalMissingData()`.
 

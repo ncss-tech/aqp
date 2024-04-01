@@ -3,6 +3,7 @@
 \docType{package}
 \name{aqp-package}
 \alias{aqp-package}
+\alias{_PACKAGE}
 \alias{aqp}
 \alias{aqp.env}
 \title{Algorithms for Quantitative Pedology}

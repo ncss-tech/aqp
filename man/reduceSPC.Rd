@@ -7,15 +7,15 @@
 reduceSPC(p, column_names = NULL)
 }
 \arguments{
-\item{p}{a SoilProfileCollection}
+\item{p}{a \code{SoilProfileCollection}}
 
 \item{column_names}{a set of additional columns to include in the result}
 }
 \value{
-a SoilProfileCollection
+a \code{SoilProfileCollection}
 }
 \description{
-Reduce the number of columns in a SoilProfileCollection to a minimal set plus additional selected columns. Optional metadata columns are included if set. At a minimum the profileID, horizon top and bottom depth, horizon ID are included. Horizon designation and horizon texture class column names are included if metadata attributes are set. See details.
+Reduce the number of columns in a \code{SoilProfileCollection} to a minimal set plus additional selected columns. Optional metadata columns are included if set. At a minimum the profile ID, horizon top and bottom depths, and horizon ID are included. Horizon designation and horizon texture class column names are included if metadata attributes are set. See details.
 }
 \details{
 Minimum column names included (when \code{column_names = NULL})

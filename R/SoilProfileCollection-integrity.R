@@ -47,7 +47,7 @@ spc_in_sync <- function(object) {
   
   # coalesced horizon IDs 
   # identifies intermingling of profiles within horizon
-  cohid <- .coalesce.idx(hid)
+  cohid <- rle(hid)$values
   
   # if cohid is longer than sid, horizons from different profiles
   # are mixed or IDs have been corrupted (by e.g. direct edit)
@@ -67,32 +67,6 @@ spc_in_sync <- function(object) {
   return(data.frame(nSites = one,
                     relativeOrder = two,
                     valid = all(one, two)))
-}
-
-# Remove duplicate values retaining original order
-# 
-# .coalesce.idx
-# 
-# "Coalesce" an un-sorted, non-unique vector to an a vector with contiguous identical elements removed. 
-# 
-# Designed primarily for integer indices that can be particularly marred by character-based sorting also supports characters (by conversion to factor) and factors (implicitly, by conversion to numeric).
-# 
-# unique is _slightly_ faster for large vectors where order is assumed or irrelevant, but obscures critical information when the relative order of values in the input vector matters. The result of coalesce on a sorted, unique vector is the same as the input value.
-# 
-# > .coalesce.idx(1:10)
-#[1]  1  2  3  4  5  6  7  8  9 10
-#
-# > .coalesce.idx(c(17,3,3,3,6,11,3,789,23,11,2))
-# [1]  17   3   6  11   3 789  23  11   2
-# 
-# Andrew G. Brown
-# 
-.coalesce.idx <- function(x) {
-  lut <- x
-  if(inherits(x, 'character'))
-    lut <- as.integer(factor(x, ordered = TRUE))
-  dif <- diff(c(0, lut))
-  x[which(dif != 0 | is.na(dif))]
 }
 
 # if (!isGeneric('reorderHorizons'))
@@ -120,10 +94,7 @@ setMethod('reorderHorizons',
             
             h <- object@horizons
             
-            if (is.null(target.order))
-              target.order <- metadata(object)$original.order
-              if (is.null(target.order))
-                target.order <- 1:nrow(h)
+            stopifnot(!is.null(target.order))
             
             current.order <- match(target.order,
                                    order(as.character(h[[idname(object)]]),
