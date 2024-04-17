@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Introduction to SoilProfileCollection Objects • aqp</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -50,22 +50,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Introduction-to-SoilProfileCollection-Objects.html">Introduction to SoilProfileCollection Objects</a>
-    </li>
-    <li>
-      <a href="../articles/Munsell-color-conversion.html">Munsell Color Conversion</a>
-    </li>
-    <li>
-      <a href="../articles/NCSP.html">Numerical Classification of Soil Profiles</a>
-    </li>
-    <li>
       <a href="../articles/aqp-overview.html">An Overview of the aqp Package</a>
+    </li>
+    <li>
+      <a href="../articles/Introduction-to-SoilProfileCollection-Objects.html">Introduction to SoilProfileCollection Objects</a>
     </li>
     <li>
       <a href="../articles/label-placement.html">Overlapping Annotation</a>
     </li>
     <li>
       <a href="../articles/missing-data.html">Missing Data</a>
+    </li>
+    <li>
+      <a href="../articles/Munsell-color-conversion.html">Munsell Color Conversion</a>
+    </li>
+    <li>
+      <a href="../articles/NCSP.html">Numerical Classification of Soil Profiles</a>
     </li>
     <li>
       <a href="../articles/new-in-aqp-2.html">What is new in aqp 2.x?</a>
@@ -373,8 +373,8 @@ follows.</p>
 <pre><code><span><span class="co">#&gt;  [1] 21 27 32 55 25 34  3 15 27 32 25 31 33 13 21 23 15 17 12 19 14 14 22 25 40 51 67 24 25 32</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sp4</span><span class="op">$</span><span class="va">elevation</span> <span class="co"># vector of simulated elevation (site data)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;  [1]  919.5812 1023.5359  902.9178 1000.5643  949.8384  987.2411  957.6021  769.3601 1305.4491</span></span>
-<span><span class="co">#&gt; [10] 1074.1325</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;  [1]  789.9935 1038.2976  634.4105  999.1643 1093.2329 1172.2617  726.7274  962.9012  963.3701</span></span>
+<span><span class="co">#&gt; [10]  957.5942</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># unit-length value explicitly targeting site data</span></span>
 <span><span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">collection_id</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -430,12 +430,12 @@ that don’t exactly conform to the original sorting may corrupt your
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ----- Sites (6 / 10 rows  |  5 / 5 columns) -----</span></span>
 <span><span class="co">#&gt;         id elevation collection_id constant group</span></span>
-<span><span class="co">#&gt;     colusa  919.5812             1        1     A</span></span>
-<span><span class="co">#&gt;      glenn 1023.5359             1        1     B</span></span>
-<span><span class="co">#&gt;      kings  902.9178             1        1     A</span></span>
-<span><span class="co">#&gt;   mariposa 1000.5643             1        1     B</span></span>
-<span><span class="co">#&gt;  mendocino  949.8384             1        1     A</span></span>
-<span><span class="co">#&gt;       napa  987.2411             1        1     B</span></span>
+<span><span class="co">#&gt;     colusa  789.9935             1        1     A</span></span>
+<span><span class="co">#&gt;      glenn 1038.2976             1        1     B</span></span>
+<span><span class="co">#&gt;      kings  634.4105             1        1     A</span></span>
+<span><span class="co">#&gt;   mariposa  999.1643             1        1     B</span></span>
+<span><span class="co">#&gt;  mendocino 1093.2329             1        1     A</span></span>
+<span><span class="co">#&gt;       napa 1172.2617             1        1     B</span></span>
 <span><span class="co">#&gt; [... more sites ...]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spatial Data:</span></span>
@@ -592,16 +592,16 @@ data and the CRS, respectively.</p>
 <span><span class="co"># extract coordinates as matrix</span></span>
 <span><span class="fu"><a href="../reference/initSpatial.html">getSpatial</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;              x       y</span></span>
-<span><span class="co">#&gt;  [1,] 353965.6 4109574</span></span>
-<span><span class="co">#&gt;  [2,] 354063.1 4109546</span></span>
-<span><span class="co">#&gt;  [3,] 354091.3 4109545</span></span>
-<span><span class="co">#&gt;  [4,] 354417.9 4109518</span></span>
-<span><span class="co">#&gt;  [5,] 354044.2 4109536</span></span>
-<span><span class="co">#&gt;  [6,] 354021.5 4109541</span></span>
-<span><span class="co">#&gt;  [7,] 354006.8 4109585</span></span>
-<span><span class="co">#&gt;  [8,] 354077.8 4109540</span></span>
-<span><span class="co">#&gt;  [9,] 353932.4 4109609</span></span>
-<span><span class="co">#&gt; [10,] 354043.8 4109363</span></span></code></pre>
+<span><span class="co">#&gt;  [1,] 354007.0 4109619</span></span>
+<span><span class="co">#&gt;  [2,] 353936.1 4109509</span></span>
+<span><span class="co">#&gt;  [3,] 353995.0 4109512</span></span>
+<span><span class="co">#&gt;  [4,] 353974.9 4109535</span></span>
+<span><span class="co">#&gt;  [5,] 354044.5 4109536</span></span>
+<span><span class="co">#&gt;  [6,] 354275.5 4109588</span></span>
+<span><span class="co">#&gt;  [7,] 354004.7 4109306</span></span>
+<span><span class="co">#&gt;  [8,] 354057.8 4109801</span></span>
+<span><span class="co">#&gt;  [9,] 354011.8 4109497</span></span>
+<span><span class="co">#&gt; [10,] 353808.8 4109554</span></span></code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get/set spatial reference system using prj()&lt;-</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-crs.html">prj</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'+proj=utm +zone=11 +datum=NAD83'</span></span>
@@ -1658,13 +1658,13 @@ profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
 <span><span class="co"># note: horizon names are lost due to aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d.gsm</span>, <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;   variable id    value contributing_fraction top bottom</span></span>
-<span><span class="co">#&gt; 1       p1  1 17.61655                   1.0   0      5</span></span>
-<span><span class="co">#&gt; 2       p1  1 17.61655                   1.0   5     15</span></span>
-<span><span class="co">#&gt; 3       p1  1 22.62088                   1.0  15     30</span></span>
-<span><span class="co">#&gt; 4       p1  1 21.77929                   1.0  30     60</span></span>
-<span><span class="co">#&gt; 5       p1  1 18.97028                   1.0  60    100</span></span>
-<span><span class="co">#&gt; 6       p1  1 17.18451                   0.6 100    200</span></span>
-<span><span class="co">#&gt; 7       p1  2 24.58989                   1.0   0      5</span></span></code></pre>
+<span><span class="co">#&gt; 1       p1  1 45.44919             1.0000000   0      5</span></span>
+<span><span class="co">#&gt; 2       p1  1 52.60948             1.0000000   5     15</span></span>
+<span><span class="co">#&gt; 3       p1  1 50.62579             1.0000000  15     30</span></span>
+<span><span class="co">#&gt; 4       p1  1 46.70293             1.0000000  30     60</span></span>
+<span><span class="co">#&gt; 5       p1  1 37.54221             1.0000000  60    100</span></span>
+<span><span class="co">#&gt; 6       p1  1 31.23363             0.7826087 100    200</span></span>
+<span><span class="co">#&gt; 7       p1  2 16.26688             1.0000000   0      5</span></span></code></pre>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
 -&gt; wide format with {data.table} <code><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
@@ -1817,7 +1817,7 @@ Profile Distances</a></li>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>
