@@ -28,7 +28,7 @@ processing tasks <doi:10.1016/j.cageo.2012.10.020>. These functions and
 data structures have been extensively tested and documented, applied to
 projects involving hundreds of thousands of soil profiles, and deeply
 integrated into widely used tools such as SoilWeb
-<https://casoilresource.lawr.ucdavis.edu/soilweb-apps/>. Components of
+<https://casoilresource.lawr.ucdavis.edu/soilweb-apps>. Components of
 the AQP project (aqp, soilDB, sharpshootR, soilReports packages) serve
 an important role in routine data analysis within the USDA-NRCS Soil
 Science Division. The AQP suite of R packages offer a convenient
