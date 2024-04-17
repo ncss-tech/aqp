@@ -117,6 +117,21 @@ citation("aqp")
 #> 'options(citation.bibtex.max=999)'.
 ```
 
+## Related Papers and Book Chapters
+
+- Beaudette D.E., P. Roudier, and J. Skovlin. 2016. Probabilistic
+  representation of genetic soil horizons. In Book Digital soil
+  morphometrics. Springer.
+- Maynard, J.J., S.W. Salley, D.E. Beaudette, and J.E. Herrick. 2020.
+  Numerical soil classification supports soil identification by citizen
+  scientists using limited, simple soil observations. Soil Science
+  Society of America Journal 84:1675-1692.
+- Beaudette, D. E., J. Skovlin, A. G. Brown, P. Roudier, and S. M.
+  Roecker. “Algorithms for Quantitative Pedology.” In Geopedology,
+  edited by Joseph Alfred Zinck, Graciela Metternicht, Héctor Francisco
+  del Valle, and Marcos Angelini, 201–22. Cham: Springer International
+  Publishing, 2023. <https://doi.org/10.1007/978-3-031-20667-2_11>.
+
 ## Related Packages
 
 - [soilDB](https://github.com/ncss-tech/soilDB)
@@ -131,7 +146,7 @@ citation("aqp")
 - [Overlapping
   Annotation](https://ncss-tech.github.io/aqp/articles/label-placement.html)
 - [What is new in aqp
-  2.0?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
+  2.x?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
 
 ## Tutorials
 

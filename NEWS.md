@@ -1,9 +1,10 @@
-# aqp 2.0.3 (2024-04-09)
+# aqp 2.0.3 (2024-04-17)
+ * CRAN release
  * `simulateColor()` gains new method `mvnorm` for simulating plausible colors
    - package mvtnorm added to SUGGESTS
  * performance improvements in `profileInformationIndex()`, `dice()`, `slab()`, `spc2mpspline()`, `fillHzGaps()`, and `flagOverlappingHz()`
  * aesthetic improvements in `huePositionCircle()`
- * new function `thicknessOf()` used for calculating thickness of horizons within each profile of a SoilProfileCollection based on horizon-level logical expressions encoded in a function. Default behavior uses pattern matching on the horizon designation name.
+ * new function `thicknessOf()` used for calculating thickness of horizons within each profile of a `SoilProfileCollection` based on horizon-level logical expressions encoded in a function. Default behavior uses pattern matching on the horizon designation name.
 
 # aqp 2.0.2 (2023-11-18)
  * CRAN release
