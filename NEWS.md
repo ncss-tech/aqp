@@ -1,4 +1,4 @@
-# aqp 2.0.3 (2024-04-17)
+# aqp 2.0.3 (2024-04-18)
  * CRAN release
  * `simulateColor()` gains new method `mvnorm` for simulating plausible colors
    - package mvtnorm added to SUGGESTS
