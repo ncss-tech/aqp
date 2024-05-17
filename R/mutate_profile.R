@@ -44,7 +44,7 @@ setMethod("mutate_profile", signature(object = "SoilProfileCollection"),
 
 #' @param expr A list of expressions in terms of column names in site or horizon table of `object`
 #' @rdname mutate_profile
-#' @export mutate_profile
+#' @export 
 #' @examples
 #' data(jacobs2000)
 #' 
