@@ -153,7 +153,7 @@ In Harden (1982) "rubification" is calculated relative to a reference parent mat
 <span class="r-in"><span><span class="va">jacobs2000</span><span class="op">$</span><span class="va">rubif</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">jacobs2000</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># sum the melanization index over the 0-100cm interval</span></span></span>
-<span class="r-in"><span>  <span class="va">p0_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="segment.html">segment</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">p0_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="hz_segment.html">hz_segment</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">ccol</span> <span class="op">&lt;-</span> <span class="fu"><a href="parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">c_horizon_color</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -205,7 +205,7 @@ In Harden (1982) "rubification" is calculated relative to a reference parent mat
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>

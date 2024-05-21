@@ -190,9 +190,6 @@
     <loc>/reference/dice-SoilProfileCollection-method.html</loc>
   </url>
   <url>
-    <loc>/reference/dissolve_hz.html</loc>
-  </url>
-  <url>
     <loc>/reference/dollarsign-set.html</loc>
   </url>
   <url>
@@ -367,6 +364,15 @@
     <loc>/reference/hzTransitionProbabilities.html</loc>
   </url>
   <url>
+    <loc>/reference/hz_dissolve.html</loc>
+  </url>
+  <url>
+    <loc>/reference/hz_intersect.html</loc>
+  </url>
+  <url>
+    <loc>/reference/hz_segment.html</loc>
+  </url>
+  <url>
     <loc>/reference/hzdesgnname.html</loc>
   </url>
   <url>
@@ -527,9 +533,6 @@
   </url>
   <url>
     <loc>/reference/rowley2019.html</loc>
-  </url>
-  <url>
-    <loc>/reference/segment.html</loc>
   </url>
   <url>
     <loc>/reference/shannonEntropy.html</loc>
