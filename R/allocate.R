@@ -413,7 +413,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   
   # combine results and subset to 0-25cm
   df_bs  <- cbind(df[vars2[1:3]], BS1 = bs1, BS2 = bs2)
-  df_bs  <- segment(df_bs, intervals = c(0, 25), hzdepcols = c("hztop", "hzbot"))
+  df_bs  <- hz_segment(df_bs, intervals = c(0, 25), depthcols = c("hztop", "hzbot"))
   df_bs  <- df_bs[df_bs$segment_id == "00-25", -6]
   
   # aggregate the horizons

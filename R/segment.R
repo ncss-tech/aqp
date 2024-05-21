@@ -7,9 +7,10 @@
 #' @param object either a `SoilProfileCollection` or `data.frame`
 #' @param intervals a vector of integers over which to slice the horizon data (e.g. `c(25, 100)` or `25:100`)
 #' @param trim logical, when `TRUE` horizons in `object` are truncated to the min/max specified in `intervals`. When `FALSE`, those horizons overlapping an interval are marked as such. Care should be taken when specifying more than one depth interval and `trim = FALSE`.
-#' @param hzdepcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("hzdept", "hzdepb")`), only necessary if `object` is a `data.frame`.
+#' @param depthcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("top", "bottom")`), only necessary if `object` is a 
+#' @param hzdepcols deprecated being replaced by depthcols.
 #' 
-#' @details `segment()` performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. `slice()` or `slab()`.
+#' @details `hz_segment()` performs no aggregation or resampling of the source data, rather, labels are added to horizon records for subsequent aggregation or summary. This makes it possible to process a very large number of records outside of the constraints associated with e.g. `slice()` or `slab()`.
 #'
 #' @return Either a `SoilProfileCollection` or `data.frame` with the original horizon data segmented by depth intervals. There are usually more records in the resulting object, one for each time a segment interval partially overlaps with a horizon. A new column called `segment_id` identifying the depth interval is added.
 #' 
@@ -28,7 +29,7 @@
 #' depths(sp1) <- id ~ top + bottom
 #' 
 #' # segment and trim
-#' z <- segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE)
+#' z <- hz_segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE)
 #' 
 #' # display segment labels
 #' # note that there are new horizon boundaries at segments
@@ -52,7 +53,7 @@
 #' 
 #' a.slab <- slab(s, fm = ~ p1, slab.structure = c(0, 10, 20, 30), slab.fun = mean, na.rm = TRUE)
 #' 
-#' z <- segment(s, intervals = c(0, 10, 20, 30), trim = TRUE)
+#' z <- hz_segment(s, intervals = c(0, 10, 20, 30), trim = TRUE)
 #' z <- horizons(z)
 #' z$thick <- z$bottom - z$top
 #' 
@@ -75,22 +76,22 @@
 #' data(sp5)
 #' 
 #' # segment by upper 25-cm
-#' test1 <- segment(sp5, intervals = c(0, 100))
+#' test1 <- hz_segment(sp5, intervals = c(0, 100))
 #' print(test1)
 #' nrow(test1)
 #' print(object.size(test1), units = "Mb")
 #' 
 #' # segment by 1-cm increments
-#' test2 <- segment(sp5, intervals = 0:100)
+#' test2 <- hz_segment(sp5, intervals = 0:100)
 #' print(test2)
 #' nrow(test2)
 #' print(object.size(test2), units = "Mb")
 #' 
 #' 
 #' # segment and aggregate
-#' test3 <- segment(horizons(sp5), 
+#' test3 <- hz_segment(horizons(sp5), 
 #'                  intervals = c(0, 5, 15, 30, 60, 100, 200), 
-#'                  hzdepcols = c("top", "bottom")
+#'                  depthcols = c("top", "bottom")
 #' )
 #' test3$hzthk <- test3$bottom - test3$top
 #' test3_agg <- by(test3, test3$segment_id, function(x) {
@@ -104,7 +105,12 @@
 #' 
 #' head(test3_agg)
 #' 
-segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
+hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bottom"), hzdepcols = NULL) {
+
+  if (!is.null(hzdepcols) & is.null(depthcols)) {
+    .Deprecated("hzdepcols is being replaced with depthcols to be consistent with SoilProfileCollection()")
+    depthcols <- hzdepcols
+  }
   
   # depth interval rules
   dep <- data.frame(
@@ -119,10 +125,10 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
     formatC(dep$bot, width = n, flag = 0)
   )
   
-  # argument sanity check
+  # argument sanity check ----
   test_spc <- inherits(object, 'SoilProfileCollection')
   test_df  <- inherits(object, 'data.frame')
-  test_hd  <- !is.null(hzdepcols) & length(hzdepcols) == 2
+  test_hd  <- !is.null(depthcols) & length(depthcols) == 2
   test_dep <- is.numeric(dep$top) & is.numeric(dep$bot) & all(dep$top < dep$bot)
   
   
@@ -131,7 +137,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   }
   
   if (!test_spc & (!test_df | !test_hd)) {
-    stop("if the input is a data.frame then hzdepcols must not be NULL and length(hzdepcols) == 2")
+    stop("if the input is a data.frame then depthcols must not be NULL and length(depthcols) == 2")
   }
   
   if (!test_dep) {
@@ -139,64 +145,67 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   }
   
   
-  # standardize inputs
+  # standardize inputs ----
   if (test_spc) {
-    peid      <- idname(object)
-    hzid      <- hzidname(object)
-    hzdepcols <- horizonDepths(object)
+    idcol     <- idname(object)
+    hzidcol   <- hzidname(object)
+    depthcols <- horizonDepths(object)
     h  <- horizons(object)
-    names(h)[names(h) %in% c(peid, hzid)] <- c("peid", "hzid")
+    names(h)[names(h) %in% c(idcol, hzidcol)] <- c("idcol", "hzidcol")
   } else {
     h <- object
   }
-  names(h)[names(h) %in% hzdepcols] <- c("hzdept", "hzdepb")
+  names(h)[names(h) %in% depthcols] <- c("top", "bot")
   
+
   ## TODO: consider using dice()
-  # filter horizons and trim
+  # filter horizons and trim ----
   .slice <- function(h, top = NULL, bot = NULL) {
-    idx <- h$hzdept <= bot & h$hzdepb >= top
+    idx <- which(h$top < bot & h$bot > top)
     h <- h[idx, ]
     
-    # causing errors when FALSE
+    # causing errors when FALSE; fixed?
     if (trim == TRUE) {
-      h <- within(h, {
-        hzdept = ifelse(hzdept < top, top, hzdept)
-        hzdepb = ifelse(hzdepb > bot, bot, hzdepb)
-        })
+      h$top = ifelse(h$top < top, top, h$top)
+      h$bot = ifelse(h$bot > bot, bot, h$bot)
       
-    h <- h[(h$hzdepb - h$hzdept) > 0, ]
+      # h <- h[(h$bot - h$top) > 0, ]
     }
+    
+    # h <- h[!is.na(h$peiid), ] 
     
     return(h)
   }
   
-  # slice spc by intervals
+  # slice spc by intervals ----
   # dep$df <- lapply(1:nrow(dep), function(x) h[0, ]) # pre-allocate memory
-  dep$df <- list(h[0, ])[rep(1, nrow(dep))] # pre-allocate memory faster
+  df_str <- cbind(h[0, ], segment_id = NA_character_[0])
+  dep$df <- list(df_str)[rep(1, nrow(dep))] # pre-allocate memory faster
   h <- {
     split(dep, dep$id) ->.;
     lapply(., function(x) {
-      x$df[[1]] <- cbind(.slice(h, top = x$top, bot = x$bot), segment_id = x$id)
+      temp <- .slice(h, top = x$top, bot = x$bot)
+      if (nrow(temp) > 0) x$df[[1]] <- cbind(temp, segment_id = x$id)
       return(x$df[[1]])
     }) ->.;
     do.call("rbind", .) ->.;
     }
-  names(h)[names(h) %in% c("hzdept", "hzdepb")] <- hzdepcols
+  names(h)[names(h) %in% c("top", "bot")] <- depthcols
   
   
   if (test_spc) {
-    h <- h[order(h$peid, h[[hzdepcols[1]]]), ]
+    h <- h[order(h$idcol, h[[depthcols[1]]]), ]
     
     # merge to re-add spc with NA
-    h_orig <- data.frame(peid = names(table(horizons(object)[peid])), stringsAsFactors = FALSE)
-    h <- merge(h_orig, h, by = "peid", all.x = TRUE, sort = FALSE)
+    h_orig <- data.frame(idcol = names(table(horizons(object)[idcol])), stringsAsFactors = FALSE)
+    h <- merge(h_orig, h, by = "idcol", all.x = TRUE, sort = FALSE)
     rm(h_orig)
     
     ## TODO: consider adding a flag to indicate "new" horizon records that have been added
     
-    # rebuild SPC
-    names(h)[names(h) == "peid"] <- peid
-    names(h)[names(h) == "hzid"] <- hzid
+    # rebuild SPC ----
+    names(h)[names(h) == "idcol"]   <- idcol
+    names(h)[names(h) == "hzidcol"] <- hzidcol
     h$hzID <- 1:nrow(h)
     
     replaceHorizons(object) <- h
@@ -212,6 +221,14 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
   
 }
 
+#' @export 
+#' @rdname hz_segment
+segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bottom"), hzdepcols = NULL) {
+  .Deprecated("segment() will be deprecated and replaced by hz_segment()")
+  hz_segment(object, intervals, trim, depthcols, hzdepcols)
+}
+
+
 
 #' @title Dissolving horizon boundaries by grouping variables
 #' 
@@ -219,15 +236,17 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 #'
 #' @param object a \code{data.frame}
 #' @param by character: column names, to be used as grouping variables, within the object.
-#' @param id character: column name of the pedon ID within the object.
-#' @param hztop character: column name of the horizon top depth within the object.
-#' @param hzbot character: column name of the horizon bottom depth in the object.
+#' @param idcol character: column name of the pedon ID within the object.
+#' @param depthcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("top", "bottom")`).
+#' @param id deprecated and replaced with idcol.
+#' @param hztop deprecated and replaced by depthcols.
+#' @param hzbot deprecated and replaced by depthcols.
 #' @param collapse logical: indicating whether to not combine grouping variables before dissolving.
 #' @param order logical: indicating whether or not to order the object by the id, hztop, and hzbot columns. 
-#' #' 
+#'
 #' @details This function assumes the profiles and horizons within the object follow the logic defined by \code{checkHzDepthLogic} (e.g. records are ordered sequentially by id, hztop, and hzbot and without gaps). If the records are not ordered, set the \code{order = TRUE}.
 #'
-#' @return A \code{data.frame} with the original id, by grouping variables, and non-consecutive horizon depths. 
+#' @return A \code{data.frame} with the original idcol, by grouping variables, and non-consecutive horizon depths. 
 #' 
 #' @author Stephen Roecker
 #' 
@@ -245,7 +264,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 #' spc$genhz <- generalize.hz(spc$name, c("A", "E", "B", "C"), c("A", "E", "B", "C")) 
 #' h <- horizons(spc)
 #' 
-#' test <- dissolve_hz(h, by = c("genhz", "dep_5"), id = "id", hztop = "top", hzbot = "bottom")
+#' test <- hz_dissolve(h, by = c("genhz", "dep_5"), idcol = "id", depthcols = c("top", "bottom"))
 #' 
 #' vars <- c("id", "top", "bottom", "genhz", "dep_5")
 #' h[h$id == "92-1", vars]
@@ -254,9 +273,9 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 #' 
 #' # example 2
 #' df <- data.frame(
-#'     peiid = 1,
-#'     hzdept = c(0, 5,  10, 15, 25, 50), 
-#'     hzdepb = c(5, 10, 15, 25, 50, 100),
+#'     id = 1,
+#'     top    = c(0, 5,  10, 15, 25, 50), 
+#'     bottom = c(5, 10, 15, 25, 50, 100),
 #'     hzname = c("A1",  "A2",  "E/A", "2Bt1", "2Bt2", "2C"),
 #'     genhz  = c("A",   "A",   "E",   "2Bt",  "2Bt", "2C"),
 #'     texcl  = c("sil", "sil", "sil", "sl",   "sl",   "s")
@@ -264,49 +283,68 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = NULL) {
 #' 
 #' df
 #' 
-#' dissolve_hz(df, c("genhz", "texcl"))
-#' dissolve_hz(df, c("genhz", "texcl"), collapse = TRUE)
+#' hz_dissolve(df, c("genhz", "texcl"))
+#' hz_dissolve(df, c("genhz", "texcl"), collapse = TRUE)
 #' 
-#' test <- dissolve_hz(df, "genhz")
+#' test <- hz_dissolve(df, "genhz")
 #' subset(test, value == "2Bt")
 #' 
 
 
-dissolve_hz <- function(object, by, id = "peiid", hztop = "hzdept", hzbot = "hzdepb", collapse = FALSE, order = FALSE) {
+hz_dissolve <- function(object, by, idcol = "id", id = NULL, hztop = NULL, hzbot = NULL, depthcols = c("top", "bottom"), collapse = FALSE, order = FALSE) {
   
   # id = "peiid"; hztop = "hzdept"; hzbot = "hzdepb", collapse = FALSE, order = FALSE
   
   # test inputs ----
   # argument sanity check
+  # check idcol and hzdepcols
+  if (!is.null(hztop) & !is.null(hzbot)) {
+    .Deprecated("hztop and hztop parameters will be deprecated and replaced by hzdepcols in order to be consistent with SoilProfileCollection()")
+    depthcols <- c(hztop, hzbot)
+  }
+  if (!is.null(id) & is.null(idcol)) {
+    .Deprecated("id will be deprecated and replaced by idcol in order to be consistent with SoilProfileCollection()")
+    depthcols <- c(hztop, hzbot)
+  }
+  
   # test_spc <- inherits(object, 'SoilProfileCollection')
   
   # check that object & by are the right class
-  test_object   <- inherits(object,   "data.frame")
-  test_by <- inherits(by, "character")
+  test_object <- inherits(object, "data.frame")
+  # test_by     <- inherits(by,     "character")
   
-  if (!any(test_object | test_by)) {
+  if (!any(test_object)) {
     stop("the object argument must be a data.frame, and by a character", call. = FALSE)
   }
-  
-  # check that by is not NULL
-  if (is.null(by)) stop("the by argument must not be NULL")
-  
+
   # check that collapse is a logical of length 1
   if (!inherits(collapse, "logical") || length(collapse) != 1) {
     stop("the collapse argument must be logical and a length of one", call. = FALSE)
   }
   
-  # check that the column names exisit within the object
-  var_names <- c(id = id, top = hztop, bot = hzbot, by)
-  if (!all(var_names %in% names(object))) {
-    stop("all arguments must match object names")
-  }
+  # check that by is not NULL
+  if (is.null(by)) stop("the by argument must not be NULL")
   
   # check that "by" are characters or convert
   if (any(!"character" %in% sapply(object[by], class))) {
     message("non-character grouping variables are being converted to characters")
     object[by] <- lapply(object[by], as.character)
   }
+  
+  # check that the column names exist within the object
+  var_names <- c(idcol = idcol, top = depthcols[1], bot = depthcols[2], by)
+  if (!all(var_names %in% names(object))) {
+    stop("all arguments must match object names")
+  }
+  
+  # check if previous dissolve_id exists and overwrite
+  nm  <- names(object)
+  idx <- nm == "dissolve_id"
+  if (any(idx)) {
+    warning("object contains an existing column named 'dissolve_id', it will be overwritten") 
+    object[idx] <- NULL
+  }
+  
   
   # standardize inputs ----
   df <- object
@@ -316,7 +354,7 @@ dissolve_hz <- function(object, by, id = "peiid", hztop = "hzdept", hzbot = "hzd
   # valid
   # vd_idx <- validate_depths(df, id = "id", hztop = "hzdept", bot = "hzdepb")
   if (order == TRUE) {
-    df <- df[order(df$id, df$top, df$bot), ]
+    df <- df[order(df$idcol, df$top, df$bot), ]
   }
   
   if (collapse == TRUE) {
@@ -328,27 +366,183 @@ dissolve_hz <- function(object, by, id = "peiid", hztop = "hzdept", hzbot = "hzd
   # var thickness ----
   var_dep <- lapply(by, function(x) {
     
-    con_bot <- rle(    paste(df$id, df[, x]))$length
-    con_top <- rle(rev(paste(df$id, df[, x])))$length
+    con_bot <- rle(    paste(df$idcol, df[, x]))$length
+    con_top <- rle(rev(paste(df$idcol, df[, x])))$length
     
     bot_idx <- cumsum(con_bot)
     top_idx <- cumsum(con_top)
     
     vd <- data.frame(
-      id  = df[bot_idx, "id"],
-      top = rev(rev(df$top)[top_idx]),
-      bot = df[bot_idx, "bot"],
+      idcol = df[bot_idx, "idcol"],
+      top   = rev(rev(df$top)[top_idx]),
+      bot   = df[bot_idx, "bot"],
       variable = x,
-      value    = df[bot_idx,    x]
+      value = df[bot_idx,    x]
     )
+    # vd$dissolve_id = 1:nrow(vd)
     
     return(vd)
   })
   var_dep <- do.call("rbind", var_dep)
   
+  
+  # this is redundant with collapse = TRUE, and inappropriate unless the grouping by variable matches across all horizon depths, otherwise it'll generate pedons with overlapping depths
+  # if (direction == "wide") {
+  #   var_dep <- reshape(
+  #     var_dep,
+  #     direction = "wide",
+  #     idvar = c("id", "top", "bot"),
+  #     timevar = "variable",
+  #     v.names = "value"
+  #   )
+  # }
+  
+  
   # undo standardization ----
   names(var_dep)[1:3] <- var_names[1:3]
   
   
+  # append dissolve_id
+  n <- c(
+    var_dep[["top"]], 
+    var_dep[["bottom"]]
+    ) |>
+    nchar() |>
+    max()
+  var_dep$dissolve_id <- paste0(
+    var_dep[[idcol]],
+    "_",
+    formatC(var_dep[["top"]],    width = n, flag = 0), 
+    "-", 
+    formatC(var_dep[["bottom"]], width = n, flag = 0),
+    "_",
+    var_dep[["variable"]]
+  )
+  
+  
   return(var_dep)
 }
+
+
+#' @export 
+#' @rdname hz_dissolve
+
+dissolve_hz <- function(object, by, idcol = "id", id = NULL, hztop = NULL, hzbot = NULL, depthcols = c("top", "bottom"), collapse = FALSE, order = FALSE) {
+  .Deprecated("dissolve_hz() will be deprecated and replaced by hz_dissolve()")
+  hz_dissolve(object, by, idcol, id, hztop, hzbot, depthcols, collapse, order)
+  }
+
+
+
+#' @title Intersecting horizon boundaries by horizon depths
+#' 
+#' @description This function intersects two horizon tables by harmonizing their depths and merging them where they overlap. This can be useful to rejoin the results of `hz_dissolve()` to it's original horizon table, and then perform an aggregation on the dissolved variables.
+#'
+#' @param x a \code{data.frame}
+#' @param y a \code{data.frame}
+#' @param idcol character: column name of the pedon ID within the object.
+#' @param depthcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("top", "bottom")`).
+#'
+#' @details .
+#'
+#' @return A \code{data.frame} with harmonized depth intervals (i.e. segment_id) and columns from both of the original \code{data.frame}. If both \code{data.frame} contain the same column names, they will both be returned (with the exception of the idcol and depthcols), and appended with either x or y to indicate which \code{data.frame} they originated from. 
+#' 
+#' @author Stephen Roecker
+#' 
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' h <- data.frame(
+#' id = 1,
+#' top    = c(0,  25, 44, 46, 50),
+#' bottom = c(25, 44, 46, 50, 100),
+#' by     = c("Yes", "Yes", "No", "No", "Yes"),
+#' clay   = c(10, 12, 27, 35, 16)
+#' )
+#' 
+#' h |> hz_dissolve("by")
+#' 
+#' h |> hz_dissolve("by") |> hz_intersect(x = _, y = h)
+#' 
+#' h |> hz_dissolve("by") |> 
+#'   hz_intersect(x = h, y = _) |> 
+#'   aggregate(clay ~ dissolve_id, data = _, mean)
+#' 
+
+
+
+hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
+  
+  # test inputs ----
+  # argument sanity check
+  
+  # check that depthcols ----
+  ## length == 2
+  if (length(depthcols) != 2) stop("depthcols must length must equal 2")
+  
+  ## check for matching column names 
+  x_deps <- names(x[depthcols])
+  y_deps <- names(y[depthcols])
+  
+  if (!all.equal(
+    names(x[depthcols]), 
+    names(y[depthcols]))
+    ) stop("both x and y must contain columns with names matching depthcols")
+  
+  
+  # check segment_id ----
+  ## if it exists, overwrite it
+  x_nm <- names(x)
+  y_nm <- names(y)
+  if (any(x_nm %in% "segment_id")) {
+    warning("x includes a column named 'segment_id', it will be overwritten")
+    x[x_nm == "segment_id"] <- NULL
+  }
+  
+  if (any(y_nm %in% "segment_id")) {
+    warning("y includes a column named 'segment_id', it will be overwritten")
+    y[y_nm == "segment_id"] <- NULL
+  }
+  
+  
+  # standardize inputs ----
+  var_names <- c(idcol = idcol, top = depthcols[1], bot = depthcols[2])
+  idx_x <- sapply(var_names[1:3], function(i) which(names(x) == i))
+  idx_y <- sapply(var_names[1:3], function(i) which(names(y) == i))
+  names(x)[idx_x] <- names(var_names)[1:3]
+  names(y)[idx_y] <- names(var_names)[1:3]
+  
+  
+  # intersect x & y ----
+  split(x, x$idcol) ->.;
+  lapply(., function(x) {
+    xi <- x
+    yi <- y[which(y$idcol == xi$idcol[1]), ]
+    
+    int <- c(xi$top, xi$bot, yi$top, yi$bot) |> 
+      sort() |> 
+      unique()
+    
+    xi_seg <- hz_segment(xi, intervals = int, depthcols = names(var_names[2:3]), trim = TRUE)
+    yi_seg <- hz_segment(yi, intervals = int, depthcols = names(var_names[2:3]), trim = TRUE)
+    
+    return(list(x_seg = xi_seg, y_seg = yi_seg))
+  }) ->.;
+  
+  x_seg <- lapply(., function(x) x[["x_seg"]]) |> do.call("rbind", args = _)
+  y_seg <- lapply(., function(x) x[["y_seg"]]) |> do.call("rbind", args = _)
+
+  xy_int <- merge(x_seg, y_seg, by = c("segment_id", "idcol", "top", "bot"))
+  
+  
+  # undo standardization ----
+  names(xy_int)[names(xy_int) %in% names(var_names)] <- var_names
+  
+  
+  return(xy_int)
+  }
+
+
+  
