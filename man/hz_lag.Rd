@@ -6,8 +6,8 @@
 \usage{
 hz_lag(
   object,
-  vars,
   lag = 1,
+  vars = NULL,
   idcol = "id",
   depthcols = c("top", "bottom"),
   order = FALSE
@@ -16,9 +16,9 @@ hz_lag(
 \arguments{
 \item{object}{a \code{data.frame}}
 
-\item{vars}{character: column names, to lag.}
-
 \item{lag}{integer: number of horizons to lag}
+
+\item{vars}{character: column names, to lag.}
 
 \item{idcol}{character: column name of the pedon ID within the object.}
 
@@ -45,10 +45,10 @@ texcl     = c("SL", "SL", "CL", "CL", "L"),
 clay   = c(10, 12, 27, 35, 16)
 )
 
-h |> hz_lag(c("texcl", "clay"), 1)
+h |> hz_lag()
 
 h |> 
-hz_lag(c("texcl", "clay"), 1) |> 
+hz_lag() |> 
 cbind(h) |>
 transform(
 clay_dif = clay - clay_lag.1,

@@ -558,10 +558,10 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 #' clay   = c(10, 12, 27, 35, 16)
 #' )
 #' 
-#' h |> hz_lag(c("texcl", "clay"), 1)
+#' h |> hz_lag()
 #' 
 #' h |> 
-#' hz_lag(c("texcl", "clay"), 1) |> 
+#' hz_lag() |> 
 #' cbind(h) |>
 #' transform(
 #' clay_dif = clay - clay_lag.1,
@@ -570,7 +570,12 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 
 
 
-hz_lag <- function(object, vars, lag = 1, idcol = "id", depthcols = c("top", "bottom"), order = FALSE) {
+hz_lag <- function(object, lag = 1, vars = NULL, idcol = "id", depthcols = c("top", "bottom"), order = FALSE) {
+  
+  nm <- names(object)
+  idx <- which(! nm %in% c(idcol, depthcols))
+  if (is.null(vars)) vars <- nm[idx]
+  
   
   # check arguments ----
   .check_depthcols_l(depthcols)
@@ -590,7 +595,7 @@ hz_lag <- function(object, vars, lag = 1, idcol = "id", depthcols = c("top", "bo
   
   
   # lag ----
-  .lag <- function(x, lag = lag, var = NULL) {
+  .lag <- function(x, lag = lag, vars = NULL) {
     
     nr  <- nrow(x)
     top <- 1:nr
@@ -598,17 +603,20 @@ hz_lag <- function(object, vars, lag = 1, idcol = "id", depthcols = c("top", "bo
     
     test_idcol <- x$idcol[top] == x$idcol[bot] 
     # test_deps  <- x$bot[top]   == x$top[bot]
-    lag_var <- ifelse(
-      test_idcol & !is.na(test_idcol), 
-      x[bot, var], 
-      NA)
+    # lag_vars <- ifelse(
+    #   test_idcol & !is.na(test_idcol),
+    #   x[bot, var],
+    #   NA)
+    lag_vars <- x[test_idcol * bot, vars]
+    names(lag_vars) <- paste0(vars, "_lag.", lag)
     
-    return(lag_var)
+    return(lag_vars)
   }
   
-  x_lag <- lapply(vars, function(y) .lag(x, lag = lag, y)) |>
-    do.call("data.frame", args = _)
-  names(x_lag) <- paste0(vars, "_lag.", lag)
+  # x_lag <- lapply(vars, function(y) .lag(x, lag = lag, y)) |>
+  #   do.call("data.frame", args = _)
+  # names(x_lag) <- paste0(vars, "_lag.", lag)
+  x_lag <- .lag(x, lag, vars)
   
   # # reset inputs ----
   # x <- .reset_inputs(cbind(x, x_lag), x_conversion)
