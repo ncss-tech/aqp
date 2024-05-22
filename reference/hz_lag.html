@@ -83,8 +83,8 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hz_lag</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
-<span>  <span class="va">vars</span>,</span>
 <span>  lag <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  idcol <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>  depthcols <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
 <span>  order <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -97,12 +97,12 @@
 <dd><p>a <code>data.frame</code></p></dd>
 
 
-<dt>vars</dt>
-<dd><p>character: column names, to lag.</p></dd>
-
-
 <dt>lag</dt>
 <dd><p>integer: number of horizons to lag</p></dd>
+
+
+<dt>vars</dt>
+<dd><p>character: column names, to lag.</p></dd>
 
 
 <dt>idcol</dt>
@@ -143,26 +143,26 @@
 <span class="r-in"><span>clay   <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">12</span>, <span class="fl">27</span>, <span class="fl">35</span>, <span class="fl">16</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> <span class="fu">hz_lag</span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"texcl"</span>, <span class="st">"clay"</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   texcl_lag.1 clay_lag.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          SL         12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          CL         27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          CL         35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           L         16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        &lt;NA&gt;         NA</span>
+<span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> <span class="fu">hz_lag</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    texcl_lag.1 clay_lag.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           SL         12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           CL         27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           CL         35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            L         16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA        &lt;NA&gt;         NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> </span></span>
-<span class="r-in"><span><span class="fu">hz_lag</span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"texcl"</span>, <span class="st">"clay"</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="fu">hz_lag</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>clay_dif <span class="op">=</span> <span class="va">clay</span> <span class="op">-</span> <span class="va">clay_lag.1</span>,</span></span>
 <span class="r-in"><span>texcl_contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="st">"-"</span>, <span class="va">texcl_lag.1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   texcl_lag.1 clay_lag.1 id top bottom texcl clay clay_dif texcl_contrast</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          SL         12  1   0     25    SL   10       -2          SL-SL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          CL         27  1  25     44    SL   12      -15          SL-CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          CL         35  1  44     46    CL   27       -8          CL-CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           L         16  1  46     50    CL   35       19           CL-L</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        &lt;NA&gt;         NA  1  50    100     L   16       NA           L-NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    texcl_lag.1 clay_lag.1 id top bottom texcl clay clay_dif texcl_contrast</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           SL         12  1   0     25    SL   10       -2          SL-SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           CL         27  1  25     44    SL   12      -15          SL-CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           CL         35  1  44     46    CL   27       -8          CL-CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            L         16  1  46     50    CL   35       19           CL-L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA        &lt;NA&gt;         NA  1  50    100     L   16       NA           L-NA</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
