@@ -382,27 +382,26 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
   # }
   
   
-  # reset inputs ----
-  var_dep <- .reset_inputs(var_dep, df_conversion)
-  
-  
   # append dissolve_id
   n <- c(
-    var_dep[["top"]], 
-    var_dep[["bottom"]]
+    var_dep$top, 
+    var_dep$bot
     ) |>
     nchar() |>
-    max()
+    max(na.rm = TRUE)
   var_dep$dissolve_id <- paste0(
-    var_dep[[idcol]],
+    var_dep$idcol,
     "_",
-    formatC(var_dep[["top"]],    width = n, flag = 0), 
+    formatC(var_dep$top, width = n, flag = 0), 
     "-", 
-    formatC(var_dep[["bottom"]], width = n, flag = 0),
+    formatC(var_dep$bot, width = n, flag = 0),
     "_",
-    var_dep[["variable"]]
+    var_dep$variable
   )
   
+  
+  # reset inputs ----
+  var_dep <- .reset_inputs(var_dep, df_conversion)
   
   return(var_dep)
 }
