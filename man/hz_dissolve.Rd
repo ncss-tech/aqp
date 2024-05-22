@@ -9,9 +9,6 @@ hz_dissolve(
   object,
   by,
   idcol = "id",
-  id = NULL,
-  hztop = NULL,
-  hzbot = NULL,
   depthcols = c("top", "bottom"),
   collapse = FALSE,
   order = FALSE
@@ -20,11 +17,9 @@ hz_dissolve(
 dissolve_hz(
   object,
   by,
-  idcol = "id",
-  id = NULL,
-  hztop = NULL,
-  hzbot = NULL,
-  depthcols = c("top", "bottom"),
+  id = "idcol",
+  hztop = "top",
+  hzbot = "bottom",
   collapse = FALSE,
   order = FALSE
 )
@@ -36,17 +31,17 @@ dissolve_hz(
 
 \item{idcol}{character: column name of the pedon ID within the object.}
 
-\item{id}{deprecated and replaced with idcol.}
-
-\item{hztop}{deprecated and replaced by depthcols.}
-
-\item{hzbot}{deprecated and replaced by depthcols.}
-
 \item{depthcols}{a character vector of length 2 specifying the names of the horizon depths (e.g. \code{c("top", "bottom")}).}
 
 \item{collapse}{logical: indicating whether to not combine grouping variables before dissolving.}
 
 \item{order}{logical: indicating whether or not to order the object by the id, hztop, and hzbot columns.}
+
+\item{id}{deprecated and replaced with idcol.}
+
+\item{hztop}{deprecated and replaced by depthcols.}
+
+\item{hzbot}{deprecated and replaced by depthcols.}
 }
 \value{
 A \code{data.frame} with the original idcol, by grouping variables, and non-consecutive horizon depths.

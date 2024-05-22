@@ -5,21 +5,9 @@
 \alias{segment}
 \title{Segmenting of Soil Horizon Data by Depth Interval}
 \usage{
-hz_segment(
-  object,
-  intervals,
-  trim = TRUE,
-  depthcols = c("top", "bottom"),
-  hzdepcols = NULL
-)
+hz_segment(object, intervals, trim = TRUE, depthcols = c("top", "bottom"))
 
-segment(
-  object,
-  intervals,
-  trim = TRUE,
-  depthcols = c("top", "bottom"),
-  hzdepcols = NULL
-)
+segment(object, intervals, trim = TRUE, hzdepcols = c("top", "bottom"))
 }
 \arguments{
 \item{object}{either a \code{SoilProfileCollection} or \code{data.frame}}

@@ -38,9 +38,10 @@ h |> hz_dissolve("by")
 
 h |> hz_dissolve("by") |> hz_intersect(x = _, y = h)
 
-h |> hz_dissolve("by") |> 
-  hz_intersect(x = h, y = _) |> 
-  aggregate(clay ~ dissolve_id, data = _, mean)
+h |> 
+hz_dissolve("by") |> 
+hz_intersect(x = h, y = _) |>
+aggregate(clay ~ dissolve_id, data = _, mean)
 
 }
 \author{
