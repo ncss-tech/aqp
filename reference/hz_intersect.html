@@ -142,9 +142,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    046-050  1  46     50       by    No 1_044-050_by  No   35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5    050-100  1  50    100       by   Yes 1_050-100_by Yes   16</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> <span class="fu"><a href="hz_dissolve.html">hz_dissolve</a></span><span class="op">(</span><span class="st">"by"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
-<span class="r-in"><span>  <span class="fu">hz_intersect</span><span class="op">(</span>x <span class="op">=</span> <span class="va">h</span>, y <span class="op">=</span> <span class="va">_</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">clay</span> <span class="op">~</span> <span class="va">dissolve_id</span>, data <span class="op">=</span> <span class="va">_</span>, <span class="va">mean</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="fu"><a href="hz_dissolve.html">hz_dissolve</a></span><span class="op">(</span><span class="st">"by"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="fu">hz_intersect</span><span class="op">(</span>x <span class="op">=</span> <span class="va">h</span>, y <span class="op">=</span> <span class="va">_</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">clay</span> <span class="op">~</span> <span class="va">dissolve_id</span>, data <span class="op">=</span> <span class="va">_</span>, <span class="va">mean</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    dissolve_id clay</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1_000-044_by   11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 1_044-050_by   31</span>

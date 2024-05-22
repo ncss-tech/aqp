@@ -85,9 +85,6 @@
 <span>  <span class="va">object</span>,</span>
 <span>  <span class="va">by</span>,</span>
 <span>  idcol <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hztop <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hzbot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  depthcols <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
 <span>  collapse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  order <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -96,11 +93,9 @@
 <span><span class="fu">dissolve_hz</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  <span class="va">by</span>,</span>
-<span>  idcol <span class="op">=</span> <span class="st">"id"</span>,</span>
-<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hztop <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hzbot <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  depthcols <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"idcol"</span>,</span>
+<span>  hztop <span class="op">=</span> <span class="st">"top"</span>,</span>
+<span>  hzbot <span class="op">=</span> <span class="st">"bottom"</span>,</span>
 <span>  collapse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  order <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -120,18 +115,6 @@
 <dd><p>character: column name of the pedon ID within the object.</p></dd>
 
 
-<dt>id</dt>
-<dd><p>deprecated and replaced with idcol.</p></dd>
-
-
-<dt>hztop</dt>
-<dd><p>deprecated and replaced by depthcols.</p></dd>
-
-
-<dt>hzbot</dt>
-<dd><p>deprecated and replaced by depthcols.</p></dd>
-
-
 <dt>depthcols</dt>
 <dd><p>a character vector of length 2 specifying the names of the horizon depths (e.g. <code>c("top", "bottom")</code>).</p></dd>
 
@@ -142,6 +125,18 @@
 
 <dt>order</dt>
 <dd><p>logical: indicating whether or not to order the object by the id, hztop, and hzbot columns.</p></dd>
+
+
+<dt>id</dt>
+<dd><p>deprecated and replaced with idcol.</p></dd>
+
+
+<dt>hztop</dt>
+<dd><p>deprecated and replaced by depthcols.</p></dd>
+
+
+<dt>hzbot</dt>
+<dd><p>deprecated and replaced by depthcols.</p></dd>
 
 </dl></div>
     <div id="value">
