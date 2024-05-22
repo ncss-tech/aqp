@@ -534,8 +534,8 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 #' @description This function finds adjacent values to a horizon values at lagged distances.
 #'
 #' @param object a \code{data.frame}
-#' @param vars character: column names, to lag.
 #' @param lag integer: number of horizons to lag
+#' @param unit character: lag units in index or depth.
 #' @param idcol character: column name of the pedon ID within the object.
 #' @param depthcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("top", "bottom")`).
 #' @param order logical: indicating whether or not to order the #'
@@ -560,21 +560,25 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 #' 
 #' h |> hz_lag()
 #' 
+#' h |> hz_lag(-1)
+#' 
+#' h |> hz_lag(10:15, unit = "depth")
+#' 
 #' h |> 
 #' hz_lag() |> 
-#' cbind(h) |>
+#' cbind(h, lag = _) |>
 #' transform(
-#' clay_dif = clay - clay_lag.1,
-#' texcl_contrast = paste0(texcl, "-", texcl_lag.1))
+#' clay_dif = lag.clay_bot.1 - clay,
+#' texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1))
 #' 
 
 
 
-hz_lag <- function(object, lag = 1, vars = NULL, idcol = "id", depthcols = c("top", "bottom"), order = FALSE) {
+hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c("top", "bottom"), order = FALSE) {
   
   nm <- names(object)
-  idx <- which(! nm %in% c(idcol, depthcols))
-  if (is.null(vars)) vars <- nm[idx]
+  idx_std <- which(! nm %in% c(idcol, depthcols))
+  vars <- nm[idx_std]
   
   
   # check arguments ----
@@ -586,6 +590,20 @@ hz_lag <- function(object, lag = 1, vars = NULL, idcol = "id", depthcols = c("to
   x_std <- .standardize_inputs(object, idcol = idcol, depthcols = depthcols)
   x_conversion <- x_std$x_conversion
   x            <- x_std$x; rm(x_std)
+   
+  
+  # check depths ---
+  if (unit == "depth" & max(object[[depthcols[2]]] > 1000)) {
+    warning("The maximum depth is greater than 1000, which is implausible and will be removed. To avoid this action either remove the offending horizon or convert the depth units to a measure which will not exceed 1000")
+    x <- x[x$bot < 1000, ]
+  }
+  
+  test <- aggregate(top ~ idcol, data = x, length)$top |> max()
+  if (unit == "index") {
+    if ((test - 1) < max(lag)) {
+    stop("lag can not be greater than the maximum number of horizons")
+    }
+  }
   
   
   # order ----
@@ -595,31 +613,69 @@ hz_lag <- function(object, lag = 1, vars = NULL, idcol = "id", depthcols = c("to
   
   
   # lag ----
-  .lag <- function(x, lag = lag, vars = NULL) {
+  .lag_ind <- function(x, lag = lag) {
     
     nr  <- nrow(x)
     top <- 1:nr
-    bot <- c((1 + lag):nr, rep(NA, lag))
+    if (lag >= 0) bot <- c((1 + lag):nr, rep(NA, lag))
+    if (lag <  0) bot <- c(rep(NA, abs(lag)), 1:(nr + lag))
     
     test_idcol <- x$idcol[top] == x$idcol[bot] 
-    # test_deps  <- x$bot[top]   == x$top[bot]
-    # lag_vars <- ifelse(
-    #   test_idcol & !is.na(test_idcol),
-    #   x[bot, var],
-    #   NA)
     lag_vars <- x[test_idcol * bot, vars]
-    names(lag_vars) <- paste0(vars, "_lag.", lag)
-    
+    if (lag >= 0) names(lag_vars) <- paste0(vars, "_bot.",     lag)
+    if (lag <  0) names(lag_vars) <- paste0(vars, "_top.", abs(lag))
+
     return(lag_vars)
   }
   
-  # x_lag <- lapply(vars, function(y) .lag(x, lag = lag, y)) |>
-  #   do.call("data.frame", args = _)
-  # names(x_lag) <- paste0(vars, "_lag.", lag)
-  x_lag <- .lag(x, lag, vars)
+  
+  .lag_dep <- function(x, lag = lag) {
+    
+    n <- length(x)
+    x$.ID <- 1:nrow(x)
+    x_seg <- hz_segment(x, intervals = min(x$top):max(x$bot), trim = TRUE, depthcols = c("top", "bot"))
+    x_seg <- x_seg[1:(n + 1)]
+    
+    
+    x_seg <- lapply(lag, function(i) {
+      
+      x$bot_i <- x$bot + i
+      idx <- match(
+        paste(x$idcol,     x$bot_i),
+        paste(x_seg$idcol, x_seg$bot)
+        )
+      xi_seg <- x_seg[idx, ]
+      xi_seg <- x[xi_seg$.ID, vars, drop = FALSE]
+      xi_seg$.ID <- NULL
+      
+      if (i >= 0) names(xi_seg) <- paste0(names(xi_seg), "_bot.",     i)
+      if (i <  0) names(xi_seg) <- paste0(names(xi_seg), "_top.", abs(i))
+      
+      
+      return(xi_seg)
+    }) |>
+      do.call("cbind", args = _)
+    
+    return(x_seg)
+  }
+  
+  
+  if (unit == "index") {
+    x_lag <- lapply(lag, function(i) {
+      .lag_ind(x, i)
+    }) |>
+      do.call("cbind", args = _)
+    x_lag <- x_lag[sort(names(x_lag))]
+  }
+  if (unit == "depth") {
+    x_lag <- .lag_dep(x, lag)
+    x_lag <- x_lag[sort(names(x_lag))]
+  }
+  
   
   # # reset inputs ----
-  # x <- .reset_inputs(cbind(x, x_lag), x_conversion)
+  x <- .reset_inputs(cbind(x, x_lag), x_conversion)
+  
    
   return(x_lag)
 }

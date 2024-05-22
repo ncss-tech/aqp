@@ -7,7 +7,7 @@
 hz_lag(
   object,
   lag = 1,
-  vars = NULL,
+  unit = "index",
   idcol = "id",
   depthcols = c("top", "bottom"),
   order = FALSE
@@ -18,7 +18,7 @@ hz_lag(
 
 \item{lag}{integer: number of horizons to lag}
 
-\item{vars}{character: column names, to lag.}
+\item{unit}{character: lag units in index or depth.}
 
 \item{idcol}{character: column name of the pedon ID within the object.}
 
@@ -47,12 +47,16 @@ clay   = c(10, 12, 27, 35, 16)
 
 h |> hz_lag()
 
+h |> hz_lag(-1)
+
+h |> hz_lag(10:15, unit = "depth")
+
 h |> 
 hz_lag() |> 
-cbind(h) |>
+cbind(h, lag = _) |>
 transform(
-clay_dif = clay - clay_lag.1,
-texcl_contrast = paste0(texcl, "-", texcl_lag.1))
+clay_dif = lag.clay_bot.1 - clay,
+texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1))
 
 }
 \author{
