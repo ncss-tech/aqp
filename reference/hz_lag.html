@@ -84,7 +84,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hz_lag</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  lag <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  unit <span class="op">=</span> <span class="st">"index"</span>,</span>
 <span>  idcol <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>  depthcols <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span>,</span>
 <span>  order <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -101,8 +101,8 @@
 <dd><p>integer: number of horizons to lag</p></dd>
 
 
-<dt>vars</dt>
-<dd><p>character: column names, to lag.</p></dd>
+<dt>unit</dt>
+<dd><p>character: lag units in index or depth.</p></dd>
 
 
 <dt>idcol</dt>
@@ -144,25 +144,59 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> <span class="fu">hz_lag</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    texcl_lag.1 clay_lag.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           SL         12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           CL         27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           CL         35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            L         16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NA        &lt;NA&gt;         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    clay_bot.1 texcl_bot.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          12          SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          27          CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          35          CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          16           L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA         NA        &lt;NA&gt;</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> <span class="fu">hz_lag</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    clay_top.1 texcl_top.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA         NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          10          SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          12          SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          27          CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          35          CL</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> <span class="fu">hz_lag</span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">15</span>, unit <span class="op">=</span> <span class="st">"depth"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     clay_bot.10 clay_bot.11 clay_bot.12 clay_bot.13 clay_bot.14 clay_bot.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2            12          12          12          12          12          12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            16          16          16          16          16          16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.1          16          16          16          16          16          16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.2          16          16          16          16          16          16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA           NA          NA          NA          NA          NA          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     texcl_bot.10 texcl_bot.11 texcl_bot.12 texcl_bot.13 texcl_bot.14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             SL           SL           SL           SL           SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              L            L            L            L            L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.1            L            L            L            L            L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.2            L            L            L            L            L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA          &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     texcl_bot.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2             SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.1            L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.2            L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA          &lt;NA&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">h</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span><span class="fu">hz_lag</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">h</span>, lag <span class="op">=</span> <span class="va">_</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>clay_dif <span class="op">=</span> <span class="va">clay</span> <span class="op">-</span> <span class="va">clay_lag.1</span>,</span></span>
-<span class="r-in"><span>texcl_contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="st">"-"</span>, <span class="va">texcl_lag.1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    texcl_lag.1 clay_lag.1 id top bottom texcl clay clay_dif texcl_contrast</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           SL         12  1   0     25    SL   10       -2          SL-SL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           CL         27  1  25     44    SL   12      -15          SL-CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           CL         35  1  44     46    CL   27       -8          CL-CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5            L         16  1  46     50    CL   35       19           CL-L</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NA        &lt;NA&gt;         NA  1  50    100     L   16       NA           L-NA</span>
+<span class="r-in"><span>clay_dif <span class="op">=</span> <span class="va">lag.clay_bot.1</span> <span class="op">-</span> <span class="va">clay</span>,</span></span>
+<span class="r-in"><span>texcl_contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">texcl</span>, <span class="st">"-"</span>, <span class="va">lag.texcl_bot.1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id top bottom texcl clay lag.clay_bot.1 lag.texcl_bot.1 clay_dif</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1   0     25    SL   10             12              SL        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1  25     44    SL   12             27              CL       15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   1  44     46    CL   27             35              CL        8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   1  46     50    CL   35             16               L      -19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA  1  50    100     L   16             NA            &lt;NA&gt;       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    texcl_contrast</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           SL-SL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           SL-CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           CL-CL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5            CL-L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NA           L-NA</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
