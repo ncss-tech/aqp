@@ -466,14 +466,9 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
   ## length == 2
   if (length(depthcols) != 2) stop("depthcols must length must equal 2")
   
-  ## check for matching column names 
-  x_deps <- names(x[depthcols])
-  y_deps <- names(y[depthcols])
-  
-  if (!all.equal(
-    names(x[depthcols]), 
-    names(y[depthcols]))
-    ) stop("both x and y must contain columns with names matching depthcols")
+  ## check for matching column names
+  .check_names(x, c(idcol, depthcols))
+  .check_names(y, c(idcol, depthcols))
   
   
   # check segment_id ----
@@ -504,19 +499,24 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
     xi <- x
     yi <- y[which(y$idcol == xi$idcol[1]), ]
     
-    int <- c(xi$top, xi$bot, yi$top, yi$bot) |> 
-      sort() |> 
+    if (nrow(yi) > 0) {
+      
+      int <- c(xi$top, xi$bot, yi$top, yi$bot) |>
+      sort() |>
       unique()
-    
-    xi_seg <- hz_segment(xi, intervals = int, depthcols = names(x_conversion[2:3]), trim = TRUE)
-    yi_seg <- hz_segment(yi, intervals = int, depthcols = names(x_conversion[2:3]), trim = TRUE)
-    
-    return(list(x_seg = xi_seg, y_seg = yi_seg))
+      
+      xi_seg <- hz_segment(xi, intervals = int, depthcols = names(x_conversion[2:3]), trim = TRUE)
+      yi_seg <- hz_segment(yi, intervals = int, depthcols = names(x_conversion[2:3]), trim = TRUE)
+      
+      return(list(x_seg = xi_seg, y_seg = yi_seg))
+    }
   }) ->.;
+  
   
   x_seg <- lapply(., function(x) x[["x_seg"]]) |> do.call("rbind", args = _)
   y_seg <- lapply(., function(x) x[["y_seg"]]) |> do.call("rbind", args = _)
 
+  
   xy_int <- merge(x_seg, y_seg, by = c("segment_id", "idcol", "top", "bot"))
   
   
