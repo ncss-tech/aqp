@@ -517,7 +517,7 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
   y_seg <- lapply(., function(x) x[["y_seg"]]) |> do.call("rbind", args = _)
 
   
-  xy_int <- merge(x_seg, y_seg, by = c("segment_id", "idcol", "top", "bot"))
+  xy_int <- merge(x_seg, y_seg, by = c("segment_id", "idcol", "top", "bot"), sort = FALSE)
   
   
   # reset inputs ----
@@ -607,7 +607,7 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
   
   # order ----
   if (order) {
-    x[order(x$idcol, x$top, x$bot), ]
+    x <- x[order(x$idcol, x$top, x$bot), ]
   }
   
   
@@ -619,12 +619,13 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     if (lag >= 0) bot <- c((1 + lag):nr, rep(NA, lag))
     if (lag <  0) bot <- c(rep(NA, abs(lag)), 1:(nr + lag))
     
-    test_idcol <- x$idcol[top] == x$idcol[bot] 
-    lag_vars <- x[test_idcol * bot, vars]
-    if (lag >= 0) names(lag_vars) <- paste0(vars, "_bot.",     lag)
-    if (lag <  0) names(lag_vars) <- paste0(vars, "_top.", abs(lag))
+    test_idcol <- x$idcol[top] == x$idcol[bot]
+    test_idcol <- ifelse(! test_idcol, NA, TRUE)
+    x_lag <- x[test_idcol * bot, vars]
+    if (lag >= 0) names(x_lag) <- paste0(vars, "_bot.",     lag)
+    if (lag <  0) names(x_lag) <- paste0(vars, "_top.", abs(lag))
 
-    return(lag_vars)
+    return(x_lag)
   }
   
   
@@ -673,7 +674,7 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
   
   
   # # reset inputs ----
-  x <- .reset_inputs(cbind(x, x_lag), x_conversion)
+  x_lag <- .reset_inputs(x_lag, x_conversion)
   
    
   return(x_lag)
