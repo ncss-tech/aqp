@@ -714,8 +714,28 @@ aloc_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", i
   # x_sub <- x[x$rn %in% xy$rn, ]
   
   
+  # check segment_id ----
+  ## if it exists, overwrite it
+  x_nm <- names(x)
+  y_nm <- names(y)
+  if (any(x_nm == "segment_id") | any(y_nm == "segment_id")) {
+    x[x_nm == "segment_id"] <- NULL
+    y[y_nm == "segment_id"] <- NULL
+  }
+  
+  
+  # check dissolve_id ----
+  ## if it exists, overwrite it
+  x_nm <- names(x)
+  y_nm <- names(y)
+  if (any(x_nm == "dissolve_id") | any(y_nm == "dissolve_id")) {
+    x[x_nm == "dissolve_id"] <- NULL
+    y[y_nm == "dissolve_id"] <- NULL
+  }
+  
+  
   # standardize inputs
-  x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols, clay = clay)
+  x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols, clay = clay, taxpartsize = taxpartsize)
   x <- x_std$x; x_conv <- x_std$x_conversion
   x_std <- NULL
   
@@ -750,7 +770,8 @@ aloc_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", i
   clay_wt <- NULL
   
   xy_agg <- data.table::as.data.table(xy)[,
-    list(top     = min(top, na.rm = TRUE),
+    list(
+      top     = min(top, na.rm = TRUE),
       bot     = max(bot, na.rm = TRUE),
       clay_wt = weighted.mean(clay, w = thk_t,  na.rm = TRUE),
       # need to impute frags

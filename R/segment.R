@@ -700,7 +700,7 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
 
 
 # standardize inputs
-.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL, texcl = NULL, clay = NULL) {
+.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL, texcl = NULL, clay = NULL, taxpartsize = NULL) {
   
   # set new names
   var_names <- c(
@@ -709,7 +709,8 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     top     = depthcols[1], 
     bot     = depthcols[2],
     texcl   = texcl,
-    clay    = clay
+    clay    = clay,
+    taxpartsize = taxpartsize
   )
   
   # find matches
