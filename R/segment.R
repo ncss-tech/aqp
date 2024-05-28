@@ -396,7 +396,7 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
     "-", 
     formatC(var_dep$bot, width = n, flag = 0),
     "_",
-    var_dep$variable
+    var_dep$value
   )
   
   
@@ -700,14 +700,16 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
 
 
 # standardize inputs
-.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL) {
+.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL, texcl = NULL, clay = NULL) {
   
   # set new names
   var_names <- c(
     idcol   = idcol, 
     hzidcol = hzidcol, 
     top     = depthcols[1], 
-    bot     = depthcols[2]
+    bot     = depthcols[2],
+    texcl   = texcl,
+    clay    = clay
   )
   
   # find matches

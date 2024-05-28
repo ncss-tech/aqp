@@ -159,6 +159,15 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
 
 
   load(system.file("data/soiltexture.rda", package="aqp")[1])
+  
+  
+  # convert fine sand classes to their generic counterparts
+  df <- within(df, {
+    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
+    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
+    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
+  })
+  
 
 
   # check for texcl that don't match
@@ -175,7 +184,12 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
     idx <- paste(df$texcl[clay_not_na], df$clay[clay_not_na]) %in% paste(soiltexture$values$texcl, soiltexture$values$clay)
 
     if (any(!idx)) {
-      warning("not all the user supplied clay values fall within the texcl")
+      warning("not all the user supplied clay values fall within the texcl, so they will be set to NA")
+      
+      df$clay[which(!idx)] <- NA
+      
+      clay_not_null <- all(!is.na(df$clay))
+      clay_is_null  <- !clay_not_null
     }
   }
 
@@ -185,14 +199,6 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
   if (idx) {
     warning("some clay records < 0 or > 100%")
   }
-
-
-  # convert fine sand classes to their generic counterparts
-  df <- within(df, {
-    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
-    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
-    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
-  })
 
 
   # if clay is present
@@ -478,9 +484,9 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   idx <- df$fragvoltot >= 35
   if (any(idx)) {
     df[idx,] <- within(df[idx,], {
-      fpsc[texcl %in% sandytextures] = "sandy-skeletal"
-      fpsc[clay <  35]               = "loamy-skeletal"
       fpsc[clay >= 35]               = "clayey-skeletal"
+      fpsc[clay <  35]               = "loamy-skeletal"
+      fpsc[texcl %in% sandytextures] = "sandy-skeletal"
       })
   }
 
@@ -505,6 +511,7 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
 
   return(df$fpsc)
 }
+
 
 
 #' Parse texmod from texture

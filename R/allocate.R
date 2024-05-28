@@ -635,3 +635,205 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   return(sp)
 }
 
+
+#' @title Allocate Particle Size Control Class for the Control Section.
+#' 
+#' @description This function aggregates information in the horizon table and allocates it to the particle size control section.
+#'
+#' @param x a \code{data.frame} containing the original horizon table.
+#' @param y a \code{data.frame} containing the particle size control section depths for each idcol.
+#' @param taxpartsize \code{character} column name for taxonomic family particle size class.
+#' @param clay \code{character} column name for clay percent.
+# #' @param frags \code{character} column name for total rock fragments percent.
+#' @param idcol character: column name of the pedon ID within the object.
+#' @param depthcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("top", "bottom")`).
+#' 
+#' 
+#' @details
+#' This function differs from \code{\link{texture_to_taxpartsize}} in that is aggregates the results of \code{\link{texture_to_taxpartsize}}, and accounts for strongly contrasting particle size classes. 
+#' 
+#' 
+#'
+#' @return A \code{data.frame} object containing the original idcol and aggregated particle size control section allocation.
+#' 
+#' @seealso \code{\link{texture_to_taxpartsize}}
+#' 
+#' @export
+
+#' @examples
+#' 
+#' h <- data.frame(
+#' id = 1,
+#' hzname = c("A", "BA", "Bw", "BC", "C"),
+#' top    = c( 0, 10, 45, 60,  90),
+#' bottom = c(10, 45, 60, 90, 150),
+#' clay   = c(15, 16, 45, 20,  10),
+#' sand   = c(10, 35, 40, 50,  90),
+#' frags  = c( 0,  5, 10, 38,  40)
+#' )
+#'
+#' h <- cbind(
+#' h, 
+#' texcl = ssc_to_texcl(clay = h$clay, sand = h$sand)
+#' )
+#' 
+#' pscs <- data.frame(
+#' id = 1, 
+#' top = 25, 
+#' bottom = 100
+#' )
+#' 
+#' h <- cbind(
+#' h, 
+#' taxpartsize = texture_to_taxpartsize(
+#' texcl = h$texcl,
+#' clay  = h$clay, 
+#' sand  = h$sand,
+#' fragvoltot = h$frags
+#' ))
+#' 
+#' depths(h) <- id ~ top + bottom
+#' 
+#' pscs <- data.frame(id = h$id, rbind(estimatePSCS(h)))
+#' names(pscs)[2:3] <- c("top", "bottom")
+#' 
+#' aloc_taxpartsize(horizons(h), pscs)
+#'  
+#' 
+aloc_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", idcol = "id", depthcols = c("top", "bottom")) {
+  # need to incorporate fine sand for special cases of strongly contrasting classes and rock fragments (?)
+  # frags = "frags", 
+  
+  # strongly contrasting
+  pscs_sc <- NULL
+  pscs_sc <- c("Ashy over clayey", "Ashy over clayey-skeletal", "Ashy over loamy", "Ashy over loamy-skeletal", "Ashy over medial", "Ashy over medial-skeletal", "Ashy over pumiceous or cindery", "Ashy over sandy or sandy-skeletal", "Ashy-skeletal over clayey", "Ashy-skeletal over fragmental or cindery", "Ashy-skeletal over loamy-skeletal", "Ashy-skeletal over sandy or sandy-skeletal", "Cindery over loamy", "Cindery over medial", "Cindery over medial-skeletal", "Clayey over coarse-gypseous", "Clayey over fine-gypseous", "Clayey over fragmental", "Clayey over gypseous-skeletal", "Clayey over loamy", "Clayey over loamy-skeletal", "Clayey over sandy or sandy-skeletal", "Clayey-skeletal over sandy or sandy-skeletal", "Coarse-loamy over clayey", "Coarse-loamy over fragmental", "Coarse-loamy over sandy or sandy-skeletal", "Coarse-silty over clayey", "Coarse-silty over sandy or sandy-skeletal", "Fine-loamy over clayey", "Fine-loamy over fragmental", "Fine-loamy over sandy or sandy-skeletal", "Fine-silty over clayey", "Fine-silty over fragmental", "Fine-silty over sandy or sandy-skeletal", "Hydrous over clayey", "Hydrous over clayey-skeletal", "Hydrous over fragmental", "Hydrous over loamy", "Hydrous over loamy-skeletal", "Hydrous over sandy or sandy-skeletal", "Loamy over ashy or ashy-pumiceous", "Loamy over coarse-gypseous", "Loamy over fine-gypseous", "Loamy over pumiceous or cindery", "Loamy over sandy or sandy-skeletal", "Loamy-skeletal over cindery", "Loamy-skeletal over clayey", "Loamy-skeletal over fragmental", "Loamy-skeletal over gypseous-skeletal", "Loamy-skeletal over sandy or sandy-skeletal", "Medial over ashy", "Medial over ashy-pumiceous or ashy-skeletal", "Medial over clayey", "Medial over clayey-skeletal", "Medial over fragmental", "Medial over hydrous", "Medial over loamy", "Medial over loamy-skeletal", "Medial over pumiceous or cindery", "Medial over sandy or sandy-skeletal", "Medial-skeletal over fragmental or cindery", "Medial-skeletal over loamy-skeletal", "Medial-skeletal over sandy or sandy-skeletal", "Pumiceous or ashy-pumiceous over loamy", "Pumiceous or ashy-pumiceous over loamy-skeletal", "Pumiceous or ashy-pumiceous over medial", "Pumiceous or ashy-pumiceous over medial-skeletal", "Pumiceous or ashy-pumiceous over sandy or sandy skeletal", "Sandy over clayey", "Sandy over loamy", "Sandy-skeletal over loamy") |> 
+    tolower()
+  
+  x$rn <- 1:nrow(x)
+  # xy <- hz_intersect(x, y, idcol = idcol, depthcols = depthcols)
+  # x_sub <- x[x$rn %in% xy$rn, ]
+  
+  
+  # standardize inputs
+  x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols, clay = clay)
+  x <- x_std$x; x_conv <- x_std$x_conversion
+  x_std <- NULL
+  
+  y <- .standardize_inputs(y, idcol = idcol, depthcols = depthcols)$x
+  
+  
+  # dissolve on pscs
+  # calculate non-trimmed horizon thickness
+  x_dis <- x |>
+    hz_dissolve(by = "taxpartsize", idcol = "idcol", depthcols = c("top", "bot")) |>
+    transform(thk_o = bot - top)
+  
+  
+  # trim depths
+  # calculate trimmed horizon thickness
+  xy_dis <- x_dis |>
+    hz_intersect(y, idcol = "idcol", depthcols = c("top", "bot")) |>
+    transform(thk_t = bot - top)
+  
+  
+  # rejoin dissolved pscs to the original horizon table 
+  xy <- hz_intersect(x, xy_dis, idcol = "idcol", depthcols = c("top", "bot")) |> suppressWarnings()
+  x_dis  <- NULL
+  xy_dis <- NULL
+  
+  
+  # aggregate clay values within dissolved pscs
+  top <- NULL
+  bot <- NULL
+  thk_o <- NULL
+  thk_t <- NULL
+  clay_wt <- NULL
+  
+  xy_agg <- data.table::as.data.table(xy)[,
+    list(top     = min(top, na.rm = TRUE),
+      bot     = max(bot, na.rm = TRUE),
+      clay_wt = weighted.mean(clay, w = thk_t,  na.rm = TRUE),
+      # need to impute frags
+      # frag_wt = weighted.mean(total_frags_pct_nopf, w = thk_t), na.rm = TRUE,
+      thk_o   = sum(thk_o, na.rm = TRUE),
+      thk_t   = sum(thk_t, na.rm = TRUE)
+    ), by = c("idcol", "taxpartsize", "dissolve_id")
+    ]
+  data.table::setorder(xy_agg, idcol, top)
+  xy_agg <- as.data.frame(xy_agg)
+  
+  
+  # find adjacent horizons
+  xy_lag <- xy_agg |> 
+    hz_lag(idcol = "idcol", depthcols = c("top", "bot"))
+  
+  
+  # replace special cases of pscs with strongly contrasting classes
+  clay_wt_bot.1     <- NULL
+  taxpartsize_bot.1 <- NULL
+  
+  xy_agg <- cbind(xy_agg, xy_lag) |> 
+    within({
+      clay_dif = clay_wt_bot.1 - clay_wt
+      sc       = paste0(taxpartsize, " over ", taxpartsize_bot.1)
+      sc       = gsub(" over NA$", "", sc)
+      
+      sc = gsub("^fine over|^very-fine over", "clayey over", sc)
+      sc = gsub("over fine$|over very-fine$", "over clayey", sc)
+      sc = gsub("over fine over|over very-fine over", "over clayey over", sc)
+      sc = gsub("over sandy|over sandy-skeletal", "over sandy or sandy-skeletal", sc)
+      
+      idx_sc     = sc %in% pscs_sc
+      sc[idx_sc] = sc[idx_sc]
+    })
+  xy_lag <- NULL
+  
+  
+  # find multiple strongly contrasting ps classes within the control section
+  n_sc    <- NULL
+  n_peiid <- NULL
+  
+  test <- data.table::as.data.table(xy_agg)[, list(
+    n_sc    = sum(grepl("over", sc), na.rm = TRUE),
+    n_peiid = length(idcol)
+  ),
+  by = "idcol"
+  ] |>
+    as.data.frame()
+  
+  
+  # pick the sc pscs with the largest contrast or pscs with the greatest thickness
+  xy_res <- xy_agg |>
+    merge(test, by = "idcol", all.x = TRUE, sort = FALSE) |>
+    transform(
+      idx_sc = grepl(" over ", sc)
+    )
+  
+  xy_res <- data.table::as.data.table(xy_res)[, list(
+    pscs1 = sc[n_sc == 0 & n_peiid == 1],
+    pscs2 = sc[n_sc == 1 & n_peiid  > 1 & idx_sc],
+    pscs3 = sc[which.max(thk_t[n_sc == 0 & n_peiid == 2])],
+    pscs4 = sc[n_sc == 1 & idx_sc],
+    pscs5 = sc[which.max(abs(clay_dif[n_sc > 1 & !is.na(sc)]))]
+    ),
+    by =  "idcol"
+    ] |>
+    as.data.frame() |>
+    within({
+      # need to add fix for special case of sandy over loamy which requires fine sand percent
+      taxpartsize = paste(pscs1, pscs3, pscs4, pscs5, sep = "")
+      taxpartsize = gsub("NA", "", taxpartsize)
+      pscs1 = NULL
+      pscs2 = NULL
+      pscs3 = NULL
+      pscs4 = NULL
+      pscs5 = NULL
+    })
+  
+  
+  # reset inputs
+  xy_res <- .reset_inputs(xy_res, x_conv[1])
+  
+  
+  return(xy_res)
+}
