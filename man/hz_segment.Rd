@@ -116,7 +116,7 @@ head(test3_agg)
 
 }
 \seealso{
-\code{\link[=dice]{dice()}}, \code{\link[=glom]{glom()}}
+\code{\link[=dice]{dice()}}, \code{\link[=glom]{glom()}}, \code{\link[=hz_dissolve]{hz_dissolve()}}, \code{\link[=hz_lag]{hz_lag()}}, \code{\link[=hz_intersect]{hz_intersect()}}
 }
 \author{
 Stephen Roecker

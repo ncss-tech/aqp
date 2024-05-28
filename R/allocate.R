@@ -60,6 +60,8 @@
 #'
 #' @return A vector or \code{data.frame} object.
 #' 
+#' @author Stephen Roecker
+#' 
 #' @references 
 #' Abrol, I., Yadav, J. & Massoud, F. 1988. \href{https://www.fao.org/3/x5871e/x5871e00.htm}{Salt-affected soils and their management}. No. Bulletin 39. Rome, FAO Soils.
 #' 
@@ -656,7 +658,9 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 #'
 #' @return A \code{data.frame} object containing the original idcol and aggregated particle size control section allocation.
 #' 
-#' @seealso \code{\link{texture_to_taxpartsize}}
+#' @author Stephen Roecker
+#' 
+#' @seealso [texture_to_taxpartsize()], [PSCS_levels()]
 #' 
 #' @export
 
@@ -697,17 +701,14 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 #' pscs <- data.frame(id = h$id, rbind(estimatePSCS(h)))
 #' names(pscs)[2:3] <- c("top", "bottom")
 #' 
-#' aloc_taxpartsize(horizons(h), pscs)
+#' hz_to_taxpartsize(horizons(h), pscs)
 #'  
 #' 
-aloc_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", idcol = "id", depthcols = c("top", "bottom")) {
+hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", idcol = "id", depthcols = c("top", "bottom")) {
   # need to incorporate fine sand for special cases of strongly contrasting classes and rock fragments (?)
   # frags = "frags", 
   
   # strongly contrasting
-  pscs_sc <- NULL
-  pscs_sc <- c("Ashy over clayey", "Ashy over clayey-skeletal", "Ashy over loamy", "Ashy over loamy-skeletal", "Ashy over medial", "Ashy over medial-skeletal", "Ashy over pumiceous or cindery", "Ashy over sandy or sandy-skeletal", "Ashy-skeletal over clayey", "Ashy-skeletal over fragmental or cindery", "Ashy-skeletal over loamy-skeletal", "Ashy-skeletal over sandy or sandy-skeletal", "Cindery over loamy", "Cindery over medial", "Cindery over medial-skeletal", "Clayey over coarse-gypseous", "Clayey over fine-gypseous", "Clayey over fragmental", "Clayey over gypseous-skeletal", "Clayey over loamy", "Clayey over loamy-skeletal", "Clayey over sandy or sandy-skeletal", "Clayey-skeletal over sandy or sandy-skeletal", "Coarse-loamy over clayey", "Coarse-loamy over fragmental", "Coarse-loamy over sandy or sandy-skeletal", "Coarse-silty over clayey", "Coarse-silty over sandy or sandy-skeletal", "Fine-loamy over clayey", "Fine-loamy over fragmental", "Fine-loamy over sandy or sandy-skeletal", "Fine-silty over clayey", "Fine-silty over fragmental", "Fine-silty over sandy or sandy-skeletal", "Hydrous over clayey", "Hydrous over clayey-skeletal", "Hydrous over fragmental", "Hydrous over loamy", "Hydrous over loamy-skeletal", "Hydrous over sandy or sandy-skeletal", "Loamy over ashy or ashy-pumiceous", "Loamy over coarse-gypseous", "Loamy over fine-gypseous", "Loamy over pumiceous or cindery", "Loamy over sandy or sandy-skeletal", "Loamy-skeletal over cindery", "Loamy-skeletal over clayey", "Loamy-skeletal over fragmental", "Loamy-skeletal over gypseous-skeletal", "Loamy-skeletal over sandy or sandy-skeletal", "Medial over ashy", "Medial over ashy-pumiceous or ashy-skeletal", "Medial over clayey", "Medial over clayey-skeletal", "Medial over fragmental", "Medial over hydrous", "Medial over loamy", "Medial over loamy-skeletal", "Medial over pumiceous or cindery", "Medial over sandy or sandy-skeletal", "Medial-skeletal over fragmental or cindery", "Medial-skeletal over loamy-skeletal", "Medial-skeletal over sandy or sandy-skeletal", "Pumiceous or ashy-pumiceous over loamy", "Pumiceous or ashy-pumiceous over loamy-skeletal", "Pumiceous or ashy-pumiceous over medial", "Pumiceous or ashy-pumiceous over medial-skeletal", "Pumiceous or ashy-pumiceous over sandy or sandy skeletal", "Sandy over clayey", "Sandy over loamy", "Sandy-skeletal over loamy") |> 
-    tolower()
   
   x$rn <- 1:nrow(x)
   # xy <- hz_intersect(x, y, idcol = idcol, depthcols = depthcols)
@@ -804,7 +805,7 @@ aloc_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", i
       sc = gsub("over fine over|over very-fine over", "over clayey over", sc)
       sc = gsub("over sandy|over sandy-skeletal", "over sandy or sandy-skeletal", sc)
       
-      idx_sc     = sc %in% pscs_sc
+      idx_sc     = sc %in% .pscs_sc
       sc[idx_sc] = sc[idx_sc]
     })
   xy_lag <- NULL

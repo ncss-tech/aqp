@@ -59,6 +59,9 @@ clay_dif = lag.clay_bot.1 - clay,
 texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1))
 
 }
+\seealso{
+\code{\link[=hz_dissolve]{hz_dissolve()}}, \code{\link[=hz_intersect]{hz_intersect()}}, \code{\link[=hz_segment]{hz_segment()}}
+}
 \author{
 Stephen Roecker
 }

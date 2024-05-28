@@ -44,6 +44,9 @@ hz_intersect(x = h, y = _) |>
 aggregate(clay ~ dissolve_id, data = _, mean)
 
 }
+\seealso{
+\code{\link[=hz_dissolve]{hz_dissolve()}}, \code{\link[=hz_lag]{hz_lag()}}, \code{\link[=hz_segment]{hz_segment()}}
+}
 \author{
 Stephen Roecker
 }

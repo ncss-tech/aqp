@@ -16,7 +16,7 @@
 #' 
 #' @author Stephen Roecker
 #' 
-#' @seealso [dice()], [glom()]
+#' @seealso [dice()], [glom()], [hz_dissolve()], [hz_lag()], [hz_intersect()]
 #' 
 #' @export
 #'
@@ -242,7 +242,7 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = c("top", "bottom
 #' 
 #' @author Stephen Roecker
 #' 
-#' @seealso \code{\link{checkHzDepthLogic}}
+#' @seealso [hz_lag()], [hz_intersect()], [hz_segment()] , [checkHzDepthLogic()]
 #' 
 #' @export
 #'
@@ -432,6 +432,7 @@ dissolve_hz <- function(object, by, id = "idcol", hztop = "top", hzbot = "bottom
 #' 
 #' @author Stephen Roecker
 #' 
+#' @seealso [hz_dissolve()], [hz_lag()], [hz_segment()] 
 #' 
 #' @export
 #'
@@ -544,6 +545,7 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 #' 
 #' @author Stephen Roecker
 #' 
+#' @seealso [hz_dissolve()], [hz_intersect()], [hz_segment()] 
 #' 
 #' @export
 #'

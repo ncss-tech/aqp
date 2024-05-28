@@ -89,7 +89,7 @@ subset(test, value == "2Bt")
 
 }
 \seealso{
-\code{\link{checkHzDepthLogic}}
+\code{\link[=hz_lag]{hz_lag()}}, \code{\link[=hz_intersect]{hz_intersect()}}, \code{\link[=hz_segment]{hz_segment()}} , \code{\link[=checkHzDepthLogic]{checkHzDepthLogic()}}
 }
 \author{
 Stephen Roecker
