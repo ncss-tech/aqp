@@ -184,12 +184,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7 92-1 156    213     C  TRUE</span>
 <span class="r-in"><span><span class="va">test</span><span class="op">[</span><span class="va">test</span><span class="op">$</span><span class="va">id</span> <span class="op">==</span> <span class="st">"92-1"</span>, <span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      id top bottom variable value        dissolve_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  92-1   0     18    genhz     A 92-1_000-018_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  92-1  18     43    genhz     E 92-1_018-043_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  92-1  43    153    genhz     B 92-1_043-153_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  92-1 153    213    genhz     C 92-1_153-213_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27 92-1   0    156    dep_5 FALSE 92-1_000-156_dep_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28 92-1 156    213    dep_5  TRUE 92-1_156-213_dep_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  92-1   0     18    genhz     A     92-1_000-018_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  92-1  18     43    genhz     E     92-1_018-043_E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  92-1  43    153    genhz     B     92-1_043-153_B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  92-1 153    213    genhz     C     92-1_153-213_C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 92-1   0    156    dep_5 FALSE 92-1_000-156_FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 92-1 156    213    dep_5  TRUE  92-1_156-213_TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example 2</span></span></span>
@@ -212,25 +212,25 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  1  50    100     2C    2C     s</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">hz_dissolve</span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"texcl"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom variable value     dissolve_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   0     10    genhz     A 1_000-010_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  10     15    genhz     E 1_010-015_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  15     50    genhz   2Bt 1_015-050_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  50    100    genhz    2C 1_050-100_genhz</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1   0     15    texcl   sil 1_000-015_texcl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1  15     50    texcl    sl 1_015-050_texcl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1  50    100    texcl     s 1_050-100_texcl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom variable value   dissolve_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   0     10    genhz     A   1_000-010_A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  10     15    genhz     E   1_010-015_E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  15     50    genhz   2Bt 1_015-050_2Bt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  50    100    genhz    2C  1_050-100_2C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1   0     15    texcl   sil 1_000-015_sil</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1  15     50    texcl    sl  1_015-050_sl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  1  50    100    texcl     s   1_050-100_s</span>
 <span class="r-in"><span><span class="fu">hz_dissolve</span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"genhz"</span>, <span class="st">"texcl"</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom      variable    value             dissolve_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   0     10 genhz &amp; texcl  A &amp; sil 1_000-010_genhz &amp; texcl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  10     15 genhz &amp; texcl  E &amp; sil 1_010-015_genhz &amp; texcl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  15     50 genhz &amp; texcl 2Bt &amp; sl 1_015-050_genhz &amp; texcl</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  50    100 genhz &amp; texcl   2C &amp; s 1_050-100_genhz &amp; texcl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom      variable    value        dissolve_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   0     10 genhz &amp; texcl  A &amp; sil  1_000-010_A &amp; sil</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  10     15 genhz &amp; texcl  E &amp; sil  1_010-015_E &amp; sil</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  15     50 genhz &amp; texcl 2Bt &amp; sl 1_015-050_2Bt &amp; sl</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  50    100 genhz &amp; texcl   2C &amp; s   1_050-100_2C &amp; s</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">hz_dissolve</span><span class="op">(</span><span class="va">df</span>, <span class="st">"genhz"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">test</span>, <span class="va">value</span> <span class="op">==</span> <span class="st">"2Bt"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom variable value     dissolve_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  15     50    genhz   2Bt 1_015-050_genhz</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom variable value   dissolve_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  15     50    genhz   2Bt 1_015-050_2Bt</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
