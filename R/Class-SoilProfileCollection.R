@@ -948,10 +948,12 @@ setMethod("site", signature(object = "SoilProfileCollection"),
 setGeneric("diagnostic_hz", function(object, ...)
   standardGeneric("diagnostic_hz"))
 
-#' Retrieve diagnostic data from SoilProfileCollection
+#' Get or Set Diagnostic Horizon data in a SoilProfileCollection
 #'
-#' @description Get diagnostic feature data from SoilProfileCollection. Result is returned in the same \code{data.frame} class used to initially construct the SoilProfileCollection.
-#'
+#' @description Diagnostic horizons describe features of the soil relevant to taxonomic classification. A single profile may have multiple diagnostic features or horizons, each of which may be comprised of multiple horizons.
+#' 
+#'  - `diagnostic_hz()` (get method): Get diagnostic feature data from a SoilProfileCollection. 
+#'  
 #' @param object a SoilProfileCollection
 #'
 #' @docType methods
@@ -968,9 +970,11 @@ setMethod(f = 'diagnostic_hz', signature(object = 'SoilProfileCollection'),
 setGeneric("restrictions", function(object, ...)
   standardGeneric("restrictions"))
 
-#' Retrieve restriction data from SoilProfileCollection
+#' Get or Set Restriction data in a SoilProfileCollection
 #'
-#' @description Get restriction data from SoilProfileCollection. Result is returned in the same \code{data.frame} class used to initially construct the SoilProfileCollection.
+#' @description Restrictions describe root-limiting features in the soil. A single profile may have multiple restrictions.
+#' 
+#'  - `restrictions()` (get method): Get restriction data from a SoilProfileCollection. 
 #'
 #' @param object a SoilProfileCollection
 #' @docType methods
