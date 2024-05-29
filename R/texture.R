@@ -1058,7 +1058,7 @@ fragvol_to_texmod <- function(
 
 PSCS_levels <- function() {
   
-  fe <- c("fragmental", "pumiceous", "cindery", "sandy-skeletal", "loamy-skeletal", "gypseous-skeletal", "ashy-skeletal", "medial-skeletal", "ashy-pumiceous", "medial-pumiceous", "clay-skeletal", "sandy", "ashy", "coarse-loamy", "coarse-silty", "coarse-gypseous", "medial", "loamy", "fine-gypseous", "fine-loamy", "fine-silty", "hydrous", "fine", "clayey", "very-fine", "diatomaceous")
+  fe <- c("fragmental", "pumiceous", "cindery", "sandy-skeletal", "loamy-skeletal", "gypseous-skeletal", "ashy-skeletal", "medial-skeletal", "ashy-pumiceous", "medial-pumiceous", "clay-skeletal", "sandy", "ashy", "coarse-loamy", "coarse-silty", "coarse-gypseous", "medial", "loamy", "fine-gypseous", "fine-loamy", "fine-silty", "hydrous", "fine", "clayey", "very-fine", "diatomaceous") |> rev()
   
   # cf <- c("fragmental", "sandy-skeletal", "loamy-skeletal", "clay-skeletal")
   
@@ -1067,10 +1067,13 @@ PSCS_levels <- function() {
   
   idx <- lapply(test, function(x) {
     idx <- sapply(x, function(y) which(fe == y)) |> unlist()
-    l <- stats::lag(idx)
+    # l <- dplyr::lag(idx)
+    l <- idx[c(NA, 1:(length(idx) - 1))]
     idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
-    n <- length(idx)
-    idx = sum(idx * c(1, 0.1, 0.01)[1:n])
+    n   <- length(idx)
+    idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
+    
+    return(idx)
     })
   
   fe <- data.frame(rn = 1:length(fe), fe = fe)

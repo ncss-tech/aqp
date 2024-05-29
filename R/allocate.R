@@ -638,9 +638,9 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 }
 
 
-#' @title Allocate Particle Size Control Class for the Control Section.
+#' @title Allocate Particle Size Class for the Control Section.
 #' 
-#' @description This function aggregates information in the horizon table and allocates it to the particle size control section.
+#' @description This function aggregates information in the horizon table and allocates it to the particle size class for the control section.
 #'
 #' @param x a \code{data.frame} containing the original horizon table.
 #' @param y a \code{data.frame} containing the particle size control section depths for each idcol.
