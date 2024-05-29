@@ -49,6 +49,9 @@
     <loc>/reference/NCSP.html</loc>
   </url>
   <url>
+    <loc>/reference/PSCS_levels.html</loc>
+  </url>
+  <url>
     <loc>/reference/ROSETTA.centroids.html</loc>
   </url>
   <url>
@@ -92,9 +95,6 @@
   </url>
   <url>
     <loc>/reference/allocate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/aloc_taxpartsize.html</loc>
   </url>
   <url>
     <loc>/reference/aqp-package.html</loc>
@@ -182,9 +182,6 @@
   </url>
   <url>
     <loc>/reference/depths.html</loc>
-  </url>
-  <url>
-    <loc>/reference/diagnostic_hz-set.html</loc>
   </url>
   <url>
     <loc>/reference/diagnostic_hz.html</loc>
@@ -379,6 +376,9 @@
     <loc>/reference/hz_segment.html</loc>
   </url>
   <url>
+    <loc>/reference/hz_to_taxpartsize.html</loc>
+  </url>
+  <url>
     <loc>/reference/hzdesgnname.html</loc>
   </url>
   <url>
@@ -527,9 +527,6 @@
   </url>
   <url>
     <loc>/reference/replaceHorizons.html</loc>
-  </url>
-  <url>
-    <loc>/reference/restrictions-set.html</loc>
   </url>
   <url>
     <loc>/reference/restrictions.html</loc>
