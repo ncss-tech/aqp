@@ -121,7 +121,7 @@
     <h2>Value</h2>
     
 
-<p>A <code>data.frame</code> object containing the original idcol and aggregated particle size control section allocation.</p>
+<p>A <code>data.frame</code> object containing the original idcol, the aggregated particle size control section allocation, and an aniso column to indicate more than one contrasting class.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -175,8 +175,8 @@
 <span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">pscs</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"top"</span>, <span class="st">"bottom"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">hz_to_taxpartsize</span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span>, <span class="va">pscs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id              taxpartsize</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 coarse-loamy over clayey</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id taxpartsizemod              taxpartsize</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1          aniso coarse-loamy over clayey</span>
 <span class="r-in"><span> </span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
