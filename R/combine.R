@@ -348,7 +348,7 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
   o.s <- lapply(spc.list, '[[', 'site')
   o.d <- lapply(spc.list, '[[', 'diagnostic')
   o.r <- lapply(spc.list, '[[', 'restrictions')
-  o.sp <- lapply(spc.list, '[[', 'sp')
+  # o.sp <- lapply(spc.list, '[[', 'sp')
 
   # generate new SPC components
   # https://github.com/ncss-tech/aqp/issues/71
@@ -379,8 +379,8 @@ pbindlist <- function(l, new.idname = NULL, verbose = TRUE) {
   }
 
   # sp slot is deprecated; always empty/uninitialized now
-  o.sp <- new('SpatialPoints')
-
+  o.sp <- NULL
+  
   ## sanity check: profile IDs should be unique
   if (length(o.s[[new.pID]]) != length(unique(o.s[[new.pID]]))) {
     stop('non-unique profile IDs detected')

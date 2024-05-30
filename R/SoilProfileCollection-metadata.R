@@ -70,7 +70,7 @@
   
   # transfer attributes https://github.com/ncss-tech/aqp/issues/204
   customattr <- attributes(src)
-  customattr <- customattr[!names(customattr) %in% names(attributes(SoilProfileCollection()))]
+  customattr <- customattr[!names(customattr) %in% c("sp", names(attributes(SoilProfileCollection())))]
   attributes(dest)[names(customattr)] <- attributes(src)[names(customattr)]
   
   # original.order metadata no longer created, not transferred

@@ -66,7 +66,7 @@ plotSPC(
   ...
 )
 
-\S4method{plot}{SoilProfileCollection,ANY}(x, y, ...)
+\S4method{plot}{SoilProfileCollection}(x, y, ...)
 }
 \arguments{
 \item{x}{a \code{SoilProfileCollection} object}

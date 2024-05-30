@@ -1696,6 +1696,5 @@ plotSPC <- function(
 #' @aliases plot,SoilProfileCollection-method plot,SoilProfileCollection,ANY-method
 #' @rdname SoilProfileCollection-plotting-methods
 #' @export
-setMethod("plot", signature(x = "SoilProfileCollection",
-                            y = "ANY"),
+setMethod("plot", signature(x = "SoilProfileCollection"),
           definition = {function(x, y, ...) plotSPC(x, ...)})

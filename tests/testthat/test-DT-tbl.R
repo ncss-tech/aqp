@@ -370,7 +370,6 @@ res <- lapply(dfclasses, function(use_class) {
 
       expect_equivalent(l$horizons, horizons(sp1df))
       expect_equivalent(l$site, site(sp1df))
-      expect_equivalent(l$sp, sp1df@sp)
       expect_equivalent(l$diagnostic, diagnostic_hz(sp1df))
       expect_equivalent(l$restrictions, restrictions(sp1df))
 

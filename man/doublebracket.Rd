@@ -8,7 +8,7 @@
 \alias{[[,SoilProfileCollection,ANY,ANY-method}
 \title{Get column of horizon or site data in a SoilProfileCollection}
 \usage{
-\S4method{[[}{SoilProfileCollection,ANY,ANY}(x, i, j)
+\S4method{[[}{SoilProfileCollection}(x, i, j)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
