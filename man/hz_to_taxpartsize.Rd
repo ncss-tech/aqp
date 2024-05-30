@@ -27,7 +27,7 @@ hz_to_taxpartsize(
 \item{depthcols}{a character vector of length 2 specifying the names of the horizon depths (e.g. \code{c("top", "bottom")}).}
 }
 \value{
-A \code{data.frame} object containing the original idcol and aggregated particle size control section allocation.
+A \code{data.frame} object containing the original idcol, the aggregated particle size control section allocation, and an aniso column to indicate more than one contrasting class.
 }
 \description{
 This function aggregates information in the horizon table and allocates it to the particle size class for the control section.

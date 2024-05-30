@@ -656,7 +656,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 #' 
 #' 
 #'
-#' @return A \code{data.frame} object containing the original idcol and aggregated particle size control section allocation.
+#' @return A \code{data.frame} object containing the original idcol, the aggregated particle size control section allocation, and an aniso column to indicate more than one contrasting class.
 #' 
 #' @author Stephen Roecker
 #' 
@@ -735,7 +735,7 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   }
   
   
-  # standardize inputs
+  # standardize inputs ----
   x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols, clay = clay, taxpartsize = taxpartsize)
   x <- x_std$x; x_conv <- x_std$x_conversion
   x_std <- NULL
@@ -743,27 +743,27 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   y <- .standardize_inputs(y, idcol = idcol, depthcols = depthcols)$x
   
   
-  # dissolve on pscs
+  # dissolve on pscs ----
   # calculate non-trimmed horizon thickness
   x_dis <- x |>
     hz_dissolve(by = "taxpartsize", idcol = "idcol", depthcols = c("top", "bot")) |>
     transform(thk_o = bot - top)
   
   
-  # trim depths
+  # trim depths ----
   # calculate trimmed horizon thickness
   xy_dis <- x_dis |>
     hz_intersect(y, idcol = "idcol", depthcols = c("top", "bot")) |>
     transform(thk_t = bot - top)
   
   
-  # rejoin dissolved pscs to the original horizon table 
+  # rejoin dissolved pscs to the original horizon table ----
   xy <- hz_intersect(x, xy_dis, idcol = "idcol", depthcols = c("top", "bot")) |> suppressWarnings()
   x_dis  <- NULL
   xy_dis <- NULL
   
-  
-  # aggregate clay values within dissolved pscs
+
+  # aggregate clay values within dissolved pscs ----
   top <- NULL
   bot <- NULL
   thk_o <- NULL
@@ -785,12 +785,12 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   xy_agg <- as.data.frame(xy_agg)
   
   
-  # find adjacent horizons
+  # find adjacent horizons ----
   xy_lag <- xy_agg |> 
     hz_lag(idcol = "idcol", depthcols = c("top", "bot"))
   
   
-  # replace special cases of pscs with strongly contrasting classes
+  # address special cases of strongly contrasting classes ----
   clay_wt_bot.1     <- NULL
   taxpartsize_bot.1 <- NULL
   
@@ -821,6 +821,13 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
       # fine-silty over clayey
       sc = ifelse( 
         sc == "fine-silty over clayey" & abs(clay_dif) < 25, 
+        taxpartsize,
+        sc
+      )
+      # loamy material contains less than 50 percent, by weight
+      # need to include a vfs percent in the function arguments, which is only present in the lab data, and otherwise you typically wouldn't assume the vfs percent is high enough to qualify for these special cases
+      sc = ifelse( 
+        sc %in% c("coarse-loamy over sandy or sandy-skeletal", "loamy over sandy or sandy-skeletal", "loamy-skeletal over sandy or sandy-skeletal", "sandy over loamy", "sandy-skeletal over loamy"),
         taxpartsize,
         sc
       )
@@ -856,9 +863,10 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   xy_res <- data.table::as.data.table(xy_res)[, list(
     pscs1 = sc[n_sc == 0 & n_peiid == 1],
     pscs2 = sc[n_sc == 1 & n_peiid  > 1 & idx_sc],
-    pscs3 = sc[which.max(thk_t[n_sc == 0 & n_peiid == 2])],
+    pscs3 = sc[which.max(thk_t[n_sc == 0 & n_peiid > 1])],
     pscs4 = sc[n_sc == 1 & idx_sc],
-    pscs5 = sc[which.max(abs(clay_dif[n_sc > 1 & !is.na(sc)]))]
+    pscs5 = sc[which.max(abs(clay_dif[n_sc > 1 & !is.na(sc)]))],
+    taxpartsizemod = ifelse(max(n_sc) > 1, "aniso", "not used")
     ),
     by =  "idcol"
     ] |>

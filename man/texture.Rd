@@ -25,6 +25,7 @@ texture_to_taxpartsize(
   texcl = NULL,
   clay = NULL,
   sand = NULL,
+  sandvf = NULL,
   fragvoltot = NULL
 )
 
@@ -74,6 +75,8 @@ conventions (e.g. gr|GR, grv|GRV)}
 \item{lieutex}{vector of in lieu of texture terms that conform to the USDA
 code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 are > 90 percent by volume (default: NULL))}
+
+\item{sandvf}{vector of very fine sand percentages}
 
 \item{fragvoltot}{vector of total rock fragment percentages}
 

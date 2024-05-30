@@ -421,6 +421,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #'
 #' @param clay vector of clay percentages
 #' @param sand vector of sand percentages
+#' @param sandvf vector of very fine sand percentages
 #'
 #' @param fragvoltot vector of total rock fragment percentages
 #'
@@ -432,7 +433,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #'
 #' @export
 #'
-texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragvoltot = NULL) {
+texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, sandvf = NULL, fragvoltot = NULL) {
 
   # check lengths
   idx <- length(texcl) == length(clay) & length(clay) == length(sand) & length(sand) == length(fragvoltot)
@@ -442,9 +443,12 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
 
 
   # standarize inputs
+  if (is.null(sandvf)) sandvf <- NA
+  
   df <- data.frame(texcl      = tolower(texcl),
                    clay       = as.integer(round(clay)),
                    sand       = as.integer(round(sand)),
+                   sandvf     = as.integer(round(sandvf)),
                    fragvoltot = as.integer(round(fragvoltot)),
                    fpsc       = as.character(NA),
                    stringsAsFactors = FALSE
@@ -455,7 +459,7 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
 
 
   # check texcl lookup
-  idx <- any(! df$texcl %in% SoilTextureLevels(which = 'codes'))
+  idx <- any(! df$texcl[!is.na(df$texcl)] %in% SoilTextureLevels(which = 'codes'))
   if (idx) {
     warning("not all the texcl supplied match the lookup table")
   }
@@ -463,8 +467,13 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
 
   # check percentages
   idx <- df$silt > 100 | df$silt < 0 | df$clay > 100 | df$clay < 0 | df$sand > 100 | df$sand < 0 | df$fragvoltot > 100 | df$fragvoltot < 0
-  if (any(idx)) {
+  if (any(idx, na.rm = TRUE)) {
     warning("some records are > 100% or < 0%, or the calcuated silt fraction is > 100% or < 0%")
+  }
+  
+  
+  if (any(sandvf > sand & all(!is.na(sandvf)))) {
+    warning("the sandvf values should not be greater than the sand values")
   }
 
 
@@ -475,9 +484,18 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
     texcl_calc = ifelse(texcl_calc == "s"  & grepl("^cos$|^fs$|^vfs$",    texcl), texcl, texcl_calc)
     texcl_calc = ifelse(texcl_calc == "ls" & grepl("^lcos$|^lfs$|^lvfs$", texcl), texcl, texcl_calc)
     texcl_calc = ifelse(texcl_calc == "sl" & grepl("^cosl$|^fsl$|^vfsl$", texcl), texcl, texcl_calc)
+    
+    sandvf = ifelse(is.na(sandvf) & texcl %in% c("vfs", "lvfs"),    50, sandvf)
+    sandvf = ifelse(is.na(sandvf) & texcl %in% c("vfsl"),           40, sandvf)
+    sandvf = ifelse(is.na(sandvf) & texcl %in% c("fsl"),            15, sandvf)
+    sandvf = ifelse(is.na(sandvf) & texcl %in% c("sl", "l", "scl"), 10, sandvf)
+    sandvf = ifelse(is.na(sandvf) & texcl %in% c("fsl"),            7,  sandvf)
+    
+    sand = ifelse(!is.na(sandvf), sand - sandvf,  sand)
+    silt = ifelse(!is.na(sandvf), silt + sandvf,  silt)
   })
 
-  idx <- any(df$texcl != df$texcl_calc)
+  idx <- any(df$texcl != df$texcl_calc, na.rm = TRUE)
   if (idx) {
     warning("some of the texcl records don't match the calculated texcl via ssc_to_texcl()")
   }
