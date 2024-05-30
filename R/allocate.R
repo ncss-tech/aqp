@@ -794,6 +794,8 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   clay_wt_bot.1     <- NULL
   taxpartsize_bot.1 <- NULL
   
+  
+  # still needs special cases for very fine sand
   xy_agg <- cbind(xy_agg, xy_lag) |> 
     within({
       clay_dif = clay_wt_bot.1 - clay_wt
@@ -804,9 +806,27 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
       sc = gsub("over fine$|over very-fine$", "over clayey", sc)
       sc = gsub("over fine over|over very-fine over", "over clayey over", sc)
       sc = gsub("over sandy|over sandy-skeletal", "over sandy or sandy-skeletal", sc)
-      
-      idx_sc     = sc %in% .pscs_sc
-      sc[idx_sc] = sc[idx_sc]
+      # clay over loamy
+      sc = ifelse( 
+        abs(clay_dif) >= 25 & sc %in% c("clayey over fine-loamy", "clayey over coarse-loamy"),
+        gsub("clayey over fine-loamy|clayey over coarse-loamy", "clayey over loamy", sc),
+        sc
+      )
+      # clay over loamy-skeletal
+      sc = ifelse( 
+        sc == "clayey over loamy-skeletal" & abs(clay_dif) < 25, 
+        taxpartsize,
+        sc
+      )
+      # fine-silty over clayey
+      sc = ifelse( 
+        sc == "fine-silty over clayey" & abs(clay_dif) < 25, 
+        taxpartsize,
+        sc
+      )
+      idx_sc = sc %in% .pscs_sc
+      # idx_sc = grepl("over", sc)
+      sc = ifelse(idx_sc, sc, taxpartsize)
     })
   xy_lag <- NULL
   
@@ -816,8 +836,8 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   n_peiid <- NULL
   
   test <- data.table::as.data.table(xy_agg)[, list(
-    n_sc    = sum(grepl("over", sc), na.rm = TRUE),
-    n_peiid = length(idcol)
+    n_sc    = sum(idx_sc, na.rm = TRUE), # sum(grepl(" over ", sc), na.rm = TRUE),
+    n_peiid = length(idx_sc)
   ),
   by = "idcol"
   ] |>
@@ -828,7 +848,9 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   xy_res <- xy_agg |>
     merge(test, by = "idcol", all.x = TRUE, sort = FALSE) |>
     transform(
-      idx_sc = grepl(" over ", sc)
+      idx_sc = sc %in% .pscs_sc,
+      # idx_sc = grepl(" over ", sc),
+      idx_c_ov_l = sc %in% c("clayey over fine-loamy")
     )
   
   xy_res <- data.table::as.data.table(xy_res)[, list(

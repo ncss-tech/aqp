@@ -2,7 +2,7 @@
 % Please edit documentation in R/allocate.R
 \name{hz_to_taxpartsize}
 \alias{hz_to_taxpartsize}
-\title{Allocate Particle Size Control Class for the Control Section.}
+\title{Allocate Particle Size Class for the Control Section.}
 \usage{
 hz_to_taxpartsize(
   x,
@@ -30,7 +30,7 @@ hz_to_taxpartsize(
 A \code{data.frame} object containing the original idcol and aggregated particle size control section allocation.
 }
 \description{
-This function aggregates information in the horizon table and allocates it to the particle size control section.
+This function aggregates information in the horizon table and allocates it to the particle size class for the control section.
 }
 \details{
 This function differs from \code{\link{texture_to_taxpartsize}} in that is aggregates the results of \code{\link{texture_to_taxpartsize}}, and accounts for strongly contrasting particle size classes.
