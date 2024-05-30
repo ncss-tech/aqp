@@ -629,19 +629,19 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
 setGeneric('diagnostic_hz<-', function(object, value)
   standardGeneric('diagnostic_hz<-'))
 
-#' Add Data to Diagnostic Features Slot
-#'
 #' @name diagnostic_hz<-
 #'
-#' @description Diagnostic feature data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
-#'
+#' @description 
+#' 
+#'  - `diagnostic_hz<-` (set method): Set diagnostic feature data for a SoilProfileCollection. The profile ID column from `object` (`idname(object)`) must be present in the replacement `value` object.
+#' 
 #' @param object A SoilProfileCollection
-#' @param value An object inheriting \code{data.frame}
+#' @param value An object inheriting from \code{data.frame}
 #'
 #' @aliases diagnostic_hz<-,SoilProfileCollection-method
 #' @docType methods
 #' @export
-#' @rdname diagnostic_hz-set
+#' @rdname diagnostic_hz
 #'
 #' @examples
 #'
@@ -716,19 +716,18 @@ setReplaceMethod("diagnostic_hz",
 setGeneric('restrictions<-', function(object, value)
   standardGeneric('restrictions<-'))
 
-#' Add Data to Restrictions Slot
-#'
 #' @name restrictions<-
 #'
-#' @description Restrictions data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named profile ID columns on the left and right hand side to facilitate the join: \code{restrictions(spc) <- newdata}.
-#'
+#' @description 
+#' 
+#'  - `restrictions<-` (set method): Set restriction data for a SoilProfileCollection. The profile ID column from `object` (`idname(object)`) must be present in the replacement `value` object.
 #' @param object A SoilProfileCollection
-#' @param value An object inheriting \code{data.frame}
+#' @param value An data.frame object containing at least a column with name `idname(object)`
 #'
 #' @aliases restrictions<-,SoilProfileCollection-method
 #' @docType methods
 #'
-#' @rdname restrictions-set
+#' @rdname restrictions
 #' @export
 #' @examples
 #'

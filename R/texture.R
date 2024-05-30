@@ -70,6 +70,8 @@
 #' 
 #' @return - `texcl_to_ssc`: A `data.frame` containing columns `"sand"`,`"silt"`, `"clay"`
 #'
+#' @seealso \code{\link{SoilTextureLevels}}
+#' 
 #' @author Stephen Roecker
 #' 
 #' @references Matthew R. Levi, Modified Centroid for Estimating Sand, Silt, and Clay from Soil Texture Class, Soil Science Society of America Journal, 2017, 81(3):578-588, ISSN 1435-0661, \doi{10.2136/sssaj2016.09.0301}.
@@ -159,6 +161,15 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
 
 
   load(system.file("data/soiltexture.rda", package="aqp")[1])
+  
+  
+  # convert fine sand classes to their generic counterparts
+  df <- within(df, {
+    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
+    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
+    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
+  })
+  
 
 
   # check for texcl that don't match
@@ -175,7 +186,12 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
     idx <- paste(df$texcl[clay_not_na], df$clay[clay_not_na]) %in% paste(soiltexture$values$texcl, soiltexture$values$clay)
 
     if (any(!idx)) {
-      warning("not all the user supplied clay values fall within the texcl")
+      warning("not all the user supplied clay values fall within the texcl, so they will be set to NA")
+      
+      df$clay[which(!idx)] <- NA
+      
+      clay_not_null <- all(!is.na(df$clay))
+      clay_is_null  <- !clay_not_null
     }
   }
 
@@ -185,14 +201,6 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
   if (idx) {
     warning("some clay records < 0 or > 100%")
   }
-
-
-  # convert fine sand classes to their generic counterparts
-  df <- within(df, {
-    texcl = ifelse(texcl %in% c("cos",  "fs", "vfs"),   "s",  texcl)
-    texcl = ifelse(texcl %in% c("lcos", "lfs", "lvfs"), "ls", texcl)
-    texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
-  })
 
 
   # if clay is present
@@ -418,6 +426,8 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #'
 #' @return - `texture_to_taxpartsize`: a character vector containing `"taxpartsize"` classes
 #' 
+#' @seealso \code{\link{hz_to_taxpartsize}}
+#' 
 #' @rdname texture
 #'
 #' @export
@@ -478,9 +488,9 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
   idx <- df$fragvoltot >= 35
   if (any(idx)) {
     df[idx,] <- within(df[idx,], {
-      fpsc[texcl %in% sandytextures] = "sandy-skeletal"
-      fpsc[clay <  35]               = "loamy-skeletal"
       fpsc[clay >= 35]               = "clayey-skeletal"
+      fpsc[clay <  35]               = "loamy-skeletal"
+      fpsc[texcl %in% sandytextures] = "sandy-skeletal"
       })
   }
 
@@ -505,6 +515,7 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, fragv
 
   return(df$fpsc)
 }
+
 
 
 #' Parse texmod from texture
@@ -1025,3 +1036,56 @@ fragvol_to_texmod <- function(
   return(df)
 }
 
+
+#' @title Ranking Systems for USDA Taxonomic Particle-Size and Substitute Classes of Mineral Soils
+#' 
+#' @description Generate a vector of USDA Particle-Size and Substitute Classes  names, sorted according to approximate particle size
+#'
+#' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
+#' 
+#' @return an ordered factor
+#' 
+#' @author Stephen Roecker
+#' 
+#' @seealso [hz_to_taxpartsize()], [texture_to_taxpartsize()], [SoilTextureLevels()]
+#' 
+#' @export
+#' @examples
+#' 
+#' # class codes
+#' PSCS_levels()
+#' 
+
+PSCS_levels <- function() {
+  
+  fe <- c("fragmental", "pumiceous", "cindery", "sandy-skeletal", "loamy-skeletal", "gypseous-skeletal", "ashy-skeletal", "medial-skeletal", "ashy-pumiceous", "medial-pumiceous", "clay-skeletal", "sandy", "ashy", "coarse-loamy", "coarse-silty", "coarse-gypseous", "medial", "loamy", "fine-gypseous", "fine-loamy", "fine-silty", "hydrous", "fine", "clayey", "very-fine", "diatomaceous") |> rev()
+  
+  # cf <- c("fragmental", "sandy-skeletal", "loamy-skeletal", "clay-skeletal")
+  
+  test <- strsplit(.pscs_sc, " over | or ")
+  names(test) <- .pscs_sc
+  
+  idx <- lapply(test, function(x) {
+    idx <- sapply(x, function(y) which(fe == y)) |> unlist()
+    # l <- dplyr::lag(idx)
+    l <- idx[c(NA, 1:(length(idx) - 1))]
+    idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
+    n   <- length(idx)
+    idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
+    
+    return(idx)
+    })
+  
+  fe <- data.frame(rn = 1:length(fe), fe = fe)
+  sc <- data.frame(rn = unlist(idx),  fe = .pscs_sc)
+  lu <- rbind(fe, sc)
+  lu <- lu[order(lu$rn), ]
+  lu$rn <- 1:nrow(lu)
+  lu$fe <- factor(lu$fe, levels = lu$fe, ordered = TRUE)
+  
+  return(lu$fe)
+}
+
+
+.pscs_sc <- c("Ashy over clayey", "Ashy over clayey-skeletal", "Ashy over loamy", "Ashy over loamy-skeletal", "Ashy over medial", "Ashy over medial-skeletal", "Ashy over pumiceous or cindery", "Ashy over sandy or sandy-skeletal", "Ashy-skeletal over clayey", "Ashy-skeletal over fragmental or cindery", "Ashy-skeletal over loamy-skeletal", "Ashy-skeletal over sandy or sandy-skeletal", "Cindery over loamy", "Cindery over medial", "Cindery over medial-skeletal", "Clayey over coarse-gypseous", "Clayey over fine-gypseous", "Clayey over fragmental", "Clayey over gypseous-skeletal", "Clayey over loamy", "Clayey over loamy-skeletal", "Clayey over sandy or sandy-skeletal", "Clayey-skeletal over sandy or sandy-skeletal", "Coarse-loamy over clayey", "Coarse-loamy over fragmental", "Coarse-loamy over sandy or sandy-skeletal", "Coarse-silty over clayey", "Coarse-silty over sandy or sandy-skeletal", "Fine-loamy over clayey", "Fine-loamy over fragmental", "Fine-loamy over sandy or sandy-skeletal", "Fine-silty over clayey", "Fine-silty over fragmental", "Fine-silty over sandy or sandy-skeletal", "Hydrous over clayey", "Hydrous over clayey-skeletal", "Hydrous over fragmental", "Hydrous over loamy", "Hydrous over loamy-skeletal", "Hydrous over sandy or sandy-skeletal", "Loamy over ashy or ashy-pumiceous", "Loamy over coarse-gypseous", "Loamy over fine-gypseous", "Loamy over pumiceous or cindery", "Loamy over sandy or sandy-skeletal", "Loamy-skeletal over cindery", "Loamy-skeletal over clayey", "Loamy-skeletal over fragmental", "Loamy-skeletal over gypseous-skeletal", "Loamy-skeletal over sandy or sandy-skeletal", "Medial over ashy", "Medial over ashy-pumiceous or ashy-skeletal", "Medial over clayey", "Medial over clayey-skeletal", "Medial over fragmental", "Medial over hydrous", "Medial over loamy", "Medial over loamy-skeletal", "Medial over pumiceous or cindery", "Medial over sandy or sandy-skeletal", "Medial-skeletal over fragmental or cindery", "Medial-skeletal over loamy-skeletal", "Medial-skeletal over sandy or sandy-skeletal", "Pumiceous or ashy-pumiceous over loamy", "Pumiceous or ashy-pumiceous over loamy-skeletal", "Pumiceous or ashy-pumiceous over medial", "Pumiceous or ashy-pumiceous over medial-skeletal", "Pumiceous or ashy-pumiceous over sandy or sandy-skeletal", "Sandy over clayey", "Sandy over loamy", "Sandy-skeletal over loamy") |> 
+  tolower()

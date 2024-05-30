@@ -1,8 +1,10 @@
-# aqp 2.0.3 (2024-03-20)
+# aqp 2.0.3 (2024-04-18)
+ * CRAN release
  * `simulateColor()` gains new method `mvnorm` for simulating plausible colors
    - package mvtnorm added to SUGGESTS
  * performance improvements in `profileInformationIndex()`, `dice()`, `slab()`, `spc2mpspline()`, `fillHzGaps()`, and `flagOverlappingHz()`
  * aesthetic improvements in `huePositionCircle()`
+ * new function `thicknessOf()` used for calculating thickness of horizons within each profile of a `SoilProfileCollection` based on horizon-level logical expressions encoded in a function. Default behavior uses pattern matching on the horizon designation name.
 
 # aqp 2.0.2 (2023-11-18)
  * CRAN release
@@ -600,7 +602,7 @@ Incremental changes, should have no effect on previous code:
 
 # aqp 1.0 (2012-03-26)
    * 1.0 release, still missing condensed vignettes- should be ready soon
-   * see http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56 for samples
+   * see https://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56 for samples
    * A small bug in profile_compare() was fixed, where slices were evaluated as 'soil' based on the bottom depth of the profile, and NOT on the presence of actual data. See ?profile_compare for details. This change will have a minor affect on profile comparisons in cases where Cr or R horizons (usually missing most characterization data) have been extended down to some arbitrary depth (usually 150 or 200 cm) AND a maximum depth of evaluation (max_d) was set beyond the actual depth of most profiles in the collection.
 
 # aqp 0.99-9.8 (2012-03-02)

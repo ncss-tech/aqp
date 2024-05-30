@@ -57,8 +57,9 @@ thicknessOf <- function(x,
                         FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]]),
                         na.rm = FALSE,
                         ...) {
+  
   .internalTHK <- NULL
-  .interalHZM <- NULL
+  .internalHZM <- NULL
   
   if (is.null(hzdesgn) || !hzdesgn %in% horizonNames(x)) {
     stop("Horizon designation column (", hzdesgn, ") does not exist.")
