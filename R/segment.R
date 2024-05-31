@@ -702,7 +702,7 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
 
 
 # standardize inputs
-.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL, texcl = NULL, clay = NULL, taxpartsize = NULL) {
+.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL, texcl = NULL, clay = NULL, taxpartsize = NULL, sand = NULL) {
   
   # set new names
   var_names <- c(
@@ -712,6 +712,7 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     bot     = depthcols[2],
     texcl   = texcl,
     clay    = clay,
+    sand    = sand,
     taxpartsize = taxpartsize
   )
   
@@ -721,7 +722,18 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
   # rename matching column names
   names(x)[idx_x] <- names(var_names)
   
-  return(list(x = x, x_conversion = var_names))
+  # remove duplicate names
+  nm_x <- names(x)
+  idx_dup <- names(which(table(nm_x) > 1))
+  idx_dup <- which(nm_x %in% idx_dup)
+  if (any(!is.na(idx_dup))) {
+    warning("some argument names are duplicated by the function column name harmonization and will be renamed to var_orig (e.g. clay_orig)")
+    
+    idx_orig <- idx_dup[! idx_dup %in% idx_x]
+    names(x)[idx_orig] <- paste0(names(x)[idx_orig], "_orig")
+  } else idx_orig = NULL
+    
+  return(list(x = x, x_conversion = var_names, x_orig = idx_orig))
 }
 
 

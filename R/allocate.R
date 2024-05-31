@@ -652,9 +652,8 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 #' 
 #' 
 #' @details
-#' This function differs from \code{\link{texture_to_taxpartsize}} in that is aggregates the results of \code{\link{texture_to_taxpartsize}}, and accounts for strongly contrasting particle size classes. 
-#' 
-#' 
+#' This function differs from \code{\link{texture_to_taxpartsize}} in that is aggregates the results of \code{\link{texture_to_taxpartsize}}, and accounts for strongly contrasting particle size classes.
+#'  
 #'
 #' @return A \code{data.frame} object containing the original idcol, the aggregated particle size control section allocation, and an aniso column to indicate more than one contrasting class.
 #' 
@@ -736,10 +735,13 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   
   
   # standardize inputs ----
+  vars <- c(idcol, depthcols, clay, taxpartsize)
+  x <- x[vars]
   x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols, clay = clay, taxpartsize = taxpartsize)
   x <- x_std$x; x_conv <- x_std$x_conversion
   x_std <- NULL
   
+  y <- y[c(idcol, depthcols)]
   y <- .standardize_inputs(y, idcol = idcol, depthcols = depthcols)$x
   
   
@@ -764,17 +766,19 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   
 
   # aggregate clay values within dissolved pscs ----
-  top <- NULL
-  bot <- NULL
-  thk_o <- NULL
-  thk_t <- NULL
-  clay_wt <- NULL
+  top       <- NULL
+  bot       <- NULL
+  thk_o     <- NULL
+  thk_t     <- NULL
+  clay_wt   <- NULL
+  # sandvf_wt <- NULL
   
   xy_agg <- data.table::as.data.table(xy)[,
     list(
-      top     = min(top, na.rm = TRUE),
-      bot     = max(bot, na.rm = TRUE),
-      clay_wt = weighted.mean(clay, w = thk_t,  na.rm = TRUE),
+      top       = min(top,                          na.rm = TRUE),
+      bot       = max(bot,                          na.rm = TRUE),
+      clay_wt   = weighted.mean(clay,   w = thk_t,  na.rm = TRUE),
+      # sandvf_wt = weighted.mean(sandvf, w = thk_t,  na.rm = TRUE),
       # need to impute frags
       # frag_wt = weighted.mean(total_frags_pct_nopf, w = thk_t), na.rm = TRUE,
       thk_o   = sum(thk_o, na.rm = TRUE),
@@ -792,6 +796,7 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   
   # address special cases of strongly contrasting classes ----
   clay_wt_bot.1     <- NULL
+  sandvf_wt_bot.1   <- NULL
   taxpartsize_bot.1 <- NULL
   
   
@@ -832,6 +837,18 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
         sc
       )
       idx_sc = sc %in% .pscs_sc
+      # # sandy over loamy
+      # sc = ifelse(
+      #   sc %in% c("sandy over coarse-loamy", "sandy over fine-loamy") & taxpartsize_bot.1 %in% c("coarse-loamy", "fine-loamy") & sandvf_wt_bot.1 > 50,
+      #   "sandy over loamy",
+      #   sc
+      #   )
+      # # sandy-skeletal over loamy
+      # sc = ifelse(
+      #   sc %in% c("sandy-skeletal over coarse-loamy", "sandy over fine-loamy") & taxpartsize_bot.1 %in% c("coarse-loamy", "fine-loamy") & sandvf_wt_bot.1 > 50,
+      #   "sandy-skeletal over loamy",
+      #   sc
+      # )
       # idx_sc = grepl("over", sc)
       sc = ifelse(idx_sc, sc, taxpartsize)
     })
