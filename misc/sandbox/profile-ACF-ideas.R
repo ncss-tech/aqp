@@ -1,6 +1,7 @@
 ##
 ## Use auto-correlation function to investigate / document / visualize the 
 ## vertical anisotropy within soil profiles
+## TODO: keep track of where ACF -> some small value
 ##
 ##
 ##
@@ -115,4 +116,10 @@ acfPlot2(x, 'estimated_oc')
 acfPlot2(x, 'estimated_oc', resample = TRUE)
 
 acfPlot(x, 'clay')
+acfPlot2(x, 'clay')
+acfPlot2(x, 'clay', resample = TRUE)
+
+acfPlot(x, 'ph_h2o')
+acfPlot2(x, 'ph_h2o')
+acfPlot2(x, 'ph_h2o', resample = TRUE)
 
