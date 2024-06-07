@@ -49,9 +49,6 @@
     <loc>/reference/NCSP.html</loc>
   </url>
   <url>
-    <loc>/reference/PSCS_levels.html</loc>
-  </url>
-  <url>
     <loc>/reference/ROSETTA.centroids.html</loc>
   </url>
   <url>
@@ -407,6 +404,9 @@
   </url>
   <url>
     <loc>/reference/length.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lookup_PSCS.html</loc>
   </url>
   <url>
     <loc>/reference/lunique.html</loc>
