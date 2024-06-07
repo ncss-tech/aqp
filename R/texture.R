@@ -1057,11 +1057,11 @@ fragvol_to_texmod <- function(
 
 #' @title Ranking Systems for USDA Taxonomic Particle-Size and Substitute Classes of Mineral Soils
 #' 
-#' @description Generate a vector of USDA Particle-Size and Substitute Classes  names, sorted according to approximate particle size
+#' @description Generate a lookup table of USDA Particle-Size and Substitute Classes  names, ranked according to approximate particle size
 #'
 #' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
-#' @return an ordered factor
+#' @return A data.frame with a rank column, taxonomic family particle size class, and a flag for contrasting.
 #' 
 #' @author Stephen Roecker
 #' 
@@ -1071,12 +1071,41 @@ fragvol_to_texmod <- function(
 #' @examples
 #' 
 #' # class codes
-#' PSCS_levels()
+#' lu <- lookup_PSCS()
+#' 
+#' idx <- lu$contrasting == FALSE
+#' 
+#' lu$taxpartsize[idx]
+#' 
+#' lu$rank[as.integer(lu$taxpartsize)[idx]]
 #' 
 
-PSCS_levels <- function() {
+lookup_PSCS <- function() {
   
-  fe <- c("fragmental", "pumiceous", "cindery", "sandy-skeletal", "loamy-skeletal", "gypseous-skeletal", "ashy-skeletal", "medial-skeletal", "ashy-pumiceous", "medial-pumiceous", "clay-skeletal", "sandy", "ashy", "coarse-loamy", "coarse-silty", "coarse-gypseous", "medial", "loamy", "fine-gypseous", "fine-loamy", "fine-silty", "hydrous", "fine", "clayey", "very-fine", "diatomaceous") |> rev()
+  fe <- c(
+    "diatomaceous", "hydrous", "very-fine", "clayey", "fine", 
+    "fine-silty", "fine-loamy", "fine-gypseous", 
+    "loamy", "medial", 
+    "coarse-gypseous", "coarse-silty", "coarse-loamy", 
+    "ashy", "sandy", 
+    "clayey-skeletal", 
+    "medial-pumiceous", "ashy-pumiceous", "medial-skeletal", "ashy-skeletal", "gypseous-skeletal", 
+    "loamy-skeletal", "sandy-skeletal", 
+    "pumiceous", "cindery", "fragmental"
+    )
+  
+  rank <- c(
+    100, 90, 80, 68, 47,
+    27, 26, 25, 
+    18, 17,
+    10, 9, 8,
+    6, 5,
+    -28,
+    -29, -30, -31, -32, -33,
+    -35, -45, 
+    -60, -65, -90
+    )
+  names(rank) <- fe
   
   # cf <- c("fragmental", "sandy-skeletal", "loamy-skeletal", "clay-skeletal")
   
@@ -1084,24 +1113,35 @@ PSCS_levels <- function() {
   names(test) <- .pscs_sc
   
   idx <- lapply(test, function(x) {
-    idx <- sapply(x, function(y) which(fe == y)) |> unlist()
+    idx <- sapply(x, function(y) rank[which(fe == y)]) |> unlist()
+    
+    # select the 3rd value when "or" results in 3 values
+    if (length(idx) > 2) idx <- c(idx[1], idx[3])
+    
+    dif <- diff(idx)
+    idx <- idx[1] + sqrt(abs(dif)) * sign(dif)
     # l <- dplyr::lag(idx)
-    l <- idx[c(NA, 1:(length(idx) - 1))]
-    idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
-    n   <- length(idx)
-    idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
+    # l <- idx[c(NA, 1:(length(idx) - 1))]
+    # idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
+    # n   <- length(idx)
+    # idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
+    
     
     return(idx)
     })
+  idx <- round(unlist(idx), 1)
   
-  fe <- data.frame(rn = 1:length(fe), fe = fe)
-  sc <- data.frame(rn = unlist(idx),  fe = .pscs_sc)
-  lu <- rbind(fe, sc)
-  lu <- lu[order(lu$rn), ]
-  lu$rn <- 1:nrow(lu)
-  lu$fe <- factor(lu$fe, levels = lu$fe, ordered = TRUE)
+  # fe <- data.frame(rn = 1:length(fe), fe = fe)
+  fe_df <- data.frame(rank = unname(rank), taxpartsize = fe)
+  sc_df <- data.frame(rank = unname(idx),  taxpartsize = .pscs_sc)
+  lu <- rbind(fe_df, sc_df)
+  lu <- lu[order(-lu$rank), ]
+  # lu$rn <- 1:nrow(lu)
+  lu$contrasting <- grepl(" over ", lu$taxpartsize)
+  lu$taxpartsize <- factor(lu$taxpartsize, levels = lu$taxpartsize, ordered = TRUE)
+  row.names(lu) <- NULL
   
-  return(lu$fe)
+  return(lu)
 }
 
 
