@@ -659,7 +659,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
 #' 
 #' @author Stephen Roecker
 #' 
-#' @seealso [texture_to_taxpartsize()], [lookup_PSCS()]
+#' @seealso [texture_to_taxpartsize()], [lookup_taxpartsize()]
 #' 
 #' @export
 
