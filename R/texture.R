@@ -1082,29 +1082,16 @@ fragvol_to_texmod <- function(
 
 lookup_PSCS <- function() {
   
-  fe <- c(
-    "diatomaceous", "hydrous", "very-fine", "clayey", "fine", 
-    "fine-silty", "fine-loamy", "fine-gypseous", 
-    "loamy", "medial", 
-    "coarse-gypseous", "coarse-silty", "coarse-loamy", 
-    "ashy", "sandy", 
-    "clayey-skeletal", 
-    "medial-pumiceous", "ashy-pumiceous", "medial-skeletal", "ashy-skeletal", "gypseous-skeletal", 
-    "loamy-skeletal", "sandy-skeletal", 
-    "pumiceous", "cindery", "fragmental"
-    )
+  fe <- c("diatomaceous", "very-fine", "clayey", "fine", "hydrous", "fine-silty", 
+          "fine-gypseous", "fine-loamy", "medial", "loamy", "coarse-loamy", 
+          "coarse-silty", "coarse-gypseous", "ashy", "sandy", "hydrous-pumiceous", 
+          "medial-pumiceous", "ashy-pumiceous", "pumiceous", "clayey-skeletal", 
+          "hydrous-skeletal", "medial-skeletal", "loamy-skeletal", "gypseous-skeletal", 
+          "ashy-skeletal", "sandy-skeletal", "cindery", "fragmental")
   
-  rank <- c(
-    100, 90, 80, 68, 47,
-    27, 26, 25, 
-    18, 17,
-    10, 9, 8,
-    6, 5,
-    -28,
-    -29, -30, -31, -32, -33,
-    -35, -45, 
-    -60, -65, -90
-    )
+  rank <- c(84, 74, 60.02, 46.04, 44.04, 26, 25.8, 25.6, 24, 17.24, 8.88, 
+            8.5, 7.5, 6.5, 4.67, -55.96, -76, -93.5, -97.33, -43.33, -55.96, 
+            -76, -83.23, -83.35, -93.5, -95.33, -97.33, -96.94)
   names(rank) <- fe
   
   # cf <- c("fragmental", "sandy-skeletal", "loamy-skeletal", "clay-skeletal")
