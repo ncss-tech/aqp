@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -166,6 +166,7 @@ or possibly <code>mean</code>: somewhere in-between.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">d</span>, hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">1</span>, width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="estimateSoilDepth-1.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02219775</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># top of the first Cd</span></span></span>
 <span class="r-in"><span><span class="fu">estimateSoilDepth</span><span class="op">(</span><span class="va">d</span>, name <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span></span>
@@ -211,6 +212,7 @@ or possibly <code>mean</code>: somewhere in-between.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># adjust default y-offset and depth scaling for following examples</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp1</span>, y.offset<span class="op">=</span><span class="fl">10</span>, scaling.factor<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.417561</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get plotting parameters for profile widths and depth scaling factors</span></span></span>
 <span class="r-in"><span><span class="va">lsp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="st">"last_spc_plot"</span>, envir <span class="op">=</span> <span class="va">aqp.env</span><span class="op">)</span></span></span>

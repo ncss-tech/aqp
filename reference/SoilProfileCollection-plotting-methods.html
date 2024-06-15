@@ -18,7 +18,7 @@ Options can be used to conveniently specify sets of arguments that will be used 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -428,11 +428,13 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="co"># plot profiles without horizon-line divisions</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp1</span>, divide.hz <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-2.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3799805</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># diagonal lines encode horizon boundary distinctness</span></span></span>
 <span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">hzD</span> <span class="op">&lt;-</span> <span class="fu"><a href="hzDistinctnessCodeToOffset.html">hzDistinctnessCodeToOffset</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">bound_distinct</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp1</span>, hz.distinctness.offset <span class="op">=</span> <span class="st">'hzD'</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-3.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3799805</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot horizon color according to some property</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
@@ -440,6 +442,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'name'</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp4</span>, color <span class="op">=</span> <span class="st">'clay'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-4.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6817383</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># another example</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span></span></span>
@@ -452,11 +455,13 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp2</span>, label <span class="op">=</span> <span class="st">'surface'</span>, plot.order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">$</span><span class="va">surface</span><span class="op">)</span>, </span></span>
 <span class="r-in"><span>max.depth <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-5.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.074414</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example using a categorical attribute</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp2</span>, color <span class="op">=</span> <span class="st">"plasticity"</span>, </span></span>
 <span class="r-in"><span>max.depth <span class="op">=</span> <span class="fl">400</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-6.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9719401</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot two SPC objects in the same figure</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -464,10 +469,12 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="co"># plot the first SPC object and</span></span></span>
 <span class="r-in"><span><span class="co"># allocate space for the second SPC object</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp1</span>, n <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4042345</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the second SPC, starting from the first empty space</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp2</span>, x.idx.offset <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-7.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.033979</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
@@ -485,6 +492,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">0.8</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-8.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4472448</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># shrink horizon names in "thin" horizons</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span></span></span>
@@ -496,6 +504,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-9.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4472448</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
@@ -515,10 +524,12 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="co"># note that the legend is split into 2 rows when length(classes) &gt; n.legend argument</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp3</span>, color<span class="op">=</span><span class="st">'fake.data'</span>, name<span class="op">=</span><span class="st">'fake.data'</span>, cex.names<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-10.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1893726</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># make enough room in a single legend row</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">sp3</span>, color<span class="op">=</span><span class="st">'fake.data'</span>, name<span class="op">=</span><span class="st">'fake.data'</span>, cex.names<span class="op">=</span><span class="fl">0.8</span>, n.legend<span class="op">=</span><span class="fl">15</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-11.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1893726</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
@@ -541,10 +552,12 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="co"># y-offset at 0</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">x</span>, color <span class="op">=</span> <span class="st">'matrix_color'</span>, cex.names <span class="op">=</span> <span class="fl">0.66</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-12.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3687043</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># constant adjustment to y-offset</span></span></span>
 <span class="r-in"><span><span class="fu">plotSPC</span><span class="op">(</span><span class="va">x</span>, color <span class="op">=</span> <span class="st">'matrix_color'</span>, cex.names <span class="op">=</span> <span class="fl">0.66</span>, y.offset <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-13.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3687043</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># attempt using invalid y.offset</span></span></span>
 <span class="r-in"><span><span class="co"># warning issued and default value of '0' used</span></span></span>
@@ -564,6 +577,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>  fixLabelCollisions <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3942057</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-14.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
@@ -584,6 +598,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
 <span class="r-in"><span>        name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.346582</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
 <span class="r-plt img"><img src="SoilProfileCollection-plotting-methods-15.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span></span></span>
@@ -591,7 +606,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span><span class="co"># align / adjust relative x positions</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">111</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="alignTransect.html">alignTransect</a></span><span class="op">(</span><span class="va">xoff</span>, x.min <span class="op">=</span> <span class="fl">1</span>, x.max <span class="op">=</span> <span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, thresh <span class="op">=</span> <span class="fl">0.65</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 162 iterations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 136 iterations</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># y-offset is automatically re-ordered according to</span></span></span>
 <span class="r-in"><span><span class="co"># plot.order</span></span></span>
@@ -606,6 +621,7 @@ Soil Scientists. Computers &amp; Geosciences. 52:258 - 268.</p>
 <span class="r-in"><span>        hz.depths <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
 <span class="r-in"><span>        name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3573011</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/box.html" class="external-link">box</a></span><span class="op">(</span><span class="op">)</span></span></span>

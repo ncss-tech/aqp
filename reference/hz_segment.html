@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
       </span>
     </div>
 
@@ -144,12 +144,15 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">z</span>, color <span class="op">=</span> <span class="st">'segment_id'</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hz_segment-1.png" alt="" width="768" height="475"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.177614</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># highlight new horizon records</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">z</span>, color <span class="op">=</span> <span class="cn">NA</span>, default.color <span class="op">=</span> <span class="cn">NA</span>, width <span class="op">=</span> <span class="fl">0.3</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.177614</span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp1</span>, color <span class="op">=</span> <span class="cn">NA</span>, default.color <span class="op">=</span> <span class="cn">NA</span>, </span></span>
 <span class="r-in"><span>width <span class="op">=</span> <span class="fl">0.3</span>, lwd <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, name <span class="op">=</span> <span class="cn">NA</span>, print.id <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.177614</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [P001:6] horizon with top == bottom, cannot fix horizon depth overlap</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  consider using repairMissingHzDepths()</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'top'</span>, horiz <span class="op">=</span> <span class="cn">TRUE</span>, </span></span>
@@ -181,10 +184,10 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            slab   segment          diff</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 00-10 -2.801336 -2.801336 -4.440892e-16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10-20 -2.613135 -2.613135  0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20-30 -4.175462 -4.175462  0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             slab    segment diff</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 00-10  0.5880336  0.5880336    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10-20 -1.0574822 -1.0574822    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20-30 -4.7171472 -4.7171472    0</span>
 <span class="r-in"><span><span class="va">res</span><span class="op">$</span><span class="va">diff</span> <span class="op">&lt;</span> <span class="fl">0.001</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE TRUE TRUE</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
