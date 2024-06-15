@@ -1,3 +1,6 @@
+# aqp 2.0.4 (2024-06-14)
+ * ragged bottom lines in `plotSPC()` now adjusted as function of number of profiles and device width
+
 # aqp 2.0.3 (2024-04-18)
  * CRAN release
  * `simulateColor()` gains new method `mvnorm` for simulating plausible colors

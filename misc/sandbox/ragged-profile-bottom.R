@@ -205,13 +205,13 @@ plotSPC(p[1:10, , .FIRST], cex.names = 0.66, name.style = 'center-center', width
 plotSPC(p[1:10, , .FIRST], cex.names = 0.66, name.style = 'center-center', width = 0.25, hz.distinctness.offset = 'hzd')
 
 
-plotSPC(p[1, ], cex.names = 0.66, name.style = 'center-center', width = 0.1, hz.distinctness.offset = 'hzd')
+plotSPC(p[1, ], cex.names = 0.66, name.style = 'center-center', width = 0.1, hz.distinctness.offset = 'hzd', max.depth = 145)
 
-plotSPC(p[1, ], cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.distinctness.offset = 'hzd')
+plotSPC(p[1, ], cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.distinctness.offset = 'hzd', max.depth = 145)
 
-plotSPC(p[1:5, ], cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.distinctness.offset = 'hzd')
+plotSPC(p[1:5, ], cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.distinctness.offset = 'hzd', max.depth = 145)
 
-plotSPC(p[1:10, ], cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.distinctness.offset = 'hzd')
+plotSPC(p[1:10, ], cex.names = 0.66, name.style = 'center-center', width = 0.33, hz.distinctness.offset = 'hzd', max.depth = 145)
 
 
 
