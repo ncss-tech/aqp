@@ -773,12 +773,18 @@ plotSPC <- function(
   if(id.style == 'auto') {
     sum.ID.str.width <- sum(sapply(pLabels, strwidth, units = 'inches', cex = cex.id, font = 2))
     ID.width.ratio <- sum.ID.str.width  / .par_devWidth
-    print(ID.width.ratio)
     
-    if(ID.width.ratio > 0.7)
+    # debug
+    # print(ID.width.ratio)
+    
+    if(ID.width.ratio > 0.7) {
       id.style <- 'side'
-    else
+    }
+    
+    else {
       id.style <- 'top'
+    }
+    
   }
   
   
