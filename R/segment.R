@@ -383,12 +383,8 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
   
   
   # append dissolve_id
-  n <- c(
-    var_dep$top, 
-    var_dep$bot
-    ) |>
-    nchar() |>
-    max(na.rm = TRUE)
+  n <- max(nchar(c(var_dep$top, var_dep$bot)), na.rm = TRUE)
+  
   var_dep$dissolve_id <- paste0(
     var_dep$idcol,
     "_",
@@ -439,25 +435,20 @@ dissolve_hz <- function(object, by, id = "idcol", hztop = "top", hzbot = "bottom
 #' @examples
 #' 
 #' h <- data.frame(
-#' id = 1,
-#' top    = c(0,  25, 44, 46, 50),
-#' bottom = c(25, 44, 46, 50, 100),
-#' by     = c("Yes", "Yes", "No", "No", "Yes"),
-#' clay   = c(10, 12, 27, 35, 16)
+#'   id = 1,
+#'   top    = c(0,  25, 44, 46, 50),
+#'   bottom = c(25, 44, 46, 50, 100),
+#'   by     = c("Yes", "Yes", "No", "No", "Yes"),
+#'   clay   = c(10, 12, 27, 35, 16)
 #' )
 #' 
-#' h |> hz_dissolve("by")
+#' hz_dissolve(h, "by")
 #' 
-#' h |> hz_dissolve("by") |> hz_intersect(x = _, y = h)
+#' hz_intersect(x = hz_dissolve(h, "by"), y = h)
 #' 
-#' h |> 
-#' hz_dissolve("by") |> 
-#' hz_intersect(x = h, y = _) |>
-#' aggregate(clay ~ dissolve_id, data = _, mean)
+#' hi <- hz_intersect(x = h, y = hz_dissolve(h, "by"))
+#' aggregate(clay ~ dissolve_id, data = hi, mean)
 #' 
-
-
-
 hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
   
   # test inputs ----
@@ -502,9 +493,7 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
     
     if (nrow(yi) > 0) {
       
-      int <- c(xi$top, xi$bot, yi$top, yi$bot) |>
-      sort() |>
-      unique()
+      int <-  unique(sort(c(xi$top, xi$bot, yi$top, yi$bot)))
       
       xi_seg <- hz_segment(xi, intervals = int, depthcols = names(x_conversion[2:3]), trim = TRUE)
       yi_seg <- hz_segment(yi, intervals = int, depthcols = names(x_conversion[2:3]), trim = TRUE)
@@ -514,8 +503,8 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
   }) ->.;
   
   
-  x_seg <- lapply(., function(x) x[["x_seg"]]) |> do.call("rbind", args = _)
-  y_seg <- lapply(., function(x) x[["y_seg"]]) |> do.call("rbind", args = _)
+  x_seg <- do.call("rbind", lapply(., function(x) x[["x_seg"]]))
+  y_seg <- do.call("rbind", lapply(., function(x) x[["y_seg"]]))
 
   
   xy_int <- merge(x_seg, y_seg, by = c("segment_id", "idcol", "top", "bot"), sort = FALSE)
@@ -559,22 +548,17 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 #' clay   = c(10, 12, 27, 35, 16)
 #' )
 #' 
-#' h |> hz_lag()
+#' hz_lag(h)
 #' 
-#' h |> hz_lag(-1)
+#' hz_lag(h, -1)
 #' 
-#' h |> hz_lag(10:15, unit = "depth")
+#' hz_lag(h, 10:15, unit = "depth")
 #' 
-#' h |> 
-#' hz_lag() |> 
-#' cbind(h, lag = _) |>
-#' transform(
-#' clay_dif = lag.clay_bot.1 - clay,
-#' texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1))
+#' transform(cbind(h, lag = hz_lag(h)), 
+#'   clay_dif = lag.clay_bot.1 - clay,
+#'   texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1)
+#' )
 #' 
-
-
-
 hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c("top", "bottom"), order = FALSE) {
   
   nm <- names(object)
@@ -599,7 +583,7 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     x <- x[x$bot < 1000, ]
   }
   
-  test <- aggregate(top ~ idcol, data = x, length)$top |> max()
+  test <- max(aggregate(top ~ idcol, data = x, length)$top)
   if (unit == "index") {
     if ((test - 1) < max(lag)) {
     stop("lag can not be greater than the maximum number of horizons")
@@ -639,46 +623,42 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     x_seg <- x_seg[1:(n + 1)]
     
     
-    x_seg <- lapply(lag, function(i) {
-      
+    x_seg <- do.call("cbind", args =  lapply(lag, function(i) {
       x$bot_i <- x$bot + i
-      idx <- match(
-        paste(x$idcol,     x$bot_i),
-        paste(x_seg$idcol, x_seg$bot)
-        )
-      xi_seg <- x_seg[idx, ]
+      idx <- match(paste(x$idcol, x$bot_i),
+                   paste(x_seg$idcol, x_seg$bot))
+      xi_seg <- x_seg[idx,]
       xi_seg <- x[xi_seg$.ID, vars, drop = FALSE]
       xi_seg$.ID <- NULL
       
-      if (i >= 0) names(xi_seg) <- paste0(names(xi_seg), "_bot.",     i)
-      if (i <  0) names(xi_seg) <- paste0(names(xi_seg), "_top.", abs(i))
+      if (i >= 0)
+        names(xi_seg) <- paste0(names(xi_seg), "_bot.",     i)
       
+      if (i <  0)
+        names(xi_seg) <- paste0(names(xi_seg), "_top.", abs(i))
       
       return(xi_seg)
-    }) |>
-      do.call("cbind", args = _)
+    }))
     
     return(x_seg)
   }
   
   
   if (unit == "index") {
-    x_lag <- lapply(lag, function(i) {
+    x_lag <- do.call("cbind", lapply(lag, function(i) {
       .lag_ind(x, i)
-    }) |>
-      do.call("cbind", args = _)
+    }))
     x_lag <- x_lag[sort(names(x_lag))]
   }
+  
   if (unit == "depth") {
     x_lag <- .lag_dep(x, lag)
     x_lag <- x_lag[sort(names(x_lag))]
   }
   
-  
   # # reset inputs ----
   x_lag <- .reset_inputs(x_lag, x_conversion)
   
-   
   return(x_lag)
 }
 

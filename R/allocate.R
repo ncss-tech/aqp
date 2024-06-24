@@ -747,20 +747,18 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   
   # dissolve on pscs ----
   # calculate non-trimmed horizon thickness
-  x_dis <- x |>
-    hz_dissolve(by = "taxpartsize", idcol = "idcol", depthcols = c("top", "bot")) |>
-    transform(thk_o = bot - top)
+  x_dis <- transform(hz_dissolve(x, by = "taxpartsize", idcol = "idcol", depthcols = c("top", "bot")), 
+                     thk_o = bot - top)
   
   
   # trim depths ----
   # calculate trimmed horizon thickness
-  xy_dis <- x_dis |>
-    hz_intersect(y, idcol = "idcol", depthcols = c("top", "bot")) |>
-    transform(thk_t = bot - top)
+  xy_dis <- transform(hz_intersect(x_dis, y, idcol = "idcol", depthcols = c("top", "bot")),
+                      thk_t = bot - top)
   
   
   # rejoin dissolved pscs to the original horizon table ----
-  xy <- hz_intersect(x, xy_dis, idcol = "idcol", depthcols = c("top", "bot")) |> suppressWarnings()
+  xy <- suppressWarnings(hz_intersect(x, xy_dis, idcol = "idcol", depthcols = c("top", "bot")))
   x_dis  <- NULL
   xy_dis <- NULL
   
@@ -790,8 +788,7 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   
   
   # find adjacent horizons ----
-  xy_lag <- xy_agg |> 
-    hz_lag(idcol = "idcol", depthcols = c("top", "bot"))
+  xy_lag <- hz_lag(xy_agg, idcol = "idcol", depthcols = c("top", "bot"))
   
   
   # address special cases of strongly contrasting classes ----
@@ -801,8 +798,7 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   
   
   # still needs special cases for very fine sand
-  xy_agg <- cbind(xy_agg, xy_lag) |> 
-    within({
+  xy_agg <- within(cbind(xy_agg, xy_lag), {
       clay_dif = clay_wt_bot.1 - clay_wt
       sc       = paste0(taxpartsize, " over ", taxpartsize_bot.1)
       sc       = gsub(" over NA$", "", sc)
@@ -859,36 +855,32 @@ hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", 
   n_sc    <- NULL
   n_peiid <- NULL
   
-  test <- data.table::as.data.table(xy_agg)[, list(
+  test <- as.data.frame(data.table::as.data.table(xy_agg)[, list(
     n_sc    = sum(idx_sc, na.rm = TRUE), # sum(grepl(" over ", sc), na.rm = TRUE),
     n_peiid = length(idx_sc)
   ),
   by = "idcol"
-  ] |>
-    as.data.frame()
+  ])
   
   
   # pick the sc pscs with the largest contrast or pscs with the greatest thickness
-  xy_res <- xy_agg |>
-    merge(test, by = "idcol", all.x = TRUE, sort = FALSE) |>
-    transform(
+  xy_res <- transform(merge(xy_agg, test, by = "idcol", all.x = TRUE, sort = FALSE), 
       idx_sc = sc %in% .pscs_sc,
       # idx_sc = grepl(" over ", sc),
       idx_c_ov_l = sc %in% c("clayey over fine-loamy")
     )
   
-  xy_res <- data.table::as.data.table(xy_res)[, list(
-    pscs1 = sc[n_sc == 0 & n_peiid == 1],
-    pscs2 = sc[n_sc == 1 & n_peiid  > 1 & idx_sc],
-    pscs3 = sc[which.max(thk_t[n_sc == 0 & n_peiid > 1])],
-    pscs4 = sc[n_sc == 1 & idx_sc],
-    pscs5 = sc[which.max(abs(clay_dif[n_sc > 1 & !is.na(sc)]))],
-    taxpartsizemod = ifelse(max(n_sc) > 1, "aniso", "not used")
-    ),
-    by =  "idcol"
-    ] |>
-    as.data.frame() |>
-    within({
+  xy_res <- 
+    within(as.data.frame(
+      data.table::as.data.table(xy_res)[, list(
+        pscs1 = sc[n_sc == 0 & n_peiid == 1],
+        pscs2 = sc[n_sc == 1 & n_peiid  > 1 & idx_sc],
+        pscs3 = sc[which.max(thk_t[n_sc == 0 & n_peiid > 1])],
+        pscs4 = sc[n_sc == 1 & idx_sc],
+        pscs5 = sc[which.max(abs(clay_dif[n_sc > 1 & !is.na(sc)]))],
+        taxpartsizemod = ifelse(max(n_sc) > 1, "aniso", "not used")
+      ), by =  "idcol"]),  
+    {
       # need to add fix for special case of sandy over loamy which requires fine sand percent
       taxpartsize = paste(pscs1, pscs3, pscs4, pscs5, sep = "")
       taxpartsize = gsub("NA", "", taxpartsize)
