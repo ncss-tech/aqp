@@ -69,6 +69,7 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         if: matrix.config.r == '3.6'
         with:
-          args: 'c("--no-manual", "--as-cran", "--no-build-vignettes", "--ignore-vignettes")'
+          args: 'c("--no-manual", "--as-cran", "--ignore-vignettes")'
+          build_args: 'c("--no-manual", "--no-build-vignettes")'
           upload-snapshots: true
         
