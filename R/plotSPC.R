@@ -722,20 +722,6 @@ plotSPC <- function(
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
-  ## this should probably use strwidth() AFTER plot() has been called
-  # if profile style is auto, determine style based on font metrics
-  if(id.style == 'auto') {
-    sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
-    plot.width <- par('pin')[1]
-    ID.width.ratio <- sum.ID.str.width  / plot.width
-    #   	print(ID.width.ratio)
-    
-    if(ID.width.ratio > 0.7)
-      id.style <- 'side'
-    else
-      id.style <- 'top'
-  }
-  
   
   
   ## init plotting region, unless we are appending to an existing plot
@@ -760,8 +746,47 @@ plotSPC <- function(
   }
   
   
+  
+  ########################
+  ## device information ##
+  ########################
+  
+  # note: all of this has to happen after plot(...), or if `add = TRUE`
+  
+  .par_usr <- par('usr')
+  .par_dev <- par('pin')
+  .par_xWidth <- diff(.par_usr[1:2])
+  .par_devWidth <- .par_dev[1]
+  
+  # profiles / device width (inches)
+  .dev_sketch_density <- (.par_xWidth / .par_devWidth)
+  
   # calculate width of a single character on current plot device
   one.char.width <- strwidth('W')
+  
+  
+  ################################
+  ## profile ID style selection ##
+  ################################
+  
+  # if profile style is auto, determine style based on font metrics
+  if(id.style == 'auto') {
+    sum.ID.str.width <- sum(sapply(pLabels, strwidth, units = 'inches', cex = cex.id, font = 2))
+    ID.width.ratio <- sum.ID.str.width  / .par_devWidth
+    
+    # debug
+    # print(ID.width.ratio)
+    
+    if(ID.width.ratio > 0.7) {
+      id.style <- 'side'
+    }
+    
+    else {
+      id.style <- 'top'
+    }
+    
+  }
+  
   
   ## TODO dynamically adjust `width` based on strwidth(longest.hz.name)
   ## TODO abstract single profile sketch code into a single function
@@ -938,10 +963,13 @@ plotSPC <- function(
         if(truncation_flag_i & !all(is.na(xx))) {
           
           # must be an even number of oscillations
-          # computed as function of number of profiles
+          # computed as function of (ideal oscillations / 2) / sketch density
           # adjusted to width (n.osc increases with width)
-          # min value of 4
-          .raggedN <- pmax(4, round((2.5 * width) * 32 / (n / 2)) * 2)
+          # min value of 6
+          # max value of 32
+          .raggedN <- round((2.5 * width) * (8 / .dev_sketch_density)) * 2
+          .raggedN <- pmax(6, .raggedN)
+          .raggedN <- pmin(32, .raggedN)
           
           # ragged bottom line segment: lr -> ll ordering
           .r <- .raggedLines(x1 = x.ll, x2 = x.lr, y = y0[j], o = .raggedOffsets, n = .raggedN)
@@ -1027,10 +1055,15 @@ plotSPC <- function(
         if(truncation_flag_i & !all(is.na(xx))) {
           
           # must be an even number of oscillations
-          # computed as function of number of profiles
+          # computed as function of (ideal oscillations / 2) / sketch density
           # adjusted to width (n.osc increases with width)
-          # min value of 4
-          .raggedN <- pmax(4, round((2.5 * width) * 32 / (n / 2)) * 2)
+          # min value of 6
+          # max value of 32
+          .raggedN <- round((2.5 * width) * (8 / .dev_sketch_density)) * 2
+          .raggedN <- pmax(6, .raggedN)
+          .raggedN <- pmin(32, .raggedN)
+          
+          ## TODO: allow user adjustments via argument
           
           # ragged bottom line segment: lr -> ll ordering
           .r <- .raggedLines(x1 = x.ll, x2 = x.lr, y = y0[j], o = .raggedOffsets, n = .raggedN)

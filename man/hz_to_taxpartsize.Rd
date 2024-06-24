@@ -77,7 +77,7 @@ hz_to_taxpartsize(horizons(h), pscs)
 
 }
 \seealso{
-\code{\link[=texture_to_taxpartsize]{texture_to_taxpartsize()}}, \code{\link[=PSCS_levels]{PSCS_levels()}}
+\code{\link[=texture_to_taxpartsize]{texture_to_taxpartsize()}}, \code{\link[=lookup_taxpartsize]{lookup_taxpartsize()}}
 }
 \author{
 Stephen Roecker

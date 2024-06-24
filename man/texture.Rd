@@ -281,7 +281,7 @@ Matthew R. Levi, Modified Centroid for Estimating Sand, Silt, and Clay from Soil
 \seealso{
 \code{\link{SoilTextureLevels}}
 
-\code{\link{hz_to_taxpartsize}}
+\code{\link[=hz_to_taxpartsize]{hz_to_taxpartsize()}}, \code{\link[=lookup_taxpartsize]{lookup_taxpartsize()}}
 }
 \author{
 Stephen Roecker

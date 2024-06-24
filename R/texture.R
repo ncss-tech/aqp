@@ -427,7 +427,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #'
 #' @return - `texture_to_taxpartsize`: a character vector containing `"taxpartsize"` classes
 #' 
-#' @seealso \code{\link{hz_to_taxpartsize}}
+#' @seealso [hz_to_taxpartsize()], [lookup_taxpartsize()]
 #' 
 #' @rdname texture
 #'
@@ -1057,11 +1057,11 @@ fragvol_to_texmod <- function(
 
 #' @title Ranking Systems for USDA Taxonomic Particle-Size and Substitute Classes of Mineral Soils
 #' 
-#' @description Generate a vector of USDA Particle-Size and Substitute Classes  names, sorted according to approximate particle size
+#' @description Generate a lookup table of USDA Particle-Size and Substitute Classes  names, ranked according to approximate particle size
 #'
 #' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
-#' @return an ordered factor
+#' @return A data.frame with a rank column, taxonomic family particle size class, and a flag for contrasting.
 #' 
 #' @author Stephen Roecker
 #' 
@@ -1071,12 +1071,27 @@ fragvol_to_texmod <- function(
 #' @examples
 #' 
 #' # class codes
-#' PSCS_levels()
+#' lu <- lookup_taxpartsize()
+#' 
+#' idx <- lu$contrasting == FALSE
+#' 
+#' lu$taxpartsize[idx]
+#' 
+#' lu$rank[as.integer(lu$taxpartsize)[idx]]
 #' 
 
-PSCS_levels <- function() {
+lookup_taxpartsize <- function() {
+  fe <- c("diatomaceous", "very-fine", "clayey", "fine", "hydrous", "fine-silty", 
+          "fine-gypseous", "fine-loamy", "medial", "loamy", "coarse-loamy", 
+          "coarse-silty", "coarse-gypseous", "ashy", "sandy", "hydrous-pumiceous", 
+          "medial-pumiceous", "ashy-pumiceous", "clayey-skeletal", "hydrous-skeletal", 
+          "medial-skeletal", "loamy-skeletal", "gypseous-skeletal", "ashy-skeletal", 
+          "sandy-skeletal", "pumiceous", "cindery", "fragmental")
   
-  fe <- rev(c("fragmental", "pumiceous", "cindery", "sandy-skeletal", "loamy-skeletal", "gypseous-skeletal", "ashy-skeletal", "medial-skeletal", "ashy-pumiceous", "medial-pumiceous", "clay-skeletal", "sandy", "ashy", "coarse-loamy", "coarse-silty", "coarse-gypseous", "medial", "loamy", "fine-gypseous", "fine-loamy", "fine-silty", "hydrous", "fine", "clayey", "very-fine", "diatomaceous"))
+  rank <- c(84, 74, 60.02, 46.04, 44.04, 26, 25.8, 25.6, 24, 17.24, 8.88, 
+            8.5, 7.5, 6.5, 4.67, -55.96, -76, -93.5, -43.33, -55.96, -76, 
+            -83.23, -83.35, -93.5, -95.33, -95.83, -96.33, -98.94)
+  names(rank) <- fe
   
   # cf <- c("fragmental", "sandy-skeletal", "loamy-skeletal", "clay-skeletal")
   
@@ -1084,24 +1099,35 @@ PSCS_levels <- function() {
   names(test) <- .pscs_sc
   
   idx <- lapply(test, function(x) {
-    idx <- unlist(sapply(x, function(y) which(fe == y)))
+    idx <- unlist(sapply(x, function(y) rank[which(fe == y)]))
+    
+    # select the 3rd value when "or" results in 3 values
+    if (length(idx) > 2) idx <- c(idx[1], idx[3])
+    
+    dif <- diff(idx)
+    idx <- idx[1] + sqrt(abs(dif)) * sign(dif)
     # l <- dplyr::lag(idx)
-    l <- idx[c(NA, 1:(length(idx) - 1))]
-    idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
-    n   <- length(idx)
-    idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
+    # l <- idx[c(NA, 1:(length(idx) - 1))]
+    # idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
+    # n   <- length(idx)
+    # idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
+    
     
     return(idx)
     })
+  idx <- round(unlist(idx), 1)
   
-  fe <- data.frame(rn = 1:length(fe), fe = fe)
-  sc <- data.frame(rn = unlist(idx),  fe = .pscs_sc)
-  lu <- rbind(fe, sc)
-  lu <- lu[order(lu$rn), ]
-  lu$rn <- 1:nrow(lu)
-  lu$fe <- factor(lu$fe, levels = lu$fe, ordered = TRUE)
+  # fe <- data.frame(rn = 1:length(fe), fe = fe)
+  fe_df <- data.frame(rank = unname(rank), taxpartsize = fe)
+  sc_df <- data.frame(rank = unname(idx),  taxpartsize = .pscs_sc)
+  lu <- rbind(fe_df, sc_df)
+  lu <- lu[order(-lu$rank), ]
+  # lu$rn <- 1:nrow(lu)
+  lu$contrasting <- grepl(" over ", lu$taxpartsize)
+  lu$taxpartsize <- factor(lu$taxpartsize, levels = lu$taxpartsize, ordered = TRUE)
+  row.names(lu) <- NULL
   
-  return(lu$fe)
+  return(lu)
 }
 
 
