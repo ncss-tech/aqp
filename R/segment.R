@@ -113,18 +113,16 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
     bot = intervals[-1],
     stringsAsFactors = FALSE
   )
+  
   n <- max(nchar(intervals))
-  dep$id <- paste0(
-    formatC(dep$top, width = n, flag = 0), 
-    "-", 
-    formatC(dep$bot, width = n, flag = 0)
-  )
+  dep$id <- paste0(formatC(dep$top, width = n, flag = 0),
+                   "-",
+                   formatC(dep$bot, width = n, flag = 0))
   
   # argument sanity check ----
   test_spc <- inherits(object, 'SoilProfileCollection')
   test_df  <- inherits(object, 'data.frame')
   test_dep <- is.numeric(dep$top) & is.numeric(dep$bot) & all(dep$top < dep$bot)
-  
   
   if (!any(test_spc, test_df)) {
     stop("the input must be either a SoilProfileCollection or data.frame")
@@ -135,7 +133,6 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
   if (!test_dep) {
     stop("intervals should be numeric and sequential (e.g. c(0, 1, 2, 3) or 0:100)")
   }
-  
   
   # standardize inputs ----
   if (test_spc) {
@@ -149,7 +146,6 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
   }
   names(h)[names(h) %in% depthcols] <- c("top", "bot")
   
-
   ## TODO: consider using dice()
   # filter horizons and trim ----
   .slice <- function(h, top = NULL, bot = NULL) {
@@ -164,7 +160,7 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
       # h <- h[(h$bot - h$top) > 0, ]
     }
     
-    # h <- h[!is.na(h$peiid), ] 
+    # h <- h[!is.na(h$peiid), ]
     
     return(h)
   }
@@ -174,14 +170,17 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
   df_str <- cbind(h[0, ], segment_id = NA_character_[0])
   dep$df <- list(df_str)[rep(1, nrow(dep))] # pre-allocate memory faster
   h <- {
-    split(dep, dep$id) ->.;
+    split(dep, dep$id) -> .
+    
     lapply(., function(x) {
       temp <- .slice(h, top = x$top, bot = x$bot)
-      if (nrow(temp) > 0) x$df[[1]] <- cbind(temp, segment_id = x$id)
+      if (nrow(temp) > 0)
+        x$df[[1]] <- cbind(temp, segment_id = x$id)
       return(x$df[[1]])
-    }) ->.;
-    do.call("rbind", .) ->.;
-    }
+    }) -> .
+    
+    do.call("rbind", .) -> .
+  }
   names(h)[names(h) %in% c("top", "bot")] <- depthcols
   
   
@@ -216,11 +215,9 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
 #' @export 
 #' @rdname hz_segment
 segment <- function(object, intervals, trim = TRUE, hzdepcols = c("top", "bottom")) {
-  .Deprecated("segment() will be deprecated and replaced by hz_segment()")
+  .Deprecated("segment() is deprecated and has been replaced by hz_segment()")
   hz_segment(object, intervals, trim, depthcols = hzdepcols)
 }
-
-
 
 #' @title Dissolving horizon boundaries by grouping variables
 #' 
@@ -281,8 +278,6 @@ segment <- function(object, intervals, trim = TRUE, hzdepcols = c("top", "bottom
 #' test <- hz_dissolve(df, "genhz")
 #' subset(test, value == "2Bt")
 #' 
-
-
 hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom"), collapse = FALSE, order = FALSE) {
   
   # id = "peiid"; hztop = "hzdept"; hzbot = "hzdepb", collapse = FALSE, order = FALSE
@@ -296,17 +291,14 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
   if (!any(test_object)) {
     stop("the object argument must be a data.frame", call. = FALSE)
   }
-
   
   # check that collapse is a logical of length 1
   if (!inherits(collapse, "logical") || length(collapse) != 1) {
     stop("the collapse argument must be logical and a length of one", call. = FALSE)
   }
   
-  
   # check that by is not NULL
   if (is.null(by)) stop("the by argument must not be NULL")
-  
   
   # check that "by" are characters or convert
   if (any(!"character" %in% sapply(object[by], class))) {
@@ -314,10 +306,8 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
     object[by] <- lapply(object[by], as.character)
   }
   
-  
   # check that the column names exist within the object
   .check_names(object, vars = c(idcol = idcol, top = depthcols[1], bot = depthcols[2], by))
-  
   
   # check if previous dissolve_id exists and overwrite
   nm  <- names(object)
@@ -326,7 +316,6 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
     warning("object contains an existing column named 'dissolve_id', it will be overwritten") 
     object[idx] <- NULL
   }
-  
   
   # standardize inputs ----
   df_std <- .standardize_inputs(object, idcol = idcol, depthcols = depthcols)
@@ -345,7 +334,6 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
     df[by_co] <- apply(df[by], 1, paste, collapse = " & ")
     by    <- by_co
   }
-  
   
   # var thickness ----
   var_dep <- lapply(by, function(x) {
@@ -381,7 +369,6 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
   #   )
   # }
   
-  
   # append dissolve_id
   n <- max(nchar(c(var_dep$top, var_dep$bot)), na.rm = TRUE)
   
@@ -407,9 +394,9 @@ hz_dissolve <- function(object, by, idcol = "id", depthcols = c("top", "bottom")
 #' @rdname hz_dissolve
 
 dissolve_hz <- function(object, by, id = "idcol", hztop = "top", hzbot = "bottom", collapse = FALSE, order = FALSE) {
-  .Deprecated("dissolve_hz() will be deprecated and replaced by hz_dissolve()")
+  .Deprecated("dissolve_hz() is deprecated and has been replaced by hz_dissolve()")
   hz_dissolve(object, by, idcol = id, depthcols = c(hztop, hzbot), collapse, order)
-  }
+}
 
 
 
@@ -462,7 +449,6 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
   .check_names(x, c(idcol, depthcols))
   .check_names(y, c(idcol, depthcols))
   
-  
   # check segment_id ----
   ## if it exists, overwrite it
   x_nm <- names(x)
@@ -477,7 +463,6 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
     y[y_nm == "segment_id"] <- NULL
   }
   
-  
   # standardize inputs ----
   x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols)
   x_conversion <- x_std$x_conversion
@@ -486,8 +471,7 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
   y <- .standardize_inputs(y, idcol = idcol, depthcols = depthcols)$x
   
   # intersect x & y ----
-  split(x, x$idcol) ->.;
-  lapply(., function(x) {
+  res <- lapply(split(x, x$idcol), function(x) {
     xi <- x
     yi <- y[which(y$idcol == xi$idcol[1]), ]
     
@@ -500,21 +484,18 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
       
       return(list(x_seg = xi_seg, y_seg = yi_seg))
     }
-  }) ->.;
+  })
   
-  
-  x_seg <- do.call("rbind", lapply(., function(x) x[["x_seg"]]))
-  y_seg <- do.call("rbind", lapply(., function(x) x[["y_seg"]]))
-
+  x_seg <- do.call("rbind", lapply(res, function(x) x[["x_seg"]]))
+  y_seg <- do.call("rbind", lapply(res, function(x) x[["y_seg"]]))
   
   xy_int <- merge(x_seg, y_seg, by = c("segment_id", "idcol", "top", "bot"), sort = FALSE)
-  
   
   # reset inputs ----
   xy_int <- .reset_inputs(xy_int, x_conversion)
   
   return(xy_int)
-  }
+}
 
 
 
@@ -541,11 +522,11 @@ hz_intersect <- function(x, y, idcol = "id", depthcols = c("top", "bottom")) {
 #' @examples
 #' 
 #' h <- data.frame(
-#' id = 1,
-#' top    = c(0,  25, 44, 46, 50),
-#' bottom = c(25, 44, 46, 50, 100),
-#' texcl     = c("SL", "SL", "CL", "CL", "L"),
-#' clay   = c(10, 12, 27, 35, 16)
+#'   id = 1,
+#'   top    = c(0,  25, 44, 46, 50),
+#'   bottom = c(25, 44, 46, 50, 100),
+#'   texcl     = c("SL", "SL", "CL", "CL", "L"),
+#'   clay   = c(10, 12, 27, 35, 16)
 #' )
 #' 
 #' hz_lag(h)
@@ -565,17 +546,15 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
   idx_std <- which(! nm %in% c(idcol, depthcols))
   vars <- nm[idx_std]
   
-  
   # check arguments ----
   .check_depthcols_l(depthcols)
   .check_names(object, vars = c(idcol, depthcols, vars))
   
-  
   # standardize inputs ----
   x_std <- .standardize_inputs(object, idcol = idcol, depthcols = depthcols)
   x_conversion <- x_std$x_conversion
-  x            <- x_std$x; rm(x_std)
-   
+  x <- x_std$x
+  rm(x_std)
   
   # check depths ---
   if (unit == "depth" & max(object[[depthcols[2]]] > 1000)) {
@@ -590,12 +569,10 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     }
   }
   
-  
   # order ----
   if (order) {
     x <- x[order(x$idcol, x$top, x$bot), ]
   }
-  
   
   # lag ----
   .lag_ind <- function(x, lag = lag) {
@@ -614,14 +591,12 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     return(x_lag)
   }
   
-  
   .lag_dep <- function(x, lag = lag) {
     
     n <- length(x)
     x$.ID <- 1:nrow(x)
     x_seg <- hz_segment(x, intervals = min(x$top):max(x$bot), trim = TRUE, depthcols = c("top", "bot"))
     x_seg <- x_seg[1:(n + 1)]
-    
     
     x_seg <- do.call("cbind", args =  lapply(lag, function(i) {
       x$bot_i <- x$bot + i
@@ -643,7 +618,6 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     return(x_seg)
   }
   
-  
   if (unit == "index") {
     x_lag <- do.call("cbind", lapply(lag, function(i) {
       .lag_ind(x, i)
@@ -662,27 +636,31 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
   return(x_lag)
 }
 
-
-
 # check depthcols length
 .check_depthcols_l <- function(x) {
   if (length(x) != 2 & !is.null(x)) stop("depthcols must length must equal 2")
 }
 
-
 ## check for matching column names
 .check_names <- function(x, vars) {
-  
   x_nm <- names(x)
   
-  if (! all(vars %in% x_nm)) {
+  if (!all(vars %in% x_nm)) {
     stop("x must contain columns with names that match the input arguments")
   }
 }
 
-
 # standardize inputs
-.standardize_inputs <- function(x, idcol = NULL, hzidcol = NULL, depthcols = NULL, texcl = NULL, clay = NULL, taxpartsize = NULL, sand = NULL) {
+.standardize_inputs <- function(
+    x,
+    idcol = NULL,
+    hzidcol = NULL,
+    depthcols = NULL,
+    texcl = NULL,
+    clay = NULL,
+    taxpartsize = NULL,
+    sand = NULL
+) {
   
   # set new names
   var_names <- c(
@@ -711,7 +689,9 @@ hz_lag <- function(object, lag = 1, unit = "index", idcol = "id", depthcols = c(
     
     idx_orig <- idx_dup[! idx_dup %in% idx_x]
     names(x)[idx_orig] <- paste0(names(x)[idx_orig], "_orig")
-  } else idx_orig = NULL
+  } else {
+    idx_orig <- NULL
+  }
     
   return(list(x = x, x_conversion = var_names, x_orig = idx_orig))
 }
