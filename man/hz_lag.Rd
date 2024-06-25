@@ -38,25 +38,23 @@ This function finds adjacent values to a horizon values at lagged distances.
 \examples{
 
 h <- data.frame(
-id = 1,
-top    = c(0,  25, 44, 46, 50),
-bottom = c(25, 44, 46, 50, 100),
-texcl     = c("SL", "SL", "CL", "CL", "L"),
-clay   = c(10, 12, 27, 35, 16)
+  id = 1,
+  top    = c(0,  25, 44, 46, 50),
+  bottom = c(25, 44, 46, 50, 100),
+  texcl     = c("SL", "SL", "CL", "CL", "L"),
+  clay   = c(10, 12, 27, 35, 16)
 )
 
-h |> hz_lag()
+hz_lag(h)
 
-h |> hz_lag(-1)
+hz_lag(h, -1)
 
-h |> hz_lag(10:15, unit = "depth")
+hz_lag(h, 10:15, unit = "depth")
 
-h |> 
-hz_lag() |> 
-cbind(h, lag = _) |>
-transform(
-clay_dif = lag.clay_bot.1 - clay,
-texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1))
+transform(cbind(h, lag = hz_lag(h)), 
+  clay_dif = lag.clay_bot.1 - clay,
+  texcl_contrast = paste0(texcl, "-", lag.texcl_bot.1)
+)
 
 }
 \seealso{
