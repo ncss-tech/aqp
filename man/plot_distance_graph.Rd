@@ -39,7 +39,7 @@ plot_distance_graph(d, idx=7:12)
 plot_distance_graph(d, idx=12:18)
 }
 \references{
-http://casoilresource.lawr.ucdavis.edu/
+https://casoilresource.lawr.ucdavis.edu/
 }
 \seealso{
 \code{\link{sp2}}, \code{\link{profile_compare}}

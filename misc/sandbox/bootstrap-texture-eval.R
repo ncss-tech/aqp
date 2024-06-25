@@ -40,6 +40,37 @@ legend('top', legend = c('Source', 'Dirichlet', 'Multivariate Normal'), pch = c(
 stats.full <- textureTriangleSummary(s.d, pch = 1, cex = 0.5, range.alpha = 50, col = grey(0.5), legend = TRUE, main = 'Original')
 
 
+data("soiltexture")
+
+# doesn't work
+g <- soiltexture$values[, 1:3]
+names(g) <- names(s.d)
+z <- kdeDirichlet(s.d, kdegrid = g)
+
+z <- kdeDirichlet(s.n, n = 100)
+image(z)
+
+
+z <- TT.kde2d(TT, tri.data = s.d, n = 100)
+
+TT <- TT.plot(
+  class.sys= "USDA-NCSS.TT",
+  main= "",
+  tri.sum.tst=FALSE,
+  cex.lab=0.75,
+  cex.axis=0.75,
+  frame.bg.col='white',
+  class.lab.col='black',
+  lwd.axis=1.5,
+  arrows.show=TRUE,
+  new.mar = c(3, 0, 0, 0)
+)
+TT.points(tri.data = s.d, geo = TT, col='firebrick', pch = 3, cex = 0.5, lwd = 1, tri.sum.tst = FALSE)
+TT.contour(TT, z, add = TRUE, levels = c(0.00001, 0.001, 0.01))
+
+
+
+
 
 
 # sample data
@@ -51,13 +82,14 @@ ssc <- horizons(sp4)[grep('^Bt', sp4$name), c('sand', 'silt', 'clay')]
 names(ssc) <- toupper(names(ssc))
 
 # ok fine, I'll try dplyr
-ssc <- horizons(sp4) %>%
-  filter(grepl('^Bt', x = name)) %>%
-  select(
-    SAND = sand,
-    SILT = silt,
-    CLAY = clay
-  )
+# ssc <- horizons(sp4) |> 
+#   subset(grepl('^Bt', x = name))  |> 
+#   transform(
+#     SAND = sand,
+#     SILT = silt,
+#     CLAY = clay
+#   ) |> 
+#   subset(subset = c('SAND', 'SILT', 'CLAY'))
 
 # simulate 100 samples
 s.d <- bootstrapSoilTexture(ssc, n = 100, method = 'dirichlet')$samples

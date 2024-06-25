@@ -49,7 +49,7 @@ plot(x, 1:length(x), ylim=c(90,0), type='b', cex=0.5)
 
 }
 \references{
-http://casoilresource.lawr.ucdavis.edu/
+https://casoilresource.lawr.ucdavis.edu/
 }
 \author{
 Dylan E. Beaudette

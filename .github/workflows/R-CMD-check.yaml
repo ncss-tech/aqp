@@ -54,7 +54,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         if: matrix.config.r == '3.6'
         with:
-          extra-packages: any::rcmdcheck, soiltexture=?ignore-before-r=4.3.0, markovchain=?ignore-before-r=4.0.0, Hmisc=?ignore
+          extra-packages: any::rcmdcheck, soiltexture=?ignore-before-r=4.3.0, markovchain=?ignore-before-r=4.0.0, Hmisc=?ignore, knitr=?ignore-before-r=4.0.0, rmarkdown=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0,
           needs: check
           
       - uses: r-lib/actions/setup-r-dependencies@v2

@@ -55,6 +55,6 @@ panel=panel.superpose, ylim=c(110,-5), asp=2)
 
 }
 \references{
-\url{http://casoilresource.lawr.ucdavis.edu/}
+\url{https://casoilresource.lawr.ucdavis.edu/}
 }
 \keyword{datasets}

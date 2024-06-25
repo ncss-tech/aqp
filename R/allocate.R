@@ -60,6 +60,8 @@
 #'
 #' @return A vector or \code{data.frame} object.
 #' 
+#' @author Stephen Roecker
+#' 
 #' @references 
 #' Abrol, I., Yadav, J. & Massoud, F. 1988. \href{https://www.fao.org/3/x5871e/x5871e00.htm}{Salt-affected soils and their management}. No. Bulletin 39. Rome, FAO Soils.
 #' 
@@ -413,7 +415,7 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   
   # combine results and subset to 0-25cm
   df_bs  <- cbind(df[vars2[1:3]], BS1 = bs1, BS2 = bs2)
-  df_bs  <- segment(df_bs, intervals = c(0, 25), hzdepcols = c("hztop", "hzbot"))
+  df_bs  <- hz_segment(df_bs, intervals = c(0, 25), depthcols = c("hztop", "hzbot"))
   df_bs  <- df_bs[df_bs$segment_id == "00-25", -6]
   
   # aggregate the horizons
@@ -635,3 +637,272 @@ allocate <- function(..., to = c("FAO Salt Severity", "FAO Black Soil", "ST Diag
   return(sp)
 }
 
+
+#' @title Allocate Particle Size Class for the Control Section.
+#' 
+#' @description This function aggregates information in the horizon table and allocates it to the particle size class for the control section.
+#'
+#' @param x a \code{data.frame} containing the original horizon table.
+#' @param y a \code{data.frame} containing the particle size control section depths for each idcol.
+#' @param taxpartsize \code{character} column name for taxonomic family particle size class.
+#' @param clay \code{character} column name for clay percent.
+# #' @param frags \code{character} column name for total rock fragments percent.
+#' @param idcol character: column name of the pedon ID within the object.
+#' @param depthcols a character vector of length 2 specifying the names of the horizon depths (e.g. `c("top", "bottom")`).
+#' 
+#' 
+#' @details
+#' This function differs from \code{\link{texture_to_taxpartsize}} in that is aggregates the results of \code{\link{texture_to_taxpartsize}}, and accounts for strongly contrasting particle size classes.
+#'  
+#'
+#' @return A \code{data.frame} object containing the original idcol, the aggregated particle size control section allocation, and an aniso column to indicate more than one contrasting class.
+#' 
+#' @author Stephen Roecker
+#' 
+#' @seealso [texture_to_taxpartsize()], [lookup_taxpartsize()]
+#' 
+#' @export
+
+#' @examples
+#' 
+#' h <- data.frame(
+#' id = 1,
+#' hzname = c("A", "BA", "Bw", "BC", "C"),
+#' top    = c( 0, 10, 45, 60,  90),
+#' bottom = c(10, 45, 60, 90, 150),
+#' clay   = c(15, 16, 45, 20,  10),
+#' sand   = c(10, 35, 40, 50,  90),
+#' frags  = c( 0,  5, 10, 38,  40)
+#' )
+#'
+#' h <- cbind(
+#' h, 
+#' texcl = ssc_to_texcl(clay = h$clay, sand = h$sand)
+#' )
+#' 
+#' pscs <- data.frame(
+#' id = 1, 
+#' top = 25, 
+#' bottom = 100
+#' )
+#' 
+#' h <- cbind(
+#' h, 
+#' taxpartsize = texture_to_taxpartsize(
+#' texcl = h$texcl,
+#' clay  = h$clay, 
+#' sand  = h$sand,
+#' fragvoltot = h$frags
+#' ))
+#' 
+#' depths(h) <- id ~ top + bottom
+#' 
+#' pscs <- data.frame(id = h$id, rbind(estimatePSCS(h)))
+#' names(pscs)[2:3] <- c("top", "bottom")
+#' 
+#' hz_to_taxpartsize(horizons(h), pscs)
+#'  
+#' 
+hz_to_taxpartsize <- function(x, y, taxpartsize = "taxpartsize", clay = "clay", idcol = "id", depthcols = c("top", "bottom")) {
+  # need to incorporate fine sand for special cases of strongly contrasting classes and rock fragments (?)
+  # frags = "frags", 
+  
+  # strongly contrasting
+  
+  x$rn <- 1:nrow(x)
+  # xy <- hz_intersect(x, y, idcol = idcol, depthcols = depthcols)
+  # x_sub <- x[x$rn %in% xy$rn, ]
+  
+  
+  # check segment_id ----
+  ## if it exists, overwrite it
+  x_nm <- names(x)
+  y_nm <- names(y)
+  if (any(x_nm == "segment_id") | any(y_nm == "segment_id")) {
+    x[x_nm == "segment_id"] <- NULL
+    y[y_nm == "segment_id"] <- NULL
+  }
+  
+  
+  # check dissolve_id ----
+  ## if it exists, overwrite it
+  x_nm <- names(x)
+  y_nm <- names(y)
+  if (any(x_nm == "dissolve_id") | any(y_nm == "dissolve_id")) {
+    x[x_nm == "dissolve_id"] <- NULL
+    y[y_nm == "dissolve_id"] <- NULL
+  }
+  
+  
+  # standardize inputs ----
+  vars <- c(idcol, depthcols, clay, taxpartsize)
+  x <- x[vars]
+  x_std <- .standardize_inputs(x, idcol = idcol, depthcols = depthcols, clay = clay, taxpartsize = taxpartsize)
+  x <- x_std$x; x_conv <- x_std$x_conversion
+  x_std <- NULL
+  
+  y <- y[c(idcol, depthcols)]
+  y <- .standardize_inputs(y, idcol = idcol, depthcols = depthcols)$x
+  
+  
+  # dissolve on pscs ----
+  # calculate non-trimmed horizon thickness
+  x_dis <- x |>
+    hz_dissolve(by = "taxpartsize", idcol = "idcol", depthcols = c("top", "bot")) |>
+    transform(thk_o = bot - top)
+  
+  
+  # trim depths ----
+  # calculate trimmed horizon thickness
+  xy_dis <- x_dis |>
+    hz_intersect(y, idcol = "idcol", depthcols = c("top", "bot")) |>
+    transform(thk_t = bot - top)
+  
+  
+  # rejoin dissolved pscs to the original horizon table ----
+  xy <- hz_intersect(x, xy_dis, idcol = "idcol", depthcols = c("top", "bot")) |> suppressWarnings()
+  x_dis  <- NULL
+  xy_dis <- NULL
+  
+
+  # aggregate clay values within dissolved pscs ----
+  top       <- NULL
+  bot       <- NULL
+  thk_o     <- NULL
+  thk_t     <- NULL
+  clay_wt   <- NULL
+  # sandvf_wt <- NULL
+  
+  xy_agg <- data.table::as.data.table(xy)[,
+    list(
+      top       = min(top,                          na.rm = TRUE),
+      bot       = max(bot,                          na.rm = TRUE),
+      clay_wt   = weighted.mean(clay,   w = thk_t,  na.rm = TRUE),
+      # sandvf_wt = weighted.mean(sandvf, w = thk_t,  na.rm = TRUE),
+      # need to impute frags
+      # frag_wt = weighted.mean(total_frags_pct_nopf, w = thk_t), na.rm = TRUE,
+      thk_o   = sum(thk_o, na.rm = TRUE),
+      thk_t   = sum(thk_t, na.rm = TRUE)
+    ), by = c("idcol", "taxpartsize", "dissolve_id")
+    ]
+  data.table::setorder(xy_agg, idcol, top)
+  xy_agg <- as.data.frame(xy_agg)
+  
+  
+  # find adjacent horizons ----
+  xy_lag <- xy_agg |> 
+    hz_lag(idcol = "idcol", depthcols = c("top", "bot"))
+  
+  
+  # address special cases of strongly contrasting classes ----
+  clay_wt_bot.1     <- NULL
+  sandvf_wt_bot.1   <- NULL
+  taxpartsize_bot.1 <- NULL
+  
+  
+  # still needs special cases for very fine sand
+  xy_agg <- cbind(xy_agg, xy_lag) |> 
+    within({
+      clay_dif = clay_wt_bot.1 - clay_wt
+      sc       = paste0(taxpartsize, " over ", taxpartsize_bot.1)
+      sc       = gsub(" over NA$", "", sc)
+      
+      sc = gsub("^fine over|^very-fine over", "clayey over", sc)
+      sc = gsub("over fine$|over very-fine$", "over clayey", sc)
+      sc = gsub("over fine over|over very-fine over", "over clayey over", sc)
+      sc = gsub("over sandy|over sandy-skeletal", "over sandy or sandy-skeletal", sc)
+      # clay over loamy
+      sc = ifelse( 
+        abs(clay_dif) >= 25 & sc %in% c("clayey over fine-loamy", "clayey over coarse-loamy"),
+        gsub("clayey over fine-loamy|clayey over coarse-loamy", "clayey over loamy", sc),
+        sc
+      )
+      # clay over loamy-skeletal
+      sc = ifelse( 
+        sc == "clayey over loamy-skeletal" & abs(clay_dif) < 25, 
+        taxpartsize,
+        sc
+      )
+      # fine-silty over clayey
+      sc = ifelse( 
+        sc == "fine-silty over clayey" & abs(clay_dif) < 25, 
+        taxpartsize,
+        sc
+      )
+      # loamy material contains less than 50 percent, by weight
+      # need to include a vfs percent in the function arguments, which is only present in the lab data, and otherwise you typically wouldn't assume the vfs percent is high enough to qualify for these special cases
+      sc = ifelse( 
+        sc %in% c("coarse-loamy over sandy or sandy-skeletal", "loamy over sandy or sandy-skeletal", "loamy-skeletal over sandy or sandy-skeletal", "sandy over loamy", "sandy-skeletal over loamy"),
+        taxpartsize,
+        sc
+      )
+      idx_sc = sc %in% .pscs_sc
+      # # sandy over loamy
+      # sc = ifelse(
+      #   sc %in% c("sandy over coarse-loamy", "sandy over fine-loamy") & taxpartsize_bot.1 %in% c("coarse-loamy", "fine-loamy") & sandvf_wt_bot.1 > 50,
+      #   "sandy over loamy",
+      #   sc
+      #   )
+      # # sandy-skeletal over loamy
+      # sc = ifelse(
+      #   sc %in% c("sandy-skeletal over coarse-loamy", "sandy over fine-loamy") & taxpartsize_bot.1 %in% c("coarse-loamy", "fine-loamy") & sandvf_wt_bot.1 > 50,
+      #   "sandy-skeletal over loamy",
+      #   sc
+      # )
+      # idx_sc = grepl("over", sc)
+      sc = ifelse(idx_sc, sc, taxpartsize)
+    })
+  xy_lag <- NULL
+  
+  
+  # find multiple strongly contrasting ps classes within the control section
+  n_sc    <- NULL
+  n_peiid <- NULL
+  
+  test <- data.table::as.data.table(xy_agg)[, list(
+    n_sc    = sum(idx_sc, na.rm = TRUE), # sum(grepl(" over ", sc), na.rm = TRUE),
+    n_peiid = length(idx_sc)
+  ),
+  by = "idcol"
+  ] |>
+    as.data.frame()
+  
+  
+  # pick the sc pscs with the largest contrast or pscs with the greatest thickness
+  xy_res <- xy_agg |>
+    merge(test, by = "idcol", all.x = TRUE, sort = FALSE) |>
+    transform(
+      idx_sc = sc %in% .pscs_sc,
+      # idx_sc = grepl(" over ", sc),
+      idx_c_ov_l = sc %in% c("clayey over fine-loamy")
+    )
+  
+  xy_res <- data.table::as.data.table(xy_res)[, list(
+    pscs1 = sc[n_sc == 0 & n_peiid == 1],
+    pscs2 = sc[n_sc == 1 & n_peiid  > 1 & idx_sc],
+    pscs3 = sc[which.max(thk_t[n_sc == 0 & n_peiid > 1])],
+    pscs4 = sc[n_sc == 1 & idx_sc],
+    pscs5 = sc[which.max(abs(clay_dif[n_sc > 1 & !is.na(sc)]))],
+    taxpartsizemod = ifelse(max(n_sc) > 1, "aniso", "not used")
+    ),
+    by =  "idcol"
+    ] |>
+    as.data.frame() |>
+    within({
+      # need to add fix for special case of sandy over loamy which requires fine sand percent
+      taxpartsize = paste(pscs1, pscs3, pscs4, pscs5, sep = "")
+      taxpartsize = gsub("NA", "", taxpartsize)
+      pscs1 = NULL
+      pscs2 = NULL
+      pscs3 = NULL
+      pscs4 = NULL
+      pscs5 = NULL
+    })
+  
+  
+  # reset inputs
+  xy_res <- .reset_inputs(xy_res, x_conv[1])
+  
+  
+  return(xy_res)
+}

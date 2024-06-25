@@ -101,6 +101,10 @@ overlapMetrics <- function(x, thresh) {
 
 
 
+## TODO: incorporate ideas from N-body simulation
+# https://en.wikipedia.org/wiki/N-body_simulation
+
+
 #' @title Simulation of electrostatic force between two charged particles
 #' @description This function computes a "force" (attraction or repulsion) between two charged "particles" (usually labels or other graphical elements), using a modification of the 1D electrostatic force equation. This function is used internally for label placement in the presence of overlap, as in [fixOverlap()].
 #'
@@ -134,6 +138,7 @@ overlapMetrics <- function(x, thresh) {
   
   # modified version, c/o K.C. Thompson
   # increase const --> dampen chaotic oscillation during simulation 
+  # "softening" in N-body simulation
   res <- (Qk * Q1 * Q2 ) / (d^ex + const)
   
   return(res)
