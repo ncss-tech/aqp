@@ -48,15 +48,23 @@
 #' depths(sp1) <- id ~ top + bottom
 #' site(sp1) <- ~ group
 #'
-#' p <- sp1
-#' attr <- 'prop' # clay contents
-#' foo <- estimatePSCS(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
-#' foo
-#'
-#'
-estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
-                        texcl.attr = "texcl", tax_order_field = "tax_order",
-                        bottom.pattern='Cr|R|Cd', simplify = TRUE, ...) {
+#' # set required metadata
+#' hzdesgnname(sp1) <- 'name'
+#' hztexclname(sp1) <- 'texture'
+#' hzmetaname(sp1, 'clay') <- 'prop'
+#' 
+#' x <- estimatePSCS(sp1)
+#' x
+estimatePSCS <- function(
+    p,
+    hzdesgn = hzdesgnname(p, required = TRUE),
+    clay.attr = hzmetaname(p, "clay", required = TRUE),
+    texcl.attr = hztexclname(p, required = TRUE),
+    tax_order_field = "tax_order",
+    bottom.pattern = 'Cr|R|Cd',
+    simplify = TRUE,
+    ...
+) {
   
   .LAST <- NULL
   hz.depths <- horizonDepths(p)
@@ -64,23 +72,17 @@ estimatePSCS = function(p, hzdesgn = "hzname", clay.attr = "clay",
   attr.len <- unlist(lapply(c(hzdesgn, clay.attr, texcl.attr), length))
   if (any(attr.len > 1))
     stop("horizon designation, clay attribute or texture class attribute must have length 1")
-
-  if (is.null(hzdesgn) | (!hzdesgn %in% horizonNames(p))) {
-    hzdesgn <- guessHzDesgnName(p, required = TRUE)
-    if (hzdesgn == "")
-      stop("horizon designation column not correctly specified")
+  
+  if (is.null(hzdesgn) || !hzdesgn %in% horizonNames(p)) {
+    stop("Horizon designation column (", hzdesgn, ") does not exist.")
   }
-
+  
+  if (is.null(texcl.attr) || !texcl.attr %in% horizonNames(p)) {
+    stop("Horizon texture class column (", texcl.attr, ") does not exist.")
+  }
+  
   if (is.null(clay.attr) | (!clay.attr %in% horizonNames(p))) {
-    clay.attr <- guessHzAttrName(p, attr = "clay", optional = c("total","_r"))
-    if (clay.attr == "")
-      stop("horizon clay content column not correctly specified")
-  }
-
-  if (is.null(texcl.attr) | (!texcl.attr %in% horizonNames(p))) {
-    texcl.attr <- guessHzTexClName(p)
-    if (texcl.attr == "")
-      stop("horizon texture class column not correctly specified")
+    stop("Horizon clay content column (", clay.attr, ") does not exist.")
   }
 
   soildepth <- minDepthOf(p, hzdesgn = hzdesgn, pattern = bottom.pattern, simplify = FALSE)[[hz.depths[1]]]
