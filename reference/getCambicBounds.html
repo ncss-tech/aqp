@@ -85,9 +85,9 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getCambicBounds</span><span class="op">(</span></span>
 <span>  <span class="va">p</span>,</span>
-<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzDesgnName</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  texcl.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzTexClName</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  clay.attr <span class="op">=</span> <span class="fu"><a href="guessHzAttrName.html">guessHzAttrName</a></span><span class="op">(</span><span class="va">p</span>, attr <span class="op">=</span> <span class="st">"clay"</span>, <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"total"</span>, <span class="st">"_r"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  texcl.attr <span class="op">=</span> <span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  clay.attr <span class="op">=</span> <span class="fu"><a href="hzmetaname.html">hzmetaname</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"clay"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  argi_bounds <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  d_value <span class="op">=</span> <span class="st">"d_value"</span>,</span>
 <span>  m_value <span class="op">=</span> <span class="st">"m_value"</span>,</span>
@@ -165,12 +165,14 @@ There may be multiple cambic horizons (indexes) in a profile. Each cambic index 
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">hzdept</span> <span class="op">+</span> <span class="va">hzdepb</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set required metadata</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'hzname'</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">spc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texcl'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzmetaname.html">hzmetaname</a></span><span class="op">(</span><span class="va">spc</span>, <span class="st">'clay'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'clay'</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># print results in table</span></span></span>
 <span class="r-in"><span><span class="fu">getCambicBounds</span><span class="op">(</span><span class="va">spc</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> guessing horizon attribute 'clay' is stored in `clay`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id cambic_top cambic_bottom cambic_index</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1         32            49            1</span>
 <span class="r-in"><span></span></span>

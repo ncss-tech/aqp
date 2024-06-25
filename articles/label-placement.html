@@ -118,7 +118,6 @@ large font sizes almost always lead to overlapping horizon depth labels
 (see numbers just to the right of horizon boundaries in the figure
 below).</p>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;"></p>
-<pre><code><span><span class="co">#&gt; [1] 0.2265625</span></span></code></pre>
 <p>Version 2.0 of the {aqp} package provides two algorithms for avoiding
 overlapping annotation, available in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> for the
 adjustment of horizon depth annotation, and for general use via
@@ -130,7 +129,7 @@ device.</p>
 single soil profile template characterized by multiple thin horizons.
 Simulation and duplication were used to generate multiple copies of the
 three variations on the original template.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># soil profile template</span></span>
@@ -151,9 +150,8 @@ three variations on the original template.</p>
 <span><span class="co"># create 3 copies of each simulation</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duplicate.html">duplicate</a></span><span class="op">(</span><span class="va">s</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>Overlapping horizon depth labels are clear. Note that there are three
-copies of each simulated variation on the original template.</p>
-<pre><code><span><span class="co">#&gt; [1] 0.6210938</span></span></code></pre>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;"></p>
+copies of each simulated variation on the original template.
+<img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Selecting the optimal label-adjustment methods and parameters will
 depend on the collection of profiles, horizonation, profile height, font
 sizes, and graphics device settings (figure height, resolution).</p>
@@ -183,7 +181,6 @@ number of iterations has been reached. Label adjustment solutions are
 deterministic and can be controlled by additional arguments to
 <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code>. The most common adjustment is via
 charge density (<code>q</code>). See comparisons below.</p>
-<pre><code><span><span class="co">#&gt; [1] 0.6210938</span></span></code></pre>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -199,9 +196,8 @@ repeatability is important. The “cooling schedule” parameters
 specific applications. These additional arguments are passed to
 <code><a href="../reference/SANN_1D.html">SANN_1D()</a></code> via <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>.</p>
 <p>Note that each solution, within duplicate profiles, is slightly
-different.</p>
-<pre><code><span><span class="co">#&gt; [1] 0.6210938</span></span></code></pre>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;"></p>
+different.
+<img src="label-placement_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -209,7 +205,7 @@ different.</p>
 </h2>
 <p>Create a very busy profile with lots of possible overlapping horizon
 depth labels.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quickSPC.html">quickSPC</a></span><span class="op">(</span></span>
 <span>  <span class="st">"SPC:Oi|Oe|AAA|E1|E2|E3|BhsBhsBhsBhs|Bt1|Bt2|Bt3Bt3|CCCCCC|Ab1|Ab2|2C2C2C2C2C2C|2Cr|2R2R2R2R2R2R2R2R"</span>, </span>
 <span>  interval <span class="op">=</span> <span class="fl">1</span></span>
@@ -218,7 +214,7 @@ depth labels.</p>
 <span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">hzID</span><span class="op">)</span></span></code></pre></div>
 <p>Set arguments to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> and define a custom function
 to demonstrate various label adjustment settings.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pretty colors</span></span>
 <span><span class="va">.bluecolors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">25</span>, palette <span class="op">=</span> <span class="st">'Blues'</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">25</span><span class="op">]</span></span>
 <span></span>
@@ -259,48 +255,32 @@ relative to the original label positions. Larger values imply a higher
 degree of adjustment. Note that each simulated annealing (SANN) label
 adjustment is different, unless randomness is “controlled” using
 <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixLabelCollisions <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'No\nAdjustment'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixLabelCollisions <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'No\nAdjustment'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 2'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 2'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 3'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'SANN\nsim 3'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 1.5'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 1.5'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 1'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.5'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.5'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.4010417</span></span></code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.25'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.25'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;"></p>
 <!--
 
@@ -321,19 +301,11 @@ plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
 
 <img src="label-placement_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;" />
 
-```
-#> [1] 0.8931588
-```
-
 ``` r
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1), max.depth = 151)
 ```
 
 <img src="label-placement_files/figure-html/unnamed-chunk-9-2.png" width="768" style="display: block; margin: auto;" />
-
-```
-#> [1] 0.8931588
-```
 
 ``` r
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
@@ -341,19 +313,11 @@ plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
 
 <img src="label-placement_files/figure-html/unnamed-chunk-9-3.png" width="768" style="display: block; margin: auto;" />
 
-```
-#> [1] 0.8931588
-```
-
 ``` r
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.5), max.depth = 151)
 ```
 
 <img src="label-placement_files/figure-html/unnamed-chunk-9-4.png" width="768" style="display: block; margin: auto;" />
-
-```
-#> [1] 0.8931588
-```
 
 ``` r
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
@@ -361,19 +325,11 @@ plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
 
 <img src="label-placement_files/figure-html/unnamed-chunk-9-5.png" width="768" style="display: block; margin: auto;" />
 
-```
-#> [1] 0.8931588
-```
-
 ``` r
 plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 ```
 
 <img src="label-placement_files/figure-html/unnamed-chunk-9-6.png" width="768" style="display: block; margin: auto;" />
-
-```
-#> [1] 0.8931588
-```
 -->
 </div>
 <div class="section level2">
@@ -383,7 +339,7 @@ plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 of <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>. The function <code>overlapMetics()</code> can
 be used to determine overlap within a vector of positions based on a
 given distance threshold.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3.4</span>, <span class="fl">3.5</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/overlapMetrics.html">overlapMetrics</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
@@ -398,7 +354,7 @@ passed on to <code><a href="../reference/SANN_1D.html">SANN_1D()</a></code> or <
 The <code>converged</code> attribute is included in the result to
 signify that a successful solution was possible. See the manual page for
 <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code> for additional details.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># vector of positions, typically labels but could be profile sketch alignment on the x-axis</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2.3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">5.5</span>, <span class="fl">7</span><span class="op">)</span></span>
 <span></span>
@@ -408,7 +364,7 @@ signify that a successful solution was possible. See the manual page for
 <pre><code><span><span class="co">#&gt; [1] 1.000000 2.198432 2.775781 4.000000 5.000000 5.500000 7.000000</span></span>
 <span><span class="co">#&gt; attr(,"converged")</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># electrostatics-inspired simulation of particles</span></span>
 <span><span class="co"># solution is deterministic</span></span>
 <span><span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">s</span>, thresh <span class="op">=</span> <span class="fl">0.5</span>, method <span class="op">=</span> <span class="st">'E'</span><span class="op">)</span></span></code></pre></div>
@@ -424,7 +380,7 @@ signify that a successful solution was possible. See the manual page for
 <code>fixOverlap(..., trace = TRUE)</code> using both electrostatic
 simulation (<code>method = 'E'</code>) and simulated annealing
 (<code>method = 'S')</code>.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">evalMethods</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">thresh</span>, <span class="va">q</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">9</span>, palette <span class="op">=</span> <span class="st">'Zissou 1'</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -483,7 +439,7 @@ position vector <code>x</code>. Larger values of charge density
 to increasingly complex problems (e.g. larger thresholds, more overlap).
 However, setting <code>q</code> too high will result in chaos and
 failure to converge.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># explore effect of charge (q)</span></span>
 <span><span class="co"># too large -&gt; chaos</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">12</span>, <span class="fl">18</span>, <span class="fl">20</span>, <span class="fl">35</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">56</span>, <span class="fl">90</span>, <span class="fl">120</span>, <span class="fl">145</span>, <span class="fl">150</span><span class="op">)</span></span>
@@ -491,24 +447,24 @@ failure to converge.</p>
 <span><span class="co"># just about right, very few perturbations required</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-1.png" width="816" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ok, but now most label positions are affected</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-2.png" width="816" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># too high, wasting time on more iterations</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-3.png" width="816" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># far too high, wasting more time with little gain</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-4.png" width="816" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># chaos and failure to converge</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-13-5.png" width="816" style="display: block; margin: auto;"></p>
 <p>Additional examples to tinker with.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># threshold too large</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">10</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -560,7 +516,7 @@ failure to converge.</p>
 </h2>
 <p>Define a custom function for visualizing the extended output from
 <code>fixOverlap(..., method = 'S', trace = TRUE)</code>.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tracePlot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span>, <span class="va">cex.axis.labels</span> <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># setup plot device</span></span>
 <span>  <span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, bg <span class="op">=</span> <span class="st">'black'</span>, fg <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
@@ -621,22 +577,22 @@ failure to converge.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>A relatively challenging example.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2.2</span>, <span class="fl">2.8</span>, <span class="fl">3.5</span>, <span class="fl">6</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">10.1</span>, <span class="fl">12.8</span>, <span class="fl">13</span>, <span class="fl">14.8</span>, <span class="fl">15</span>, <span class="fl">15.5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># fix overlap, return debugging information</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span></span>
 <span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.73</span>, method <span class="op">=</span> <span class="st">'S'</span>, trace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; 160 iterations</span></span></code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># check convergence</span></span>
 <span><span class="va">z</span><span class="op">$</span><span class="va">converged</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect algorithm trace</span></span>
 <span><span class="fu">tracePlot</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># trace log</span></span>
 <span><span class="co"># B: boundary condition violation</span></span>
 <span><span class="co"># O: rank (order) violation</span></span>
@@ -647,7 +603,7 @@ failure to converge.</p>
 <span><span class="co">#&gt;  B  O  +  - </span></span>
 <span><span class="co">#&gt; 22 71 64  2</span></span></code></pre>
 <p>A very challenging example.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># fix overlap, return debugging information</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101010</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, min <span class="op">=</span> <span class="fl">2.5</span>, max <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span><span class="op">)</span></span>
@@ -655,16 +611,16 @@ failure to converge.</p>
 <span><span class="co"># widen boundary conditions</span></span>
 <span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">0.2</span>, trace <span class="op">=</span> <span class="cn">TRUE</span>, min.x <span class="op">=</span> <span class="fl">0</span>, max.x <span class="op">=</span> <span class="fl">10</span>, maxIter <span class="op">=</span> <span class="fl">2000</span>, adj <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; 1203 iterations</span></span></code></pre>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># check convergence</span></span>
 <span><span class="va">z</span><span class="op">$</span><span class="va">converged</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect algorithm trace</span></span>
 <span><span class="fu">tracePlot</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span></span></code></pre></div>
 <p><img src="label-placement_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Cleanup.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reset plotSPC() options</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>.aqp.plotSPC.args <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 </div>

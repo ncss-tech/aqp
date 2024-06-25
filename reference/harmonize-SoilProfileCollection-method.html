@@ -137,12 +137,10 @@ Data are "harmonized" to a common attribute names specified by the names of list
 <span class="r-in"><span><span class="co"># inspect result</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h1</span>, color <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-1.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.59328</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># filter with calculated "harmonized group" to get just RV profiles</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="subset-SoilProfileCollection-method.html">subset</a></span><span class="op">(</span><span class="va">h1</span>, <span class="va">hgroup</span> <span class="op">==</span> <span class="st">"q50"</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"foo"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-2.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.864427</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### single source, two properties at once; with common labels: "method1" "method2"</span></span></span>
 <span class="r-in"><span></span></span>
@@ -152,10 +150,8 @@ Data are "harmonized" to a common attribute names specified by the names of list
 <span class="r-in"><span>                                    bar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>method1 <span class="op">=</span> <span class="st">"p3"</span>, method2 <span class="op">=</span> <span class="st">"p4"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-3.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.935273</span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-4.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6.935273</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">h3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           id top bottom       foo      bar hzID</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10_method1   0     20 -12.83190 10.08068    1</span>
@@ -170,20 +166,16 @@ Data are "harmonized" to a common attribute names specified by the names of list
 <span class="r-in"><span>                                    bar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>method2 <span class="op">=</span> <span class="st">"p3"</span>, method3 <span class="op">=</span> <span class="st">"p4"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span> <span class="co"># note the pattern of values missing for foo (*_method3)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-5.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10.40291</span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span> <span class="co">#  likewise for bar (*_method1)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-6.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10.40291</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#' the new labels need not match across harmonizations -- not sure how useful this is but it works</span></span></span>
 <span class="r-in"><span><span class="va">h3</span> <span class="op">&lt;-</span> <span class="fu">harmonize</span><span class="op">(</span><span class="va">spc</span>, x.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>foo <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>method1 <span class="op">=</span> <span class="st">"p1"</span>, method2 <span class="op">=</span> <span class="st">"p2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                    bar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>method3 <span class="op">=</span> <span class="st">"p3"</span>, method4 <span class="op">=</span> <span class="st">"p4"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span> <span class="co"># note the pattern of values missing for foo (*_method 3 + 4)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-7.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13.87055</span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span> <span class="co">#  likewise for bar (*_method 1 + 2)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-8.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13.87055</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### two-source harmonization</span></span></span>
 <span class="r-in"><span></span></span>
@@ -197,7 +189,6 @@ Data are "harmonized" to a common attribute names specified by the names of list
 <span class="r-in"><span><span class="co"># same property with different name in two different datasets</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h4</span>, color <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-9.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.656111</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### many source harmonization</span></span></span>
 <span class="r-in"><span></span></span>
@@ -224,7 +215,6 @@ Data are "harmonized" to a common attribute names specified by the names of list
 <span class="r-in"><span><span class="co"># inspect a subset</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">bigspc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>,<span class="op">]</span>, color <span class="op">=</span> <span class="st">"foo"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-10.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.252649</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

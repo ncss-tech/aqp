@@ -87,9 +87,9 @@ from the Keys to Soil Taxonomy (12th edition).</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimatePSCS</span><span class="op">(</span></span>
 <span>  <span class="va">p</span>,</span>
-<span>  hzdesgn <span class="op">=</span> <span class="st">"hzname"</span>,</span>
-<span>  clay.attr <span class="op">=</span> <span class="st">"clay"</span>,</span>
-<span>  texcl.attr <span class="op">=</span> <span class="st">"texcl"</span>,</span>
+<span>  hzdesgn <span class="op">=</span> <span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  clay.attr <span class="op">=</span> <span class="fu"><a href="hzmetaname.html">hzmetaname</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"clay"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  texcl.attr <span class="op">=</span> <span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">p</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  tax_order_field <span class="op">=</span> <span class="st">"tax_order"</span>,</span>
 <span>  bottom.pattern <span class="op">=</span> <span class="st">"Cr|R|Cd"</span>,</span>
 <span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -179,10 +179,13 @@ USDA-Natural Resources Conservation Service, Washington, DC.</p>
 <span class="r-in"><span><span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">group</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">sp1</span></span></span>
-<span class="r-in"><span><span class="va">attr</span> <span class="op">&lt;-</span> <span class="st">'prop'</span> <span class="co"># clay contents</span></span></span>
-<span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">estimatePSCS</span><span class="op">(</span><span class="va">p</span>, hzdesgn<span class="op">=</span><span class="st">'name'</span>, clay.attr <span class="op">=</span> <span class="va">attr</span>, texcl.attr<span class="op">=</span><span class="st">"texture"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">foo</span></span></span>
+<span class="r-in"><span><span class="co"># set required metadata</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzdesgnname.html">hzdesgnname</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'name'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hztexclname.html">hztexclname</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'texture'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="hzmetaname.html">hzmetaname</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="st">'clay'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'prop'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">estimatePSCS</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     id pscs_top pscs_bottom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 P001       49          89</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 P002       30          59</span>
@@ -193,8 +196,6 @@ USDA-Natural Resources Conservation Service, Washington, DC.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7 P007       25         100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8 P008       27         102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9 P009       28         103</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

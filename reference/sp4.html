@@ -409,7 +409,6 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># basic plot method, highly customizable: see manual page ?plotSPC</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.517548</span>
 <span class="r-in"><span><span class="co"># inspect plotting area, very simple to overlay graphical elements</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span>, lty<span class="op">=</span><span class="fl">3</span>, col<span class="op">=</span><span class="st">'blue'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># profiles are centered at integers, from 1 to length(obj)</span></span></span>
@@ -423,10 +422,8 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'clay'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-2.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.049284</span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, color<span class="op">=</span><span class="st">'CF'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-3.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.049284</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># apply a function to each profile, returning a single value per profile,</span></span></span>
 <span class="r-in"><span><span class="co"># in the same order as profile_id(sp4)</span></span></span>
@@ -464,7 +461,6 @@ Soil Sci. Soc. Am. J. 73: 2087-2095.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plot</a></span><span class="op">(</span><span class="va">sp4</span>, plot.order<span class="op">=</span><span class="va">new.order</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sp4-4.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.049284</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># deconstruct SoilProfileCollection into a data.frame, with horizon+site data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'data.frame'</span><span class="op">)</span></span></span>
