@@ -69,6 +69,11 @@ fragvoltot = h$frags
 
 depths(h) <- id ~ top + bottom
 
+# set required metadata for estimatePSCS()
+hzdesgnname(h) <- "hzname"
+hztexclname(h) <- "texcl"
+hzmetaname(h, "clay") <- "clay"
+
 pscs <- data.frame(id = h$id, rbind(estimatePSCS(h)))
 names(pscs)[2:3] <- c("top", "bottom")
 

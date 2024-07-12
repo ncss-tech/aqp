@@ -30,7 +30,7 @@ d <-
 
 
 depths(d) <- id ~ top + bottom
-
+hzdesgnname(d) <- "name"
 
 ## tests
 
@@ -39,6 +39,7 @@ test_that("error conditions", {
   # function will only accept a single profile
   expect_error(estimateSoilDepth(d, name='name'))
 
+  hzdesgnname(d) <- ""
   # not specified -> error 
   expect_error(profileApply(d, estimateSoilDepth))
   

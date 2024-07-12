@@ -6,10 +6,10 @@
 #'
 #' e.g. \code{guessHzAttrName(x, attr="clay", optional=c("total", "_r"))} matches (\code{claytotal_r == totalclay_r}) over (\code{clay_r == claytotal == totalclay}) over \code{clay}.
 #'
-#' @param x A SoilProfileCollection
-#' @param attr A regular expression containing required formative element of attribute name.
-#' @param optional A character vector of regular expression(s) containing optional formative elements of attribute name.
-#' @param verbose A boolean value for whether to produce message output about guesses.
+#' @param x A _SoilProfileCollection_
+#' @param attr _character_. A regular expression containing required formative element of attribute name.
+#' @param optional _character_. Vector of regular expression(s) containing optional formative elements of attribute name.
+#' @param verbose _logical_. Produce message output about guesses? Default: `TRUE`
 #'
 #' @return Character containing horizon attribute column name. Result is the first match in \code{horizonNames(x)} with the most required plus optional patterns matched.
 #'
@@ -46,15 +46,15 @@
 guessHzAttrName <- function(x, attr, optional = NULL, verbose = TRUE, required = FALSE) {
   nm <- horizonNames(x)
   
-  if(!inherits(x, 'SoilProfileCollection')) {
+  if (!inherits(x, 'SoilProfileCollection')) {
     stop("x must be a SoilProfileCollection")
   }
   
   # possible names include column names with name in the name
-  req <- grepl(attr, nm, ignore.case=TRUE)
+  req <- grepl(attr, nm, ignore.case = TRUE)
   
-  opt <- lapply(as.list(optional), function(i) grepl(i, nm, ignore.case=TRUE))
-  if(is.null(optional) | length(optional) == 0)
+  opt <- lapply(as.list(optional), function(i) grepl(i, nm, ignore.case = TRUE))
+  if (is.null(optional) | length(optional) == 0)
     opt <- as.list(req)
   opt <- rowSums(do.call('cbind', opt))
   
@@ -70,15 +70,15 @@ guessHzAttrName <- function(x, attr, optional = NULL, verbose = TRUE, required =
   # return first index matching in decreasing precedence
   #  all optional met, some optional met, basic requirement met, no requirement met
   res <- NA
-  if(length(idx1)) {
+  if (length(idx1)) {
     res <- nm[idx1[1]]
-  } else if(length(idx2)) {
+  } else if (length(idx2)) {
     res <- nm[idx2[1]]
-  } else if(length(idx3)) {
+  } else if (length(idx3)) {
     res <- nm[idx3[1]]
   }
-  if(!is.na(res)) {
-    if(verbose)
+  if (!is.na(res)) {
+    if (verbose)
       message(sprintf('guessing horizon attribute \'%s\' is stored in `%s`', attr, res))
   } else {
     msg <- sprintf('unable to guess column containing horizon attribute \'%s\'', attr)
@@ -90,7 +90,7 @@ guessHzAttrName <- function(x, attr, optional = NULL, verbose = TRUE, required =
   return(res)
 }
 
-#' @description `guessHzDesgnName()`: This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
+#' @description `guessHzDesgnName()`: **DEPRECATED** This follows the historic convention used by \code{aqp::plotSPC()} looking for "hzname" or other column names containing the regular expression "name". If the pattern "name" is not found, the pattern "desgn" is searched as a fallback, as "hzdesgn" or "hz_desgn" are other common column naming schemes for horizon designation name.
 #'
 #' @param x A SoilProfileCollection
 #' @param required logical Default: `FALSE`. Is this attribute required? If it is, set to `TRUE` to trigger error on invalid value.
@@ -98,23 +98,14 @@ guessHzAttrName <- function(x, attr, optional = NULL, verbose = TRUE, required =
 #' @rdname guessHzAttrName
 #'
 #' @export
-#'
-#' @examples
-#'
-#' a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), horizonname=c("A","Bw"))
-#' depths(a) <- id ~ top + bottom
-#'
-#' # store guess in metadata
-#' hzdesgnname(a) <- guessHzDesgnName(a)
-#'
-#' # inspect result
-#' hzdesgnname(a)
-#'
 guessHzDesgnName <- function(x, required = FALSE) {
+  
+  .Deprecated(msg = "`guessHzDesgnName()` is deprecated. Use `hzdesgnname()` (with `required=TRUE` argument if needed), or use `guessHzAttrName()` with appropriate values for your use case")
+  
   nm <- horizonNames(x)
   name <- NA
 
-  if(!inherits(x, 'SoilProfileCollection')) {
+  if (!inherits(x, 'SoilProfileCollection')) {
     stop("x must be a SoilProfileCollection")
   }
 
@@ -125,10 +116,10 @@ guessHzDesgnName <- function(x, required = FALSE) {
   }
 
   # possible names include column names with name in the name
-  possible.name <- nm[grep('name', nm, ignore.case=TRUE)]
+  possible.name <- nm[grep('name', nm, ignore.case = TRUE)]
 
   # use the first valid guess
-  if(length(possible.name) > 0) {
+  if (length(possible.name) > 0) {
     possible.name <- possible.name[1]
     name <- possible.name
   } else {
@@ -148,24 +139,15 @@ guessHzDesgnName <- function(x, required = FALSE) {
   return(name)
 }
 
-#' @description `guessHzTexClName()`: This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
+#' @description `guessHzTexClName()`: **DEPRECATED** This function is used to provide a texture class attribute column name to functions. It will use regular expressions to match "texcl" which is typically the texture of the fine earth fraction, without modifiers or in-lieu textures. Alternately, it will match "texture" for cases where "texcl" is absent (e.g. in NASIS Component Horizon).
 #'
 #' @rdname guessHzAttrName
 #' 
 #' @export guessHzTexClName
-#' 
-#' @examples
-#'
-#' a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40), texture=c("A","Bw"))
-#' depths(a) <- id ~ top + bottom
-#'
-#' # store guess in metadata
-#' hztexclname(a) <- guessHzTexClName(a)
-#'
-#' # inspect result
-#' hztexclname(a)
-#'
 guessHzTexClName <- function(x, required = FALSE) {
+  
+  .Deprecated(msg = "`guessHzTexClName()` is deprecated. Use `hztexclname()` (with `required=TRUE` argument if needed), or use `guessHzAttrName()` with appropriate values for your use case")
+  
   nm <- horizonNames(x)
 
   if (!inherits(x, 'SoilProfileCollection')) {
