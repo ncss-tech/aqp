@@ -691,22 +691,7 @@ plotSPC <- function(
   hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
   h[['.color']] <- hz.color.interpretation$colors
   
-  # sketch parameters for follow-up overlay / inspection
-  lsp <- list('width' = width,
-              'plot.order' = plot.order,
-              'x0' = relative.pos + x.idx.offset,
-              'pIDs' = pIDs[plot.order],
-              'idname' = idname(x),
-              'y.offset' = y.offset,
-              'scaling.factor' = scaling.factor,
-              'max.depth' = max.depth,
-              'n' = n,
-              'extra_x_space' = extra_x_space,
-              'extra_y_space' = extra_y_space,
-              'hz.depth.LAI' = rep(NA_real_, n),
-              'legend.colors' = hz.color.interpretation$colors,
-              'legend.data' = hz.color.interpretation$color.legend.data
-  )
+  
   
   
   ####################
@@ -724,20 +709,24 @@ plotSPC <- function(
   
   
   
-  ## init plotting region, unless we are appending to an existing plot
+  #######################################################################
+  ## init plotting region, unless we are appending to an existing plot ##
+  #######################################################################
+  
+  # y-limits also include y.offset range
+  ylim.range <- c(
+    max.depth + max(y.offset), 
+    -extra_y_space
+  )
+  
+  # x-limits
+  xlim.range <- c(width * x_left_space_mult, n + extra_x_space)
+  
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
     
-    # y-limits also include y.offset range
-    ylim.range <- c(
-      max.depth + max(y.offset), 
-      -extra_y_space
-    )
-
-    # x-limits
-    xlim.range <- c(width * x_left_space_mult, n + extra_x_space)
-    
+    # make a new, empty plot
     plot(x = 0, y = 0, type = 'n', 
          xlim = xlim.range,
          ylim = ylim.range,
@@ -786,6 +775,30 @@ plotSPC <- function(
     }
     
   }
+  
+  
+  ##########################################################
+  ## sketch parameters for follow-up overlay / inspection ##
+  ##########################################################
+  
+  lsp <- list('width' = width,
+              'plot.order' = plot.order,
+              'x0' = relative.pos + x.idx.offset,
+              'pIDs' = pIDs[plot.order],
+              'idname' = idname(x),
+              'y.offset' = y.offset,
+              'scaling.factor' = scaling.factor,
+              'max.depth' = max.depth,
+              'n' = n,
+              'xlim' = xlim.range,
+              'ylim' = ylim.range,
+              'extra_x_space' = extra_x_space,
+              'extra_y_space' = extra_y_space,
+              'hz.depth.LAI' = rep(NA_real_, n),
+              'legend.colors' = hz.color.interpretation$colors,
+              'legend.data' = hz.color.interpretation$color.legend.data
+  )
+  
   
   
   ## TODO dynamically adjust `width` based on strwidth(longest.hz.name)
