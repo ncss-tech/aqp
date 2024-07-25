@@ -163,7 +163,7 @@ aggregate(featdept ~ id, data = df, summary)
 
 }
 \references{
-Abrol, I., Yadav, J. & Massoud, F. 1988. \href{https://www.fao.org/3/x5871e/x5871e00.htm}{Salt-affected soils and their management}. No. Bulletin 39. Rome, FAO Soils.
+Abrol, I., Yadav, J. & Massoud, F. 1988. \href{https://www.fao.org/4/x5871e/x5871e00.htm}{Salt-affected soils and their management}. No. Bulletin 39. Rome, FAO Soils.
 
 FAO. 2006. \href{https://www.fao.org/4/a0541e/a0541e.pdf}{Guidelines for soil description}. Rome, Food and Agriculture Organization of the United Nations.
 

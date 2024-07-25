@@ -63,7 +63,7 @@
 #' @author Stephen Roecker
 #' 
 #' @references 
-#' Abrol, I., Yadav, J. & Massoud, F. 1988. [Salt-affected soils and their management](https://www.fao.org/3/x5871e/x5871e00.htm). No. Bulletin 39. Rome, FAO Soils.
+#' Abrol, I., Yadav, J. & Massoud, F. 1988. [Salt-affected soils and their management](https://www.fao.org/4/x5871e/x5871e00.htm). No. Bulletin 39. Rome, FAO Soils.
 #' 
 #' FAO. 2006. [Guidelines for soil description](https://www.fao.org/4/a0541e/a0541e.pdf). Rome, Food and Agriculture Organization of the United Nations.
 #' 
