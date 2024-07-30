@@ -1,4 +1,4 @@
-# aqp 2.0.4 (2024-07-25)
+# aqp 2.0.4 (2024-07-30)
  * CRAN release
  * ragged bottom lines in `plotSPC()` now adjusted as function of number of profiles and device width
  * additional metadata from `plotSPC()` saved to `last_spc_plot` in `aqp.env`
