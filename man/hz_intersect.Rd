@@ -27,21 +27,19 @@ This function intersects two horizon tables by harmonizing their depths and merg
 \examples{
 
 h <- data.frame(
-id = 1,
-top    = c(0,  25, 44, 46, 50),
-bottom = c(25, 44, 46, 50, 100),
-by     = c("Yes", "Yes", "No", "No", "Yes"),
-clay   = c(10, 12, 27, 35, 16)
+  id = 1,
+  top    = c(0,  25, 44, 46, 50),
+  bottom = c(25, 44, 46, 50, 100),
+  by     = c("Yes", "Yes", "No", "No", "Yes"),
+  clay   = c(10, 12, 27, 35, 16)
 )
 
-h |> hz_dissolve("by")
+hz_dissolve(h, "by")
 
-h |> hz_dissolve("by") |> hz_intersect(x = _, y = h)
+hz_intersect(x = hz_dissolve(h, "by"), y = h)
 
-h |> 
-hz_dissolve("by") |> 
-hz_intersect(x = h, y = _) |>
-aggregate(clay ~ dissolve_id, data = _, mean)
+hi <- hz_intersect(x = h, y = hz_dissolve(h, "by"))
+aggregate(clay ~ dissolve_id, data = hi, mean)
 
 }
 \seealso{

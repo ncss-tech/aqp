@@ -38,34 +38,29 @@ This function differs from \code{\link{texture_to_taxpartsize}} in that is aggre
 \examples{
 
 h <- data.frame(
-id = 1,
-hzname = c("A", "BA", "Bw", "BC", "C"),
-top    = c( 0, 10, 45, 60,  90),
-bottom = c(10, 45, 60, 90, 150),
-clay   = c(15, 16, 45, 20,  10),
-sand   = c(10, 35, 40, 50,  90),
-frags  = c( 0,  5, 10, 38,  40)
+  id = 1,
+  hzname = c("A", "BA", "Bw", "BC", "C"),
+  top    = c(0, 10, 45, 60,  90),
+  bottom = c(10, 45, 60, 90, 150),
+  clay   = c(15, 16, 45, 20,  10),
+  sand   = c(10, 35, 40, 50,  90),
+  frags  = c(0,  5, 10, 38,  40)
 )
 
-h <- cbind(
-h, 
-texcl = ssc_to_texcl(clay = h$clay, sand = h$sand)
-)
+h <- cbind(h,
+           texcl = ssc_to_texcl(clay = h$clay, sand = h$sand))
 
-pscs <- data.frame(
-id = 1, 
-top = 25, 
-bottom = 100
-)
+pscs <- data.frame(id = 1,
+                   top = 25,
+                   bottom = 100)
 
-h <- cbind(
-h, 
-taxpartsize = texture_to_taxpartsize(
-texcl = h$texcl,
-clay  = h$clay, 
-sand  = h$sand,
-fragvoltot = h$frags
-))
+h <- cbind(h,
+           taxpartsize = texture_to_taxpartsize(
+             texcl = h$texcl,
+             clay  = h$clay,
+             sand  = h$sand,
+             fragvoltot = h$frags
+           ))
 
 depths(h) <- id ~ top + bottom
 
