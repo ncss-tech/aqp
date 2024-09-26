@@ -167,7 +167,8 @@ table(m.new.chroma$C)
 # * do we need multivariate interpolation?
 # 
 
-.cols <- hcl.colors(length(unique(m.new.chroma$C)))
+.n <- length(unique(m.new.chroma$C[m.new.chroma$H %in% c('2.5Y', '2.5YR', '2.5R')]))
+.cols <- hcl.colors(n = .n, palette = 'blues3')
 
 xyplot(
   x ~ V | factor(H), 
@@ -175,7 +176,7 @@ xyplot(
   data = m.new.chroma, 
   subset = H %in% c('2.5Y', '2.5YR', '2.5R'),
   type = 'l', 
-  par.settings = tactile.theme(superpose.line = list(col = .cols)), 
+  par.settings = tactile.theme(superpose.line = list(col = .cols, lwd = 2)), 
   as.table = TRUE, 
   scales = list(alternating = 1),
   panel = function(...) {
@@ -190,7 +191,7 @@ xyplot(
   data = m.new.chroma, 
   subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
   type = 'l', 
-  par.settings = tactile.theme(superpose.line = list(col = .cols)), 
+  par.settings = tactile.theme(superpose.line = list(col = .cols, lwd = 2)), 
   as.table = TRUE, 
   scales = list(alternating = 1),
   panel = function(...) {

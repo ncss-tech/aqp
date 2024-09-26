@@ -339,14 +339,22 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   if(length(N.idx) > 0)
     the_chroma[N.idx] <- 0
   
+  
+  ## TODO: any other hue with 0 chroma should be interpreted as N
+  
+  
   # value / chroma should be within unique set of allowed chips
   valid.value <- unique(as.character(munsell$value))
   valid.chroma <- unique(as.character(munsell$chroma))
   
+  
   ## warn if non-standard notation
   
-  ## TODO: should rounding be enabled by default for backwards compatibility?
-  ## TODO: rounding is wrong with e.g. 10YR 2.6 / 3 --> closest value is 2.5
+  ## TODO: 
+  ##  * should rounding be enabled by default for backwards compatibility?
+  ##  * current rounding is wrong with e.g. 10YR 2.6 / 3 --> closest value is 2.5
+  ##  * find closest value/chroma by distance search, once 0.5 values are ready
+  ##  * why are we converting to character?
   
   # value
   if(any(! as.character(na.omit(the_value)) %in% valid.value)) {
@@ -371,15 +379,17 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   )
   
   ## benchmarks:
-  # plyr::join 2x faster than base::merge
-  # data.table::merge (with conversion to/from) 5x faster than base::merge
+  # plyr::join() 2x faster than base::merge
+  # data.table::merge() (with conversion to/from) 5x faster than base::merge()
   
   ## TODO: maybe more efficient with keys
   # round-trip through data.table is still faster
   d <- data.table::as.data.table(d)
   munsell <- data.table::as.data.table(munsell)
+  
   # join
   res <- merge(d, munsell, by = c('hue','value','chroma'), all.x = TRUE, sort = FALSE)
+  
   # back to data.frame
   res <- as.data.frame(res)
   
@@ -405,8 +415,10 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
     alpha <- maxColorValue
   }
   
-  # convert to R color
-  res$soil_color <- NA # init an empy column
+  
+  ## convert to hex notation
+  # init an empty column
+  res$soil_color <- NA
   
   # account for missing values if present: we have to do this because rgb() doesn't like NA
   if(length(rgb.na > 0)) {
