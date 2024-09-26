@@ -156,16 +156,17 @@ p1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR',
 p2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
 
 # good
-p.1 + p.2
+p1 + p2
 
 # verify odd chroma frequencies
 table(m.new.chroma$C)
 
 
+
 ## TODO:
 # * vectorize interpolateValue() or re-factor
 # * do we need multivariate interpolation?
-# 
+# * safely handle impossible interpolation (missing end points ~ some hues)
 
 .n <- length(unique(m.new.chroma$C[m.new.chroma$H %in% c('2.5Y', '2.5YR', '2.5R')]))
 .cols <- hcl.colors(n = .n, palette = 'blues3')
@@ -220,49 +221,78 @@ xyplot(
 
 
 ## interpolate all half-value chips
-# .s <- seq(from = 1.5,  to = 9.5, by = 1)
-# map(m.new.chroma, .f = interpolateValue, .progress = TRUE)
+z <- split(m.new.chroma, list(m.new.chroma$H, m.new.chroma$C))
+zz <- map(z, .f = interpolateValue2, .progress = TRUE)
 
+# remove NULLs
+# these are H/C combinations where interpolation is not possible
+idx <- which(!sapply(zz, is.null))
+zz <- zz[idx]
 
+zz <- do.call('rbind', zz)
+nrow(zz)
 
-## interpolate 2.5 values
-# only need 2 value-slices
-m.sub <- subset(m.new.chroma, V %in% c(2, 3))
-m.sub <- split(m.sub, list(m.sub$H, m.sub$C))
-
-# note: some combinations are missing values 2 AND 3
-table(sapply(m.sub, nrow))
-# 0    1    2 
-# 1102  140  718 
-
-# only process those with 2 records
-idx <- which(sapply(m.sub, nrow) == 2)
-m.sub <- m.sub[idx]
-
-m.2.5.values <- map(m.sub, .f = interpolateValue, .progress = TRUE)
-m.2.5.values <- do.call('rbind', m.2.5.values)
-
-# 758 rows
-nrow(m.2.5.values)
-head(m.2.5.values)
-
-## stack interpolated 2.5 values
-m.new.chroma <- rbind(m.new.chroma, m.2.5.values)
+# stack interpolated values
+m.new.chroma <- rbind(m.new.chroma, zz)
 
 # sort
 m.new.chroma <- m.new.chroma[order(m.new.chroma$H, m.new.chroma$V, m.new.chroma$C), ]
 
 str(m.new.chroma)
 
+
+# ## interpolate 2.5 values
+# # only need 2 value-slices
+# m.sub <- subset(m.new.chroma, V %in% c(2, 3))
+# m.sub <- split(m.sub, list(m.sub$H, m.sub$C))
+# 
+# # note: some combinations are missing values 2 AND 3
+# table(sapply(m.sub, nrow))
+# # 0    1    2 
+# # 1102  140  718 
+# 
+# # only process those with 2 records
+# idx <- which(sapply(m.sub, nrow) == 2)
+# m.sub <- m.sub[idx]
+# 
+# m.2.5.values <- map(m.sub, .f = interpolateValue, .progress = TRUE)
+# m.2.5.values <- do.call('rbind', m.2.5.values)
+# 
+# # 758 rows
+# nrow(m.2.5.values)
+# head(m.2.5.values)
+# 
+# ## stack interpolated 2.5 values
+# m.new.chroma <- rbind(m.new.chroma, m.2.5.values)
+# 
+# # sort
+# m.new.chroma <- m.new.chroma[order(m.new.chroma$H, m.new.chroma$V, m.new.chroma$C), ]
+
+
+
 ## graphical check
 g <- make.groups(
   m.new.chroma,
-  m.2.5.values
+  zz
 )
 
 # ok
 xyplot(
   x ~ V | factor(C), 
+  groups = which, 
+  data = g, 
+  subset = H %in% c('2.5YR'), 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 0.5, 
+  pch = 16, 
+  xlim = c(0, 10)
+)
+
+xyplot(
+  y ~ V | factor(C), 
   groups = which, 
   data = g, 
   subset = H %in% c('2.5YR'), 
@@ -288,6 +318,50 @@ xyplot(
   pch = 16, 
   xlim = c(0, 10)
 )
+
+
+.n <- length(unique(m.new.chroma$C[m.new.chroma$H %in% c('2.5Y', '2.5YR', '2.5R')]))
+.cols <- hcl.colors(n = .n, palette = 'zissou1')
+
+xyplot(
+  x ~ V | factor(H), 
+  groups = C, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'),
+  type = 'b', 
+  par.settings = tactile.theme(
+    background = list(col = 'black'),
+    axis.text = list(col = 'white'),
+    par.xlab.text = list(col = 'white'),
+    par.ylab.text = list(col = 'white'),
+    superpose.symbol = list(col = .cols, pch = 16),
+    superpose.line = list(col = .cols, lwd = 1)
+    ), 
+  as.table = TRUE, 
+  scales = list(alternating = 1, x = list(at = seq(1, 10))),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+xyplot(
+  x ~ V | factor(H), 
+  groups = C, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'),
+  type = 'b', 
+  par.settings = tactile.theme(
+    superpose.symbol = list(col = .cols, pch = 16),
+    superpose.line = list(col = .cols, lwd = 1)
+  ), 
+  as.table = TRUE, 
+  scales = list(alternating = 1, x = list(at = seq(1, 10))),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
 
 
 
@@ -320,15 +394,20 @@ m.final <- data.frame(m.new.chroma, m.sRGB)
 plot_cols <- rgb(m.final$R, m.final$G, m.final$B)
 
 
-p1 <- xyplot(V ~ C | factor(H, levels=c('2.5Y', '10YR', '7.5YR', '5YR', '2.5YR', '10R')),
-             main="Common Soil Colors", 
-             data=m.final, subset=H %in% c('2.5Y', '10YR', '7.5YR', '5YR', '2.5YR', '10R') & V > 1 & V <= 8 & C <= 8, 
-             as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
-             par.settings = tactile.theme(),
-             panel=function(x, y, subscripts, ...) 
-             {
-               panel.xyplot(x, y, pch=15, cex=2, col=plot_cols[subscripts])
-             }
+p1 <- xyplot(
+  V ~ C | factor(H, levels = c('2.5Y', '10YR', '7.5YR', '5YR', '2.5YR', '10R')),
+  main = "Common Soil Colors", 
+  data = m.final, 
+  subset = H %in% c('2.5Y', '10YR', '7.5YR', '5YR', '2.5YR', '10R') & V <= 8 & C <= 8, 
+  as.table = TRUE, 
+  subscripts = TRUE, 
+  scales = list(alternating = 1, y = list(at = 1:8)),
+  xlab = 'Chroma', 
+  ylab = 'Value',
+  par.settings = tactile.theme(),
+  panel = function(x, y, subscripts, ...) {
+    panel.xyplot(x, y, pch = 15, cex = 2, col = plot_cols[subscripts])
+  }
 )
 
 p1
@@ -374,7 +453,8 @@ n.agg.final <- n.agg.final[order(n.agg.final$V), ]
 # combine
 m.final <- rbind(m.final, n.agg.final)
 
-# 9227
+# 2022: 9,227 (2.5 value chips)
+# 2024: 15,709 (all half-value chips)
 nrow(m.final)
 
 
@@ -392,17 +472,32 @@ row.names(m.final.lab) <- NULL
 
 str(m.final.lab)
 
+
 ##
-## check
+## check differences from previous versions of the LUT
 ##
+
+## 2022:
+## the new N chips are the top differences
+## everything else has dE00 < 4
+## mostly value == 1
+
+
+## 2024:
+## dE00 > 0.4 (but all < 1.5) are 2.5 value chips
+## 
+## likely related to interpolation over full range of V vs. single, linear interpolation 2->2.5<-3
+
+
+
 
 ## make backup copy of old LUT
 # data(munsell)
-# saveRDS(munsell, file = 'munsell-LUT-2022-03-29.rds')
+# saveRDS(munsell, file = 'munsell-LUT-2024-09-25.rds')
 
-z.old <- readRDS('munsell-LUT-2022-03-29.rds')
+z.old <- readRDS('munsell-LUT-2024-09-25.rds')
 
-z <- merge(z.old, m.final.lab, by = c('hue', 'value', 'chroma'), all.x = TRUE)
+z <- merge(z.old, m.final.lab, by = c('hue', 'value', 'chroma'), all.x = TRUE, sort = FALSE)
 
 str(z)
 
@@ -431,6 +526,8 @@ for(i in 1:nrow(z)) {
   )
 }
 
+hist(d)
+
 
 # changes with dE00 > 2
 idx <- which(d > 2)
@@ -444,9 +541,19 @@ table(zz$hue)
 table(zz$value)
 table(zz$chroma)
 
-## N chips are the top differences
-## everything else is dE00 < 4
-## mostly value == 1
+
+# changes with dE00 > 0.4
+idx <- which(d > 0.4)
+zz <- z[idx, ]
+zz$dE00 <- d[idx]
+zz <- zz[order(zz$dE00, decreasing = TRUE), ]
+
+nrow(zz)
+head(zz, 20)
+
+table(zz$hue)
+table(zz$value)
+table(zz$chroma)
 
 
 
@@ -460,6 +567,12 @@ save(munsell, file = '../../../data/munsell.rda', compress = 'xz')
 
 ## install / or reload from source
 
+munsell2rgb('10YR', 9, 2, returnLAB = TRUE)
+munsell2rgb('10YR', 9.5, 2, returnLAB = TRUE)
+
+# dE00 ~ 3
+# colorContrastPlot('10YR 9/2', '10YR 9.5/2')
+
 
 munsell2rgb('10YR', 3.5, 2, returnLAB = TRUE)
 munsell2rgb('10YR', 4, 2, returnLAB = TRUE)
@@ -472,7 +585,7 @@ munsell2rgb('10YR', 5, 1, returnLAB = TRUE)
 
 
 # check neutral
-m <- sprintf('N %s/', 2:9)
+m <- sprintf('N %s/', c(2, 2.5,  3:8))
 cols <- parseMunsell(m)
 soilPalette(cols, lab = m)
 

@@ -382,10 +382,15 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   # plyr::join() 2x faster than base::merge
   # data.table::merge() (with conversion to/from) 5x faster than base::merge()
   
+  
   ## TODO: maybe more efficient with keys
   # round-trip through data.table is still faster
   d <- data.table::as.data.table(d)
   munsell <- data.table::as.data.table(munsell)
+  
+  
+  ## TODO: optimize by first filtering full lookup table on e.g. hue
+  
   
   # join
   res <- merge(d, munsell, by = c('hue','value','chroma'), all.x = TRUE, sort = FALSE)

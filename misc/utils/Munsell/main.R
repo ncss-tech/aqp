@@ -1,9 +1,11 @@
 ## Code / Data related to preparation of Munsell color interpretation in aqp
-## 2022-03-29
+## 2024-09-26
 ## D.E. Beaudette, A.G. Brown
 
 # make Munsell and related LUT
-# add neutral chips
+# + neutral chips
+# + odd chroma
+# + 0.5 value 
 # xyY [C] -> XYZ [D65] -> sRGB -> CIELAB
 source('prepare-munsell-LUT.R')
 

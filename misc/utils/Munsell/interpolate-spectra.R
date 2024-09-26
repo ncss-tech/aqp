@@ -1,6 +1,6 @@
 library(lattice)
 library(tactile)
-library(pbapply)
+library(purrr)
 library(reshape2)
 
 # load simplified spectra
@@ -47,7 +47,7 @@ interpolateOddChromaSpectra <- function(i) {
   # short circuit: 0 candidates for interpolation
   if(length(s.chroma) < 1)
     return(NULL)
-    
+  
   
   # setup interpolation function: natural splines
   # fit is exact at training points
@@ -89,7 +89,7 @@ interpolateOddChromaSpectra <- function(i) {
 }
 
 # do interpolation
-mm <- pblapply(m, interpolateOddChromaSpectra)
+mm <- map(m, .f = interpolateOddChromaSpectra, .progress = TRUE)
 
 # combine
 mm <- do.call('rbind', mm)
@@ -108,6 +108,16 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
        scales = list(y = list(tick.number = 10)),
        par.settings = tactile.theme()
 )
+
+idx <- which(m.final$hue %in% c('2.5YR') & m.final$value == 4)
+s <- m.final[idx, ]
+
+xyplot(reflectance ~ chroma | factor(wavelength), data=s, 
+       type='b', as.table=TRUE,
+       scales = list(y = list(tick.number = 10)),
+       par.settings = tactile.theme()
+)
+
 
 
 # check for reflectance <= 0
@@ -133,7 +143,7 @@ m.final$reflectance[idx] <- min(m.final$reflectance[-idx])
 
 
 ## check: OK
-s <- subset(m.final, subset = hue == '2.5YR' & value == 4 & chroma %in% 2:4)
+s <- subset(m.final, subset = hue == '5YR' & value == 4 & chroma %in% 2:4)
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
@@ -142,6 +152,15 @@ xyplot(reflectance ~ wavelength, data = s,
        par.settings = tactile.theme()
 )
 
+
+s <- subset(m.final, subset = hue == '2.5Y' & value == 4 & chroma %in% 2:4)
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       par.settings = tactile.theme()
+)
 
 
 
@@ -195,7 +214,7 @@ interpolateValueSpectra <- function(i) {
 
 
 # do interpolation
-mm <- pblapply(m, interpolateValueSpectra)
+mm <- map(m, .f = interpolateValueSpectra, .progress = TRUE)
 
 # combine
 mm <- do.call('rbind', mm)
@@ -238,6 +257,11 @@ save(munsell.spectra, file = '../../../data/munsell.spectra.rda', compress = 'xz
 save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda', compress = 'xz')
 
 # cleanup
-unlink(c('interpolated-Munsell-spectra-wide.rds', 'interpolated-Munsell-spectra.rds', 'simplified-Munsell-spectra.rds'))
+unlink(
+  c('interpolated-Munsell-spectra-wide.rds', 
+    'interpolated-Munsell-spectra.rds', 
+    'simplified-Munsell-spectra.rds'
+  )
+)
 
 

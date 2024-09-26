@@ -38,8 +38,47 @@ interpolateChroma <- function(m.i) {
 }
 
 
-## TODO: consider re-writing for entire range, and splinefun() based interpolation
+# 2024-09-26
+# re-write of interpolateValue() -> now safely interpolates all 0.5 values
+interpolateValue2 <- function(m.i) {
+  
+  # can only proceed with >=2 rows
+  # some combinations of hue, value, chroma have 1 row.
+  # there will be other combinations created by split() with 0 rows
+  if(nrow(m.i) < 2) {
+    return(NULL)
+  }
+  
+  # linear interpolation ~ munsell value
+  # x ~ V
+  s.1 <- splinefun(m.i$V, m.i$x)
+  # y ~ V
+  s.2 <- splinefun(m.i$V, m.i$y)
+  # Y ~ V
+  s.3 <- splinefun(m.i$V, m.i$Y)
+  
+  # all odd values
+  new.V <- seq(from = min(m.i$V) + 0.5, to = max(m.i$V) - 0.5, by = 1)
+  
+  # combine interpolated values into data.frame
+  # H, C are constant
+  m.new <- data.frame(
+    H = m.i$H[1],
+    V = new.V,
+    C = m.i$C[1],
+    p1 = s.1(new.V),
+    p2 = s.2(new.V),
+    p3 = s.3(new.V)
+  )
+  
+  names(m.new) <- c('H', 'V', 'C', 'x', 'y', 'Y')
+  
+  # only return new rows
+  return(m.new)
+}
 
+
+## NOTE: this can only interpolate between two integer values
 # 2022-03-29
 # for now only interpolating 2.5 value
 # usually interpolating xyY, 
