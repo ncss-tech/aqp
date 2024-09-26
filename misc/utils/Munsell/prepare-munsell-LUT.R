@@ -8,10 +8,21 @@ library(aqp)
 source('local-functions.R') 
 
 
-# munsell data comes with a lookup table in xyY colorspace
-# url: http://www.cis.rit.edu/mcsl/online/munsell.php
+##
+## Notes / Ideas:
+##
+##   * univariate interpolation of odd-chroma and 0.5-value chips seems to work well
+##   * 
+##
 
-# Munsell chroma, CIE x, y, and Y. The chromaticity coordinates were calculated using illuminant C and the CIE 1931 2 degree observer.
+
+
+## munsell data comes with a lookup table in xyY colorspace
+## url: http://www.cis.rit.edu/mcsl/online/munsell.php
+
+## Munsell chroma, CIE x, y, and Y. 
+## The chromaticity coordinates were calculated using 
+## illuminant C and the CIE 1931 2 degree observer.
 m <- read.table("munsell-all.dat.gz", header=TRUE)
 
 
@@ -30,7 +41,13 @@ m$Y <- rescale(m$Y, to = c(0, 1))
 ## remove vale < 1 --> 765 records
 m <- subset(m, V >= 1)
 
+
+
+
+##
 ## interpolate odd chroma chips
+##
+
 # also interpolate backwards to C == 1
 m.split <- split(m, list(m$H, m$V))
 
@@ -43,22 +60,168 @@ nrow(m.new.chroma)
 
 
 ## graphical check
-p.1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+.cols <- hcl.colors(length(unique(m$V)))
 
-p.2 <- xyplot(x ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+p1 <- xyplot(
+  x ~ C | factor(H), 
+  groups = V, 
+  data = m, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
+  type = 'p', 
+  par.settings = tactile.theme(superpose.symbol = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 1.25, 
+  xlim = c(-1, 25),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
 
+p2 <- xyplot(
+  x ~ C | factor(H), 
+  groups = V, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
+  type = 'p', 
+  par.settings = tactile.theme(superpose.symbol = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1),
+  pch = 16,
+  cex = 0.5, 
+  xlim = c(-1, 25),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+# ok
+update(p1 + p2, auto.key = list(title = 'V'))
+
+
+p1 <- xyplot(
+  y ~ C | factor(H), 
+  groups = V, 
+  data = m, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
+  type = 'p', 
+  par.settings = tactile.theme(superpose.symbol = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 1.25, 
+  xlim = c(-1, 25),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+p2 <- xyplot(
+  y ~ C | factor(H), 
+  groups = V, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
+  type = 'p', 
+  par.settings = tactile.theme(superpose.symbol = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1),
+  pch = 16,
+  cex = 0.5, 
+  xlim = c(-1, 25),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+# ok
+update(p1 + p2, auto.key = list(title = 'V'))
+
+
+
+# original
+p1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+# interpolated
+p2 <- xyplot(x ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+
+# good
+p1 + p2
+
+
+# original
+p1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+# interpolated
+p2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+
+# good
 p.1 + p.2
 
-
-p.1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
-
-p.2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
-
-p.1 + p.2
+# verify odd chroma frequencies
+table(m.new.chroma$C)
 
 
+## TODO:
+# * vectorize interpolateValue() or re-factor
+# * do we need multivariate interpolation?
+# 
 
-summary(m.new.chroma)
+.cols <- hcl.colors(length(unique(m.new.chroma$C)))
+
+xyplot(
+  x ~ V | factor(H), 
+  groups = C, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'),
+  type = 'l', 
+  par.settings = tactile.theme(superpose.line = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+xyplot(
+  y ~ V | factor(H), 
+  groups = C, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
+  type = 'l', 
+  par.settings = tactile.theme(superpose.line = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+xyplot(
+  Y ~ V | factor(H), 
+  groups = C, 
+  data = m.new.chroma, 
+  subset = H %in% c('2.5Y', '2.5YR', '2.5R'), 
+  type = 'l', 
+  par.settings = tactile.theme(superpose.line = list(col = .cols)), 
+  as.table = TRUE, 
+  scales = list(alternating = 1),
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.xyplot(...)
+  }
+) 
+
+
+
+
+
+## interpolate all half-value chips
+# .s <- seq(from = 1.5,  to = 9.5, by = 1)
+# map(m.new.chroma, .f = interpolateValue, .progress = TRUE)
+
 
 
 ## interpolate 2.5 values

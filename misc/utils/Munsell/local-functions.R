@@ -38,6 +38,8 @@ interpolateChroma <- function(m.i) {
 }
 
 
+## TODO: consider re-writing for entire range, and splinefun() based interpolation
+
 # 2022-03-29
 # for now only interpolating 2.5 value
 # usually interpolating xyY, 
@@ -71,15 +73,6 @@ interpolateValue <- function(m.i, new.V = 2.5, vars = c('x', 'y', 'Y')) {
 
 
 
-
-# 
-# # compute midpoints between a sequence of points:
-# mdpts <- function(x) 
-# 	{
-# 	m <- ( x[1:length(x)-1] + x[2:length(x)] ) / 2
-# 	m
-# 	}
-# 
 
 
 
