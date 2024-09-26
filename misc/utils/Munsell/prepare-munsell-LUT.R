@@ -2,7 +2,7 @@ library(latticeExtra)
 library(tactile)
 library(grDevices)
 library(scales)
-library(pbapply)
+library(purrr)
 library(aqp)
 
 source('local-functions.R') 
@@ -10,7 +10,7 @@ source('local-functions.R')
 
 # munsell data comes with a lookup table in xyY colorspace
 # url: http://www.cis.rit.edu/mcsl/online/munsell.php
- 
+
 # Munsell chroma, CIE x, y, and Y. The chromaticity coordinates were calculated using illuminant C and the CIE 1931 2 degree observer.
 m <- read.table("munsell-all.dat.gz", header=TRUE)
 
@@ -18,7 +18,7 @@ m <- read.table("munsell-all.dat.gz", header=TRUE)
 ## rescale Y
 # note: the data from the Munsell group contains Y values 
 # that are in the range of approx: 0-100
- 
+
 # these need to be rescaled to the range of 0-1, 
 # but not using the existing min/max values
 # instead, set the max Y value at 100
@@ -35,21 +35,24 @@ m <- subset(m, V >= 1)
 m.split <- split(m, list(m$H, m$V))
 
 # this combines original + interpolated values
-m.new.chroma <- pblapply(m.split, interpolateChroma)
+m.new.chroma <- map(m.split, .f = interpolateChroma, .progress = TRUE)
 m.new.chroma <- do.call('rbind', m.new.chroma)
+
+# 8460 rows
+nrow(m.new.chroma)
 
 
 ## graphical check
-p.1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+p.1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
 
-p.2 <- xyplot(x ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+p.2 <- xyplot(x ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
 
 p.1 + p.2
 
 
-p.1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+p.1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
 
-p.2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+p.2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
 
 p.1 + p.2
 
@@ -72,9 +75,10 @@ table(sapply(m.sub, nrow))
 idx <- which(sapply(m.sub, nrow) == 2)
 m.sub <- m.sub[idx]
 
-m.2.5.values <- pblapply(m.sub, interpolateValue)
+m.2.5.values <- map(m.sub, .f = interpolateValue, .progress = TRUE)
 m.2.5.values <- do.call('rbind', m.2.5.values)
 
+# 758 rows
 nrow(m.2.5.values)
 head(m.2.5.values)
 
@@ -93,7 +97,33 @@ g <- make.groups(
 )
 
 # ok
-xyplot(x ~ V | factor(C), groups = which, data = g, subset = H %in% c('2.5YR'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16, xlim = c(0, 10)) 
+xyplot(
+  x ~ V | factor(C), 
+  groups = which, 
+  data = g, 
+  subset = H %in% c('2.5YR'), 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 0.5, 
+  pch = 16, 
+  xlim = c(0, 10)
+)
+
+xyplot(
+  x ~ V | factor(C), 
+  groups = which, 
+  data = g, 
+  subset = H %in% c('5G'), 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 0.5, 
+  pch = 16, 
+  xlim = c(0, 10)
+)
 
 
 
@@ -112,8 +142,13 @@ summary(m.XYZ)
 m.sRGB <- XYZ2rgb(m.XYZ)
 
 ## check:
-# probably the same
+# should give the same results
+# note explicit reference illuminant conversion XYZ coordinates are D65
 # z <- convertColor(m.XYZ, from = 'XYZ', to = 'sRGB', from.ref.white = 'D65', to.ref.white = 'D65')
+#
+# relatively small differences
+# colMeans(m.sRGB - z)
+
 
 
 m.final <- data.frame(m.new.chroma, m.sRGB)
@@ -178,6 +213,7 @@ m.final <- rbind(m.final, n.agg.final)
 # 9227
 nrow(m.final)
 
+
 ##
 ## add CIELAB coordinates
 ##
@@ -226,7 +262,8 @@ for(i in 1:nrow(z)) {
     from_space = 'lab', 
     to_space = 'lab', 
     white_from = 'D65', 
-    white_to = 'D65', method = 'cie2000'
+    white_to = 'D65', 
+    method = 'cie2000'
   )
 }
 

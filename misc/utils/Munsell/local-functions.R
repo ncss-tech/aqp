@@ -123,7 +123,11 @@ xyY2XYZ <- function(xyY.data) {
 		
 	## this has been revised as of Jan 2008 
 	## new version:
-	M_adapt_C_to_D65 <- matrix(c(0.990448, -0.012371, -0.003564, -0.007168, 1.015594, 0.006770, -0.011615, -0.002928, 0.918157), ncol=3, byrow=TRUE)
+	M_adapt_C_to_D65 <- matrix(
+	  c(0.990448, -0.012371, -0.003564, -0.007168, 1.015594, 0.006770, -0.011615, -0.002928, 0.918157), 
+	  ncol = 3, 
+	  byrow = TRUE
+	)
 	
 	
 	# 
@@ -140,8 +144,7 @@ xyY2XYZ <- function(xyY.data) {
 ## 
 ## updated August 2009
 ## 
-XYZ2rgb <- function(mun_XYZ_D65)
-	{
+XYZ2rgb <- function(mun_XYZ_D65) {
 	
 	
 	# 
@@ -161,7 +164,11 @@ XYZ2rgb <- function(mun_XYZ_D65)
 	# http://www.brucelindbloom.com/Eqn_RGB_XYZ_Matrix.html
 	# 
 	# sRGB profile:
-	M_XYZ_to_sRGB_D65 <- matrix(c(3.24071, -0.969258, 0.0556352, -1.53726, 1.87599, -0.203996, -0.498571, 0.0415557, 1.05707), ncol=3, byrow=TRUE)
+	M_XYZ_to_sRGB_D65 <- matrix(
+	  c(3.24071, -0.969258, 0.0556352, -1.53726, 1.87599, -0.203996, -0.498571, 0.0415557, 1.05707), 
+	  ncol = 3, 
+	  byrow = TRUE
+	)
 	
 	
 	
@@ -196,7 +203,7 @@ XYZ2rgb <- function(mun_XYZ_D65)
 	B_clip <- ifelse(B > 1, 1, B_clip) 
 	
 	
-	return(data.frame(R=R_clip, G=G_clip, B=B_clip))
+	return(data.frame(R = R_clip, G = G_clip, B = B_clip))
 	}
 	
 	
