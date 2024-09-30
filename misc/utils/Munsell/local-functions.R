@@ -1,30 +1,29 @@
 
 # 2022-03-29
+# interpolate odd chroma from Munsell renotation data
+# m.i: subset renotation data.frame, for a single hue/value
 interpolateChroma <- function(m.i) {
   
-  # interpolation over S(y ~ C) and S(x ~ C)
-  s.x <- splinefun(m.i$C, m.i$x)
-  s.y <- splinefun(m.i$C, m.i$y)
+  # spline interpolation over S(y ~ C) and S(x ~ C)
+  # fit is exact at training points
+  s.x <- splinefun(m.i$C, m.i$x, method = 'natural')
+  s.y <- splinefun(m.i$C, m.i$y, method = 'natural')
   
   # make predictions along range of 1 -> max(C)
   # but only where we are missing data
-  C.original <- m.i$C
-  C.full <- seq(from = 1, to = max(m.i$C), by = 1)
-  C.new <- setdiff(C.full, C.original)
-  
-  # eval spline functions along missing points
-  p.x <- s.x(C.new)
-  p.y <- s.y(C.new)
+  .original <- m.i$C
+  .full <- seq(from = 1, to = max(m.i$C), by = 1)
+  .new <- setdiff(.full, .original)
   
   # combine interpolated values into data.frame
   # H, V, Y are constant
   m.new <- data.frame(
     H = m.i$H[1],
     V = m.i$V[1],
-    C = C.new,
-    x = p.x,
-    y = p.y,
-    Y= m.i$Y[1]
+    C = .new,
+    x = s.x(.new),
+    y = s.y(.new),
+    Y = m.i$Y[1]
   )
   
   # stack and re-order along C values
@@ -40,6 +39,7 @@ interpolateChroma <- function(m.i) {
 
 # 2024-09-26
 # re-write of interpolateValue() -> now safely interpolates all 0.5 values
+# m.i: data.frame of Munsell renotation data, for a single hue and chroma
 interpolateValue2 <- function(m.i) {
   
   # can only proceed with >=2 rows
@@ -49,16 +49,20 @@ interpolateValue2 <- function(m.i) {
     return(NULL)
   }
   
-  # linear interpolation ~ munsell value
+  # spline interpolation ~ munsell value
+  # fit is exact at training points
   # x ~ V
-  s.1 <- splinefun(m.i$V, m.i$x)
+  s.1 <- splinefun(m.i$V, m.i$x, method = 'natural')
   # y ~ V
-  s.2 <- splinefun(m.i$V, m.i$y)
+  s.2 <- splinefun(m.i$V, m.i$y, method = 'natural')
   # Y ~ V
-  s.3 <- splinefun(m.i$V, m.i$Y)
+  s.3 <- splinefun(m.i$V, m.i$Y, method = 'natural')
   
-  # all odd values
+  # new Munsell values for which interpolated xyY coordinates are required
+  # limited to the range of available value at this hue/chroma combination
   new.V <- seq(from = min(m.i$V) + 0.5, to = max(m.i$V) - 0.5, by = 1)
+  
+  # TODO: coordinate with interpolation of spectra
   
   # combine interpolated values into data.frame
   # H, C are constant

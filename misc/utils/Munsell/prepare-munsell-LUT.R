@@ -1,3 +1,7 @@
+##
+##
+##
+
 library(latticeExtra)
 library(tactile)
 library(grDevices)
@@ -12,6 +16,7 @@ source('local-functions.R')
 ## Notes / Ideas:
 ##
 ##   * univariate interpolation of odd-chroma and 0.5-value chips seems to work well
+##   * consider leaving values 0.2-0.8 for improved interpolation
 ##   * 
 ##
 
@@ -38,7 +43,7 @@ m$Y <- pmin(m$Y, 100)
 # rescale Y to [0,1]
 m$Y <- rescale(m$Y, to = c(0, 1))
 
-## remove vale < 1 --> 765 records
+## remove value < 1 --> 765 records
 m <- subset(m, V >= 1)
 
 
@@ -49,10 +54,10 @@ m <- subset(m, V >= 1)
 ##
 
 # also interpolate backwards to C == 1
-m.split <- split(m, list(m$H, m$V))
+z <- split(m, list(m$H, m$V))
 
 # this combines original + interpolated values
-m.new.chroma <- map(m.split, .f = interpolateChroma, .progress = TRUE)
+m.new.chroma <- map(z, .f = interpolateChroma, .progress = TRUE)
 m.new.chroma <- do.call('rbind', m.new.chroma)
 
 # 8460 rows
@@ -142,29 +147,75 @@ update(p1 + p2, auto.key = list(title = 'V'))
 
 
 # original
-p1 <- xyplot(x ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+p1 <- xyplot(
+  x ~ C | factor(V), 
+  groups = factor(H, levels = c('2.5Y', '2.5YR', '2.5R')), 
+  data = m, 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 1.25, 
+  xlim = c(-1, 25)
+) 
+
 # interpolated
-p2 <- xyplot(x ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+p2 <- xyplot(
+  x ~ C | factor(V), 
+  groups = factor(H, levels = c('2.5Y', '2.5YR', '2.5R')), 
+  data = m.new.chroma, 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 0.5, 
+  pch = 16
+)
 
 # good
-p1 + p2
+update(p1 + p2, auto.key = list(title = 'H'))
 
 
 # original
-p1 <- xyplot(y ~ C | factor(V), groups = H, data = m, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 1.25, xlim = c(-1, 25)) 
+p1 <- xyplot(
+  x ~ C | factor(V), 
+  groups = factor(H, levels = c('2.5Y', '2.5YR', '2.5G')), 
+  data = m, 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 1.25, 
+  xlim = c(-1, 25)
+) 
+
 # interpolated
-p2 <- xyplot(y ~ C | factor(V), groups = H, data = m.new.chroma, subset = H %in% c('2.5YR', '2.5Y', '5G'), type = 'p', par.settings = tactile.theme(), as.table = TRUE, scales = list(alternating = 1), cex = 0.5, pch = 16)
+p2 <- xyplot(
+  x ~ C | factor(V), 
+  groups = factor(H, levels = c('2.5Y', '2.5YR', '2.5G')), 
+  data = m.new.chroma, 
+  type = 'p', 
+  par.settings = tactile.theme(), 
+  as.table = TRUE, 
+  scales = list(alternating = 1), 
+  cex = 0.5, 
+  pch = 16
+)
 
 # good
-p1 + p2
+update(p1 + p2, auto.key = list(title = 'H'))
 
-# verify odd chroma frequencies
+
+
+
+
+## verify odd chroma frequencies
+# good
 table(m.new.chroma$C)
 
 
 
 ## TODO:
-# * vectorize interpolateValue() or re-factor
 # * do we need multivariate interpolation?
 # * safely handle impossible interpolation (missing end points ~ some hues)
 
@@ -238,37 +289,19 @@ m.new.chroma <- rbind(m.new.chroma, zz)
 # sort
 m.new.chroma <- m.new.chroma[order(m.new.chroma$H, m.new.chroma$V, m.new.chroma$C), ]
 
-str(m.new.chroma)
+# 15700
+nrow(m.new.chroma)
 
 
-# ## interpolate 2.5 values
-# # only need 2 value-slices
-# m.sub <- subset(m.new.chroma, V %in% c(2, 3))
-# m.sub <- split(m.sub, list(m.sub$H, m.sub$C))
-# 
-# # note: some combinations are missing values 2 AND 3
-# table(sapply(m.sub, nrow))
-# # 0    1    2 
-# # 1102  140  718 
-# 
-# # only process those with 2 records
-# idx <- which(sapply(m.sub, nrow) == 2)
-# m.sub <- m.sub[idx]
-# 
-# m.2.5.values <- map(m.sub, .f = interpolateValue, .progress = TRUE)
-# m.2.5.values <- do.call('rbind', m.2.5.values)
-# 
-# # 758 rows
-# nrow(m.2.5.values)
-# head(m.2.5.values)
-# 
-# ## stack interpolated 2.5 values
-# m.new.chroma <- rbind(m.new.chroma, m.2.5.values)
-# 
-# # sort
-# m.new.chroma <- m.new.chroma[order(m.new.chroma$H, m.new.chroma$V, m.new.chroma$C), ]
+## for now, retain specific Munsell value
+table(m.new.chroma$V)
 
+m.new.chroma <- subset(
+  m.new.chroma,
+  subset = V %in% c(1, 2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5, 10)
+)
 
+## TODO: flag within single data.frame, these two are out of sync
 
 ## graphical check
 g <- make.groups(
@@ -336,7 +369,7 @@ xyplot(
     par.ylab.text = list(col = 'white'),
     superpose.symbol = list(col = .cols, pch = 16),
     superpose.line = list(col = .cols, lwd = 1)
-    ), 
+  ), 
   as.table = TRUE, 
   scales = list(alternating = 1, x = list(at = seq(1, 10))),
   panel = function(...) {
@@ -454,7 +487,8 @@ n.agg.final <- n.agg.final[order(n.agg.final$V), ]
 m.final <- rbind(m.final, n.agg.final)
 
 # 2022: 9,227 (2.5 value chips)
-# 2024: 15,709 (all half-value chips)
+# 2024a: 15,709 (all half-value chips)
+# 2024b: 10,447 (select half-value chips)
 nrow(m.final)
 
 

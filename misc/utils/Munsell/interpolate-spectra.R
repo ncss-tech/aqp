@@ -1,3 +1,14 @@
+##
+##
+##
+
+
+
+## TODO: clamp to original range of Munsell chroma
+## TODO: clamp to original range of Munsell value
+## TODO: coordinate with `prepare-munsell-LUT.R`
+
+
 library(lattice)
 library(tactile)
 library(purrr)
@@ -20,6 +31,8 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
 
 # split by hue/value/wavelength
 m <- split(m.rel, list(m.rel$hue, m.rel$value, m.rel$wavelength))
+
+## TODO: clamp to original range of Munsell chroma
 
 # interpolation of odd chroma
 interpolateOddChromaSpectra <- function(i) {
@@ -164,27 +177,29 @@ xyplot(reflectance ~ wavelength, data = s,
 
 
 
-## interpolate 2.5 value
+## interpolate half-chip Munsell values
 
-# just 2/3 value
-m.sub <- subset(m.final, subset = value %in% 2:3)
-
-head(m.sub)
-
-# check
-s <- subset(m.sub, subset = hue == '2.5YR' & chroma == 3)
-
-xyplot(reflectance ~ wavelength, data = s, 
-       groups = munsell, type='b',
-       scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 2),
-       par.settings = tactile.theme()
-)
+# # just 2/3 value
+# m.sub <- subset(m.final, subset = value %in% 2:3)
+# 
+# head(m.sub)
+# 
+# # check
+# s <- subset(m.sub, subset = hue == '2.5YR' & chroma == 3)
+# 
+# xyplot(reflectance ~ wavelength, data = s, 
+#        groups = munsell, type='b',
+#        scales = list(y = list(tick.number = 10)),
+#        auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 2),
+#        par.settings = tactile.theme()
+# )
 
 
 # split by hue/chroma/wavelength
-m <- split(m.sub, list(m.sub$hue, m.sub$chroma, m.sub$wavelength))
+m <- split(m.final, list(m.final$hue, m.final$chroma, m.final$wavelength))
 
+
+## TODO: clamp to original range of Munsell value
 
 interpolateValueSpectra <- function(i) {
   
@@ -192,11 +207,12 @@ interpolateValueSpectra <- function(i) {
   if(nrow(i) < 2)
     return(NULL)
   
-  # linear interpolation between value 2--3
-  a.fun <- approxfun(i$value, i$reflectance)
+  # setup interpolation function: natural splines
+  # fit is exact at training points
+  a.fun <- splinefun(i$value, i$reflectance, method = 'natural')
   
-  # single value for now
-  v.target <- 2.5
+  # new Munsell values
+  v.target <- c(2.5, 8.5, 9.5)
   
   # re-assemble into original format
   res <- data.frame(
@@ -228,15 +244,31 @@ m.final <- m.final[order(m.final$hue, m.final$value, m.final$chroma), ]
 # check: OK
 str(m.final)
 
-s <- subset(m.final, subset = hue == '2.5YR' & chroma == 3)
+s <- subset(m.final, subset = hue == '10YR' & chroma == 4 & value %in% c(2, 2.5, 3, 4))
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 2),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
        par.settings = tactile.theme()
 )
 
+s <- subset(m.final, subset = hue == '2.5Y' & chroma == 4 & value %in% c(7, 8, 8.5, 9, 9.5, 10))
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       par.settings = tactile.theme()
+)
+
+xyplot(reflectance ~ value | wavelength, data = s, 
+       type='b',
+       as.table = TRUE,
+       scales = list(alternating = 3, y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       par.settings = tactile.theme()
+)
 
 
 
