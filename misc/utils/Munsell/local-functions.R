@@ -1,4 +1,103 @@
 
+
+
+## TODO: clamp to original range of Munsell chroma
+
+# interpolation of odd chroma
+interpolateOddChromaSpectra <- function(i) {
+  
+  # 0-row input
+  if(nrow(i) < 1) {
+    return(NULL)
+  }
+    
+  # chroma stats
+  u.chroma <- unique(i$chroma)
+  r.chroma <- range(u.chroma)
+  n.chroma <- length(u.chroma)
+  
+  # reflectance stats
+  r.reflectance <- range(i$reflectance)
+  
+  # sequence of candidate chroma
+  s <- seq(from = r.chroma[1], to = r.chroma[2], by = 1)
+  s.chroma <- setdiff(s, u.chroma)
+  
+  # short circuit: single chroma, interpolation impossible
+  if(n.chroma < 2)
+    return(NULL)
+  
+  # short circuit: 0 candidates for interpolation
+  if(length(s.chroma) < 1)
+    return(NULL)
+  
+  
+  # setup interpolation function: natural splines
+  # fit is exact at training points
+  sf <- splinefun(i$chroma, i$reflectance, method = 'natural')
+  
+  # check: fit should be exact at points
+  if(sum(sf(i$chroma) - i$reflectance) > 0.001){
+    message('spline not fitting at training data!')
+  }
+  
+  # interpolate candidate chroma
+  s.reflectance <- sf(s.chroma)
+  
+  # re-assemble into original format
+  res <- data.frame(
+    munsell = sprintf("%s %s/%s", i$hue[1], i$value[1], s.chroma),
+    hue = i$hue[1],
+    value = i$value[1],
+    chroma = s.chroma,
+    wavelength = i$wavelength[1],
+    reflectance = s.reflectance,
+    stringsAsFactors = FALSE
+  )
+  
+  
+  # debugging: graphical check
+  # OK
+  # plot(reflectance ~ chroma, data = i )
+  # lines(seq(r.chroma[1], r.chroma[2], by = 0.1), af(seq(r.chroma[1], r.chroma[2], by = 0.1)), col = 'red')
+  # points(s.chroma, s.reflectance, pch = 15)
+  
+  return(res)
+  
+}
+
+
+interpolateValueSpectra <- function(i) {
+  
+  # 0 or 1 row input: no interpolation possible
+  if(nrow(i) < 2)
+    return(NULL)
+  
+  # setup interpolation function: natural splines
+  # fit is exact at training points
+  a.fun <- splinefun(i$value, i$reflectance, method = 'natural')
+  
+  # new Munsell values
+  v.target <- c(2.5, 8.5, 9.5)
+  
+  # re-assemble into original format
+  res <- data.frame(
+    munsell = sprintf("%s %s/%s", i$hue[1], v.target, i$chroma[1]),
+    hue = i$hue[1],
+    value = v.target,
+    chroma = i$chroma[1],
+    wavelength = i$wavelength[1],
+    reflectance = a.fun(v.target),
+    stringsAsFactors = FALSE
+  )
+  
+  return(res)
+}
+
+
+
+
+
 # 2022-03-29
 # interpolate odd chroma from Munsell renotation data
 # m.i: subset renotation data.frame, for a single hue/value

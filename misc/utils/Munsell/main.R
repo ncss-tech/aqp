@@ -1,5 +1,5 @@
 ## Code / Data related to preparation of Munsell color interpretation in aqp
-## 2024-09-26
+## 2024-10-03
 ## D.E. Beaudette, A.G. Brown
 
 # make Munsell and related LUT

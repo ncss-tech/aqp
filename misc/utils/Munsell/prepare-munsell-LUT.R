@@ -1,5 +1,8 @@
+## Prepare `munsell` LUT from Renotation Database
+## D.E. Beaudette
+## 2024-10-03
 ##
-##
+## Originally based on code from ~2006 as part of the Pedlogic project.
 ##
 
 library(latticeExtra)
@@ -9,6 +12,9 @@ library(scales)
 library(purrr)
 library(aqp)
 
+
+# starting from aqp base directory
+setwd('misc/utils/Munsell')
 source('local-functions.R') 
 
 
@@ -16,8 +22,8 @@ source('local-functions.R')
 ## Notes / Ideas:
 ##
 ##   * univariate interpolation of odd-chroma and 0.5-value chips seems to work well
-##   * consider leaving values 0.2-0.8 for improved interpolation
-##   * 
+##   * consider retaining values 0.2-0.8 for improved interpolation
+##   * is multivariate interpolation necessary? (I doubt it)
 ##
 
 
@@ -217,7 +223,6 @@ table(m.new.chroma$C)
 
 ## TODO:
 # * do we need multivariate interpolation?
-# * safely handle impossible interpolation (missing end points ~ some hues)
 
 .n <- length(unique(m.new.chroma$C[m.new.chroma$H %in% c('2.5Y', '2.5YR', '2.5R')]))
 .cols <- hcl.colors(n = .n, palette = 'blues3')
@@ -271,7 +276,10 @@ xyplot(
 
 
 
+##
 ## interpolate all half-value chips
+##
+
 z <- split(m.new.chroma, list(m.new.chroma$H, m.new.chroma$C))
 zz <- map(z, .f = interpolateValue2, .progress = TRUE)
 
@@ -293,13 +301,17 @@ m.new.chroma <- m.new.chroma[order(m.new.chroma$H, m.new.chroma$V, m.new.chroma$
 nrow(m.new.chroma)
 
 
-## for now, retain specific Munsell value
+## for backwards compatibility, retain specific Munsell values
 table(m.new.chroma$V)
 
 m.new.chroma <- subset(
   m.new.chroma,
   subset = V %in% c(1, 2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5, 10)
 )
+
+# check: ok
+table(m.new.chroma$V)
+
 
 ## TODO: flag within single data.frame, these two are out of sync
 
@@ -599,29 +611,31 @@ munsell <- m.final.lab
 save(munsell, file = '../../../data/munsell.rda', compress = 'xz')
 
 
+
+
 ## install / or reload from source
-
-munsell2rgb('10YR', 9, 2, returnLAB = TRUE)
-munsell2rgb('10YR', 9.5, 2, returnLAB = TRUE)
-
-# dE00 ~ 3
-# colorContrastPlot('10YR 9/2', '10YR 9.5/2')
-
-
-munsell2rgb('10YR', 3.5, 2, returnLAB = TRUE)
-munsell2rgb('10YR', 4, 2, returnLAB = TRUE)
-
-munsell2rgb('10YR', 2.5, 2, returnLAB = TRUE)
-munsell2rgb('10YR', 2, 2, returnLAB = TRUE)
-
-munsell2rgb('10YR', 2, 1, returnLAB = TRUE)
-munsell2rgb('10YR', 5, 1, returnLAB = TRUE)
-
-
-# check neutral
-m <- sprintf('N %s/', c(2, 2.5,  3:8))
-cols <- parseMunsell(m)
-soilPalette(cols, lab = m)
-
-
-
+# 
+# munsell2rgb('10YR', 9, 2, returnLAB = TRUE)
+# munsell2rgb('10YR', 9.5, 2, returnLAB = TRUE)
+# 
+# # dE00 ~ 3
+# # colorContrastPlot('10YR 9/2', '10YR 9.5/2')
+# 
+# 
+# munsell2rgb('10YR', 3.5, 2, returnLAB = TRUE)
+# munsell2rgb('10YR', 4, 2, returnLAB = TRUE)
+# 
+# munsell2rgb('10YR', 2.5, 2, returnLAB = TRUE)
+# munsell2rgb('10YR', 2, 2, returnLAB = TRUE)
+# 
+# munsell2rgb('10YR', 2, 1, returnLAB = TRUE)
+# munsell2rgb('10YR', 5, 1, returnLAB = TRUE)
+# 
+# 
+# # check neutral
+# m <- sprintf('N %s/', c(2, 2.5,  3:8))
+# cols <- parseMunsell(m)
+# soilPalette(cols, lab = m)
+# 
+# 
+# 
