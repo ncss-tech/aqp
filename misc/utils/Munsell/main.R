@@ -19,8 +19,14 @@ source('traditional-names.R')
 # prepare a simplified spectral library of Munsell color chips
 source('prepare-simplfied-spectra-library.R')
 
-# interpolate odd chroma and 2.5 value spectra
+# interpolate odd chroma and select 1/2 chip value spectra
 source('interpolate-spectra.R')
+
+# TODO: investigate poor agreement between 
+# Munsell reference and predicted CIELAB -> Munsell conversion
+# these are probably extrapolation artifacts
+source('investigate-spectral-interpolation-errors.R')
+
 
 # create Munsell hue position data
 source('make-munsellHuePosition.R')

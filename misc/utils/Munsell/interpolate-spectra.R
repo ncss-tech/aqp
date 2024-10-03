@@ -4,8 +4,7 @@
 
 
 
-## TODO: clamp to original range of Munsell chroma
-## TODO: clamp to original range of Munsell value
+## TODO: clamp to original range of Munsell chroma and value
 ## TODO: coordinate with `prepare-munsell-LUT.R`
 
 
