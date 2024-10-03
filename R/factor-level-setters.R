@@ -5,8 +5,9 @@
 ## TODO: helper function for soil texture color palette
 ## final color scheme, after some editing
 # c("s", "ls", "sl", "scl", "l", "sc", "c", "sic", "cl", "sil", "sicl", "si")
-# cols <- c("#BEBEBE", "#FDFD9E", "#ebd834", "#307431", "#CD94EA", "#546BC3", "#92C158", "#EA6996", "#6D94E5", "#4C5323", "#E93F4A", "#AF4732"
-)
+# cols <- c(
+#   "#BEBEBE", "#FDFD9E", "#ebd834", "#307431", "#CD94EA", "#546BC3", "#92C158", "#EA6996", "#6D94E5", "#4C5323", "#E93F4A", "#AF4732"
+# )
 
 # # coordinate with basic and extended soil texture classes via col
 # colorspace::swatchplot(
