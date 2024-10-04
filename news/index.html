@@ -76,11 +76,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.0.4" id="aqp-204-2024-07-30">aqp 2.0.4 (2024-07-30)<small>2024-07-30</small><a class="anchor" aria-label="anchor" href="#aqp-204-2024-07-30"></a></h2>
+<h2 class="page-header" data-toc-text="2.0.4" id="aqp-204-2024-10-04">aqp 2.0.4 (2024-10-04)<small>2024-07-30</small><a class="anchor" aria-label="anchor" href="#aqp-204-2024-10-04"></a></h2>
 <ul><li>CRAN release</li>
 <li>ragged bottom lines in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> now adjusted as function of number of profiles and device width</li>
 <li>additional metadata from <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> saved to <code>last_spc_plot</code> in <code>aqp.env</code>
 </li>
+<li>added Munsell values of 8.5 and 9.5 to Munsell LUT and (interpolated) reference spectra (<a href="https://github.com/ncss-tech/aqp/issues/318" class="external-link">#318</a>)</li>
+<li>
+<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> now safely selects the closest Munsell value and chroma to those available in the package LUT</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.3" id="aqp-203-2024-04-18">aqp 2.0.3 (2024-04-18)<small>2024-04-18</small><a class="anchor" aria-label="anchor" href="#aqp-203-2024-04-18"></a></h2>
@@ -1243,7 +1246,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>

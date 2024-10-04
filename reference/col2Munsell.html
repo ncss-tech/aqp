@@ -126,9 +126,9 @@ http://www.cis.rit.edu/mcsl/online/munsell.php</p>
 <span class="r-in"><span><span class="co"># vector of named R colors</span></span></span>
 <span class="r-in"><span><span class="fu">col2Munsell</span><span class="op">(</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'red'</span>, <span class="st">'green'</span>, <span class="st">'blue'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    hue value chroma        sigma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10R     5     26 5.334215e-14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 10GY     9     20 1.111449e-14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  5PB     1     44 0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10R   5.0     26 5.334215e-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 10GY   8.5     22 1.111449e-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  5PB   1.0     44 0.000000e+00</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sRGB matrix in the range of 0-255</span></span></span>
 <span class="r-in"><span><span class="fu">col2Munsell</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">255</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -157,15 +157,15 @@ http://www.cis.rit.edu/mcsl/online/munsell.php</p>
 <span class="r-in"><span><span class="fu">col2Munsell</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">0.8240707</span>, <span class="fl">0.7856834</span>, <span class="fl">0.7541048</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     hue value chroma       sigma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR     8      1 3.98727e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     hue value chroma     sigma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR     8      1 0.7104182</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 7.5YR 8/1 in sRGB {0, 255}</span></span></span>
 <span class="r-in"><span><span class="fu">col2Munsell</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">0.8240707</span>, <span class="fl">0.7856834</span>, <span class="fl">0.7541048</span><span class="op">)</span> <span class="op">*</span> <span class="fl">255</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     hue value chroma       sigma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR     8      1 3.98727e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     hue value chroma     sigma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 7.5YR     8      1 0.7104182</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># multple colors in CIELAB</span></span></span>
 <span class="r-in"><span><span class="fu">col2Munsell</span><span class="op">(</span></span></span>
@@ -198,17 +198,17 @@ http://www.cis.rit.edu/mcsl/online/munsell.php</p>
 <span class="r-in"><span><span class="co"># result is a data.frame of sRGB {0, 1}</span></span></span>
 <span class="r-in"><span><span class="va">color</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           r         g          b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3755239 0.2554937 0.09112035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.3754983 0.2555129 0.09093377</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.6613729 0.4212891 0.30856225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.2998508 0.2205216 0.18365313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.2897926 0.2154340 0.18009210</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># back-transform sRGB -&gt; closest Munsell color</span></span></span>
 <span class="r-in"><span><span class="co"># sigma is the dE00 color contrast metric</span></span></span>
 <span class="r-in"><span><span class="fu">col2Munsell</span><span class="op">(</span><span class="va">color</span>, space <span class="op">=</span> <span class="st">'sRGB'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     hue value chroma        sigma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR   3.0      5 1.473991e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR   3.0      5 4.410418e-14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2.5YR   5.0      6 2.796756e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   5YR   2.5      2 3.660163e-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   5YR   2.5      2 3.177668e-14</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -224,7 +224,7 @@ http://www.cis.rit.edu/mcsl/online/munsell.php</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>

@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   aqp-overview: aqp-overview.html
@@ -9,4 +9,4 @@ articles:
   Munsell-color-conversion: Munsell-color-conversion.html
   NCSP: NCSP.html
   new-in-aqp-2: new-in-aqp-2.html
-last_built: 2024-09-06T16:28Z
+last_built: 2024-10-04T22:32Z
