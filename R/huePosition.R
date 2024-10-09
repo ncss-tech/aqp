@@ -1,4 +1,7 @@
 
+## TODO: consider hue-based, angular distance between 2 hues
+
+
 #' @title Munsell Hue Reference and Position Searching
 #'
 #' @description The 40 Munsell hues are typically arranged from 5R to 2.5R moving clock wise on the unit circle. This function matches a vector of hues to positions on that circle, with options for setting a custom origin or search direction.
@@ -54,6 +57,7 @@
 #' par(op)
 #'
 huePosition <- function(x, returnHues = FALSE, includeNeutral = FALSE, origin = '5R', direction = c('cw', 'ccw')) {
+  
   # ordering via Tech Note #2
   # Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
   
@@ -62,7 +66,7 @@ huePosition <- function(x, returnHues = FALSE, includeNeutral = FALSE, origin = 
   
   # note: this is incompatible with LazyData: true
   # load look-up table from our package
-  load(system.file("data/munsellHuePosition.rda", package="aqp")[1])
+  load(system.file("data/munsellHuePosition.rda", package = "aqp")[1])
   
   ## basic error checking / argument processing
   

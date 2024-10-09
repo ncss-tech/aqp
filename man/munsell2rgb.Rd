@@ -51,67 +51,56 @@ Care should be taken when using the resulting sRGB values; they are close to the
 \examples{
 
 # neutral hues (N) can be defined with chroma of 0 or NA 
-g <- expand.grid(hue='N', value=2:8, chroma=0, stringsAsFactors=FALSE)
+g <- expand.grid(hue='N', value = 2:8, chroma = 0, stringsAsFactors = FALSE)
 (m <- munsell2rgb(g$hue, g$value, g$chroma))
 soilPalette(m)
 
-# back-transform
-rgb2munsell(t(col2rgb(m)) / 255)
+# back-transform to Munsell notation
+col2Munsell(t(col2rgb(m)) / 255)
 
 
 # basic example
-d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
+d <- expand.grid(hue = '10YR', value = 2:8, chroma = 1:8, stringsAsFactors = FALSE)
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
 # similar to the 10YR color book page
-plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
+plot(value ~ chroma, data = d, col = d$color, pch = 15, cex = 3, las = 1)
 
 # multiple pages of hue:
-hues <- c('2.5YR','5YR','7.5YR','10YR')
-d <- expand.grid(hue=hues, value=c(2, 2.5, 3:8), chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
+hues <- c('2.5YR', '5YR', '7.5YR', '10YR')
+d <- expand.grid(
+  hue = hues, 
+  value = c(2, 2.5, 3:8), 
+  chroma = seq(2, 8, by = 2), 
+  stringsAsFactors = FALSE
+)
 # convert Munsell -> sRGB
 d$color <- with(d, munsell2rgb(hue, value, chroma))
 
 # extract CIELAB coordinates
-with(d, munsell2rgb(hue, value, chroma, returnLAB=TRUE))
+with(d, munsell2rgb(hue, value, chroma, returnLAB = TRUE))
 
 # plot: note that we are setting panel order from red --> yellow
 library(lattice)
-xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
-       main="Common Soil Colors", layout=c(4,1), scales=list(alternating=1),
-       strip=strip.custom(bg=grey(0.85)),
-       data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
-       panel=function(x, y, subscripts, ...)
-       {
-         panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
-       }
+xyplot(
+  value ~ factor(chroma) | factor(hue, levels = hues),
+  main = "Common Soil Colors", layout = c(4, 1), scales = list(alternating = 1),
+  strip = strip.custom(bg = grey(0.85)),
+  data = d, as.table = TRUE, subscripts = TRUE, 
+  xlab = 'Chroma', ylab = 'Value',
+  panel = function(x, y, subscripts, ...) {
+    panel.xyplot(x, y, pch = 15, cex = 4, col = d$color[subscripts])
+  }
 )
 
 
-# soils example
-data(sp1)
-
-# convert colors
-sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
-
-# simple plot, may need to tweak gamma-correction...
-image(matrix(1:nrow(sp1)), axes=FALSE, col=sp1$soil_color, main='Soil Colors')
-
-# convert into a more useful color space
-# you will need the colorspace package for this to work
-if(require(colorspace)) {
-  # keep RGB triplets from conversion
-  sp1.rgb <- with(sp1, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
-  
-  # convert into LAB color space
-  sp1.lab <- as(with(sp1.rgb, sRGB(r,g,b)), 'LAB')
-  plot(sp1.lab)
-}
 
 # convert a non-standard color to closest "chip" in `munsell` look-up table
 getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
-# convert directly to R color
+
+# convert directly to hex notation of sRGB
 getClosestMunsellChip('7.9YR 2.7/2.0')
+
 }
 \references{
 \itemize{

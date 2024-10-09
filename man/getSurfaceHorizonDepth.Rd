@@ -9,20 +9,20 @@
 getSurfaceHorizonDepth(
   p,
   pattern,
-  hzdesgn = guessHzDesgnName(p),
+  hzdesgn = hzdesgnname(p, required = TRUE),
   simplify = TRUE
 )
 
 getMineralSoilSurfaceDepth(
   p,
-  hzdesgn = guessHzDesgnName(p),
+  hzdesgn = hzdesgnname(p, required = TRUE),
   pattern = "O",
   simplify = TRUE
 )
 
 getPlowLayerDepth(
   p,
-  hzdesgn = guessHzDesgnName(p),
+  hzdesgn = hzdesgnname(p, required = TRUE),
   pattern = "^Ap[^b]*",
   simplify = TRUE
 )
@@ -32,7 +32,7 @@ getPlowLayerDepth(
 
 \item{pattern}{a regular expression pattern to match for all horizons to be considered part of the "surface".}
 
-\item{hzdesgn}{column name containing horizon designation. Default: \code{guessHzDesgnName(p, required = TRUE)}.}
+\item{hzdesgn}{column name containing horizon designation. Default: \code{hzdesgnname(p, required = TRUE)}.}
 
 \item{simplify}{logical. Return single profile results as vector (default: \code{TRUE}) or \code{data.frame} (\code{FALSE})}
 }

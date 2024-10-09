@@ -151,7 +151,7 @@ mentioned depth-slicing algorithm.
 }
 }
 \seealso{
-\code{\link{slice}}, \code{\link{daisy}}
+\code{\link[=dice]{dice()}}, \code{\link[cluster:daisy]{cluster::daisy()}}
 }
 \author{
 Dylan E. Beaudette

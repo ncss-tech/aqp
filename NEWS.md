@@ -1,3 +1,10 @@
+# aqp 2.0.4 (2024-10-04)
+ * CRAN release
+ * ragged bottom lines in `plotSPC()` now adjusted as function of number of profiles and device width
+ * additional metadata from `plotSPC()` saved to `last_spc_plot` in `aqp.env`
+ * added Munsell values of 8.5 and 9.5 to Munsell LUT and (interpolated) reference spectra (#318)
+ * `munsell2rgb()` now safely selects the closest Munsell value and chroma to those available in the package LUT 
+
 # aqp 2.0.3 (2024-04-18)
  * CRAN release
  * `simulateColor()` gains new method `mvnorm` for simulating plausible colors

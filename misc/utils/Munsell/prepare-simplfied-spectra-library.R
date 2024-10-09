@@ -1,3 +1,7 @@
+## Simplify the Munsell spectral reference data for later use. Results are temporary.
+##
+##
+
 library(reshape2)
 
 # missing odd chroma

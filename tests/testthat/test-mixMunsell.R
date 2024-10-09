@@ -97,7 +97,7 @@ test_that("mixing methods, except reference", {
   
   # fall-back to wt.mean CIELAB
   expect_message(mx <- mixMunsell(c('10YR 6/2', '10YR 1/1'), mixingMethod = 'adaptive'))
-  expect_true(mx$munsell[1] == '2.5Y 3/2')
+  expect_true(mx$munsell[1] == '10YR 3/1')
   
 })
 

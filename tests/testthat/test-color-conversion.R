@@ -107,10 +107,11 @@ test_that("Munsell hue parsing", {
 })
 
 
-test_that("non-integer value and chroma are selectively rounded", {
+test_that("non-integer value and chroma are snapped to valid possibilities", {
   
   # rounding of value, throws warning
   expect_warning(res <- parseMunsell('10YR 3.3/4'), regexp = 'non-standard notation')
+  
   # this will not throw a warning
   res <- parseMunsell('10YR 3.3/4', convertColors = FALSE)
   
@@ -118,6 +119,23 @@ test_that("non-integer value and chroma are selectively rounded", {
   expect_equal(
     suppressWarnings(parseMunsell('10YR 3.3/4')),
     parseMunsell('10YR 3/4')
+  )
+  
+  # 2.5,  8.5, 9.5 are valid Munsell value
+  # snap nearby to these
+  expect_equal(
+    suppressWarnings(parseMunsell('10YR 2.6/4')),
+    parseMunsell('10YR 2.5/4')
+  )
+  
+  expect_equal(
+    suppressWarnings(parseMunsell('10YR 8.4/4')),
+    parseMunsell('10YR 8.5/4')
+  )
+  
+  expect_equal(
+    suppressWarnings(parseMunsell('10YR 9.55/4')),
+    parseMunsell('10YR 9.5/4')
   )
   
   # rounding of chroma, throws warning
@@ -131,11 +149,24 @@ test_that("non-integer value and chroma are selectively rounded", {
     parseMunsell('10YR 3/5')
   )
   
-  # no rounding of 2.5 values
+  # double-check no snapping of 2.5 values
   res <- parseMunsell('10YR 2.5/2')
   res.test <- col2Munsell(col = '#493A2BFF')
   
   expect_true(res.test$value == 2.5)
+  
+  
+  # test .snapValid() directly
+  .valid <- c(2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5, 10)
+  v <- c(2, 4, 6, 8, NA, 2.5, 2.6, 8.1, 9.6, 12)
+  res <- aqp:::.snapValid(v, .valid)
+  
+  # ensure snapping worked as expected
+  expect_equal(
+    res, 
+    c(2, 4, 6, 8, NA, 2.5, 2.5, 8, 9.5, 10)
+  )
+  
 })
 
 
@@ -235,6 +266,9 @@ test_that("neutral hues", {
   expect_equal(N4, '#1B1C1CFF')
   expect_equal(N6, '#464848FF')
   
+  # 0 chroma with any hue -> neutral
+  N <- munsell2rgb('10YR', 4, 0)
+  expect_equal(N, '#1B1C1CFF')
 })
 
 

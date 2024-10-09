@@ -217,5 +217,11 @@ test_that("glom vectorization", {
   
   # truncate twice, initially with drop=FALSE
   expect_equal(length(trunc(trunc(sp1, 75, 100, drop = FALSE), 90, 100)), 4)
+  
+  # no horizons in glom interval, with missing profiles dropped
+  expect_equal(length(trunc(sp1, 250, 300)), 0)
+  
+  # no horizons in glom interval, with missing profiles filled
+  expect_equal(length(trunc(sp1, 250, 300, drop = FALSE)), 9)
 })
 

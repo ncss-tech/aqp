@@ -2,7 +2,7 @@
 % Please edit documentation in R/allocate.R
 \name{hz_to_taxpartsize}
 \alias{hz_to_taxpartsize}
-\title{Allocate Particle Size Control Class for the Control Section.}
+\title{Allocate Particle Size Class for the Control Section.}
 \usage{
 hz_to_taxpartsize(
   x,
@@ -27,10 +27,10 @@ hz_to_taxpartsize(
 \item{depthcols}{a character vector of length 2 specifying the names of the horizon depths (e.g. \code{c("top", "bottom")}).}
 }
 \value{
-A \code{data.frame} object containing the original idcol and aggregated particle size control section allocation.
+A \code{data.frame} object containing the original idcol, the aggregated particle size control section allocation, and an aniso column to indicate more than one contrasting class.
 }
 \description{
-This function aggregates information in the horizon table and allocates it to the particle size control section.
+This function aggregates information in the horizon table and allocates it to the particle size class for the control section.
 }
 \details{
 This function differs from \code{\link{texture_to_taxpartsize}} in that is aggregates the results of \code{\link{texture_to_taxpartsize}}, and accounts for strongly contrasting particle size classes.
@@ -38,36 +38,36 @@ This function differs from \code{\link{texture_to_taxpartsize}} in that is aggre
 \examples{
 
 h <- data.frame(
-id = 1,
-hzname = c("A", "BA", "Bw", "BC", "C"),
-top    = c( 0, 10, 45, 60,  90),
-bottom = c(10, 45, 60, 90, 150),
-clay   = c(15, 16, 45, 20,  10),
-sand   = c(10, 35, 40, 50,  90),
-frags  = c( 0,  5, 10, 38,  40)
+  id = 1,
+  hzname = c("A", "BA", "Bw", "BC", "C"),
+  top    = c(0, 10, 45, 60,  90),
+  bottom = c(10, 45, 60, 90, 150),
+  clay   = c(15, 16, 45, 20,  10),
+  sand   = c(10, 35, 40, 50,  90),
+  frags  = c(0,  5, 10, 38,  40)
 )
 
-h <- cbind(
-h, 
-texcl = ssc_to_texcl(clay = h$clay, sand = h$sand)
-)
+h <- cbind(h,
+           texcl = ssc_to_texcl(clay = h$clay, sand = h$sand))
 
-pscs <- data.frame(
-id = 1, 
-top = 25, 
-bottom = 100
-)
+pscs <- data.frame(id = 1,
+                   top = 25,
+                   bottom = 100)
 
-h <- cbind(
-h, 
-taxpartsize = texture_to_taxpartsize(
-texcl = h$texcl,
-clay  = h$clay, 
-sand  = h$sand,
-fragvoltot = h$frags
-))
+h <- cbind(h,
+           taxpartsize = texture_to_taxpartsize(
+             texcl = h$texcl,
+             clay  = h$clay,
+             sand  = h$sand,
+             fragvoltot = h$frags
+           ))
 
 depths(h) <- id ~ top + bottom
+
+# set required metadata for estimatePSCS()
+hzdesgnname(h) <- "hzname"
+hztexclname(h) <- "texcl"
+hzmetaname(h, "clay") <- "clay"
 
 pscs <- data.frame(id = h$id, rbind(estimatePSCS(h)))
 names(pscs)[2:3] <- c("top", "bottom")
@@ -77,7 +77,7 @@ hz_to_taxpartsize(horizons(h), pscs)
 
 }
 \seealso{
-\code{\link[=texture_to_taxpartsize]{texture_to_taxpartsize()}}, \code{\link[=PSCS_levels]{PSCS_levels()}}
+\code{\link[=texture_to_taxpartsize]{texture_to_taxpartsize()}}, \code{\link[=lookup_taxpartsize]{lookup_taxpartsize()}}
 }
 \author{
 Stephen Roecker

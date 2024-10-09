@@ -259,20 +259,20 @@ setMethod("glom", signature(p = "SoilProfileCollection"),
     p <- .updateSite(p, h)
   }
   
-  if (nrow(h) > 0) {
-    if (!fill) {
+  if (fill) {
+    p <- .insert_dropped_horizons(p, horizons = h)
+  } else {
+    if (nrow(h) > 0) {
       # replace @horizons with h
       replaceHorizons(p) <- h
       
       # if pre-existing "filled" horizons are present, drop them
       p <- p[!isEmpty(p),]
     } else {
-      p <- .insert_dropped_horizons(p, horizons = h)
+      p <- p[0, ]
     }
-  } else {
-    p <- p[0,]
   }
-  
+    
   # short circuit to get hzIDs of result
   if (ids) {
     if (invert)
