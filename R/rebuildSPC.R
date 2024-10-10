@@ -27,9 +27,12 @@
 #' @seealso \code{\link{checkSPC}}
 #' @export
 rebuildSPC <- function(x) {
-
   # break into pieces as list
   x.list <- suppressWarnings(as(x, 'list'))
+
+  if (.hasSlot(x, "sp")) {
+    x.list <- x.list[!names(x.list) %in% "sp"]
+  }
 
   # seed object for new SPC
   res <- .as.data.frame.aqp(x.list$horizons, aqp_df_class(x))
@@ -103,7 +106,7 @@ rebuildSPC <- function(x) {
       
       site(res) <- newsp
       initSpatial(res) <- colnames(newsp)[2:3]
-      try(prj(res) <- x.list$sp@proj4string)
+      try(prj(res) <- x.list$sp@proj4string, silent = TRUE)
     }
   }
   return(res)

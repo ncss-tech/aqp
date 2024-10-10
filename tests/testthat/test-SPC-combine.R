@@ -141,9 +141,6 @@ test_that("combine with non-conformal spatial data", {
   profile_id(y) <- sprintf("%s-copy", profile_id(y))
   profile_id(z) <- sprintf("%s-copy-copy", profile_id(z))
 
-  # create non-conformal sp data for x=z
-  z@sp <- new('SpatialPoints')
-
   res <- combine(list(x, y, z))
   
   # remove CRS (avoids "inconsistent CRS, dropping spatial metadata")

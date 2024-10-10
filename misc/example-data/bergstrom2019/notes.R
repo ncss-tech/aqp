@@ -3,7 +3,7 @@ library(aqp)
 h <- read.csv('misc/example-data/bergstrom2019/horizon-data.csv')
 s <- read.csv('misc/example-data/bergstrom2019/site-data.csv')
 
-
+colnames(h)[1] <- "pedon"
 h$hzID <- NULL
 s$id <- NULL
 
