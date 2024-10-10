@@ -1,24 +1,3 @@
-##
-##
-
-
-## TODO: helper function for soil texture color palette
-## final color scheme, after some editing
-# c("s", "ls", "sl", "scl", "l", "sc", "c", "sic", "cl", "sil", "sicl", "si")
-# cols <- c(
-#   "#BEBEBE", "#FDFD9E", "#ebd834", "#307431", "#CD94EA", "#546BC3", "#92C158", "#EA6996", "#6D94E5", "#4C5323", "#E93F4A", "#AF4732"
-# )
-
-# # coordinate with basic and extended soil texture classes via col
-# colorspace::swatchplot(
-#   list(
-#     basic = cols,
-#     extended = colorRampPalette(cols)(21)
-#   )
-# )
-# 
-
-
 
 ## TODO: consider various sorting strategies: WMPD, AWC, {PWP,FC,SAT}
 ## http://ncss-tech.github.io/AQP/aqp/water-retention-curves.html
@@ -44,8 +23,11 @@
 #' @references \href{https://nrcspad.sc.egov.usda.gov/DistributionCenter/product.aspx?ProductID=991}{Field Book for Describing and Sampling Soils, version 3.0}
 #' 
 #' @param which 'codes' (texture codes) or 'names' (texture class names)
+#' 
 #' @param simplify Return 12-class factor levels (`TRUE`) or 21-class factor levels (default: `FALSE`)? The 12-class system does not separate sands, loamy sands and sandy loams into sand fraction variants (e.g. "very fine sandy loam" in the 21-class system is "sandy loam" in 12-class system)
+#' 
 #' @return an ordered factor
+#' 
 #' @export
 #' @examples
 #' 
@@ -67,21 +49,25 @@ SoilTextureLevels <- function(which = 'codes', simplify = FALSE) {
   
   # sorted by approximate particle size
   if (!simplify) { # from the Field Book version 3.0
-    tx <- data.frame(texture = c("coarse sand", "sand", "fine sand", 
-                                 "very fine sand", "loamy coarse sand", "loamy sand", "loamy fine sandy", 
-                                 "loamy very fine sand", "coarse sandy loam", "sandy loam", "fine sandy loam", 
-                                 "very fine sandy loam", "loam", "silt loam", "silt", "sandy clay loam", 
-                                 "clay loam", "silty clay loam", "sandy clay", "silty clay", "clay"), 
-                     texcl = c("cos", "s", "fs", "vfs", "lcos", "ls", "lfs", "lvfs", 
-                               "cosl", "sl", "fsl", "vfsl", "l", "sil", "si", "scl", "cl", "sicl", 
-                               "sc", "sic", "c")) 
+    tx <- data.frame(
+      texture = c("coarse sand", "sand", "fine sand", 
+                  "very fine sand", "loamy coarse sand", "loamy sand", "loamy fine sandy", 
+                  "loamy very fine sand", "coarse sandy loam", "sandy loam", "fine sandy loam", 
+                  "very fine sandy loam", "loam", "silt loam", "silt", "sandy clay loam", 
+                  "clay loam", "silty clay loam", "sandy clay", "silty clay", "clay"), 
+      texcl = c("cos", "s", "fs", "vfs", "lcos", "ls", "lfs", "lvfs", 
+                "cosl", "sl", "fsl", "vfsl", "l", "sil", "si", "scl", "cl", "sicl", 
+                "sc", "sic", "c")
+    ) 
   } else { # From Soil Survey Manual (1951) p. 210
-    tx <- data.frame(texture = c("sand", "loamy sand", "sandy loam",
-                                 "loam", "silt loam", "silt", "sandy clay loam",
-                                 "clay loam", "silty clay loam",
-                                 "sandy clay", "silty clay", "clay"),
-                     texcl = c("s", "ls", "sl", "l", "sil", "si",
-                               "scl", "cl", "sicl", "sc", "sic", "c"))
+    tx <- data.frame(
+      texture = c("sand", "loamy sand", "sandy loam",
+                  "loam", "silt loam", "silt", "sandy clay loam",
+                  "clay loam", "silty clay loam",
+                  "sandy clay", "silty clay", "clay"),
+      texcl = c("s", "ls", "sl", "l", "sil", "si",
+                "scl", "cl", "sicl", "sc", "sic", "c")
+    )
   }
   
   # set levels
