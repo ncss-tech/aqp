@@ -11,6 +11,8 @@ collapseHz(
   FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]], ignore.case =
     FALSE),
   ...,
+  AGGFUN = NULL,
+  ignore_numerics = NULL,
   na.rm = FALSE
 )
 }
@@ -27,6 +29,18 @@ identifiers. Default is estimated using \code{guessHzDesgnName()}.}
 length to the number of horizons in \code{x}. See details.}
 
 \item{...}{Additional arguments passed to the matching function \code{FUN}.}
+
+\item{AGGFUN}{\emph{list}. A named list containing custom aggregation functions.
+List element names should match the column name that they transform. The
+functions defined should take three arguments: \code{x} (a vector of horizon
+property values), \code{top} (a vector of top depths), and \code{bottom} (a vector of
+bottom depths). Default: \code{NULL} applies weighted.mean() to all numeric
+columns not listed in \code{ignore_numerics} and takes the thickest value for all
+other columns.}
+
+\item{ignore_numerics}{\emph{character}. Vector of column names that contain numeric
+values which should \emph{not} be aggregated using \code{weighted.mean()}. For example,
+soil color "value" and "chroma".}
 
 \item{na.rm}{\emph{logical}. If \code{TRUE} \code{NA} values are ignored when calculating
 min/max boundaries for each group and in weighted averages. If \code{FALSE} \code{NA}
@@ -59,4 +73,24 @@ b <- jacobs2000
 profile_id(a) <- paste0(profile_id(a), "_collapse")
 
 plot(c(a, b), color = "clay")
+
+# custom aggregation function for matrix_color_munsell
+
+a2 <- collapseHz(jacobs2000, c(`A` = "^A", 
+                              `E` = "E", 
+                              `Bt` = "[ABC]+t", 
+                              `C` = "^C", 
+                              `foo` = "bar"), 
+               AGGFUN = list(matrix_color_munsell = function(x, top, bottom) {
+                              thk <- bottom - top
+                              if (length(x) > 1) {
+                               xord <- order(thk, decreasing = TRUE)
+                               paste0(paste0(x[xord], " (t=", thk[xord], ")"), collapse = ", ")
+                              } else x
+                             })
+               )
+profile_id(a2) <- paste0(profile_id(a), "_collapse_custom")
+
+unique(a2$matrix_color_munsell)
+
 }
