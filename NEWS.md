@@ -1,10 +1,14 @@
-# aqp 2.0.4 (2024-10-10)
+# aqp 2.1.0 (2024-10-10)
+ * added Munsell values of 8.5 and 9.5 to Munsell look up table and (interpolated) reference spectra (#318)
+ * `munsell2rgb()` now safely selects the closest Munsell value and chroma to those available in the package LUT 
+ * new function `soilTextureColorPal()` for suggesting a color palette suitable for soil texture class
+ * **Breaking Change**: `@sp` slot of the SoilProfileCollection object, and dependency on sp package, has been removed. 
+  * Any SoilProfileCollection objects previously written to file (.rda, .rds) with aqp <2.1.x will need to be rebuilt using `rebuildSPC()` due to changes to S4 object structure
+
+# aqp 2.0.4 (2024-07-30)
  * CRAN release
  * ragged bottom lines in `plotSPC()` now adjusted as function of number of profiles and device width
  * additional metadata from `plotSPC()` saved to `last_spc_plot` in `aqp.env`
- * added Munsell values of 8.5 and 9.5 to Munsell LUT and (interpolated) reference spectra (#318)
- * `munsell2rgb()` now safely selects the closest Munsell value and chroma to those available in the package LUT 
- * new function `soilTextureColorPal()` for suggesting a color palette suitable for soil texture class
 
 # aqp 2.0.3 (2024-04-18)
  * CRAN release
