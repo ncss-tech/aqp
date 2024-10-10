@@ -611,15 +611,15 @@ test_that("basic integrity checks", {
   expect_true(spc_in_sync(spc[0,])$valid)
 
   # reordering the horizons with reorderHorizons resolves integrity issues
-  expect_true(spc_in_sync(reorderHorizons(spc))$valid)
+  expect_true(spc_in_sync(reorderHorizons(spc, seq(nrow(spc))))$valid)
 
-  # default reordering uses metadata$original.order, here we override and reverse it
-  expect_false(spc_in_sync(reorderHorizons(spc, rev(spc@metadata$original.order)))$valid)
+  # override and reverse it
+  expect_false(spc_in_sync(reorderHorizons(spc, rev(seq(nrow(spc)))))$valid)
 
   # removing the metadata works because target order matches sequential order
   #  this cannot be guaranteed to be the case in general but is a reasonable default
   spc@metadata$target.order <- NULL
-  expect_true(spc_in_sync(reorderHorizons(spc))$valid)
+  expect_true(spc_in_sync(reorderHorizons(spc, seq(nrow(spc))))$valid)
 
   # reordering horizons with any order works, even if invalid
   spc <- reorderHorizons(spc, target.order = c(20:40,1:19))

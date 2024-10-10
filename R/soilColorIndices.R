@@ -137,7 +137,7 @@ barron.torrent.redness.LAB <- function(hue, value, chroma) {
 #' jacobs2000$rubif <- profileApply(jacobs2000, function(p) {
 #'
 #'   # sum the melanization index over the 0-100cm interval
-#'   p0_100 <- segment(p, 0:100)
+#'   p0_100 <- hz_segment(p, 0:100)
 #'
 #'   ccol <- parseMunsell(p$c_horizon_color, convertColors = FALSE)
 #'
@@ -227,7 +227,7 @@ harden.rubification <- function(hue, chroma, hue_ref, chroma_ref) {
 #' jacobs2000$melan <- profileApply(jacobs2000, function(p) {
 #'
 #'   # sum the melanization index over the 0-100cm interval
-#'   p0_100 <- segment(p, 0:100)
+#'   p0_100 <- hz_segment(p, 0:100)
 #'
 #'   ccol <- parseMunsell(p$c_horizon_color, convertColors = FALSE)
 #'
@@ -300,7 +300,7 @@ buntley.westin.index <- function(hue, chroma) {
 #' @rdname thompson.bell.darkness
 #' @export thompson.bell.darkness
 thompson.bell.darkness <- function(p,
-                                   name = guessHzDesgnName(p, required = TRUE),
+                                   name = hzdesgnname(p, required = TRUE),
                                    pattern = "^A",
                                    value = "m_value",
                                    chroma = "m_chroma") {
@@ -310,8 +310,9 @@ thompson.bell.darkness <- function(p,
   
   hz <- horizons(p)
   depthz <- horizonDepths(p)
-  if (!all(name %in% horizonNames(p))) {
-    name <- guessHzDesgnName(p, required = TRUE)
+  
+  if (is.null(name) || !name %in% horizonNames(p)) {
+    stop("Horizon designation column (", name, ") does not exist.")
   }
 
   a.hz <- hz[grepl(hz[[name]], pattern = pattern),]

@@ -61,7 +61,7 @@ axis(side = 2, las = 1)
 
 Neutral colors are commonly specified two ways in the Munsell system: `N 3/` or `N 3/0`, either format will work with `munsell2rgb()` and `parseMunsell()`.
 
-Non-standard Munsell notation (e.g. `3.6YR 4.4 / 5.6`), possibly collected with a sensor vs. color book, can be approximated with `getClosestMunsellChip()`. A more accurate conversion can be performed with the [`munsellinterpol` package.](https://cran.r-project.org/web/packages/munsellinterpol/index.html).
+Non-standard Munsell notation (e.g. `3.6YR 4.4 / 5.6`), possibly collected with a sensor vs. color book, can be approximated with `getClosestMunsellChip()`. A more accurate conversion can be performed with the [`munsellinterpol` package.](https://cran.r-project.org/package=munsellinterpol).
 
 
 ## Examples

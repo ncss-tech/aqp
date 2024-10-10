@@ -1,8 +1,8 @@
 library(aqp)
 library(latticeExtra)
-library(plyr)
+library(tactile)
 library(Hmisc)
-library(reshape)
+library(reshape2)
 
 
 data(sp3)
@@ -12,7 +12,7 @@ depths(sp3) <- id ~ top + bottom
 # http://en.wikipedia.org/wiki/Differential_entropy
 # http://cran.r-project.org/web/packages/entropy/
 
-# calculation for continous random vars based on binning / counts
+# calculation for continuous random vars based on binning / counts
 # http://cran.r-project.org/web/packages/entropy/entropy.pdf
 
 ## this isn't correct, and barfs when there is < 90% data available
@@ -154,14 +154,16 @@ wtd.sum.qcd <- function(i){
 
 
 # compute some "information" metrics
-a <- slab(sp3,  ~ clay + A + cec + ph, slab.fun=mean.and.sd, slab.structure=0:100)
-a.1 <- slab(sp3,  ~ clay + A + cec + ph, slab.fun=f.entropy, slab.structure=0:100)
-a.2 <- slab(sp3, ~ clay + A + cec + ph, slab.fun=f.sig.to.noise, slab.structure=0:100)
-a.3 <- slab(sp3, ~ clay + A + cec + ph, slab.fun=f.qcd, slab.structure=0:100)
+a <- slab(sp3,  ~ clay + A + cec + ph, slab.fun = mean.and.sd, slab.structure = 0:100)
+a.1 <- slab(sp3,  ~ clay + A + cec + ph, slab.fun = f.entropy, slab.structure = 0:100)
+a.2 <- slab(sp3, ~ clay + A + cec + ph, slab.fun = f.sig.to.noise, slab.structure = 0:100)
+a.3 <- slab(sp3, ~ clay + A + cec + ph, slab.fun = f.qcd, slab.structure = 0:100)
 
 # combine
-g <- make.groups(summary=a, entropy=a.1, sig.to.noise=a.2, qcd=a.3)
-g$which <- factor(g$which, labels=c('Mean +/- 1SD', 'psuedo-Entropy', 'Signal : Noise', 'QCD'))
+g <- make.groups(summary = a, entropy = a.1, sig.to.noise = a.2, qcd = a.3)
+g$which <- factor(g$which, labels = c('Mean +/- 1SD', 'psuedo-Entropy', 'Signal : Noise', 'QCD'))
+
+.tps <- tactile.theme(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2')))
 
 p <- xyplot(
   top ~ value | which + variable, data=g,
@@ -170,7 +172,7 @@ p <- xyplot(
   ylab='Depth (cm)',
   xlab='',
   ylim=c(100,-5), layout=c(5,3), scales=list(x=list(relation='free')),
-  par.settings=list(superpose.line=list(lwd=2, col=c('RoyalBlue', 'Orange2'))),
+  par.settings = .tps,
   panel=panel.depth_function, 
   prepanel=prepanel.depth_function,
   auto.key=list(columns=2, lines=TRUE, points=FALSE)
@@ -181,20 +183,21 @@ useOuterStrips(p, strip=strip.custom(bg=grey(0.85)), strip.left = strip.custom(h
 
 
 ## a "no-information QCD" must be computed from the raw data, by depth-slice
-s <- slice(sp3, 0:100 ~ clay + A + cec + ph, just.the.data = TRUE)
+s <- dice(sp3, fm = 0:100 ~ clay + A + cec + ph, SPC = FALSE)
 s.long <- melt(s, id.vars = c('top', 'bottom'), measure.vars = c('clay', 'A', 'cec', 'ph'))
-qcd.ni <- ddply(s.long, c('variable'), no.information.qcd)
+
+qcd.ni <- lapply(split(s.long, s.long$variable), no.information.qcd)
 
 
 ## compute weighted mean and weighted sum QCD by variable
 ## note that these must be standardized by slice-wise "no-information" QCD
-wm.qcd <- ddply(a.3, 'variable', .fun=wtd.mean.qcd)
-ws.qcd <- ddply(a.3, 'variable', .fun=wtd.sum.qcd)
-
-### does this make sense?
-# join QCD summaries to "no-information" baseline
-ss <- join(join(wm.qcd, ws.qcd), qcd.ni)
-transform(ss, mean.qcd=wt.mean.qcd / mean.ni.qcd, sum.qcd=wt.sum.qcd / sum.ni.qcd)
-
+# wm.qcd <- ddply(a.3, 'variable', .fun=wtd.mean.qcd)
+# ws.qcd <- ddply(a.3, 'variable', .fun=wtd.sum.qcd)
+# 
+# ### does this make sense?
+# # join QCD summaries to "no-information" baseline
+# ss <- join(join(wm.qcd, ws.qcd), qcd.ni)
+# transform(ss, mean.qcd=wt.mean.qcd / mean.ni.qcd, sum.qcd=wt.sum.qcd / sum.ni.qcd)
+# 
 
 

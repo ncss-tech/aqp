@@ -3,11 +3,11 @@ library(aqp)
 library(soilDB)
 library(lattice)
 library(latticeExtra)
-library(viridis)
+library(tactile)
 library(grid)
 
 # define plotting style
-tps <- list(superpose.line=list(col=c('RoyalBlue', 'DarkRed', 'DarkGreen'), lwd=2))
+tps <- tactile.theme(superpose.line=list(col=c('RoyalBlue', 'DarkRed', 'DarkGreen'), lwd=2))
 
 # get multiple series' worth of data
 # TODO: add code to deal with those series that return 0 records
@@ -72,7 +72,7 @@ ck <- list(
 
 
 # standard output from slab()
-p.1 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=HSD$agg, ylab='Depth',
+p.1 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=HSD$agg, ylab='Depth (cm)',
               xlab='median bounded by 25th and 75th percentiles',
               lower=HSD$agg$p.q25, upper=HSD$agg$p.q75, ylim=c(105, -5),
               panel=panel.depth_function, alpha=0.25, sync.colors=TRUE,
@@ -94,7 +94,7 @@ p.1 <- xyplot(top ~ p.q50 | variable, groups=taxonname, data=HSD$agg, ylab='Dept
 # experimental HSD viz
 p.2 <- segplot(
   hzn_top ~ lwr + upr, centers = diff, level = p.adj, data = HSD$HSD, 
-  col.regions = viridis, ylim = c(105, -5), 
+  col.regions = hcl.colors, ylim = c(105, -5), 
   xlab = 'HSD',
   at = col.at,
   colorkey = ck,
@@ -178,7 +178,7 @@ z <- z[idx, vars]
 dd <- datadist(z)
 options(datadist="dd")
 
-# GLS: I've used this before to parametrize correlation sturcture
+# GLS: I've used this before to parametrize correlation structure
 (m.gls <- Gls(wmpd ~ rcs(mid) * group, data = z, correlation = corAR1(form = ~ mid | sliceID)))
 
 plot(Predict(m.gls))

@@ -30,7 +30,7 @@ aggregateColorPlot(a.8, label.cex = 0.65, main = "Clarksville Moist Colors\nGene
 
 # marginal quantiles and L1 median of {L,A,B}
 x <- colorQuantiles(na.omit(pedons$moist_soil_color[which(pedons$genhz == 'Bt')]))
-plotColorQuantiles(x, title = 'Clarksville - Bt')
+plotColorQuantiles(x)
 
 
 ## RI as described in Barron and Torrent, 1986
@@ -40,7 +40,8 @@ pedons$ln_RI <- log(pedons$RI)
 
 hist(pedons$ln_RI)
 
-plot(sample(pedons, 25), color='ln_RI')
+par(mar = c(0, 0, 0, 2))
+plotSPC(sample(pedons, 15), color = 'moist_soil_color', max.depth = 150, width = 0.35, name.style = 'center-center')
 
 
 
