@@ -7,29 +7,54 @@
 collapseHz(
   x,
   pattern,
-  hzdesgn = guessHzDesgnName(x, required = TRUE),
-  ignore.case = FALSE,
+  hzdesgn = hzdesgnname(x, required = TRUE),
+  FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]], ignore.case =
+    FALSE),
+  ...,
   na.rm = FALSE
 )
 }
 \arguments{
-\item{x}{A SoilProfileCollection}
+\item{x}{A \emph{SoilProfileCollection}}
 
-\item{pattern}{character. A regular expression pattern to match in \code{hzdesgn} column}
+\item{pattern}{\emph{character}. A regular expression pattern to match in \code{hzdesgn}
+column}
 
-\item{hzdesgn}{character. Any character column containing horizon-level identifiers. Default is estimated using \code{guessHzDesgnName()}.}
+\item{hzdesgn}{\emph{character}. Any character column containing horizon-level
+identifiers. Default is estimated using \code{guessHzDesgnName()}.}
 
-\item{ignore.case}{logical. If \code{FALSE}, the pattern matching is case sensitive and if \code{TRUE}, case is ignored during matching. Default: \code{FALSE}}
+\item{FUN}{\emph{function}. A function that returns a \emph{logical} vector equal in
+length to the number of horizons in \code{x}. See details.}
 
-\item{na.rm}{logical. If \code{TRUE} \code{NA} values are ignored when calculating min/max boundaries for each group and in weighted averages. If \code{FALSE} \code{NA} values are propagated to the result. Default: \code{FALSE}}
+\item{...}{Additional arguments passed to the matching function \code{FUN}.}
+
+\item{na.rm}{\emph{logical}. If \code{TRUE} \code{NA} values are ignored when calculating
+min/max boundaries for each group and in weighted averages. If \code{FALSE} \code{NA}
+values are propagated to the result. Default: \code{FALSE}}
+}
+\value{
+A \emph{SoilProfileCollection}
 }
 \description{
-Combines and aggregates layers by grouping adjacent horizons that match \code{pattern} in \code{hzdesgn}. Numeric properties are combined using the weighted average, and other properties are derived from the thickest horizon in each group.
+Combines and aggregates data for layers by grouping adjacent horizons that
+match \code{pattern} in \code{hzdesgn}. Numeric properties are combined using the
+weighted average, and other properties are derived from the thickest horizon
+in each group.
+}
+\details{
+If a custom function (\code{FUN}) is used, it should accept arbitrary additional
+arguments via an ellipsis (\code{...}). It is not necessary to do anything with
+arguments, but the result should match the number of horizons found in the
+input SoilProfileCollection \code{x}.
 }
 \examples{
 data(jacobs2000)
 
-a <- collapseHz(jacobs2000, c(`A` = "^A", `E` = "E", `Bt` = "[ABC]+t", `C` = "^C", `foo` = "bar"))
+a <- collapseHz(jacobs2000, c(`A` = "^A", 
+                              `E` = "E", 
+                              `Bt` = "[ABC]+t", 
+                              `C` = "^C", 
+                              `foo` = "bar"))
 b <- jacobs2000
 profile_id(a) <- paste0(profile_id(a), "_collapse")
 
