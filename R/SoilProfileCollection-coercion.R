@@ -12,7 +12,7 @@
 #' @docType methods
 #' @rdname coercion-methods
 #'
-#' @examples 
+#' @examples
 #' # load example data stored as SoilProfileCollection
 #' data(sp5)
 #' 
@@ -30,11 +30,19 @@
 #' sp5$x <- sp5$y <- rnorm(length(sp5))
 #' initSpatial(sp5, crs = "OGC:CRS84") <- ~ x + y
 #' 
-#' # SpatialPointsDataFrame output
-#' str(as(sp5, 'SpatialPointsDataFrame'))
+#' if (requireNamespace("sf")) {
 #' 
-#' # SpatialPoints output
-#' str(as(sp5, 'SpatialPoints'))
+#'   # sf output
+#'   str(as(sp5, 'sf'))
+#' 
+#'   # SpatialPointsDataFrame output
+#'   str(as(sp5, 'SpatialPointsDataFrame'))
+#' 
+#'   # SpatialPoints output
+#'   str(as(sp5, 'SpatialPoints'))
+#'   
+#' }
+#' 
 setAs("SoilProfileCollection", "list", function(from) {
   
   # get slot names from prototype

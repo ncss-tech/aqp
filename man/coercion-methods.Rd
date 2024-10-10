@@ -50,9 +50,17 @@ str(as(sp5, 'data.frame'))
 sp5$x <- sp5$y <- rnorm(length(sp5))
 initSpatial(sp5, crs = "OGC:CRS84") <- ~ x + y
 
-# SpatialPointsDataFrame output
-str(as(sp5, 'SpatialPointsDataFrame'))
+if (requireNamespace("sf")) {
 
-# SpatialPoints output
-str(as(sp5, 'SpatialPoints'))
+  # sf output
+  str(as(sp5, 'sf'))
+
+  # SpatialPointsDataFrame output
+  str(as(sp5, 'SpatialPointsDataFrame'))
+
+  # SpatialPoints output
+  str(as(sp5, 'SpatialPoints'))
+  
+}
+
 }
