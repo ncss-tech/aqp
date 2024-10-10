@@ -73,6 +73,7 @@ The `replace_na` and `add_soil_flag` arguments to `profile_compare()` are not pr
  * New [depth axis styles](https://ncss-tech.github.io/AQP/aqp/sketches.html) in `plotSPC()`.
  * New function `flagOverlappingHz()` for identifying horizons with perfect overlap
  * New function `warpHorizons()` for warping horizon thickness (inflate/deflate)
+ * `simulateColor()` adds multivariate simulation in CIELAB colorspace
  
 
 ## Incremental changes, should have no effect on previous code

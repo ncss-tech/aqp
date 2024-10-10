@@ -4,6 +4,8 @@
 ## use output from simulateColor() or aggregateColor() vs. manual tabulation
 
 
+## TODO: update with latest changes to simulateColor()
+
 
 library(aqp)
 library(soilDB)

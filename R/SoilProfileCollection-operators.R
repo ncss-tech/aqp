@@ -164,7 +164,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),
                              s <- s.all[s.i, , drop = FALSE]
                              
                              # copy empty SpatialPoints object
-                             sp <- x@sp
+                             # sp <- x@sp
                              
                              # subset diagnostic data
                              d <- diagnostic_hz(x)
@@ -307,7 +307,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),
                              metadata = aqp::metadata(x),
                              horizons = .as.data.frame.aqp(h, aqp_df_class(x)),
                              site = .as.data.frame.aqp(s, aqp_df_class(x)),
-                             sp = sp,
+                             # sp = sp,
                              diagnostic = .as.data.frame.aqp(d, aqp_df_class(x)),
                              restrictions = .as.data.frame.aqp(r, aqp_df_class(x))
                            )
@@ -409,9 +409,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),
 #   which is an error caused by RStudio? when doing tab completion
 #   with %>% operator on a SPC
 
-setMethod("[[", signature(x = "SoilProfileCollection",
-                          i = "ANY",
-                          j = "ANY"),
+setMethod("[[", signature(x = "SoilProfileCollection"),
           function(x, i, j) {
             if (length(i) == 1) {
               # site names take precedence for those
@@ -446,9 +444,7 @@ setMethod("[[", signature(x = "SoilProfileCollection",
 #' @aliases [[<-,SoilProfileCollection-method [[<-,SoilProfileCollection,ANY,ANY-method 
 #' @docType methods
 #' @rdname doublebracket-set
-setReplaceMethod("[[", signature(x = "SoilProfileCollection",
-                                 i = "ANY",
-                                 value = "ANY"),
+setReplaceMethod("[[", signature(x = "SoilProfileCollection"),
                  function(x, i, value) {
                    lv <- length(value)
                    lx <- length(x)

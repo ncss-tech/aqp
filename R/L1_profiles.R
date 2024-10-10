@@ -86,9 +86,9 @@
 L1_profiles <- function(x, fm, basis = 1, method = c('regex', 'simple', 'constant'), maxDepthRule = c('max', 'min'), maxDepthConstant = NULL) {
   
   # sanity check, need this for L1 median
-  if(!requireNamespace('Gmedian'))
-    stop('package `Gmedian` is required', call.=FALSE)
-  
+  if(!requireNamespace('Gmedian')) {
+    stop('package `Gmedian` is required', call. = FALSE)
+  }
   
   # sanity checks: is this an SPC?
   if(! inherits(x, 'SoilProfileCollection')) {

@@ -15,32 +15,32 @@ SoilProfileCollection(
   horizons = data.frame(id = character(0), hzID = character(0), top = numeric(0), bottom
     = numeric(0), stringsAsFactors = FALSE),
   site = data.frame(id = character(0), stringsAsFactors = FALSE),
-  sp = new("SpatialPoints"),
   diagnostic = data.frame(stringsAsFactors = FALSE),
   restrictions = data.frame(stringsAsFactors = FALSE)
 )
 }
 \arguments{
-\item{idcol}{character Profile ID Column Name}
+\item{idcol}{character. Profile ID Column Name}
 
-\item{hzidcol}{character Horizon ID Column Name}
+\item{hzidcol}{character. Horizon ID Column Name}
 
-\item{depthcols}{character, length 2 Top and Bottom Depth Column Names}
+\item{depthcols}{character. length 2 Top and Bottom Depth Column Names}
 
-\item{metadata}{list, metadata including data.frame class in use and depth units}
+\item{metadata}{list. metadata including data.frame class in use and depth units}
 
-\item{horizons}{data.frame An object inheriting from data.frame containing Horizon data.}
+\item{horizons}{data.frame. An object inheriting from data.frame containing Horizon data.}
 
-\item{site}{data.frame An object inheriting from data.frame containing Site data.}
+\item{site}{data.frame. An object inheriting from data.frame containing Site data.}
 
-\item{sp}{SpatialPoints A SpatialPoints object. No longer used in aqp 2+, see \code{?initSpatial}}
+\item{diagnostic}{data.frame. An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}}
 
-\item{diagnostic}{data.frame An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}}
-
-\item{restrictions}{data.frame An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}}
+\item{restrictions}{data.frame. An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}}
 }
 \description{
 In general, one should use \code{depths()} to initiate a SoilProfileCollection object from data. However, sometimes there are instances where either an empty, or very specific, object is needed. If that is the case, the general constructor \code{SoilProfileCollection} is available.
+}
+\details{
+After aqp 2.0.2, the \verb{@sp} slot was removed from the SoilProfileCollection object. If you run into errors related to old object definitions, use \code{rebuildSPC()} on the problematic object.
 }
 \section{Slots}{
 
@@ -56,8 +56,6 @@ In general, one should use \code{depths()} to initiate a SoilProfileCollection o
 \item{\code{horizons}}{data.frame.}
 
 \item{\code{site}}{data.frame.}
-
-\item{\code{sp}}{SpatialPoints.}
 
 \item{\code{diagnostic}}{data.frame.}
 

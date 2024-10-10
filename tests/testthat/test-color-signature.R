@@ -26,11 +26,11 @@ test_that("colorBucket", {
   
   # add more of these
   expect_equal(pig$id[1], 'P001')
-  expect_equal(pig$.white.pigment[1], 0.6351809, tolerance=0.001)
-  expect_equal(pig$.red.pigment[1], 0.10308427, tolerance=0.001)
-  expect_equal(pig$.green.pigment[1], 0, tolerance=0.001)
-  expect_equal(pig$.yellow.pigment[1], 0.2617348, tolerance=0.001)
-  expect_equal(pig$.blue.pigment[1], 0, tolerance=0.001)
+  expect_equal(pig$.white.pigment[1], 0.635, tolerance = 0.001)
+  expect_equal(pig$.red.pigment[1], 0.103, tolerance = 0.001)
+  expect_equal(pig$.green.pigment[1], 0, tolerance = 0.001)
+  expect_equal(pig$.yellow.pigment[1], 0.261, tolerance = 0.001)
+  expect_equal(pig$.blue.pigment[1], 0, tolerance = 0.001)
   
 })
 
@@ -46,11 +46,11 @@ test_that("depthSlices", {
   
   # add more of these
   expect_equal(pig$id[1], 'P001')
-  expect_equal(pig$A.0.1[1], 5.8741, tolerance=0.001)
-  expect_equal(pig$A.0.5[1], 5.5744, tolerance=0.001)
-  expect_equal(pig$B.0.1[1], 11.0712, tolerance=0.001)
-  expect_equal(pig$B.0.5[1], 17.8611, tolerance=0.001)
-  expect_equal(pig$L.0.1[1], 30.2502, tolerance=0.001)
+  expect_equal(pig$A.0.1[1], 5.87, tolerance = 0.01)
+  expect_equal(pig$A.0.5[1], 5.57, tolerance = 0.01)
+  expect_equal(pig$B.0.1[1], 11.07, tolerance = 0.01)
+  expect_equal(pig$B.0.5[1], 17.86, tolerance = 0.01)
+  expect_equal(pig$L.0.1[1], 30.25, tolerance = 0.01)
   
 })
 

@@ -6,9 +6,9 @@
 \usage{
 getCambicBounds(
   p,
-  hzdesgn = guessHzDesgnName(p, required = TRUE),
-  texcl.attr = guessHzTexClName(p, required = TRUE),
-  clay.attr = guessHzAttrName(p, attr = "clay", c("total", "_r")),
+  hzdesgn = hzdesgnname(p, required = TRUE),
+  texcl.attr = hztexclname(p, required = TRUE),
+  clay.attr = hzmetaname(p, "clay", required = TRUE),
   argi_bounds = NULL,
   d_value = "d_value",
   m_value = "m_value",
@@ -60,8 +60,11 @@ spc <- data.frame(id=1, taxsubgrp = "Lithic Haploxerepts",
 
 # promote to SoilProfileCollection
 depths(spc) <- id ~ hzdept + hzdepb
+
+# set required metadata
 hzdesgnname(spc) <- 'hzname'
 hztexclname(spc) <- 'texcl'
+hzmetaname(spc, 'clay') <- 'clay'
 
 # print results in table
 getCambicBounds(spc)

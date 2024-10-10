@@ -81,7 +81,7 @@ legend('topleft', legend=levels(sp2$surface), col=1:6, pch=15, bty='n', bg='whit
 
 }
 \references{
-\url{http://casoilresource.lawr.ucdavis.edu/}
+\url{https://casoilresource.lawr.ucdavis.edu/}
 }
 \author{
 Dylan E. Beaudette

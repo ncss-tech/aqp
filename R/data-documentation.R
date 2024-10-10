@@ -129,7 +129,7 @@
 #' character vector} \item{field_ph}{a numeric vector}
 #' \item{hue}{a character vector} \item{value}{a numeric
 #' vector} \item{chroma}{a numeric vector} }
-#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
+#' @references \url{https://casoilresource.lawr.ucdavis.edu/}
 #' @keywords datasets
 #' @examples
 #'
@@ -190,7 +190,7 @@ NULL
 #' \item{b}{RGB blue component} \item{soil_color}{R-friendly
 #' encoding of soil color} }
 #' @author Dylan E. Beaudette
-#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
+#' @references \url{https://casoilresource.lawr.ucdavis.edu/}
 #' @source Busacca, Alan J.; Singer, Michael J.; Verosub, Kenneth L. 1989. Late
 #' Cenozoic stratigraphy of the Feather and Yuba rivers area, California, with
 #' a section on soil development in mixed alluvium at Honcut Creek. USGS
@@ -267,7 +267,7 @@ NULL
 #' \item{B}{color: b-coordinate, CIE-LAB colorspace (dry)}
 #' \item{name}{horizon name} \item{soil_color}{horizon color} }
 #' @keywords datasets
-#' @references \url{http://casoilresource.lawr.ucdavis.edu/}
+#' @references \url{https://casoilresource.lawr.ucdavis.edu/}
 #' @examples
 #'
 #' ## this example investigates the concept of a "median profile"

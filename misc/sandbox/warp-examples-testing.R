@@ -100,14 +100,40 @@ plotSPC(x, name.style = 'center-center', cex.names = 0.8, width = 0.2, max.depth
 arrows(x0 = 1 + 0.25, y0 = .y1, x1 = 2 - 0.25, y1 = .y2, len = 0.1, col = 2)
 
 
-
+# symbolize warping factor with color
 o$fact <- c(1, 1, 1, 1, 1, 1, 1, 1)
 oo$fact <- c(1.8, 1.3, 0.6, 0.75, 0.8, 1, 1, 1)
 x <- combine(o, oo)
 
 par(mar = c(1, 0, 3 , 1))
-plotSPC(x, name.style = 'center-center', cex.names = 0.8, width = 0.2, max.depth = 200, depth.axis = FALSE, hz.depths = TRUE, color = 'fact')
+plotSPC(x, name.style = 'center-center', cex.names = 0.8, width = 0.2, max.depth = 200, depth.axis = FALSE, hz.depths = TRUE, color = 'fact', col.label = 'Horizon Warp Factor')
 arrows(x0 = 1 + 0.33, y0 = .y1, x1 = 2 - 0.22, y1 = .y2, len = 0.1, col = 'black')
+
+
+## 
+wf <- c(0.5, 0.8, 0.9, 0.95, 1, 1, 1, 3)
+
+oo <- warpHorizons(o, fact = wf)
+x <- combine(o, oo)
+
+.y1 <- x[1, , .TOP]
+.y2 <- x[2, , .TOP]
+
+par(mar = c(1, 0, 0 , 2))
+plotSPC(x, name.style = 'center-center', cex.names = 0.8, width = 0.2, max.depth = 200, depth.axis = list(line = -3))
+arrows(x0 = 1 + 0.25, y0 = .y1, x1 = 2 - 0.25, y1 = .y2, len = 0.1, col = 2)
+
+
+# symbolize warping factor with color
+o$fact <- c(1, 1, 1, 1, 1, 1, 1, 1)
+oo$fact <- wf
+x <- combine(o, oo)
+
+par(mar = c(1, 0, 3 , 1))
+plotSPC(x, name.style = 'center-center', cex.names = 0.9, width = 0.22, max.depth = 200, depth.axis = FALSE, hz.depths = TRUE, color = 'fact', col.label = 'Horizon Warp Factor')
+arrows(x0 = 1 + 0.38, y0 = .y1, x1 = 2 - 0.28, y1 = .y2, len = 0.1, col = 'black')
+
+
 
 
 

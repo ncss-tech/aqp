@@ -71,10 +71,13 @@
 #' @aliases pc pc.SPC profile_compare
 #' profile_compare,SoilProfileCollection-method
 #' profile_compare,data.frame-method
+#' 
 #' @docType methods
-#' @param s a dataframe with at least 2 columns of soil properties, and an 'id'
+#' 
+#' @param s a `data.frame` with at least 2 columns of soil properties, and an 'id'
 #' column for each profile. horizon depths must be integers and
 #' self-consistent, or a \code{SoilProfileCollection} object
+#' 
 #' @param vars A vector with named properties that will be used in the
 #' comparison. These are typically column names describing horizon-level
 #' attributes (2 or more), but can also contain site-level attributes (2 or
@@ -105,7 +108,7 @@
 #' optionally scaled by max(D).
 
 #' @author Dylan E. Beaudette
-#' @seealso \code{\link{slice}}, \code{\link{daisy}}
+#' @seealso [dice()], [cluster::daisy()]
 #' @references
 #'  - D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for quantitative pedology: A toolkit for soil scientists, Computers & Geosciences, Volume 52, 2013, Pages 258-268, ISSN 0098-3004, \doi{10.1016/j.cageo.2012.10.020}.
 #'  - Moore, A.; Russell, J. & Ward, W. Numerical analysis of soils: A comparison of three soil profile models with field classification. Journal of Soil Science, 1972, 23, 194-209.

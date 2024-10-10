@@ -15,6 +15,9 @@ logical vector with length (and order) matching the horizons of \code{x}
 \description{
 Flag perfectly overlapping horizons within a SoilProfileCollection
 }
+\details{
+Horizons with \code{NA} depths can be flagged as overlapping. Consider finding these horizons with \code{checkHzDepthLogic(byhz=TRUE)} and removing or fixing them.
+}
 \examples{
 
 # two overlapping horizons
@@ -35,6 +38,9 @@ plotSPC(z, color = '.overlapFlag', hz.depths = TRUE,
 depth.axis = FALSE, cex.names = 0.85)
 
 }
+\seealso{
+\code{\link[=checkHzDepthLogic]{checkHzDepthLogic()}} \code{\link[=fillHzGaps]{fillHzGaps()}}
+}
 \author{
-D.E. Beaudette
+D.E. Beaudette, A.G. Brown
 }
