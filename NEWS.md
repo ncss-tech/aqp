@@ -3,7 +3,8 @@
  * `munsell2rgb()` now safely selects the closest Munsell value and chroma to those available in the package LUT 
  * new function `soilTextureColorPal()` for suggesting a color palette suitable for soil texture class
  * **Breaking Change**: `@sp` slot of the SoilProfileCollection object, and dependency on sp package, has been removed. 
-  * Any SoilProfileCollection objects previously written to file (.rda, .rds) with aqp <2.1.x will need to be rebuilt using `rebuildSPC()` due to changes to S4 object structure
+  * any SoilProfileCollection objects previously written to file (.rda, .rds) with aqp <2.1.x will need to be rebuilt using `rebuildSPC()` due to changes to S4 object structure
+ * `estimatePSCS()` gains argument `"lieutex"` for in lieu textures which are used in the new routine for identification of the particle size control section of organic soils
 
 # aqp 2.0.4 (2024-07-30)
  * CRAN release

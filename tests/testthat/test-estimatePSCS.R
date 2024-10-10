@@ -93,9 +93,9 @@ test_that("estimatePSCS() multiple profiles",{
 test_that("estimatePSCS() organic profiles",{
   sp1@horizons$name[1:60] <- "Oi"
   sp1@horizons$name[48:51] <- "W"
-  sp1@horizons$name[57:60] <- "Oiff"
+  sp1@horizons$name[57:60] <- "Oif"
   horizons(sp1)$lieutex <- NA
-  oo <- estimatePSCS(sp1, clay.attr = 'prop', texcl.attr = "texture")
+  oo <- estimatePSCS(sp1, hzdesgn = "name", clay.attr = "prop", texcl.attr = "texture", lieutex = "texture")
   expect_equal(oo$pscs_top, rep(0, 9))
   expect_equal(oo$pscs_bottom, c(89, 59, 67, 62, 68, 160, 160, 68, 133))
 })
