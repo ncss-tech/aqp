@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -90,7 +90,6 @@
 <span>  horizons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, hzID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, top <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, bottom</span>
 <span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  sp <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="st">"SpatialPoints"</span><span class="op">)</span>,</span>
 <span>  diagnostic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  restrictions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -101,41 +100,41 @@
 
 
 <dl><dt id="arg-idcol">idcol<a class="anchor" aria-label="anchor" href="#arg-idcol"></a></dt>
-<dd><p>character Profile ID Column Name</p></dd>
+<dd><p>character. Profile ID Column Name</p></dd>
 
 
 <dt id="arg-hzidcol">hzidcol<a class="anchor" aria-label="anchor" href="#arg-hzidcol"></a></dt>
-<dd><p>character Horizon ID Column Name</p></dd>
+<dd><p>character. Horizon ID Column Name</p></dd>
 
 
 <dt id="arg-depthcols">depthcols<a class="anchor" aria-label="anchor" href="#arg-depthcols"></a></dt>
-<dd><p>character, length 2 Top and Bottom Depth Column Names</p></dd>
+<dd><p>character. length 2 Top and Bottom Depth Column Names</p></dd>
 
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
-<dd><p>list, metadata including data.frame class in use and depth units</p></dd>
+<dd><p>list. metadata including data.frame class in use and depth units</p></dd>
 
 
 <dt id="arg-horizons">horizons<a class="anchor" aria-label="anchor" href="#arg-horizons"></a></dt>
-<dd><p>data.frame An object inheriting from data.frame containing Horizon data.</p></dd>
+<dd><p>data.frame. An object inheriting from data.frame containing Horizon data.</p></dd>
 
 
 <dt id="arg-site">site<a class="anchor" aria-label="anchor" href="#arg-site"></a></dt>
-<dd><p>data.frame An object inheriting from data.frame containing Site data.</p></dd>
-
-
-<dt id="arg-sp">sp<a class="anchor" aria-label="anchor" href="#arg-sp"></a></dt>
-<dd><p>SpatialPoints A SpatialPoints object. No longer used in aqp 2+, see <code>?initSpatial</code></p></dd>
+<dd><p>data.frame. An object inheriting from data.frame containing Site data.</p></dd>
 
 
 <dt id="arg-diagnostic">diagnostic<a class="anchor" aria-label="anchor" href="#arg-diagnostic"></a></dt>
-<dd><p>data.frame An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See <code><a href="diagnostic_hz.html">diagnostic_hz()</a></code></p></dd>
+<dd><p>data.frame. An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See <code><a href="diagnostic_hz.html">diagnostic_hz()</a></code></p></dd>
 
 
 <dt id="arg-restrictions">restrictions<a class="anchor" aria-label="anchor" href="#arg-restrictions"></a></dt>
-<dd><p>data.frame An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See <code><a href="restrictions.html">restrictions()</a></code></p></dd>
+<dd><p>data.frame. An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See <code><a href="restrictions.html">restrictions()</a></code></p></dd>
 
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>After aqp 2.0.2, the <code>@sp</code> slot was removed from the SoilProfileCollection object. If you run into errors related to old object definitions, use <code><a href="rebuildSPC.html">rebuildSPC()</a></code> on the problematic object.</p>
+    </div>
     <div id="slots">
     <h2>Slots</h2>
 
@@ -164,10 +163,6 @@
 <dd><p>data.frame.</p></dd>
 
 
-<dt><code>sp</code></dt>
-<dd><p>SpatialPoints.</p></dd>
-
-
 <dt><code>diagnostic</code></dt>
 <dd><p>data.frame.</p></dd>
 
@@ -187,7 +182,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## structure of default, empty SoilProfileCollection</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">SoilProfileCollection</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ idcol       : chr "id"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ hzidcol     : chr "hzID"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ depthcols   : chr [1:2] "top" "bottom"</span>
@@ -205,11 +200,6 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ bottom: num(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ site        :'data.frame':	0 obs. of  1 variable:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id: chr(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ sp          :Formal class 'SpatialPoints' [package "sp"] with 3 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ coords     : num [1, 1] 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ bbox       : logi [1, 1] NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. .. ..@ projargs: chr NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ diagnostic  :'data.frame':	0 obs. of  0 variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ restrictions:'data.frame':	0 obs. of  0 variables</span>
 <span class="r-in"><span></span></span>
