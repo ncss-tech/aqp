@@ -1,4 +1,4 @@
-context("segment")
+context("hz_segment")
 
 
 test_that("data.frame interface works as expected", {
@@ -7,7 +7,7 @@ test_that("data.frame interface works as expected", {
   data(sp1)
   
   # trimming
-  z <- segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE, hzdepcols = c('top', 'bottom'))
+  z <- hz_segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE, depthcols = c('top', 'bottom'))
   
   # correct object type and segment label
   expect_true(inherits(z, 'data.frame'))
@@ -17,7 +17,7 @@ test_that("data.frame interface works as expected", {
   expect_true(inherits(z[['segment_id']], 'character'))
   
   # no triming
-  z <- segment(sp1, intervals = c(0, 10, 20, 30), trim = FALSE, hzdepcols = c('top', 'bottom'))
+  z <- hz_segment(sp1, intervals = c(0, 10, 20, 30), trim = FALSE, depthcols = c('top', 'bottom'))
   
   # correct object type and segment label
   expect_true(inherits(z, 'data.frame'))
@@ -35,7 +35,7 @@ test_that("SPC interface works as expected", {
   depths(sp1) <- id ~ top + bottom
   
   # trimming
-  z <- segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE)
+  z <- hz_segment(sp1, intervals = c(0, 10, 20, 30), trim = TRUE)
   
   expect_true(inherits(z, 'SoilProfileCollection'))
   expect_true('segment_id' %in% horizonNames(z))
@@ -44,7 +44,7 @@ test_that("SPC interface works as expected", {
   expect_true(inherits(z[['segment_id']], 'character'))
   
   # no trimming
-  z <- segment(sp1, intervals = c(0, 10, 20, 30), trim = FALSE)
+  z <- hz_segment(sp1, intervals = c(0, 10, 20, 30), trim = FALSE)
   
   expect_true(inherits(z, 'SoilProfileCollection'))
   expect_true('segment_id' %in% horizonNames(z))
@@ -69,8 +69,8 @@ test_that("expected outcome with NA horizon depths", {
   bad$top[c(1, 5)] <- NA
   
   # segment
-  z.bad <- segment(bad, intervals = c(0, 10, 20, 30), trim = TRUE, hzdepcols = c('top', 'bottom'))
-  z.good <- segment(good, intervals = c(0, 10, 20, 30), trim = TRUE, hzdepcols = c('top', 'bottom'))
+  z.bad <- hz_segment(bad, intervals = c(0, 10, 20, 30), trim = TRUE, depthcols = c('top', 'bottom'))
+  z.good <- hz_segment(good, intervals = c(0, 10, 20, 30), trim = TRUE, depthcols = c('top', 'bottom'))
   
   # label class
   expect_true(inherits(z.good[['segment_id']], 'character'))
@@ -86,34 +86,35 @@ test_that("expected outcome with NA horizon depths", {
 })
 
 
-test_that("expected outcome with bogus horizon depths", {
-  
-  # init local copy of sample data
-  data(sp1)
-  
-  # copies
-  good <- sp1
-  bad <- sp1
-  
-  # add NA to horizon depths
-  bad$top[c(1, 5)] <- bad$bottom[c(1, 5)]
-  
-  # segment
-  z.bad <- segment(bad, intervals = c(0, 10, 20, 30), trim = TRUE, hzdepcols = c('top', 'bottom'))
-  z.good <- segment(good, intervals = c(0, 10, 20, 30), trim = TRUE, hzdepcols = c('top', 'bottom'))
-  
-  # label class
-  expect_true(inherits(z.good[['segment_id']], 'character'))
-  expect_true(inherits(z.bad[['segment_id']], 'character'))
-  
-  ## TODO: is this expected?
-  # row count
-  expect_false(nrow(z.good) == nrow(z.bad))
-  
-  # same values
-  # expect_false(all(z.good$segment_id == z.bad$segment_id))
-  
-})
+# I think this test needs to be retired or reframed. segment previously exclude results where the thickness of the segment was zero. That feature has been removed. Upon updating segment it was removed to ensure the original data was returned regardless of the horizon errors, which should be dealt with elsewhere.
+# test_that("expected outcome with bogus horizon depths", {
+#   
+#   # init local copy of sample data
+#   data(sp1)
+#   
+#   # copies
+#   good <- sp1
+#   bad <- sp1
+#   
+#   # add NA to horizon depths
+#   bad$top[c(1, 5)] <- bad$bottom[c(1, 5)]
+#   
+#   # segment
+#   z.bad <- hz_segment(bad, intervals = c(0, 10, 20, 30), trim = TRUE, depthcols = c('top', 'bottom'))
+#   z.good <- hz_segment(good, intervals = c(0, 10, 20, 30), trim = TRUE, depthcols = c('top', 'bottom'))
+#   
+#   # label class
+#   expect_true(inherits(z.good[['segment_id']], 'character'))
+#   expect_true(inherits(z.bad[['segment_id']], 'character'))
+#   
+#   ## TODO: is this expected?
+#   # row count
+#   expect_false(nrow(z.good) == nrow(z.bad))
+#   
+#   # same values
+#   # expect_false(all(z.good$segment_id == z.bad$segment_id))
+#   
+# })
 
 
 
@@ -128,7 +129,7 @@ test_that("same results as weighted mean via slab", {
   a.slab <- slab(s, fm = ~ p1, slab.structure = c(0, 10, 20, 30), slab.fun = mean, na.rm = TRUE)
   
   # segment
-  z <- segment(s, intervals = c(0, 10, 20, 30), trim = TRUE)
+  z <- hz_segment(s, intervals = c(0, 10, 20, 30), trim = TRUE)
   
   # compute horizon thickness weights
   z <- horizons(z)

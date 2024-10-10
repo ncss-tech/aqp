@@ -94,10 +94,7 @@ setMethod('reorderHorizons',
             
             h <- object@horizons
             
-            if (is.null(target.order))
-              target.order <- metadata(object)$original.order
-              if (is.null(target.order))
-                target.order <- 1:nrow(h)
+            stopifnot(!is.null(target.order))
             
             current.order <- match(target.order,
                                    order(as.character(h[[idname(object)]]),

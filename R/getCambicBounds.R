@@ -38,16 +38,19 @@
 #'
 #' # promote to SoilProfileCollection
 #' depths(spc) <- id ~ hzdept + hzdepb
+#' 
+#' # set required metadata
 #' hzdesgnname(spc) <- 'hzname'
 #' hztexclname(spc) <- 'texcl'
-#'
+#' hzmetaname(spc, 'clay') <- 'clay'
+#' 
 #' # print results in table
 #' getCambicBounds(spc)
 #'
 getCambicBounds <- function(p,
-                            hzdesgn = guessHzDesgnName(p, required = TRUE),
-                            texcl.attr = guessHzTexClName(p, required = TRUE),
-                            clay.attr = guessHzAttrName(p, attr = 'clay', c("total", "_r")),
+                            hzdesgn = hzdesgnname(p, required = TRUE),
+                            texcl.attr = hztexclname(p, required = TRUE),
+                            clay.attr = hzmetaname(p, "clay", required = TRUE),
                             argi_bounds = NULL,
                             d_value = "d_value",
                             m_value = "m_value",
@@ -55,8 +58,12 @@ getCambicBounds <- function(p,
                             sandy.texture.pattern = "-S$|^S$|COS$|L[^V]FS$|[^L]VFS$|LS$|LFS$",
                             ...) {
 
-  # sacrafice to CRAN gods in the name of NSE
+  # sacrifice to CRAN gods in the name of NSE
   id <- NULL
+  
+  if (is.null(hzdesgn) || !hzdesgn %in% horizonNames(p)) {
+    stop("Horizon designation column (", hzdesgn, ") does not exist.")
+  }
   
   # construct data.frame result for no-cambic-found (NA)
   empty_frame <- data.frame(id = character(0),

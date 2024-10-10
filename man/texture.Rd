@@ -25,6 +25,7 @@ texture_to_taxpartsize(
   texcl = NULL,
   clay = NULL,
   sand = NULL,
+  sandvf = NULL,
   fragvoltot = NULL
 )
 
@@ -74,6 +75,8 @@ conventions (e.g. gr|GR, grv|GRV)}
 \item{lieutex}{vector of in lieu of texture terms that conform to the USDA
 code conventions (e.g. gr|GR, pg|PG), only used when fragments or artifacts
 are > 90 percent by volume (default: NULL))}
+
+\item{sandvf}{vector of very fine sand percentages}
 
 \item{fragvoltot}{vector of total rock fragment percentages}
 
@@ -274,6 +277,11 @@ fragvol_to_texmod(gravel = 10, cobbles = 10)
 }
 \references{
 Matthew R. Levi, Modified Centroid for Estimating Sand, Silt, and Clay from Soil Texture Class, Soil Science Society of America Journal, 2017, 81(3):578-588, ISSN 1435-0661, \doi{10.2136/sssaj2016.09.0301}.
+}
+\seealso{
+\code{\link{SoilTextureLevels}}
+
+\code{\link[=hz_to_taxpartsize]{hz_to_taxpartsize()}}, \code{\link[=lookup_taxpartsize]{lookup_taxpartsize()}}
 }
 \author{
 Stephen Roecker
