@@ -1,3 +1,5 @@
+context("collapseHz()")
+
 test_that("collapseHz works", {
   data("jacobs2000", package = "aqp")
   .BOTTOM <- NULL
