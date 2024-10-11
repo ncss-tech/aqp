@@ -1,43 +1,52 @@
 #' Collapse Horizons within Profiles Based on Pattern Matching
 #'
-#' Combines and aggregates data for layers by grouping adjacent horizons that
-#' match `pattern` in `hzdesgn`. Numeric properties are combined using the
-#' weighted average, and other properties are derived from the thickest horizon
-#' in each group.
+#' Combines layers and aggregates data by grouping adjacent horizons which match `pattern` in
+#' `hzdesgn` or, alternately, share a common value in `by` argument. Numeric properties are combined
+#' using the weighted average, and other properties are derived from the dominant condition based on
+#' thickness of layers and values in each group.
 #'
 #' @param x A _SoilProfileCollection_
-#' @param pattern _character_. A regular expression pattern to match in
-#' `hzdesgn` column. Default: `NULL`.
-#' @param by _character_. A column name specifying horizons that should be 
-#'  combined. Aggregation will be applied to adjacent groups of layers within
-#'  profiles that have the same value in `by`. 
-#' @param hzdesgn _character_. Any character column containing horizon-level
-#'  identifiers. Default: `hzdesgnname(x, required = TRUE)()`.
-#' @param FUN _function_. A function that returns a _logical_ vector equal in
-#'  length to the number of horizons in `x`. See details.
+#' @param pattern _character_. A regular expression pattern to match in `hzdesgn` column. Default:
+#'   `NULL`.
+#' @param by _character_. A column name specifying horizons that should be combined. Aggregation
+#'   will be applied to adjacent groups of layers within profiles that have the same value in `by`.
+#'   Used in lieu of `pattern` and `hzdesgn`. Default: `NULL`.
+#' @param hzdesgn _character_. Any character column containing horizon-level identifiers. Default:
+#'   `hzdesgnname(x, required = TRUE)`.
+#' @param FUN _function_. A function that returns a _logical_ vector equal in length to the number
+#'   of horizons in `x`. Used only when `pattern` is specified. See details.
 #' @param ... Additional arguments passed to the matching function `FUN`.
-#' @param AGGFUN _list_. A named list containing custom aggregation functions.
-#'  List element names should match the column name that they transform. The
-#'  functions defined should take three arguments: `x` (a vector of horizon
-#'  property values), `top` (a vector of top depths), and `bottom` (a vector of
-#'  bottom depths). Default: `NULL` applies weighted.mean() to all numeric
-#'  columns not listed in `ignore_numerics` and takes the thickest value for all
-#'  other columns.
-#' @param ignore_numerics _character_. Vector of column names that contain
-#'  numeric  values which should _not_ be aggregated using `weighted.mean()`.
-#'  For example, soil color "value" and "chroma".
-#' @param na.rm _logical_. If `TRUE` `NA` values are ignored when calculating
-#'  min/max boundaries for each group and in weighted averages. If `FALSE` `NA`
-#'   values are propagated to the result. Default: `FALSE`
+#' @param AGGFUN _list_. A _named_ list containing custom aggregation functions. List element names
+#'   should match the column name that they transform. The functions defined should take three
+#'   arguments: `x` (a vector of horizon property values), `top` (a vector of top depths), and
+#'   `bottom` (a vector of bottom depths). Default: `NULL` applies `weighted.mean()` to all numeric
+#'   columns not listed in `ignore_numerics` and takes the dominant condition (value with greatest
+#'   aggregate thickness sum) for all other columns. See details.
+#' @param ignore_numerics _character_. Vector of column names that contain numeric values which
+#'   should _not_ be aggregated using `weighted.mean()`. For example, soil color "value" and
+#'   "chroma".
+#' @param na.rm _logical_. If `TRUE` `NA` values are ignored when calculating min/max boundaries for
+#'   each group and in weighted averages. If `FALSE` `NA` values are propagated to the result.
+#'   Default: `FALSE`.
 #'
 #' @details
 #'
-#' If a custom function (`FUN`) is used, it should accept arbitrary additional
-#' arguments via an ellipsis (`...`). It is not necessary to do anything with
-#' arguments, but the result should match the number of horizons found in the
-#' input SoilProfileCollection `x`.
+#' If a custom matching function (`FUN`) is used, it should accept arbitrary additional arguments
+#' via an ellipsis (`...`). It is not necessary to do anything with arguments, but the result should
+#' match the number of horizons found in the input SoilProfileCollection `x`.
 #'
+#' Custom aggregation functions defined in the `AGGFUN` argument should either return a single
+#' vector value for each group*column combination, or should return a _data.frame_ object with named
+#' columns. If the input column name is used as a column name in the result _data.frame_, then the
+#' values of that column name in the result _SoilProfileCollection_ will be replaced by the output
+#' of the aggregation function. See examples.
+#' 
 #' @return A _SoilProfileCollection_
+#' 
+#' @author Andrew G. Brown
+#' 
+#' @seealso `hz_dissolve()`
+#' 
 #' @export
 #'
 #' @examples
@@ -52,7 +61,14 @@
 #' i <- collapseHz(jacobs2000_gen, by = "genhz")
 #' 
 #' profile_id(i) <- paste0(profile_id(i), "_collapse")
-#' plot(c(i, jacobs2000), color = "genhz", name = "name", name.style = "center-center", cex.names = 1)
+#' 
+#' plot(
+#'   c(i, jacobs2000),
+#'   color = "genhz",
+#'   name = "name",
+#'   name.style = "center-center",
+#'   cex.names = 1
+#' )
 #'  
 #' # custom pattern argument  
 #' j <- collapseHz(jacobs2000,

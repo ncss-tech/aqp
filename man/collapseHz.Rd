@@ -7,6 +7,7 @@
 collapseHz(
   x,
   pattern = NULL,
+  by = NULL,
   hzdesgn = hzdesgnname(x, required = TRUE),
   FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]], ignore.case =
     FALSE),
@@ -19,47 +20,55 @@ collapseHz(
 \arguments{
 \item{x}{A \emph{SoilProfileCollection}}
 
-\item{pattern}{\emph{character}. A regular expression pattern to match in
-\code{hzdesgn} column. Default}
+\item{pattern}{\emph{character}. A regular expression pattern to match in \code{hzdesgn} column. Default:
+\code{NULL}.}
 
-\item{hzdesgn}{\emph{character}. Any character column containing horizon-level
-identifiers. Default is estimated using \code{guessHzDesgnName()}.}
+\item{by}{\emph{character}. A column name specifying horizons that should be combined. Aggregation
+will be applied to adjacent groups of layers within profiles that have the same value in \code{by}.
+Used in lieu of \code{pattern} and \code{hzdesgn}. Default: \code{NULL}.}
 
-\item{FUN}{\emph{function}. A function that returns a \emph{logical} vector equal in
-length to the number of horizons in \code{x}. See details.}
+\item{hzdesgn}{\emph{character}. Any character column containing horizon-level identifiers. Default:
+\code{hzdesgnname(x, required = TRUE)}.}
+
+\item{FUN}{\emph{function}. A function that returns a \emph{logical} vector equal in length to the number
+of horizons in \code{x}. Used only when \code{pattern} is specified. See details.}
 
 \item{...}{Additional arguments passed to the matching function \code{FUN}.}
 
-\item{AGGFUN}{\emph{list}. A named list containing custom aggregation functions.
-List element names should match the column name that they transform. The
-functions defined should take three arguments: \code{x} (a vector of horizon
-property values), \code{top} (a vector of top depths), and \code{bottom} (a vector of
-bottom depths). Default: \code{NULL} applies weighted.mean() to all numeric
-columns not listed in \code{ignore_numerics} and takes the thickest value for all
-other columns.}
+\item{AGGFUN}{\emph{list}. A \emph{named} list containing custom aggregation functions. List element names
+should match the column name that they transform. The functions defined should take three
+arguments: \code{x} (a vector of horizon property values), \code{top} (a vector of top depths), and
+\code{bottom} (a vector of bottom depths). Default: \code{NULL} applies \code{weighted.mean()} to all numeric
+columns not listed in \code{ignore_numerics} and takes the dominant condition (value with greatest
+aggregate thickness sum) for all other columns. See details.}
 
-\item{ignore_numerics}{\emph{character}. Vector of column names that contain
-numeric  values which should \emph{not} be aggregated using \code{weighted.mean()}.
-For example, soil color "value" and "chroma".}
+\item{ignore_numerics}{\emph{character}. Vector of column names that contain numeric values which
+should \emph{not} be aggregated using \code{weighted.mean()}. For example, soil color "value" and
+"chroma".}
 
-\item{na.rm}{\emph{logical}. If \code{TRUE} \code{NA} values are ignored when calculating
-min/max boundaries for each group and in weighted averages. If \code{FALSE} \code{NA}
-values are propagated to the result. Default: \code{FALSE}}
+\item{na.rm}{\emph{logical}. If \code{TRUE} \code{NA} values are ignored when calculating min/max boundaries for
+each group and in weighted averages. If \code{FALSE} \code{NA} values are propagated to the result.
+Default: \code{FALSE}.}
 }
 \value{
 A \emph{SoilProfileCollection}
 }
 \description{
-Combines and aggregates data for layers by grouping adjacent horizons that
-match \code{pattern} in \code{hzdesgn}. Numeric properties are combined using the
-weighted average, and other properties are derived from the thickest horizon
-in each group.
+Combines layers and aggregates data by grouping adjacent horizons which match \code{pattern} in
+\code{hzdesgn} or, alternately, share a common value in \code{by} argument. Numeric properties are combined
+using the weighted average, and other properties are derived from the dominant condition based on
+thickness of layers and values in each group.
 }
 \details{
-If a custom function (\code{FUN}) is used, it should accept arbitrary additional
-arguments via an ellipsis (\code{...}). It is not necessary to do anything with
-arguments, but the result should match the number of horizons found in the
-input SoilProfileCollection \code{x}.
+If a custom matching function (\code{FUN}) is used, it should accept arbitrary additional arguments
+via an ellipsis (\code{...}). It is not necessary to do anything with arguments, but the result should
+match the number of horizons found in the input SoilProfileCollection \code{x}.
+
+Custom aggregation functions defined in the \code{AGGFUN} argument should either return a single
+vector value for each group*column combination, or should return a \emph{data.frame} object with named
+columns. If the input column name is used as a column name in the result \emph{data.frame}, then the
+values of that column name in the result \emph{SoilProfileCollection} will be replaced by the output
+of the aggregation function. See examples.
 }
 \examples{
 data(jacobs2000)
@@ -70,10 +79,17 @@ patterns <- c("A", "E", "B.*t", "B.*h", "C")
 jacobs2000_gen <- generalizeHz(jacobs2000, new = new_labels, pattern = patterns)
 
 # use existing generalized horizon labels
-i <- collapseHz(jacobs2000_gen, hzdesgn = "genhz")
+i <- collapseHz(jacobs2000_gen, by = "genhz")
 
 profile_id(i) <- paste0(profile_id(i), "_collapse")
-plot(c(i, jacobs2000), color = "genhz", name = "name", name.style = "center-center", cex.names = 1)
+
+plot(
+  c(i, jacobs2000),
+  color = "genhz",
+  name = "name",
+  name.style = "center-center",
+  cex.names = 1
+)
  
 # custom pattern argument  
 j <- collapseHz(jacobs2000,
@@ -137,4 +153,10 @@ m <- collapseHz(jacobs2000,
 profile_id(m) <- paste0(profile_id(m), "_collapse_custom")
 
 m$matrix_color_munsell.n_matrix_color
+}
+\seealso{
+\code{hz_dissolve()}
+}
+\author{
+Andrew G. Brown
 }
