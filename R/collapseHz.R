@@ -7,9 +7,12 @@
 #'
 #' @param x A _SoilProfileCollection_
 #' @param pattern _character_. A regular expression pattern to match in
-#' `hzdesgn` column. Default
+#' `hzdesgn` column. Default: `NULL`.
+#' @param by _character_. A column name specifying horizons that should be 
+#'  combined. Aggregation will be applied to adjacent groups of layers within
+#'  profiles that have the same value in `by`. 
 #' @param hzdesgn _character_. Any character column containing horizon-level
-#'  identifiers. Default is estimated using `guessHzDesgnName()`.
+#'  identifiers. Default: `hzdesgnname(x, required = TRUE)()`.
 #' @param FUN _function_. A function that returns a _logical_ vector equal in
 #'  length to the number of horizons in `x`. See details.
 #' @param ... Additional arguments passed to the matching function `FUN`.
@@ -46,7 +49,7 @@
 #' jacobs2000_gen <- generalizeHz(jacobs2000, new = new_labels, pattern = patterns)
 #' 
 #' # use existing generalized horizon labels
-#' i <- collapseHz(jacobs2000_gen, hzdesgn = "genhz")
+#' i <- collapseHz(jacobs2000_gen, by = "genhz")
 #' 
 #' profile_id(i) <- paste0(profile_id(i), "_collapse")
 #' plot(c(i, jacobs2000), color = "genhz", name = "name", name.style = "center-center", cex.names = 1)
@@ -113,10 +116,9 @@
 #' profile_id(m) <- paste0(profile_id(m), "_collapse_custom")
 #' 
 #' m$matrix_color_munsell.n_matrix_color
-#
-#
 collapseHz <- function(x,
                        pattern = NULL,
+                       by = NULL,
                        hzdesgn = hzdesgnname(x, required = TRUE),
                        FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]], ignore.case = FALSE),
                        ...,
@@ -127,11 +129,11 @@ collapseHz <- function(x,
   hzd <- horizonDepths(x)
   
   # use exact match of existing genhz labels as default in lieu of pattern
-  if (is.null(pattern) & missing(matchcolumn)) {
-    existing_genhz <- unique(as.character(x[[GHL(x, required = TRUE)]]))
-    pattern <- paste0("^", existing_genhz, "$")
-    labels <- existing_genhz
-  } else if (!missing(matchcolumn)) {
+  if (is.null(pattern) & missing(by)) {
+    by <- GHL(x, required = TRUE)
+  }
+  
+  if (length(pattern) == 0) {
     pattern <- NA
   }
   
@@ -151,12 +153,18 @@ collapseHz <- function(x,
     h <- data.table::data.table(horizons(x))
     
     # calculate matches
-    l <- FUN(x, pattern = pattern[p], hzdesgn = hzdesgn, na.rm = na.rm, ...)
-    
-    if (any(l)) {
+    if (!is.null(by) && length(pattern) == 1 && is.na(pattern)) {
+      labels <- h[[by]]
+      r <- rle(paste0(h[[idn]], "-", as.character(labels)))
+      l <- rep(TRUE, nrow(h))
+    } else {
+      l <- FUN(x, pattern = pattern[p], hzdesgn = hzdesgn, na.rm = na.rm, ...)
       r <- rle(l)
-      g <- unlist(sapply(seq(r$lengths), function(i) rep(i, r$lengths[i])))
-      hidx <- unlist(sapply(seq(r$lengths), function(i) if (r$lengths[i] == 1) TRUE else rep(FALSE, r$lengths[i]))) & l
+    }
+    
+    if (any(r$lengths > 1)) {
+      g <- unlist(lapply(seq_along(r$lengths), function(i) rep(i, r$lengths[i])))
+      hidx <- unlist(lapply(seq_along(r$lengths), function(i) if (r$lengths[i] == 1) TRUE else rep(FALSE, r$lengths[i]))) & l
       gidx <- g %in% unique(g[l]) & !hidx
       naf <- names(AGGFUN)
       
@@ -179,7 +187,7 @@ collapseHz <- function(x,
                                         # v[which.max(bottom - top)[1]]
 
                                         # take dominant condition (based on sum of thickness)
-                                        cond <- aggregate(bottom - top, by = list(v), sum, na.rm = na.rm)
+                                        cond <- aggregate(bottom - top, by = list(as.character(v)), sum, na.rm = na.rm)
                                         cond[[1]][which.max(cond[[2]])[1]]
                                       }
                                     } else {
@@ -222,7 +230,9 @@ collapseHz <- function(x,
       
       # combine matches
       res3 <- data.table::rbindlist(list(res, res2), fill = TRUE)
-      res3[[hzdesgn]] <- labels[p]
+      if (missing(by)){
+        res3[[hzdesgn]] <- labels[p]
+      }
       
       # combine matches with horizons that did not match
       h <- h[-which(g %in% unique(g[l]) | hidx),]
