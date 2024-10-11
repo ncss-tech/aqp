@@ -170,6 +170,11 @@ collapseHz <- function(x,
     
     # calculate matches
     if (!is.null(by) && length(pattern) == 1 && is.na(pattern)) {
+      
+      if (!by %in% horizonNames(x)) {
+        stop("Column name `by` (\"", by, ") is not a horizon-level variable.", call. = FALSE) 
+      }
+      
       labels <- h[[by]]
       
       if (any(is.na(labels))) {

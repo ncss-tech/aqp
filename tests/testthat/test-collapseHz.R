@@ -32,6 +32,9 @@ test_that("collapseHz works", {
   expect_error(collapseHz(jacobs2000_gen, by = "matrix_color_munsell"),
                "Missing values are not allowed")
   
+  # `by` column must also be a horizon-level variable
+  expect_error(collapseHz(jacobs2000, by = "genhz"), "not a horizon-level variable")
+  
   # matches input number of profiles
   expect_equal(length(jacobs2000), length(i))
   
@@ -60,6 +63,19 @@ test_that("collapseHz works", {
   expect_equal(i[7, , .BOTTOM], c(15, 41, 61, 132, 140, 152))
   expect_true(is.numeric(i$clay))
   expect_true(is.numeric(j$clay))
+  
+  # "works" on empty SPC ()
+  expect_equal(nrow(collapseHz(jacobs2000_gen[0,], by = "genhz")), 0)
+                
+  # works on SPC with filled profile (1 horizon with NA depths)
+  all_na <- subsetHz(jacobs2000_gen[1,], TRUE)
+  all_na$top <- NA
+  all_na$bottom <- NA
+  expect_warning(na_nonna <- c(all_na, jacobs2000_gen[2:5,]))
+  expect_silent(f <- collapseHz(all_na, by = "genhz"))
+  expect_silent(n <- collapseHz(na_nonna, by = "genhz"))
+  expect_equal(nrow(n), 14)
+
   
   a_pattern <- c(`A` = "^A",
                  `E` = "E", 
