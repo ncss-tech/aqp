@@ -171,6 +171,11 @@ collapseHz <- function(x,
     # calculate matches
     if (!is.null(by) && length(pattern) == 1 && is.na(pattern)) {
       labels <- h[[by]]
+      
+      if (any(is.na(labels))) {
+        stop("Missing values are not allowed in `by` column argument", call. = FALSE)
+      }
+      
       r <- rle(paste0(h[[idn]], "-", as.character(labels)))
       l <- rep(TRUE, nrow(h))
     } else {
