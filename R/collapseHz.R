@@ -209,9 +209,22 @@ collapseHz <- function(x,
                                             # take thickest value
                                             # v[which.max(bottom - top)[1]]
     
+                                            # convert factors etc to character
+                                            # results may not conform with existing factor levels
+                                            v <- as.character(v)
+                                            
+                                            # replace NA values for use in aggregate()
+                                            if (!na.rm) {
+                                              v[is.na(v)] <- "<collapseHZ-category-missing>"
+                                            } 
+                                            
                                             # take dominant condition (based on sum of thickness)
-                                            cond <- aggregate(bottom - top, by = list(as.character(v)), sum, na.rm = na.rm)
+                                            cond <- aggregate(bottom - top, by = list(v), sum, na.rm = na.rm)
                                             v <- cond[[1]][which.max(cond[[2]])[1]]
+                                            
+                                            if (!na.rm) {
+                                              v[v == "<collapseHZ-category-missing>"] <- NA
+                                            }
                                           }
                                         }
                                         out <- data.frame(v)
