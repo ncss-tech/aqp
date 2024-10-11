@@ -169,58 +169,61 @@ collapseHz <- function(x,
       naf <- names(AGGFUN)
       
       # iterate over sets of layers needing aggregation within each matching group
-      res <- h[gidx, c(list(hzdeptnew = suppressWarnings(min(.SD[[hzd[1]]], na.rm = na.rm)), 
-                            hzdepbnew = suppressWarnings(max(.SD[[hzd[2]]], na.rm = na.rm))),
-                       
-                            # process numeric depth weighted averages w/ dominant condition otherwise                       
-                            sapply(colnames(.SD)[!colnames(.SD) %in% c(hzd, naf)],
-                                   function(n, top, bottom) {
-                                    v <- .SD[[n]]
-                                    if (length(v) > 1) {
-                                      if (!n %in% ignore_numerics && is.numeric(x)) {
-
-                                        # weighted average by thickness (numerics not in exclusion list)
-                                        weighted.mean(v, bottom - top, na.rm = na.rm)
-
+      if (sum(gidx) > 0){
+        res <- h[gidx, c(list(hzdeptnew = suppressWarnings(min(.SD[[hzd[1]]], na.rm = na.rm)), 
+                              hzdepbnew = suppressWarnings(max(.SD[[hzd[2]]], na.rm = na.rm))),
+                         
+                              # process numeric depth weighted averages w/ dominant condition otherwise                       
+                              sapply(colnames(.SD)[!colnames(.SD) %in% c(hzd, naf)],
+                                     function(n, top, bottom) {
+                                      v <- .SD[[n]]
+                                      if (length(v) > 1) {
+                                        if (!n %in% ignore_numerics && is.numeric(x)) {
+  
+                                          # weighted average by thickness (numerics not in exclusion list)
+                                          weighted.mean(v, bottom - top, na.rm = na.rm)
+  
+                                        } else {
+                                          # take thickest value
+                                          # v[which.max(bottom - top)[1]]
+  
+                                          # take dominant condition (based on sum of thickness)
+                                          cond <- aggregate(bottom - top, by = list(as.character(v)), sum, na.rm = na.rm)
+                                          cond[[1]][which.max(cond[[2]])[1]]
+                                        }
                                       } else {
-                                        # take thickest value
-                                        # v[which.max(bottom - top)[1]]
-
-                                        # take dominant condition (based on sum of thickness)
-                                        cond <- aggregate(bottom - top, by = list(as.character(v)), sum, na.rm = na.rm)
-                                        cond[[1]][which.max(cond[[2]])[1]]
+                                        v
                                       }
-                                    } else {
-                                      v
-                                    }
-                                  },
-                                  top = .SD[[hzd[1]]],
-                                  bottom = .SD[[hzd[2]]]),
-                       
-                         # process custom aggregation functions (may return data.frames)
-                         do.call('c', lapply(colnames(.SD)[colnames(.SD) %in% naf], 
-                                             function(n, top, bottom) {
-                                                       out <- AGGFUN[[n]](.SD[[n]], top, bottom)
-                                                       if (!is.data.frame(out)) {
-                                                         out <- data.frame(out)
-                                                         colnames(out) <- n
-                                                       } else {
-                                                         colnames(out) <- paste0(n, ".", colnames(out))
-                                                       }
-                                                       out
-                                                                         },
-                                             top = .SD[[hzd[1]]], 
-                                             bottom = .SD[[hzd[2]]]))), 
-               by = g[gidx]]
+                                    },
+                                    top = .SD[[hzd[1]]],
+                                    bottom = .SD[[hzd[2]]]),
+                         
+                           # process custom aggregation functions (may return data.frames)
+                           do.call('c', lapply(colnames(.SD)[colnames(.SD) %in% naf], 
+                                               function(n, top, bottom) {
+                                                         out <- AGGFUN[[n]](.SD[[n]], top, bottom)
+                                                         if (!is.data.frame(out)) {
+                                                           out <- data.frame(out)
+                                                           colnames(out) <- n
+                                                         } else {
+                                                           colnames(out) <- paste0(n, ".", colnames(out))
+                                                         }
+                                                         out
+                                                                           },
+                                               top = .SD[[hzd[1]]], 
+                                               bottom = .SD[[hzd[2]]]))), 
+                 by = g[gidx]]
+        # remove grouping ID
+        res$g <- NULL
+      } else {
+        res <- h[0, ]
+      }
       
       # allow for replacing values as well as adding new values with data.frame AGGFUN
       test1.idx <- na.omit(match(colnames(res), paste0(naf, ".", naf))) 
       test2.idx <- na.omit(match(paste0(naf, ".", naf), colnames(res)))
       colnames(res)[test2.idx] <- naf[test1.idx]
       
-      # remove grouping ID
-      res$g <- NULL
-
       # determine matches that are only a single layer (no aggregation applied)      
       res2 <- h[hidx & l, ]
       res2$hzdeptnew <- res2[[hzd[1]]]
@@ -230,12 +233,15 @@ collapseHz <- function(x,
       
       # combine matches
       res3 <- data.table::rbindlist(list(res, res2), fill = TRUE)
-      if (missing(by)){
+      if (missing(by) && nrow(res3) > 0){
         res3[[hzdesgn]] <- labels[p]
       }
       
       # combine matches with horizons that did not match
-      h <- h[-which(g %in% unique(g[l]) | hidx),]
+      agg.idx <- which(g %in% unique(g[l]) | hidx)
+      if (length(agg.idx) > 0) {
+        h <- h[-agg.idx, ]
+      }
       h <- data.table::rbindlist(list(h, res3), fill = TRUE)
       
       # replace depths
