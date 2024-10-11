@@ -163,10 +163,10 @@ collapseHz <- function(x,
     labels <- pattern
   }
   
+  h <- data.table::data.table(horizons(x))
+  
   # iterate over patterns
   for (p in seq(pattern)) {
-    
-    h <- data.table::data.table(horizons(x))
     
     # calculate matches
     if (!is.null(by) && length(pattern) == 1 && is.na(pattern)) {
@@ -271,9 +271,10 @@ collapseHz <- function(x,
       # sort horizons by id name and top depth
       h <- h[order(h[[idn]], h[[hzd[1]]]),]
       
-      # replace horizons in parent SPC
-      replaceHorizons(x) <- h
     }
+    
+    # replace horizons in parent SPC
+    replaceHorizons(x) <- h
   }
   x
 }
