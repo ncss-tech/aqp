@@ -64,21 +64,18 @@ input SoilProfileCollection \code{x}.
 \examples{
 data(jacobs2000)
 
-# use existing generalized horizon labels
+# calculate a new SPC with genhz column based on patterns
 new_labels <- c("A", "E", "Bt", "Bh", "C")
 patterns <- c("A", "E", "B.*t", "B.*h", "C")
-
-# calculate a new SPC with genhz column based on patterns
 jacobs2000_gen <- generalizeHz(jacobs2000, new = new_labels, pattern = patterns)
 
-# collapse that SPC based on genhz
+# use existing generalized horizon labels
 i <- collapseHz(jacobs2000_gen, hzdesgn = "genhz")
 
 profile_id(i) <- paste0(profile_id(i), "_collapse")
 plot(c(i, jacobs2000), color = "genhz", name = "name", name.style = "center-center", cex.names = 1)
  
 # custom pattern argument  
- 
 j <- collapseHz(jacobs2000,
                 c(
                   `A` = "^A",
