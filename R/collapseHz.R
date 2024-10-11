@@ -178,6 +178,7 @@ collapseHz <- function(x,
       r <- rle(l)
     }
     
+    # only apply aggregation if there are adjacent horizons that match the target criteria
     if (any(r$lengths > 1)) {
       g <- unlist(lapply(seq_along(r$lengths), function(i) rep(i, r$lengths[i])))
       hidx <- unlist(lapply(seq_along(r$lengths), function(i) if (r$lengths[i] == 1) TRUE else rep(FALSE, r$lengths[i]))) & l
