@@ -144,6 +144,8 @@ collapseHz <- function(x,
   idn <- idname(x)
   hzd <- horizonDepths(x)
   
+  .screenDepths(x, hzd)
+  
   # use exact match of existing genhz labels as default in lieu of pattern
   if (is.null(pattern) & missing(by)) {
     by <- GHL(x, required = TRUE)

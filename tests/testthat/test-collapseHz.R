@@ -69,11 +69,12 @@ test_that("collapseHz works", {
                 
   # works on SPC with filled profile (1 horizon with NA depths)
   all_na <- subsetHz(jacobs2000_gen[1,], TRUE)
-  all_na$top <- NA
-  all_na$bottom <- NA
+  all_na$top <- NA_real_
+  all_na$bottom <- NA_real_
   expect_warning(na_nonna <- c(all_na, jacobs2000_gen[2:5,]))
-  expect_silent(f <- collapseHz(all_na, by = "genhz"))
-  expect_silent(n <- collapseHz(na_nonna, by = "genhz"))
+  expect_warning(f <- collapseHz(all_na, by = "genhz"), "contain NA")
+  na_nonna$top[2] <- 19
+  expect_warning(n <- collapseHz(na_nonna, by = "genhz"), "bottom depths are shallower than top")
   expect_equal(nrow(n), 14)
 
   
