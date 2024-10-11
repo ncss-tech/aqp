@@ -110,4 +110,31 @@ k <- collapseHz(jacobs2000,
 profile_id(k) <- paste0(profile_id(k), "_collapse_custom")
 
 unique(k$matrix_color_munsell)
+
+# custom aggregation function for matrix_color_munsell (returns data.frame)
+m <- collapseHz(jacobs2000,
+                pattern = c(
+                  `A` = "^A",
+                  `E` = "E",
+                  `Bt` = "[ABC]+t",
+                  `C` = "^C",
+                  `foo` = "bar"
+                ),
+                AGGFUN = list(
+                  matrix_color_munsell = function(x, top, bottom) {
+                    thk <- bottom - top
+                    if (length(x) > 1) {
+                      xord <- order(thk, decreasing = TRUE)
+                      data.frame(matrix_color_munsell = paste0(x, collapse = ";"),
+                                 n_matrix_color = length(x))
+                    } else {
+                      data.frame(matrix_color_munsell = x, 
+                                 n_matrix_color = length(x))
+                    }
+                  }
+                )
+              )
+profile_id(m) <- paste0(profile_id(m), "_collapse_custom")
+
+m$matrix_color_munsell.n_matrix_color
 }

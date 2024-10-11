@@ -86,6 +86,34 @@
 #' profile_id(k) <- paste0(profile_id(k), "_collapse_custom")
 #' 
 #' unique(k$matrix_color_munsell)
+#' 
+#' # custom aggregation function for matrix_color_munsell (returns data.frame)
+#' m <- collapseHz(jacobs2000,
+#'                 pattern = c(
+#'                   `A` = "^A",
+#'                   `E` = "E",
+#'                   `Bt` = "[ABC]+t",
+#'                   `C` = "^C",
+#'                   `foo` = "bar"
+#'                 ),
+#'                 AGGFUN = list(
+#'                   matrix_color_munsell = function(x, top, bottom) {
+#'                     thk <- bottom - top
+#'                     if (length(x) > 1) {
+#'                       xord <- order(thk, decreasing = TRUE)
+#'                       data.frame(matrix_color_munsell = paste0(x, collapse = ";"),
+#'                                  n_matrix_color = length(x))
+#'                     } else {
+#'                       data.frame(matrix_color_munsell = x, 
+#'                                  n_matrix_color = length(x))
+#'                     }
+#'                   }
+#'                 )
+#'               )
+#' profile_id(m) <- paste0(profile_id(m), "_collapse_custom")
+#' 
+#' m$matrix_color_munsell.n_matrix_color
+#
 #
 collapseHz <- function(x,
                        pattern = NULL,
@@ -98,46 +126,58 @@ collapseHz <- function(x,
   idn <- idname(x)
   hzd <- horizonDepths(x)
   
-  if (is.null(pattern)) {
-    pattern <- unique(as.character(x[[GHL(x, required = TRUE)]]))
-  } 
+  # use exact match of existing genhz labels as default in lieu of pattern
+  if (is.null(pattern) & missing(matchcolumn)) {
+    existing_genhz <- unique(as.character(x[[GHL(x, required = TRUE)]]))
+    pattern <- paste0("^", existing_genhz, "$")
+    labels <- existing_genhz
+  } else if (!missing(matchcolumn)) {
+    pattern <- NA
+  }
   
+  # if a named vector of patterns is given, use the names as new labels
   if (!is.null(names(pattern))) {
     labels <- names(pattern)
     pattern <- as.character(pattern)
   } else {
+    # otherwise, the patterns and labels are the same
     pattern <- as.character(pattern)
     labels <- pattern
   }
+  
+  # iterate over patterns
   for (p in seq(pattern)) {
+    
     h <- data.table::data.table(horizons(x))
+    
+    # calculate matches
     l <- FUN(x, pattern = pattern[p], hzdesgn = hzdesgn, na.rm = na.rm, ...)
+    
     if (any(l)) {
       r <- rle(l)
       g <- unlist(sapply(seq(r$lengths), function(i) rep(i, r$lengths[i])))
       hidx <- unlist(sapply(seq(r$lengths), function(i) if (r$lengths[i] == 1) TRUE else rep(FALSE, r$lengths[i]))) & l
       gidx <- g %in% unique(g[l]) & !hidx
+      naf <- names(AGGFUN)
       
+      # iterate over sets of layers needing aggregation within each matching group
       res <- h[gidx, c(list(hzdeptnew = suppressWarnings(min(.SD[[hzd[1]]], na.rm = na.rm)), 
                             hzdepbnew = suppressWarnings(max(.SD[[hzd[2]]], na.rm = na.rm))),
-                            sapply(colnames(.SD)[!colnames(.SD) %in% hzd], 
+                       
+                            # process numeric depth weighted averages w/ dominant condition otherwise                       
+                            sapply(colnames(.SD)[!colnames(.SD) %in% c(hzd, naf)],
                                    function(n, top, bottom) {
                                     v <- .SD[[n]]
                                     if (length(v) > 1) {
-                                      if (n %in% names(AGGFUN)) {
-                                        
-                                        # custom aggregation function (column name specific)
-                                        AGGFUN[[n]](v, top, bottom)
-                                        
-                                      } else if (!n %in% ignore_numerics && is.numeric(x)) {
-                                        
+                                      if (!n %in% ignore_numerics && is.numeric(x)) {
+
                                         # weighted average by thickness (numerics not in exclusion list)
                                         weighted.mean(v, bottom - top, na.rm = na.rm)
-                                        
+
                                       } else {
                                         # take thickest value
                                         # v[which.max(bottom - top)[1]]
-                                        
+
                                         # take dominant condition (based on sum of thickness)
                                         cond <- aggregate(bottom - top, by = list(v), sum, na.rm = na.rm)
                                         cond[[1]][which.max(cond[[2]])[1]]
@@ -145,34 +185,60 @@ collapseHz <- function(x,
                                     } else {
                                       v
                                     }
-                                  }, 
-                                  top = .SD[[hzd[1]]], 
-                                  bottom = .SD[[hzd[2]]])), 
+                                  },
+                                  top = .SD[[hzd[1]]],
+                                  bottom = .SD[[hzd[2]]]),
+                       
+                         # process custom aggregation functions (may return data.frames)
+                         do.call('c', lapply(colnames(.SD)[colnames(.SD) %in% naf], 
+                                             function(n, top, bottom) {
+                                                       out <- AGGFUN[[n]](.SD[[n]], top, bottom)
+                                                       if (!is.data.frame(out)) {
+                                                         out <- data.frame(out)
+                                                         colnames(out) <- n
+                                                       } else {
+                                                         colnames(out) <- paste0(n, ".", colnames(out))
+                                                       }
+                                                       out
+                                                                         },
+                                             top = .SD[[hzd[1]]], 
+                                             bottom = .SD[[hzd[2]]]))), 
                by = g[gidx]]
       
-      res$g <- NULL
+      # allow for replacing values as well as adding new values with data.frame AGGFUN
+      test1.idx <- na.omit(match(colnames(res), paste0(naf, ".", naf))) 
+      test2.idx <- na.omit(match(paste0(naf, ".", naf), colnames(res)))
+      colnames(res)[test2.idx] <- naf[test1.idx]
       
+      # remove grouping ID
+      res$g <- NULL
+
+      # determine matches that are only a single layer (no aggregation applied)      
       res2 <- h[hidx & l, ]
       res2$hzdeptnew <- res2[[hzd[1]]]
       res2$hzdepbnew <- res2[[hzd[2]]]
       res2[[hzd[1]]] <- NULL
       res2[[hzd[2]]] <- NULL
       
-      res3 <- rbind(res, res2)
-      
+      # combine matches
+      res3 <- data.table::rbindlist(list(res, res2), fill = TRUE)
       res3[[hzdesgn]] <- labels[p]
       
+      # combine matches with horizons that did not match
       h <- h[-which(g %in% unique(g[l]) | hidx),]
       h <- data.table::rbindlist(list(h, res3), fill = TRUE)
       
+      # replace depths
       hn <- !is.na(h$hzdeptnew) & !is.na(h$hzdepbnew)
       h[[hzd[1]]][hn] <- h$hzdeptnew[hn]
       h[[hzd[2]]][hn] <- h$hzdepbnew[hn]
       h$hzdeptnew <- NULL
       h$hzdepbnew <- NULL
       
+      # sort horizons by id name and top depth
       h <- h[order(h[[idn]], h[[hzd[1]]]),]
       
+      # replace horizons in parent SPC
       replaceHorizons(x) <- h
     }
   }
