@@ -11,15 +11,23 @@ test_that("collapseHz works", {
 
   # collapse that SPC based on genhz
   i <- collapseHz(jacobs2000_gen, hzdesgn = "genhz")
-  
   expect_equal(length(jacobs2000), length(i))
   expect_equal(nrow(i), 26)
   expect_equal(i[7, , .BOTTOM], c(15, 41, 61, 132, 140, 152))
 
+  # collapses adjacent horizons with same label
   i <- collapseHz(jacobs2000_gen, by = "genhz")
+  
+  # no effect, horizon designations are unique within profiles
+  j <- collapseHz(jacobs2000_gen, by = "name")
+  
   expect_equal(length(jacobs2000), length(i))
   expect_equal(nrow(i), 26)
+  expect_equal(nrow(j), 46)
   expect_equal(i[7, , .BOTTOM], c(15, 41, 61, 132, 140, 152))
+  expect_equal(j[7, , .BOTTOM], jacobs2000[7, , .BOTTOM])
+  expect_true(is.numeric(i$clay))
+  expect_true(is.numeric(j$clay))
   
   a_pattern <- c(`A` = "^A",
                  `E` = "E", 
@@ -29,6 +37,7 @@ test_that("collapseHz works", {
   x <- collapseHz(jacobs2000, a_pattern)
   expect_equal(length(jacobs2000), length(x))
   expect_equal(nrow(x), 29)
+  expect_true(is.numeric(x$clay))
   
   m <- collapseHz(jacobs2000,
                   pattern = a_pattern,
