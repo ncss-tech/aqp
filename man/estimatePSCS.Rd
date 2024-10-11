@@ -2,16 +2,16 @@
 % Please edit documentation in R/estimatePSCS.R
 \name{estimatePSCS}
 \alias{estimatePSCS}
-\title{Estimate boundaries of the particle size control section (U.S Soil Taxonomy;
-12th edition)}
+\title{Estimate boundaries of the U.S Soil Taxonomy Particle Size Control Section}
 \usage{
 estimatePSCS(
   p,
   hzdesgn = hzdesgnname(p, required = TRUE),
   clay.attr = hzmetaname(p, "clay", required = TRUE),
   texcl.attr = hztexclname(p, required = TRUE),
+  lieutex = hzmetaname(p, "lieutex"),
   tax_order_field = "tax_order",
-  bottom.pattern = "Cr|R|Cd",
+  bottom.pattern = "Cr|R|Cd|m",
   simplify = TRUE,
   ...
 )
@@ -20,13 +20,17 @@ estimatePSCS(
 \item{p}{A SoilProfileCollection}
 
 \item{hzdesgn}{Name of the horizon attribute containing the horizon
-designation. Default 'hzname'}
+designation. Default \code{hzdesgnname(p, required = TRUE)}}
 
 \item{clay.attr}{Name of the horizon attribute containing clay contents.
-Default 'clay'}
+Default \code{hzmetaname(p, "clay", required = TRUE)}}
 
 \item{texcl.attr}{Name of the horizon attribute containing textural class
-(used for finding sandy textures). Default 'texcl'}
+(used for finding sandy textures). Default \code{hztexclname(p, required = TRUE)}}
+
+\item{lieutex}{Optional data element used in addition to the horizon
+designation to identify kinds of organic soil material for soils with organic
+surfaces. Default: \code{hzmetaname(p, "lieutex")}}
 
 \item{tax_order_field}{Name of the site attribute containing taxonomic
 order; for handling PSCS rules for Andisols in lieu of lab data. May be NA
@@ -34,22 +38,26 @@ or column missing altogether, in which case Andisol PSC possibility is
 ignored.}
 
 \item{bottom.pattern}{Regular expression pattern to match a root-restrictive
-contact. Default matches Cr, R or Cd. This argument is passed to both
-estimateSoilDepth and getArgillicBounds.}
+contact. Default matches Cr, R, Cd or m. This argument is passed to both
+\code{minDepthOf()} and \code{getArgillicBounds()}.}
 
-\item{simplify}{Return a length 2 vector with upper and lower boundary when p has length 1? Default TRUE.}
+\item{simplify}{Return a length 2 vector with upper and lower boundary when
+p has length 1? Default TRUE.}
 
 \item{...}{additional arguments are passed to getArgillicBounds()}
 }
 \value{
-A numeric vector (when \code{simplify=TRUE}) containing the top and bottom depth of the particle
+A numeric vector (when \code{simplify=TRUE}) containing the top and bottom
+depth of the particle
 size control section. First value is top, second value is bottom.
-If \code{p} contains more than one profile, the result is a data.frame with profile ID plus PSCS top and bottom depths.
+If \code{p} contains more than one profile, the result is a data.frame with
+profile ID plus PSCS top and bottom depths.
 }
 \description{
 Estimates the upper and lower boundary of the particle size control section
-by applying a programmatic version of the particle size control section key
-from the Keys to Soil Taxonomy (12th edition).
+for Mineral or Organic soilsby applying a programmatic version of the
+particle size control section key from the Keys to Soil Taxonomy (13th edition).
+See details for assumptions and required data elements.
 }
 \details{
 Requires information to identify argillic horizons (clay contents, horizon
@@ -57,7 +65,16 @@ designations) with \code{getArgillicBounds()} as well as the presence of
 plow layers and surface organic soil material. Any
 \code{getArgillicBounds()} arguments may be passed to \code{estimatePSCS}.
 
-Requires information on taxonomic order (to handle andisols).
+Also, requires information on taxonomic order to handle Andisols.
+
+In aqp 2.1, particle size control sections of organic soils Histosols and
+Histels are supported. This requires setting the \code{"lieutex"} horizon metadata
+column using \verb{hzmetaname<-()} Horizon designations containing \code{"f"} or \code{"W"}
+are  recognized as permafrost and water layers, respectively, for application
+of the organic soils key to control sections. In lieu textures \code{"SPM"} and
+\code{"PEAT"} are used to identify low density organic materials used for surface
+tier thickness. To avoid using the 160 cm surface tier, set the \code{"lieutex"}
+column to any column that does not contain \code{"SPM"} or \code{"PEAT"} values.
 
 WARNING: Soils in arenic or grossarenic subgroups, with fragipans, or with
 strongly contrasting PSCs may not be classified correctly. The author would
@@ -76,13 +93,28 @@ hzmetaname(sp1, 'clay') <- 'prop'
 
 x <- estimatePSCS(sp1)
 x
+
+# change horizon texture and set inlieu texture column to turn
+# first profile into an organic soil
+sp1$name[1:6] <- c("Oi1", "Oi2", "Oi3", "Oaf", "Cf1", "Cf2")
+sp1$texture <- as.character(sp1$texture)
+sp1$texture[1:6] <- c("PEAT", "PEAT", "PEAT", "MUCK", "GRVLS", "GRVLS")
+sp1$bottom[6] <- 200
+hzmetaname(sp1, 'lieutex') <- 'texture'
+
+y <- estimatePSCS(sp1[1, ], simplify = FALSE)
+
+# 74cm lower boundary is 25cm past the upper boundary of permafrost (49cm)
+# but minimum depth is 100cm unless there is a root-limiting layer
+y
+
 }
 \references{
 Soil Survey Staff. 2014. Keys to Soil Taxonomy, 12th ed.
 USDA-Natural Resources Conservation Service, Washington, DC.
 }
 \seealso{
-\code{getArgillicBounds}, \code{getSurfaceHorizonDepth}
+\code{\link[=getArgillicBounds]{getArgillicBounds()}}, \code{\link[=getSurfaceHorizonDepth]{getSurfaceHorizonDepth()}}
 }
 \author{
 Andrew Gene Brown
