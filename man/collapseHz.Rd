@@ -6,7 +6,7 @@
 \usage{
 collapseHz(
   x,
-  pattern,
+  pattern = NULL,
   hzdesgn = hzdesgnname(x, required = TRUE),
   FUN = function(x, pattern, hzdesgn, ...) grepl(pattern, x[[hzdesgn]], ignore.case =
     FALSE),
@@ -19,8 +19,8 @@ collapseHz(
 \arguments{
 \item{x}{A \emph{SoilProfileCollection}}
 
-\item{pattern}{\emph{character}. A regular expression pattern to match in \code{hzdesgn}
-column}
+\item{pattern}{\emph{character}. A regular expression pattern to match in
+\code{hzdesgn} column. Default}
 
 \item{hzdesgn}{\emph{character}. Any character column containing horizon-level
 identifiers. Default is estimated using \code{guessHzDesgnName()}.}
@@ -38,9 +38,9 @@ bottom depths). Default: \code{NULL} applies weighted.mean() to all numeric
 columns not listed in \code{ignore_numerics} and takes the thickest value for all
 other columns.}
 
-\item{ignore_numerics}{\emph{character}. Vector of column names that contain numeric
-values which should \emph{not} be aggregated using \code{weighted.mean()}. For example,
-soil color "value" and "chroma".}
+\item{ignore_numerics}{\emph{character}. Vector of column names that contain
+numeric  values which should \emph{not} be aggregated using \code{weighted.mean()}.
+For example, soil color "value" and "chroma".}
 
 \item{na.rm}{\emph{logical}. If \code{TRUE} \code{NA} values are ignored when calculating
 min/max boundaries for each group and in weighted averages. If \code{FALSE} \code{NA}
@@ -64,33 +64,53 @@ input SoilProfileCollection \code{x}.
 \examples{
 data(jacobs2000)
 
-a <- collapseHz(jacobs2000, c(`A` = "^A", 
-                              `E` = "E", 
-                              `Bt` = "[ABC]+t", 
-                              `C` = "^C", 
-                              `foo` = "bar"))
-b <- jacobs2000
-profile_id(a) <- paste0(profile_id(a), "_collapse")
+# use existing generalized horizon labels
+new_labels <- c("A", "E", "Bt", "Bh", "C")
+patterns <- c("A", "E", "B.*t", "B.*h", "C")
 
-plot(c(a, b), color = "clay")
+# calculate a new SPC with genhz column based on patterns
+jacobs2000_gen <- generalizeHz(jacobs2000, new = new_labels, pattern = patterns)
+
+# collapse that SPC based on genhz
+i <- collapseHz(jacobs2000_gen, hzdesgn = "genhz")
+
+profile_id(i) <- paste0(profile_id(i), "_collapse")
+plot(c(i, jacobs2000), color = "genhz", name = "name", name.style = "center-center", cex.names = 1)
+ 
+# custom pattern argument  
+ 
+j <- collapseHz(jacobs2000,
+                c(
+                  `A` = "^A",
+                  `E` = "E",
+                  `Bt` = "[ABC]+t",
+                  `C` = "^C",
+                  `foo` = "bar"
+                ))
+profile_id(j) <- paste0(profile_id(j), "_collapse")
+plot(c(j, jacobs2000), color = "clay")
 
 # custom aggregation function for matrix_color_munsell
+k <- collapseHz(jacobs2000,
+                pattern = c(
+                  `A` = "^A",
+                  `E` = "E",
+                  `Bt` = "[ABC]+t",
+                  `C` = "^C",
+                  `foo` = "bar"
+                ),
+                AGGFUN = list(
+                  matrix_color_munsell = function(x, top, bottom) {
+                    thk <- bottom - top
+                    if (length(x) > 1) {
+                      xord <- order(thk, decreasing = TRUE)
+                      paste0(paste0(x[xord], " (t=", thk[xord], ")"), collapse = ", ")
+                    } else
+                      x
+                  }
+                )
+              )
+profile_id(k) <- paste0(profile_id(k), "_collapse_custom")
 
-a2 <- collapseHz(jacobs2000, c(`A` = "^A", 
-                              `E` = "E", 
-                              `Bt` = "[ABC]+t", 
-                              `C` = "^C", 
-                              `foo` = "bar"), 
-               AGGFUN = list(matrix_color_munsell = function(x, top, bottom) {
-                              thk <- bottom - top
-                              if (length(x) > 1) {
-                               xord <- order(thk, decreasing = TRUE)
-                               paste0(paste0(x[xord], " (t=", thk[xord], ")"), collapse = ", ")
-                              } else x
-                             })
-               )
-profile_id(a2) <- paste0(profile_id(a), "_collapse_custom")
-
-unique(a2$matrix_color_munsell)
-
+unique(k$matrix_color_munsell)
 }
