@@ -77,7 +77,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Replaces horizon data with new data.frame object.</p>
+    <p>Replaces horizon data with new <code>data.frame</code> object.</p>
     </div>
 
     <div id="ref-usage">
@@ -90,7 +90,7 @@
 
 
 <dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
-<dd><p>A SoilProfileCollection</p></dd>
+<dd><p>A <code>SoilProfileCollection</code></p></dd>
 
 
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
@@ -115,7 +115,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 23</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># remove all but essential ones</span></span></span>
-<span class="r-in"><span><span class="fu">replaceHorizons</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,<span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>,<span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">replaceHorizons</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fu"><a href="hzidname.html">hzidname</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># inspect result (a clean slate)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
