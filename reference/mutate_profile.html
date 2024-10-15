@@ -81,7 +81,9 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutate_profile</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, horizon_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutate_profile</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, col_names <span class="op">=</span> <span class="cn">NULL</span>, horizon_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">mutate_profile_raw</span><span class="op">(</span><span class="va">object</span>, <span class="va">expr</span>, col_names <span class="op">=</span> <span class="cn">NULL</span>, horizon_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -96,8 +98,16 @@
 <dd><p>A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g <code>mutate_profile(hzdept = max(hzdept) - hzdept)</code></p></dd>
 
 
+<dt id="arg-col-names">col_names<a class="anchor" aria-label="anchor" href="#arg-col-names"></a></dt>
+<dd><p>character. Optional column names. Should match the number of expressions in <code>...</code>.</p></dd>
+
+
 <dt id="arg-horizon-level">horizon_level<a class="anchor" aria-label="anchor" href="#arg-horizon-level"></a></dt>
 <dd><p>logical. If <code>TRUE</code> results of expressions are added to the SoilProfileCollection's horizon slot, if <code>FALSE</code> the results are added to the site slot. If <code>NULL</code> (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the <em>first</em> and <em>last</em> profile in the collection.</p></dd>
+
+
+<dt id="arg-expr">expr<a class="anchor" aria-label="anchor" href="#arg-expr"></a></dt>
+<dd><p>A list of expressions in terms of column names in site or horizon table of <code>object</code></p></dd>
 
 </dl></div>
     <div id="value">
@@ -113,6 +123,83 @@
     <p>Andrew G. Brown.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">mutate_profile</span><span class="op">(</span><span class="va">sp4</span>, clay_wtd_average <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean</a></span><span class="op">(</span><span class="va">clay</span>, <span class="va">bottom</span> <span class="op">-</span> <span class="va">top</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SoilProfileCollection with 10 profiles and 30 horizons</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> profile ID: id  |  horizon ID: hzID </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 16 - 49 cm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----- Horizons (6 / 30 rows  |  10 / 14 columns) -----</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      id hzID top bottom name   K   Mg  Ca CEC_7 ex_Ca_to_Mg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  colusa    1   0      3    A 0.3 25.7 9.0  23.0        0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  colusa    2   3      8  ABt 0.2 23.7 5.6  21.4        0.23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  colusa    3   8     30  Bt1 0.1 23.2 1.9  23.7        0.08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  colusa    4  30     42  Bt2 0.1 44.3 0.3  43.0        0.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   glenn    5   0      9    A 0.2 21.9 4.4  18.8        0.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   glenn    6   9     34   Bt 0.3 18.9 4.5  27.5        0.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [... more horizons ...]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----- Sites (6 / 10 rows  |  2 / 2 columns) -----</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         id clay_wtd_average</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     colusa         37.19048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      glenn         31.61765</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      kings         21.90000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mariposa         30.32653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  mendocino         21.93333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       napa         16.40000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [... more sites ...]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spatial Data:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [EMPTY]</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">jacobs2000</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## col_names allows for column names to be calculated</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">mutate_profile</span><span class="op">(</span><span class="va">jacobs2000</span>, <span class="va">bottom</span> <span class="op">-</span> <span class="va">top</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">bottom</span> <span class="op">-</span> <span class="va">top</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                    col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"relthk"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">relthk28</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  18.00000  42.91549  78.79812 129.62911 152.38967 155.28169 212.26761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8]  18.00000  45.91549  83.78404 121.60563 144.42723 212.31925  15.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15]  24.91429  63.85714  83.63429 111.52000 164.36000 174.05714  20.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22]  52.90148  78.73892 129.61084 164.35961 184.18719 202.08867  28.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29]  60.84699 108.66667 134.40437 182.26230  18.00000  45.89286  75.72619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] 103.54762 118.38095 167.29167  15.00000  40.90132  47.73026  60.68421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43]  90.59868 131.40132 139.13158 151.07895</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># mutate_profile_raw allows for lists of expressions to be evaluated</span></span></span>
+<span class="r-in"><span><span class="va">master_desgn</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"O"</span>, <span class="st">"A"</span>, <span class="st">"E"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"R"</span>, <span class="st">"L"</span>, <span class="st">"M"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">thk_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"thk_"</span>, <span class="va">master_desgn</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate thickness for each horizon</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">thk</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">bottom</span> <span class="op">-</span> <span class="va">x</span><span class="op">$</span><span class="va">top</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## construct an arbitrary number of expressions using variable inputs</span></span></span>
+<span class="r-in"><span><span class="va">ops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">master_desgn</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">substitute</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">thk</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="va">PATTERN</span>, <span class="va">name</span><span class="op">)</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PATTERN <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">ops</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">thk_names</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># do mutation</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">mutate_profile_raw</span><span class="op">(</span><span class="va">x</span>, <span class="va">ops</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="site.html">site</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, <span class="va">thk_names</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     id thk_O thk_A thk_E thk_B thk_C thk_R thk_L thk_M</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 92-1     0    18    25   113    60     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 92-2     0    18    28    99    68     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 92-3     0    25    49   111     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 92-4     0    20     0     0   183     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 92-5     0    28    81    26    48     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 92-6     0    46    86    64     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 92-7     0    15    97    28    12     0     0     0</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
