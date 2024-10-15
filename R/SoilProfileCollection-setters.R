@@ -430,14 +430,16 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 setGeneric('replaceHorizons<-', function(object, value)
   standardGeneric('replaceHorizons<-'))
 
-#' Replace Data in Horizon Slot
+#' @title Replace Data in Horizon Slot
 #'
 #' @name replaceHorizons<-
 #'
-#' @description Replaces horizon data with new data.frame object.
+#' @description Replaces horizon data with new `data.frame` object.
 #'
-#' @param object A SoilProfileCollection
-#' @param value An object inheriting \code{data.frame}
+#' @param object A `SoilProfileCollection`
+#' 
+#' @param value An object inheriting `data.frame`
+#' 
 #' @aliases replaceHorizons<-,SoilProfileCollection-method
 #' @docType methods
 #'
@@ -459,7 +461,7 @@ setGeneric('replaceHorizons<-', function(object, value)
 #' length(horizonNames(sp2))
 #'
 #' # remove all but essential ones
-#' replaceHorizons(p) <- horizons(p)[,c(idname(p),hzidname(p),horizonDepths(p))]
+#' replaceHorizons(p) <- horizons(p)[,c(idname(p), hzidname(p), horizonDepths(p))]
 #'
 #' # inspect result (a clean slate)
 #' horizons(p)
