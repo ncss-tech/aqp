@@ -6,6 +6,7 @@
    * Any SoilProfileCollection objects previously written to file (.rda, .rds) with aqp <2.1.x will need to be rebuilt using `rebuildSPC()` due to changes to S4 object structure
  * `estimatePSCS()` gains argument `"lieutex"` for in lieu textures which are used in the new routine for identification of the particle size control section of organic soils
  * new function `collapseHz()` combines and aggregates data for adjacent horizons matching a pattern or sharing a common ID
+ * new function `mutate_profile_raw()` for building sets of dynamic mutate expressions. Also `mutate_profile()` gains col_names argument for dynamic naming of columns.
 
 # aqp 2.0.4 (2024-07-30)
  * CRAN release
