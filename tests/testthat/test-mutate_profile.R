@@ -35,7 +35,30 @@ test_that("transform & mutate_profile", {
   # forcing horizon level result into site produces an error
   expect_error({res3 <- mutate_profile(trunc(res, 0, 5), rt2 = (bottom - top) / sum(thickness), horizon_level = FALSE)})
   
-  # however forcing a site-level result into horizon works
-  res4 <- mutate_profile(trunc(res, 0, 5), rt3 = sum((bottom - top) / sum(thickness)), horizon_level = TRUE)
-  expect_equal(length(res4$rt3), nrow(res4))
+  # however forcing a site-level result into horizon works (using custom column name)
+  res4 <- mutate_profile(trunc(res, 0, 5), sum((bottom - top) / sum(thickness)), col_names = "foo", horizon_level = TRUE)
+  expect_equal(length(res4$foo), nrow(res4))
+})
+
+test_that("mutate_profile_raw", {
+  data(jacobs2000)
+  set.seed(123)
+  x <- mutate_profile(jacobs2000, bottom - top, 
+                      col_names = paste0("thk", floor(runif(1, 0, 100))))
+  expect_false(is.null(x$thk28))
+  
+  # example with dynamic number of columns and names
+  master_desgn <- c("O", "A", "E", "B", "C", "R", "L", "M")
+  thk_names <- paste0("thk_", master_desgn)
+  
+  x$thk <- x$bottom - x$top
+  
+  ## construct an arbitrary number of expressions using variable inputs
+  ops <- lapply(master_desgn, function(x) substitute(sum(thk[grepl(VAR, name)], na.rm = TRUE), list(VAR = x)))
+  names(ops) <- thk_names
+  
+  # do mutation
+  y <- mutate_profile_raw(x, ops)
+  
+  expect_true(all(c(idname(y), thk_names) %in% siteNames(y)))
 })
