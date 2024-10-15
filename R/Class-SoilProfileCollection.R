@@ -9,28 +9,24 @@
 #' @slot metadata list.
 #' @slot horizons data.frame.
 #' @slot site data.frame.
-#' @slot sp SpatialPoints.
 #' @slot diagnostic data.frame.
 #' @slot restrictions data.frame.
+#' 
+#' @details
+#' After aqp 2.0.2, the `@sp` slot was removed from the SoilProfileCollection object. If you run into errors related to old object definitions, use `rebuildSPC()` on the problematic object.
+#' 
 #' @aliases SoilProfileCollection-class
 #' @rdname SoilProfileCollection-class
-#' @importFrom sp SpatialPoints proj4string coordinates proj4string<- coordinates<-
-#' @importClassesFrom sp SpatialPoints SpatialPointsDataFrame
 setClass(
   Class = 'SoilProfileCollection',
   representation = representation(
     idcol = 'character', # column name containing IDs
     hzidcol = 'character', # column name containing unique horizon IDs
     depthcols = 'character', # 2 element vector with column names for hz top, bottom
-
     metadata = 'list', # list with key-value mapping
-
     horizons = 'data.frame', # all horizons sorted by ID & top depth
-
     site = 'data.frame', # data about the sampling sites
-
-    sp = 'SpatialPoints', # spatial data stored here, initialized as 'empty' sp object
-
+    # sp = 'NULL', # no longer used, formerly 'empty' sp object
     diagnostic = 'data.frame',# (optional) diagnostic horizons are stored here
     restrictions = 'data.frame' # (optional) restrictions are stored here
   ),
@@ -47,7 +43,7 @@ setClass(
                           top = numeric(0), bottom = numeric(0),
                           stringsAsFactors = FALSE),
     site = data.frame(id = character(0), stringsAsFactors = FALSE),
-    sp = sp::SpatialPoints(data.frame(x = 0, y = 0))[-1, ],
+    # sp = NULL, 
     diagnostic = data.frame(stringsAsFactors = FALSE),
     restrictions = data.frame(stringsAsFactors = FALSE)
   ),
@@ -61,18 +57,18 @@ setClass(
 # c/o: https://gis.stackexchange.com/questions/291069/creating-empty-spatialpoints-or-spatialpointsdataframe-in-r
 # old: new('SpatialPoints')
 # new: SpatialPoints(data.frame(x = 0, y = 0))[-1,]
+# new new: NULL
 
 #' Constructor for the SoilProfileCollection object
 #'
-#' @param idcol character Profile ID Column Name
-#' @param hzidcol character Horizon ID Column Name
-#' @param depthcols character, length 2 Top and Bottom Depth Column Names
-#' @param metadata list, metadata including data.frame class in use and depth units
-#' @param horizons data.frame An object inheriting from data.frame containing Horizon data.
-#' @param site data.frame An object inheriting from data.frame containing Site data.
-#' @param sp SpatialPoints A SpatialPoints object. No longer used in aqp 2+, see `?initSpatial`
-#' @param diagnostic data.frame An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}
-#' @param restrictions data.frame An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}
+#' @param idcol character. Profile ID Column Name
+#' @param hzidcol character. Horizon ID Column Name
+#' @param depthcols character. length 2 Top and Bottom Depth Column Names
+#' @param metadata list. metadata including data.frame class in use and depth units
+#' @param horizons data.frame. An object inheriting from data.frame containing Horizon data.
+#' @param site data.frame. An object inheriting from data.frame containing Site data.
+#' @param diagnostic data.frame. An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}
+#' @param restrictions data.frame. An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}
 #'
 #' @description In general, one should use \code{depths()} to initiate a SoilProfileCollection object from data. However, sometimes there are instances where either an empty, or very specific, object is needed. If that is the case, the general constructor \code{SoilProfileCollection} is available.
 #'
@@ -184,7 +180,7 @@ setClass(
              stringsAsFactors = FALSE
            ),
            site = data.frame(id = character(0), stringsAsFactors = FALSE),
-           sp = new('SpatialPoints'),
+           # sp = NULL, 
            diagnostic = data.frame(stringsAsFactors = FALSE),
            restrictions = data.frame(stringsAsFactors = FALSE)) {
 
@@ -227,7 +223,7 @@ setClass(
       metadata = metadata,
       horizons = .as.data.frame.aqp(horizons, hzclass),
       site = .as.data.frame.aqp(site, hzclass),
-      sp = sp,
+      # sp = sp,
       diagnostic = .as.data.frame.aqp(diagnostic, hzclass),
       restrictions = .as.data.frame.aqp(restrictions, hzclass)
     )
@@ -948,10 +944,12 @@ setMethod("site", signature(object = "SoilProfileCollection"),
 setGeneric("diagnostic_hz", function(object, ...)
   standardGeneric("diagnostic_hz"))
 
-#' Retrieve diagnostic data from SoilProfileCollection
+#' Get or Set Diagnostic Horizon data in a SoilProfileCollection
 #'
-#' @description Get diagnostic feature data from SoilProfileCollection. Result is returned in the same \code{data.frame} class used to initially construct the SoilProfileCollection.
-#'
+#' @description Diagnostic horizons describe features of the soil relevant to taxonomic classification. A single profile may have multiple diagnostic features or horizons, each of which may be comprised of multiple horizons.
+#' 
+#'  - `diagnostic_hz()` (get method): Get diagnostic feature data from a SoilProfileCollection. 
+#'  
 #' @param object a SoilProfileCollection
 #'
 #' @docType methods
@@ -968,9 +966,11 @@ setMethod(f = 'diagnostic_hz', signature(object = 'SoilProfileCollection'),
 setGeneric("restrictions", function(object, ...)
   standardGeneric("restrictions"))
 
-#' Retrieve restriction data from SoilProfileCollection
+#' Get or Set Restriction data in a SoilProfileCollection
 #'
-#' @description Get restriction data from SoilProfileCollection. Result is returned in the same \code{data.frame} class used to initially construct the SoilProfileCollection.
+#' @description Restrictions describe root-limiting features in the soil. A single profile may have multiple restrictions.
+#' 
+#'  - `restrictions()` (get method): Get restriction data from a SoilProfileCollection. 
 #'
 #' @param object a SoilProfileCollection
 #' @docType methods

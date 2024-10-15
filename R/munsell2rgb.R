@@ -181,8 +181,25 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 
 
 
-
-
+# internally used function for snapping a vector of user-supplied values
+# to a known subset via absolute distance
+# NA safely propagated
+.snapValid <- function(s, v) {
+  # rows are distances by the_value
+  .dist <- outer(s, v, function(i, j) {abs(i - j)})
+  
+  # index to snapped values, safely handle NA
+  idx <- apply(.dist, 1, function(i) {
+    if(all(is.na(i))) {
+      return(NA)
+    } else {
+      return(which.min(i))
+    }
+  })
+  
+  # replace with snapped + NA
+  return(v[idx])
+}
 
 
 
@@ -232,69 +249,56 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' @examples
 #' 
 #' # neutral hues (N) can be defined with chroma of 0 or NA 
-#' g <- expand.grid(hue='N', value=2:8, chroma=0, stringsAsFactors=FALSE)
+#' g <- expand.grid(hue='N', value = 2:8, chroma = 0, stringsAsFactors = FALSE)
 #' (m <- munsell2rgb(g$hue, g$value, g$chroma))
 #' soilPalette(m)
 #' 
-#' # back-transform
-#' rgb2munsell(t(col2rgb(m)) / 255)
+#' # back-transform to Munsell notation
+#' col2Munsell(t(col2rgb(m)) / 255)
 #' 
 #' 
 #' # basic example
-#' d <- expand.grid(hue='10YR', value=2:8, chroma=1:8, stringsAsFactors=FALSE)
+#' d <- expand.grid(hue = '10YR', value = 2:8, chroma = 1:8, stringsAsFactors = FALSE)
 #' d$color <- with(d, munsell2rgb(hue, value, chroma))
 #' 
 #' # similar to the 10YR color book page
-#' plot(value ~ chroma, data=d, col=d$color, pch=15, cex=3)
+#' plot(value ~ chroma, data = d, col = d$color, pch = 15, cex = 3, las = 1)
 #' 
 #' # multiple pages of hue:
-#' hues <- c('2.5YR','5YR','7.5YR','10YR')
-#' d <- expand.grid(hue=hues, value=c(2, 2.5, 3:8), chroma=seq(2,8,by=2), stringsAsFactors=FALSE)
+#' hues <- c('2.5YR', '5YR', '7.5YR', '10YR')
+#' d <- expand.grid(
+#'   hue = hues, 
+#'   value = c(2, 2.5, 3:8), 
+#'   chroma = seq(2, 8, by = 2), 
+#'   stringsAsFactors = FALSE
+#' )
 #' # convert Munsell -> sRGB
 #' d$color <- with(d, munsell2rgb(hue, value, chroma))
 #' 
 #' # extract CIELAB coordinates
-#' with(d, munsell2rgb(hue, value, chroma, returnLAB=TRUE))
+#' with(d, munsell2rgb(hue, value, chroma, returnLAB = TRUE))
 #' 
 #' # plot: note that we are setting panel order from red --> yellow
 #' library(lattice)
-#' xyplot(value ~ factor(chroma) | factor(hue, levels=hues),
-#'        main="Common Soil Colors", layout=c(4,1), scales=list(alternating=1),
-#'        strip=strip.custom(bg=grey(0.85)),
-#'        data=d, as.table=TRUE, subscripts=TRUE, xlab='Chroma', ylab='Value',
-#'        panel=function(x, y, subscripts, ...)
-#'        {
-#'          panel.xyplot(x, y, pch=15, cex=4, col=d$color[subscripts])
-#'        }
+#' xyplot(
+#'   value ~ factor(chroma) | factor(hue, levels = hues),
+#'   main = "Common Soil Colors", layout = c(4, 1), scales = list(alternating = 1),
+#'   strip = strip.custom(bg = grey(0.85)),
+#'   data = d, as.table = TRUE, subscripts = TRUE, 
+#'   xlab = 'Chroma', ylab = 'Value',
+#'   panel = function(x, y, subscripts, ...) {
+#'     panel.xyplot(x, y, pch = 15, cex = 4, col = d$color[subscripts])
+#'   }
 #' )
+#'
 #' 
-#' 
-#' # soils example
-#' data(sp1)
-#' 
-#' # convert colors
-#' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
-#' 
-#' # simple plot, may need to tweak gamma-correction...
-#' image(matrix(1:nrow(sp1)), axes=FALSE, col=sp1$soil_color, main='Soil Colors')
-#' 
-#' # convert into a more useful color space
-#' # you will need the colorspace package for this to work
-#' if(require(colorspace)) {
-#'   # keep RGB triplets from conversion
-#'   sp1.rgb <- with(sp1, munsell2rgb(hue, value, chroma, return_triplets=TRUE))
-#'   
-#'   # convert into LAB color space
-#'   sp1.lab <- as(with(sp1.rgb, sRGB(r,g,b)), 'LAB')
-#'   plot(sp1.lab)
-#' }
 #' 
 #' # convert a non-standard color to closest "chip" in `munsell` look-up table
 #' getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
-#' # convert directly to R color
+#' 
+#' # convert directly to hex notation of sRGB
 #' getClosestMunsellChip('7.9YR 2.7/2.0')
-
-
+#' 
 munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue = 1, return_triplets = FALSE, returnLAB = FALSE) {
   ## important: change the default behavior of data.frame and melt
   opt.original <- options(stringsAsFactors = FALSE)
@@ -336,29 +340,48 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   ## they will typically be missing chroma or have some arbitrary number
   ## set it to 0 for correct matching
   N.idx <- which(the_hue == 'N')
-  if(length(N.idx) > 0)
+  if(length(N.idx) > 0) {
     the_chroma[N.idx] <- 0
+  }
+    
   
-  # value / chroma should be within unique set of allowed chips
-  valid.value <- unique(as.character(munsell$value))
-  valid.chroma <- unique(as.character(munsell$chroma))
-  
-  ## warn if non-standard notation
-  
-  ## TODO: should rounding be enabled by default for backwards compatibility?
-  ## TODO: rounding is wrong with e.g. 10YR 2.6 / 3 --> closest value is 2.5
-  
-  # value
-  if(any(! as.character(na.omit(the_value)) %in% valid.value)) {
-    warning("non-standard notation in Munsell value, use getClosestMunsellChip()", call. = FALSE)
-    the_value <- ifelse(as.character(the_value) %in% valid.value, the_value, round(the_value))
+  ## any other hue with 0 chroma should be interpreted as N
+  idx <- which(the_hue != 'N' & the_chroma == 0)
+  if(length(idx > 0)) {
+    the_hue[idx] <- 'N'
   }
   
-  # chroma
-  if(any(! as.character(na.omit(the_chroma)) %in% valid.chroma)) {
-    warning("non-standard notation in Munsell chroma, use getClosestMunsellChip()", call. = FALSE)
-    the_chroma <- round(the_chroma)
+  
+  ## value / chroma should be within unique set of allowed chips
+  
+  # the valid range depends on the latest version of the munsell LUT
+  # https://github.com/ncss-tech/aqp/issues/318
+  valid.value <- unique(munsell$value)
+  valid.chroma <- unique(munsell$chroma)
+  
+  
+  # test Munsell values
+  if(any(! na.omit(the_value) %in% valid.value)) {
+    warning("non-standard notation in Munsell value, snapping to the nearest available value\n consider using getClosestMunsellChip()", call. = FALSE)
+    
+    ## TODO: optimize by only computing distances for non-standard Munsell value
+    
+    # snap supplied Munsell value to valid value via absolute distance
+    # NA are safely propagated
+    the_value <- .snapValid(the_value, valid.value)
   }
+  
+  # test Munsell chroma
+  if(any(! na.omit(the_chroma) %in% valid.chroma)) {
+    warning("non-standard notation in Munsell chroma, snapping to the nearest available chroma\n consider using getClosestMunsellChip()", call. = FALSE)
+    
+    ## TODO: optimize by only computing distances for non-standard Munsell chroma
+    
+    # snap supplied Munsell chroma to valid chroma via absolute distance
+    # NA are safely propagated
+    the_chroma <- .snapValid(the_chroma, valid.chroma)
+  }
+  
   
   
   ## join new data with look-up table
@@ -371,15 +394,22 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   )
   
   ## benchmarks:
-  # plyr::join 2x faster than base::merge
-  # data.table::merge (with conversion to/from) 5x faster than base::merge
+  # plyr::join() 2x faster than base::merge
+  # data.table::merge() (with conversion to/from) 5x faster than base::merge()
+  
   
   ## TODO: maybe more efficient with keys
   # round-trip through data.table is still faster
   d <- data.table::as.data.table(d)
   munsell <- data.table::as.data.table(munsell)
+  
+  
+  ## TODO: optimize by first filtering full lookup table on e.g. hue
+  
+  
   # join
   res <- merge(d, munsell, by = c('hue','value','chroma'), all.x = TRUE, sort = FALSE)
+  
   # back to data.frame
   res <- as.data.frame(res)
   
@@ -405,8 +435,10 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
     alpha <- maxColorValue
   }
   
-  # convert to R color
-  res$soil_color <- NA # init an empy column
+  
+  ## convert to hex notation
+  # init an empty column
+  res$soil_color <- NA
   
   # account for missing values if present: we have to do this because rgb() doesn't like NA
   if(length(rgb.na > 0)) {

@@ -50,7 +50,7 @@ jacobs2000$c_horizon_color <- profileApply(jacobs2000, function(p) {
 jacobs2000$melan <- profileApply(jacobs2000, function(p) {
 
   # sum the melanization index over the 0-100cm interval
-  p0_100 <- segment(p, 0:100)
+  p0_100 <- hz_segment(p, 0:100)
 
   ccol <- parseMunsell(p$c_horizon_color, convertColors = FALSE)
 

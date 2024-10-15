@@ -77,8 +77,8 @@ test_that("estimatePSCS()", {
 })
 
 test_that("estimatePSCS() thin soil profile with O horizon", {
-  expect_equal(estimatePSCS(x, clay.attr = 'prop', texcl.attr = "foo", hzdesgn = 'name'), c(13, 40))
-  expect_equal(estimatePSCS(c(q,x), clay.attr = 'prop', texcl.attr = "foo", hzdesgn = 'name'),
+  expect_equal(estimatePSCS(x, clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'name'), c(13, 40))
+  expect_equal(estimatePSCS(c(q,x), clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'name'),
                data.frame(id = c("706300", "P002"), 
                           pscs_top = c(13, 30),
                           pscs_bottom = c(40, 59)))
@@ -88,4 +88,14 @@ test_that("estimatePSCS() multiple profiles",{
   e <- estimatePSCS(sp1, clay.attr = 'prop', texcl.attr = "texture", hzdesgn = 'name')
   expect_equal(e$pscs_top, c(49, 30, 2, 32, 5, 31, 25, 27, 28))
   expect_equal(e$pscs_bottom, c(89, 59, 52, 62, 55, 106, 100, 102, 103))
+})
+
+test_that("estimatePSCS() organic profiles",{
+  sp1@horizons$name[1:60] <- "Oi"
+  sp1@horizons$name[48:51] <- "W"
+  sp1@horizons$name[57:60] <- "Oif"
+  horizons(sp1)$lieutex <- NA
+  oo <- estimatePSCS(sp1, hzdesgn = "name", clay.attr = "prop", texcl.attr = "texture", lieutex = "texture")
+  expect_equal(oo$pscs_top, rep(0, 9))
+  expect_equal(oo$pscs_bottom, c(89, 59, 67, 62, 68, 160, 160, 68, 133))
 })

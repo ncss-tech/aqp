@@ -6,9 +6,9 @@
 \usage{
 getArgillicBounds(
   p,
-  hzdesgn = "hzname",
-  clay.attr = "clay",
-  texcl.attr = "texcl",
+  hzdesgn = hzdesgnname(p, required = TRUE),
+  clay.attr = hzmetaname(p, "clay", required = TRUE),
+  texcl.attr = hztexclname(p, required = TRUE),
   require_t = TRUE,
   bottom.pattern = "Cr|R|Cd",
   lower.grad.pattern = "^[2-9]*B*CB*[^rtd]*[1-9]*$",
@@ -65,10 +65,13 @@ data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
-p <- sp1
-attr <- 'prop' # clay contents
-foo <- getArgillicBounds(p, hzdesgn='name', clay.attr = attr, texcl.attr="texture")
-foo
+# set required metadata
+hzdesgnname(sp1) <- 'name'
+hztexclname(sp1) <- 'texture'
+hzmetaname(sp1, 'clay') <- 'prop'
+
+x <- getArgillicBounds(sp1)
+x
 
 }
 \author{

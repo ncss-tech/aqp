@@ -1,12 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![R build
-status](https://github.com/ncss-tech/aqp/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/aqp/actions)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/aqp)](http://cran.r-project.org/web/packages/aqp)
-[![Total_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/aqp)](https://cran.r-project.org/package=aqp)
-[![aqp
-Manual](https://img.shields.io/badge/docs-HTML-informational)](http://ncss-tech.github.io/aqp/)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/aqp)](https://CRAN.R-project.org/package=aqp)
+[![CRAN
+status](https://badges.cranchecks.info/worst/aqp.svg)](https://cran.r-project.org/web/checks/check_results_aqp.html)
+[![Development
+Version](https://ncss-tech.r-universe.dev/badges/aqp)](https://ncss-tech.r-universe.dev/)
+[![Monthly CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/aqp)](https://cran.r-project.org/package=aqp)
+![CRAN/METACRAN](https://img.shields.io/cran/l/aqp) [![aqp
+Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/aqp/)
 
 # Algorithms for Quantitative Pedology (aqp) package for R
 
@@ -55,7 +59,7 @@ Install suggested packages:
 p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
 "farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 
 install.packages(p)
 ```

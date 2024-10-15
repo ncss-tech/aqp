@@ -5,6 +5,7 @@ context("surface horizon thickness, mineral soil surface, organic soil horizon")
 data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
+hzdesgnname(sp1) <- "name"
 
 p <- sp1[1]
 attr <- 'prop' # clay contents % 

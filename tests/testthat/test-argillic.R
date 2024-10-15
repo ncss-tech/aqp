@@ -5,6 +5,8 @@ depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group
 
 p <- sp1[1]
+hzdesgnname(p) <- "name"
+hztexclname(p) <- "texture"
 clay.attr <- 'prop' # clay contents %
 texcl.attr <- 'texture' # class containing textural class (for finding sandy textures)
 
@@ -41,31 +43,14 @@ test_that("argillic.clay.increase() (used for getArgillicBounds())", {
 
 test_that("getArgillicBounds()", {
 
-  # name and texture class are guessable
-  d <- getArgillicBounds(p, clay.attr='prop')
-
+  # name and texture class are determined from metadata
+  d <- getArgillicBounds(p, clay.attr = 'prop')
+  
   # this makes sure estimateSoilDepth() isn't broken...
   expect_equivalent(d, c(49, 89))
-
-  # no error when hzdesgn and texcl.attr are unknown, due to guessing function
-  d1 <- getArgillicBounds(p, hzdesgn='foo', clay.attr='prop', texcl.attr = 'bar')
-  expect_equivalent(d1, c(49, 89))
-
-  # deliberately break the reasoning guessing
-  # returns correct result because of slots
-  p$goo <- p$name
-  p$boo <- p$texture
-  p$name <- NULL
-  p$texture <- NULL
-
-  expect_error(getArgillicBounds(p, hzdesgn='foo', clay.attr='prop', texcl.attr = 'bar'))
-
-  # set the desgn name and texture class slots
-  hzdesgnname(p) <- "goo"
-  hztexclname(p) <- "boo"
-
-  d2 <- getArgillicBounds(p, hzdesgn='foo', clay.attr='prop', texcl.attr = 'bar')
-  expect_equivalent(d2, c(49, 89))
+  
+  # error when hzdesgn and texcl.attr are unknown; no guessing
+  expect_error(getArgillicBounds(p, hzdesgn = 'foo', clay.attr = 'prop', texcl.attr =  'bar'))
 })
 
 test_that("getArgillicBounds - error conditions", {
