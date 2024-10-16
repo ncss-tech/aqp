@@ -76,7 +76,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.1.0" id="aqp-210-2024-10-10">aqp 2.1.0 (2024-10-10)<a class="anchor" aria-label="anchor" href="#aqp-210-2024-10-10"></a></h2>
+<h2 class="page-header" data-toc-text="2.1.0" id="aqp-210-2024-10-16">aqp 2.1.0 (2024-10-16)<a class="anchor" aria-label="anchor" href="#aqp-210-2024-10-16"></a></h2>
 <ul><li>added Munsell values of 8.5 and 9.5 to Munsell look up table and (interpolated) reference spectra (<a href="https://github.com/ncss-tech/aqp/issues/318" class="external-link">#318</a>)</li>
 <li>
 <code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> now safely selects the closest Munsell value and chroma to those available in the package LUT</li>
@@ -89,6 +89,8 @@
 <code><a href="../reference/estimatePSCS.html">estimatePSCS()</a></code> gains argument <code>"lieutex"</code> for in lieu textures which are used in the new routine for identification of the particle size control section of organic soils</li>
 <li>new function <code><a href="../reference/collapseHz.html">collapseHz()</a></code> combines and aggregates data for adjacent horizons matching a pattern or sharing a common ID</li>
 <li>new function <code><a href="../reference/mutate_profile.html">mutate_profile_raw()</a></code> for building sets of dynamic mutate expressions. Also <code><a href="../reference/mutate_profile.html">mutate_profile()</a></code> gains col_names argument for dynamic naming of columns.</li>
+<li>
+<code><a href="../reference/addVolumeFraction.html">addVolumeFraction()</a></code> now more robust to very thin horizons x low volume fractions; also skips horizons without sufficient or relevant values</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0.4" id="aqp-204-2024-07-30">aqp 2.0.4 (2024-07-30)<small>2024-07-30</small><a class="anchor" aria-label="anchor" href="#aqp-204-2024-07-30"></a></h2>
