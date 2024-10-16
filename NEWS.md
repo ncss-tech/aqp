@@ -1,4 +1,4 @@
-# aqp 2.1.0 (2024-10-10)
+# aqp 2.1.0 (2024-10-16)
  * added Munsell values of 8.5 and 9.5 to Munsell look up table and (interpolated) reference spectra (#318)
  * `munsell2rgb()` now safely selects the closest Munsell value and chroma to those available in the package LUT 
  * new function `soilTextureColorPal()` for suggesting a color palette suitable for soil texture class
@@ -7,6 +7,7 @@
  * `estimatePSCS()` gains argument `"lieutex"` for in lieu textures which are used in the new routine for identification of the particle size control section of organic soils
  * new function `collapseHz()` combines and aggregates data for adjacent horizons matching a pattern or sharing a common ID
  * new function `mutate_profile_raw()` for building sets of dynamic mutate expressions. Also `mutate_profile()` gains col_names argument for dynamic naming of columns.
+ * `addVolumeFraction()` now more robust to very thin horizons x low volume fractions; also skips horizons without sufficient or relevant values
 
 # aqp 2.0.4 (2024-07-30)
  * CRAN release

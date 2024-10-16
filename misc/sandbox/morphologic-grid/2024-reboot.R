@@ -381,7 +381,7 @@ text(x = 1:n.profiles, y = 0, labels = sapply(x, '[[', 'id'), pos = 3)
 
 axis(side = 1, at = 1:n.profiles, cex.axis = 0.8)
 axis(side = 4, las = 1, line = -2, cex.axis = 0.75)
-legend('topleft', legend = hz$hz.code, pch = 15, pt.cex = 1.5, col = .cols, bty = 'n')
+legend('topleft', legend = hz$hz.name, pch = 15, pt.cex = 1.5, col = .cols, bty = 'n')
 
 ## demo ASCI representation
 cat(s[[1]], sep = '\n')
