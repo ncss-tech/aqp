@@ -179,8 +179,13 @@ library(aqp)
 # plot: graphical sanity check on results
 initHzDepthFunctions <- function(hz, plot = TRUE) {
   
+  # number of horizons
+  n <- nrow(hz)
+  
+  # plot colors
+  
   # generate a depth function for each horizon template
-  p <- lapply(seq_along(1:nrow(hz)), function(i) {
+  p <- lapply(1:n, function(i) {
     zapsmall(
       # work at depth interval mid points
       dnorm(z.i + (dz / 2), mean = hz$m[i], sd = hz$sd[i])
@@ -202,7 +207,8 @@ initHzDepthFunctions <- function(hz, plot = TRUE) {
       x = z.i, 
       y = pp, 
       type = 'b', 
-      pch = 1, 
+      pch = 1,
+      lwd = 1.5,
       cex = 0.5,
       xlab = 'Depth (cm)',
       ylab = 'Pr(H | depth)',
@@ -330,7 +336,7 @@ p <- initHzDepthFunctions(hz)
 
 
 ## simulation
-n.profiles <- 8
+n.profiles <- 10
 pIDs <- sprintf("p%02d", 1:n.profiles)
 
 s <- lapply(1:n.profiles, function(i) {

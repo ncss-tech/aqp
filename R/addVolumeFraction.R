@@ -51,6 +51,8 @@
 #' @title Symbolize Volume Fraction within a Soil Profile Collection Plot
 #' 
 #' @description Symbolize volume fraction on an existing soil profile collection plot.
+#' 
+#' @note It may be necessary to adjust both `res`, `cex.min`, and `cex.max` for optimal legibility.
 #'
 #' @param x a `SoilProfileCollection` object
 #' @param colname character vector of length 1, naming the column containing volume fraction data (horizon-level attribute). Values should be within 0-100 percent.
@@ -68,9 +70,7 @@
 #'
 #' @export
 #' 
-
-
-## TODO: symbol size must be controlled by `res`
+#' 
 addVolumeFraction <- function(x, colname, res = 10, cex.min = 0.1, cex.max = 0.5, pch = 1, col = 'black') {
   
   # color should be either:

@@ -35,6 +35,9 @@ Symbolize volume fraction on an existing soil profile collection plot.
 \details{
 This function can only be called after plotting a \code{SoilProfileCollection} object. Details associated with a call to \code{plotSPC()} are automatically accounted for within this function: e.g. \code{plot.order}, \code{width}, etc..
 }
+\note{
+It may be necessary to adjust both \code{res}, \code{cex.min}, and \code{cex.max} for optimal legibility.
+}
 \seealso{
 \code{\link[=plotSPC]{plotSPC()}}
 }
