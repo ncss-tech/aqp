@@ -30,11 +30,11 @@ Soil color is most often described using the [Munsell color system](https://en.w
 
 ## Color Conversion Functions
 
-Conversion of Munsell notation to "something" that can be displayed on-screen (sRGB color representation) is probably the most common color transformation applied to soil morphology data. The `munsell2rgb()` function is convenient for this operation when Munsell notation has been split into vectors of hue, value, and chroma. These could be columns in a `data.frame` or separate vectors. The `parseMunsell()` function is convenient when a full Munsell notation is given as a character vector. Note that `parseMunsell()` is a simplified wrapper to `munsell2rgb()`. For example, converting `10YR 4/6` with either function can return:
+Conversion of Munsell notation to "something" that can be displayed on-screen (sRGB color representation) is probably the most common color transformation applied to soil morphology data. The `munsell2rgb()` function is convenient for this operation when Munsell notation has been split into vectors of hue, value, and chroma. These could be columns in a `data.frame` or separate vectors. The `parseMunsell()` function is convenient when a full Munsell notation is given as a character vector. Note that `parseMunsell()` is a wrapper to `munsell2rgb()`. For example, converting `10YR 4/6` with either function can return:
 
   * hex-notation of a color: `#805921FF`, or
   * sRGB color coordinates: `0.5002233 0.3489249 0.1287694`, or
-  * CIELAB color coordinates: `40.95021 10.31088 37.49513`
+  * CIELAB color coordinates: `40.95021 10.31088 37.49513`.
 
 
 Selection of the closest `n` Munsell color "chips", given sRGB or CIELAB colorspace coordinates is performed with the `col2Munsell()` function. Input to this function can be colorspace coordinates, named colors (e.g. `red`), or hex-notation of a color. For example, the selection of the closest Munsell chip for CIELAB coordinates `(51.4337, 9.917916, 38.6889)` results in `10YR 5/6` with a reported sigma (error) of `1.5e-6`. This error is estimated as the [CIE2000 distance](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000) between the source CIELAB coordinates and the CIELAB coordinates of the closest Munsell chip.
@@ -85,5 +85,7 @@ parseMunsell('N 5/')
 # non-standard notation
 getClosestMunsellChip('3.3YR 4.4/6.1', convertColors = FALSE)
 ```
+
+
 
 

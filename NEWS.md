@@ -1,4 +1,5 @@
 # aqp 2.1.0 (2024-10-16)
+ * CRAN release
  * added Munsell values of 8.5 and 9.5 to Munsell look up table and (interpolated) reference spectra (#318)
  * `munsell2rgb()` now safely selects the closest Munsell value and chroma to those available in the package LUT 
  * new function `soilTextureColorPal()` for suggesting a color palette suitable for soil texture class
