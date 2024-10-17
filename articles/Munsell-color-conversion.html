@@ -121,16 +121,15 @@ when Munsell notation has been split into vectors of hue, value, and
 chroma. These could be columns in a <code>data.frame</code> or separate
 vectors. The <code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> function is convenient when a
 full Munsell notation is given as a character vector. Note that
-<code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> is a simplified wrapper to
-<code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code>. For example, converting
-<code>10YR 4/6</code> with either function can return:</p>
+<code><a href="../reference/parseMunsell.html">parseMunsell()</a></code> is a wrapper to <code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code>.
+For example, converting <code>10YR 4/6</code> with either function can
+return:</p>
 <ul>
 <li>hex-notation of a color: <code>#805921FF</code>, or</li>
 <li>sRGB color coordinates: <code>0.5002233 0.3489249 0.1287694</code>,
 or</li>
 <li>CIELAB color coordinates:
-<code>40.95021 10.31088 37.49513</code>
-</li>
+<code>40.95021 10.31088 37.49513</code>.</li>
 </ul>
 <p>Selection of the closest <code>n</code> Munsell color “chips”, given
 sRGB or CIELAB colorspace coordinates is performed with the
