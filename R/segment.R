@@ -188,7 +188,7 @@ hz_segment <- function(object, intervals, trim = TRUE, depthcols = c("top", "bot
     h <- h[order(h$idcol, h[[depthcols[1]]]), ]
     
     # merge to re-add spc with NA
-    h_orig <- data.frame(idcol = names(table(horizons(object)[idcol])), stringsAsFactors = FALSE)
+    h_orig <- data.frame(idcol = names(table(.data.frame.j(horizons(object), idcol, use_class = aqp_df_class(object)))), stringsAsFactors = FALSE)
     h <- merge(h_orig, h, by = "idcol", all.x = TRUE, sort = FALSE)
     rm(h_orig)
     
