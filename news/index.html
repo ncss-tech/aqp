@@ -76,7 +76,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.1.0" id="aqp-210-2024-10-16">aqp 2.1.0 (2024-10-16)<a class="anchor" aria-label="anchor" href="#aqp-210-2024-10-16"></a></h2>
+<h2 class="page-header" data-toc-text="2.1.0" id="aqp-210-2024-10-16">aqp 2.1.0 (2024-10-16)<small>2024-10-19</small><a class="anchor" aria-label="anchor" href="#aqp-210-2024-10-16"></a></h2>
 <ul><li>CRAN release</li>
 <li>added Munsell values of 8.5 and 9.5 to Munsell look up table and (interpolated) reference spectra (<a href="https://github.com/ncss-tech/aqp/issues/318" class="external-link">#318</a>)</li>
 <li>
@@ -435,7 +435,7 @@
 </ul></li>
 <li>new function <code>bootstrapSoilTexture</code> for simulating realistic sand/silt/clay compositions</li>
 <li>
-<code>combine</code> replaces/expands <code><a href="https://rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">base::union</a></code>
+<code>combine</code> replaces/expands <code><a href="https://rdrr.io/pkg/data.table/man/setops.html" class="external-link">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">base::union</a></code>
 </li>
 <li>
 <code>split</code> receives some upgrades to the S4 definition to increase parity with <code>split.default</code>
@@ -467,7 +467,7 @@
 <code>depths&lt;-</code> has been optimized and minimally validates input data</li>
 <li>default horizon ID (<code>hzID</code>) is now a <code>character</code> data type</li>
 <li>
-<code><a href="https://rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
+<code><a href="https://rdrr.io/pkg/data.table/man/setops.html" class="external-link">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
 <li>new experimental method is <code>permute_profile</code>; similar to <code>sim</code> but for boundaries. The interface to this function is likely to change/be expanded.</li>
 <li>added <code>segment</code> c/o <a href="https://github.com/smroecker" class="external-link">@smroecker</a></li>
 <li>fix for unit-length and zero-length legends in <code>plotSPC</code>
