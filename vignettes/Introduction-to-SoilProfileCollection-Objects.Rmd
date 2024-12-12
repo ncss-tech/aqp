@@ -31,7 +31,7 @@ The `SoilProfileCollection` class was designed to simplify the process of workin
 Examples listed below are meant to be copied/pasted from this document and interactively run within **R**. Comments (preceded by `#` symbol) briefly describe what the code in each line does. Further documentation on objects and functions from the `aqp` package can be accessed by typing `help(aqp)` (or more generally, `?function_name`) at the **R** console.
 
 # Setup
-In this tutorial we will use some sample data included with the `aqp` package, based on characterization data from 10 soils sampled on serpentinitic parent material as described in [McGahan et al, 2009](https://www.soils.org/publications/sssaj/articles/73/6/2087).
+In this tutorial we will use some sample data included with the `aqp` package, based on characterization data from 10 soils sampled on serpentinitic parent material as described in [McGahan et al, 2009](https://acsess.onlinelibrary.wiley.com/doi/10.2136/sssaj2008.0087).
 
 To begin you will load required packages. You may have to first install these if missing:
 
