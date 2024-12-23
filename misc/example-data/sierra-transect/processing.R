@@ -45,13 +45,13 @@ hzdesgnname(w) <- 'name'
 
 # check
 par(mar = c(0, 0, 3, 0))
-groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'CIA', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'CIA', cex.names = 0.66, cex.id = 0.66, width = 0.3, depth.axis = FALSE, hz.depths = TRUE)
 
-groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'CaO', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'CaO', cex.names = 0.66, cex.id = 0.66, width = 0.3, depth.axis = FALSE, hz.depths = TRUE)
 
-groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+groupedProfilePlot(w, groups = 'pm', group.name.offset = -15, label = 'biome', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, depth.axis = FALSE, hz.depths = TRUE)
 
-groupedProfilePlot(w, groups = 'biome', group.name.offset = -15, label = 'pm', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, plot.depth.axis = FALSE, hz.depths = TRUE)
+groupedProfilePlot(w, groups = 'biome', group.name.offset = -15, label = 'pm', name.style = 'center-center', color = 'Fet', cex.names = 0.66, cex.id = 0.66, width = 0.3, depth.axis = FALSE, hz.depths = TRUE)
 
 
 ## re-name and save

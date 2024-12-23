@@ -92,14 +92,12 @@
 #' groupedProfilePlot(wilson2022, groups = 'pm', 
 #' group.name.offset = -15, label = 'biome', 
 #' name.style = 'center-center', color = 'CIA', 
-#' cex.names = 0.66, cex.id = 0.66, width = 0.3, 
-#' depth.axis = FALSE, hz.depths = TRUE)
+#' cex.names = 0.66, cex.id = 0.66, width = 0.3)
 #' 
 #' groupedProfilePlot(wilson2022, groups = 'biome', 
 #' group.name.offset = -15, label = 'pm', 
 #' name.style = 'center-center', color = 'Fet', 
-#' cex.names = 0.66, cex.id = 0.66, width = 0.3, 
-#' depth.axis = FALSE, hz.depths = TRUE)
+#' cex.names = 0.66, cex.id = 0.66, width = 0.3)
 #' 
 "wilson2022"
 
