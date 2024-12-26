@@ -10,7 +10,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.align = 'center',
   fig.path = "man/figures/README-",
-  dev = "svglite",
+  dev = "png",
+  retina = 1.5,
   message = FALSE,
   warning = FALSE,
   tidy = FALSE
@@ -61,7 +62,7 @@ install.packages(p)
 
 ## Examples
 
-```{r fig.width=9, fig.height=6}
+```{r fig.width=9, fig.height=6, fig.alt='testing 1 2', fig.caption='testing 1 2'}
 library(aqp)
 
 # example data from three official series descriptions

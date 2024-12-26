@@ -99,7 +99,7 @@ plotSPC(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.svg" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" alt="testing 1 2" style="display: block; margin: auto;" />
 
 ## Citation
 
