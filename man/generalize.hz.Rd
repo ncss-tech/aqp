@@ -14,6 +14,7 @@ generalize.hz(
   non.matching.code = "not-used",
   hzdepm = NULL,
   ordered = !missing(hzdepm),
+  na.rm = TRUE,
   ...
 )
 
@@ -49,14 +50,16 @@ generalize.hz(
 
 \item{hzdepm}{numeric vector of horizon mid-points; \code{NA} values in \code{hzdepm} will result in \code{non.matching.code} (or \code{NA} if not defined) in result}
 
-\item{ordered}{logical, \code{TRUE} when \code{hzdepm} argument is specified}
+\item{ordered}{logical, default \code{TRUE} when \code{hzdepm} argument is specified}
+
+\item{na.rm}{logical, default \code{TRUE} will ignore missing depths in calculating sort order when \code{hzdepm} is specified and \code{ordered=TRUE}}
 
 \item{...}{additional arguments passed to \code{grep()} such as \code{perl = TRUE} for advanced REGEX}
 
 \item{ghl}{Generalized Horizon Designation column name (to be created/updated when \code{x} is a \code{SoilProfileCollection})}
 }
 \value{
-factor (possibly an ordered factor) of the same length as \code{x} (if character) or as number of horizons in \code{x} (if \code{SoilProfileCollection})
+factor (an ordered factor when \code{ordered=TRUE}) of the same length as \code{x} (if character) or as number of horizons in \code{x} (if \code{SoilProfileCollection})
 }
 \description{
 Generalize a vector of horizon names, based on new classes, and REGEX
