@@ -11,9 +11,11 @@
 #' @param pattern character vector of REGEX patterns, same length as `new`
 #' @param non.matching.code character, label used for any horizon not matched by `pattern`
 #' @param hzdepm numeric vector of horizon mid-points; `NA` values in `hzdepm` will result in `non.matching.code` (or `NA` if not defined) in result
-#' @param ordered logical, `TRUE` when `hzdepm` argument is specified
+#' @param ordered logical, default `TRUE` when `hzdepm` argument is specified
+#' @param na.rm logical, default `TRUE` will ignore missing depths in calculating sort order when `hzdepm` is specified and `ordered=TRUE`
 #' @param ... additional arguments passed to `grep()` such as `perl = TRUE` for advanced REGEX
-#' @return factor (possibly an ordered factor) of the same length as `x` (if character) or as number of horizons in `x` (if `SoilProfileCollection`)
+#'
+#' @return factor (an ordered factor when `ordered=TRUE`) of the same length as `x` (if character) or as number of horizons in `x` (if `SoilProfileCollection`)
 #' 
 #' @details When `x` is a `SoilProfileCollection` the `ghl` column will be updated with the factor results. This requires that the "horizon designation name" metadata be defined for the collection to set the column for input designations.
 #' 
@@ -90,7 +92,7 @@
 #' # GHL metadata is set
 #' GHL(x)
 #'
-generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), ...) {
+generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdepm = NULL, ordered = !missing(hzdepm), na.rm = TRUE, ...) {
 
 	# init vector of 'other', same length as original horizon name vector
 	g <- rep(non.matching.code, times = length(x))
@@ -107,8 +109,8 @@ generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdep
 	  #           { sum(!is.na(hzdepm)) == length(new) })
 	  
 	  # less stringent:
-	  # any NA hzdepm will return NA factor level, even when pattern is matched
-	  new_sort <- names(sort(tapply(hzdepm, g, median)))
+	  # default na.rm (TRUE) ignores depths that are NA
+	  new_sort <- names(sort(tapply(hzdepm, g, median, na.rm = na.rm), na.last = ifelse(na.rm, na.rm, NA)))
 	  new_sort <- new_sort[new_sort != non.matching.code]
 	  
 	  # use an ordered factor (may be overridden w/ ordered = FALSE)
@@ -116,7 +118,7 @@ generalize.hz <- function(x, new, pattern, non.matching.code = 'not-used', hzdep
 	  
 	  # if any are not matched (i.e. hzdepm is NA), replace with non.matching.code (if defined)
 	  if (!is.null(non.matching.code)) {
-	    g[is.na(g)] <- non.matching.code
+	    g[is.na(g) | is.na(hzdepm)] <- non.matching.code
 	  }
 	  g
 	} else {
