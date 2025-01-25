@@ -73,7 +73,7 @@ patterns. Or create a new column ghl in a SoilProfileCollection (requires a hori
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generalize Horizon Names</h1>
-    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/aqp/blob/master/R/generalize.hz.R" class="external-link"><code>R/generalize.hz.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/aqp/blob/v2.1/R/generalize.hz.R" class="external-link"><code>R/generalize.hz.R</code></a></small>
     <div class="hidden name"><code>generalize.hz.Rd</code></div>
     </div>
 
@@ -90,7 +90,6 @@ patterns. Or create a new column <code>ghl</code> in a <code>SoilProfileCollecti
 <span>  non.matching.code <span class="op">=</span> <span class="st">"not-used"</span>,</span>
 <span>  hzdepm <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ordered <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">hzdepm</span><span class="op">)</span>,</span>
-<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -143,11 +142,7 @@ patterns. Or create a new column <code>ghl</code> in a <code>SoilProfileCollecti
 
 
 <dt id="arg-ordered">ordered<a class="anchor" aria-label="anchor" href="#arg-ordered"></a></dt>
-<dd><p>logical, default <code>TRUE</code> when <code>hzdepm</code> argument is specified</p></dd>
-
-
-<dt id="arg-na-rm">na.rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
-<dd><p>logical, default <code>TRUE</code> will ignore missing depths in calculating sort order when <code>hzdepm</code> is specified and <code>ordered=TRUE</code></p></dd>
+<dd><p>logical, <code>TRUE</code> when <code>hzdepm</code> argument is specified</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -160,7 +155,7 @@ patterns. Or create a new column <code>ghl</code> in a <code>SoilProfileCollecti
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>factor (an ordered factor when <code>ordered=TRUE</code>) of the same length as <code>x</code> (if character) or as number of horizons in <code>x</code> (if <code>SoilProfileCollection</code>)</p>
+    <p>factor (possibly an ordered factor) of the same length as <code>x</code> (if character) or as number of horizons in <code>x</code> (if <code>SoilProfileCollection</code>)</p>
     </div>
     <div id="details">
     <h2>Details</h2>
