@@ -704,10 +704,16 @@ plotSPC <- function(
   tcol <- hzDepthCols[1]
   bcol <- hzDepthCols[2]
   
+  if (is.null(label)) {
+    label <- NA
+  }
+  
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
-  
+  if (is.null(pLabels) && !is.na(label) && nchar(label) > 0) {
+    warning("column name '", label, "' not found in site names", call. = FALSE)
+  }
   
   #######################################################################
   ## init plotting region, unless we are appending to an existing plot ##
@@ -759,7 +765,7 @@ plotSPC <- function(
   ################################
   
   # if profile style is auto, determine style based on font metrics
-  if(id.style == 'auto') {
+  if(id.style == 'auto' & !is.null(pLabels)) {
     sum.ID.str.width <- sum(sapply(pLabels, strwidth, units = 'inches', cex = cex.id, font = 2))
     ID.width.ratio <- sum.ID.str.width  / .par_devWidth
     
@@ -807,6 +813,16 @@ plotSPC <- function(
   
   ## TODO: NO DATA template for empty profiles (now possible)
   
+  # extract horizon column names
+  cn <- names(h)
+  
+  # extract / generate horizon name
+  m <- match(name, cn)
+  
+  if(!is.null(name) && is.na(m) && !is.na(name) && nchar(name) > 0) {
+    warning("column name '", name, "' not found in horizon names", call. = FALSE)
+  }
+  
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
   for(i in 1:n) {
@@ -834,9 +850,6 @@ plotSPC <- function(
       next
     }
     
-    # extract column names
-    cn <- names(this_profile_data)
-    
     # extract / generate horizon color
     # note: the ".color" horizon attribute is auto-generated above
     # missing and NA colors have already been dealt with above
@@ -861,9 +874,7 @@ plotSPC <- function(
     }
     
     
-    # extract / generate horizon name
-    m <- match(name, cn)
-    if(! is.na(m)) {
+    if(!is.na(m)) {
       this_profile_names <- as.character(this_profile_data[[m]])
     } else {
       # otherwise use an empty string
