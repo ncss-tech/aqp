@@ -400,7 +400,7 @@ NCSP <- function(
     .s <- horizons(s[, i])
     
     # characteristics for slice i
-    .s <- .s[, vars, drop = FALSE]
+    .s <- .data.frame.j(.s, vars)
     
     # preserve IDs in distance matrix
     row.names(.s) <- .ids
