@@ -149,7 +149,9 @@ three variations on the original template.</p>
 <span><span class="co"># create 3 copies of each simulation</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/duplicate.html">duplicate</a></span><span class="op">(</span><span class="va">s</span>, times <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>Overlapping horizon depth labels are clear. Note that there are three
-copies of each simulated variation on the original template.
+copies of each simulated variation on the original template. Colors
+represent sequence from top to bottom, as a visual aid across perturbed
+and duplicated profiles.
 <img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Selecting the optimal label-adjustment methods and parameters will
 depend on the collection of profiles, horizonation, profile height, font
@@ -167,7 +169,8 @@ horizons where <code>top == bottom</code>.</p></li>
 <li><p><em>simulated annealing:</em> This method is the most adaptive,
 typically capable of providing reasonable solutions for even the most
 complex profiles. The non-deterministic solutions can be undesirable
-when preparing figures for publication.</p></li>
+when preparing figures for publication. Use <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> to
+control output between runs.</p></li>
 </ul>
 <div class="section level3">
 <h3 id="electrostatic-simulation">Electrostatic Simulation<a class="anchor" aria-label="anchor" href="#electrostatic-simulation"></a>

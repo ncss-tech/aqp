@@ -153,13 +153,13 @@ Data are "harmonized" to a common attribute names specified by the names of list
 <span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">h3</span>, color <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="harmonize-SoilProfileCollection-method-4.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">h3</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           id top bottom       foo      bar hzID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10_method1   0     20 -12.83190 10.08068    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 10_method1  20     30 -20.05153 12.07949    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 10_method1  30     57 -30.67042 11.67311    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 10_method1  57     72 -45.27644 18.29534    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10_method2   0     20  16.46026 10.87968    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 10_method2  20     30  21.50456 -5.30041    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           id top bottom          foo       bar hzID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 10_method1   0      6   1.80869356 10.812217    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 10_method1   6     16   6.13055090 14.675140    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 10_method1  16     38  -1.81264065 13.078716    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 10_method2   0      6 -11.99516787  3.681007    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10_method2   6     16   1.26609006  2.708745    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 10_method2  16     38   0.07671192  7.921289    6</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a slight modification, "method 1" onlyused for "foo" and "method 3" for "bar"</span></span></span>
 <span class="r-in"><span><span class="va">h3</span> <span class="op">&lt;-</span> <span class="fu">harmonize</span><span class="op">(</span><span class="va">spc</span>, x.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>foo <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span>method1 <span class="op">=</span> <span class="st">"p1"</span>, method2 <span class="op">=</span> <span class="st">"p2"</span><span class="op">)</span>,</span></span>
