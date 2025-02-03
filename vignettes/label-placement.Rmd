@@ -63,7 +63,7 @@ s <- duplicate(s, times = 3)
 ```
 
 
-Overlapping horizon depth labels are clear. Note that there are three copies of each simulated variation on the original template.
+Overlapping horizon depth labels are clear. Note that there are three copies of each simulated variation on the original template. Colors represent sequence from top to bottom, as a visual aid across perturbed and duplicated profiles.
 ```{r fig.width=8, fig.height=5, echo = FALSE}
 .a <- list(cex.names = 0.8, color = 'nm', name = NA, show.legend = FALSE, hz.depths = TRUE, depth.axis = FALSE, cex.id = 0.66, col.palette = .bluecolors)
 
@@ -79,7 +79,7 @@ Selecting the optimal label-adjustment methods and parameters will depend on the
 
   * *electrostatic simulation:* This is generally the best method, having deterministic solutions that typically move labels as little as possible in fewer iterations. It does not do well with many very thin horizons near the top or bottom of the profile. Very complex profiles and larger font sizes may require setting `q` to values larger than 1. Set `q` to values between 0.25-0.75 to minimize adjustment distances. This method cannot (yet) provide a label adjustment solution in the presence of missing horizon depths or horizons where `top == bottom`.
   
-  * *simulated annealing:* This method is the most adaptive, typically capable of providing reasonable solutions for even the most complex profiles. The non-deterministic solutions can be undesirable when preparing figures for publication.
+  * *simulated annealing:* This method is the most adaptive, typically capable of providing reasonable solutions for even the most complex profiles. The non-deterministic solutions can be undesirable when preparing figures for publication. Use `set.seed()` to control output between runs.
 
 
 ### Electrostatic Simulation
