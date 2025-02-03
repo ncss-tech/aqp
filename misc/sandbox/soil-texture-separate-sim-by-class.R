@@ -18,7 +18,7 @@ data("soiltexture", package = 'aqp')
 ## get all soil texture measurements from latest KSSL snapshot
 
 # connect
-db <- dbConnect(RSQLite::SQLite(), 'E:/NASIS-KSSL-LDM/ncss_labdata.sqlite')
+db <- dbConnect(RSQLite::SQLite(), 'E:/NASIS-KSSL-LDM/ncss_labdata-2023.sqlite')
 
 qq <- "
 SELECT
@@ -124,8 +124,12 @@ prepareCompositionalSummary <- function(i, var = 'class') {
 }
 
 
+## TODO: use rnorm.acomp()
 
 
+##
+##
+##
 sampleComposition <- function(i, var = 'class', n = 100) {
   # simulate from Dirichlet
   s <- rDirichlet.acomp(n, i$D.alpha)
