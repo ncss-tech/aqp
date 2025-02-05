@@ -46,14 +46,13 @@
 #' @param method named method used to synthesize depth function ('random_walk'
 #' or 'LPP'), see details
 #' @param HzDistinctSim optionally simulate horizon boundary distinctness codes
-#' @param SPC result is a \code{SoilProfileCollection} object, otherwise a
-#' \code{data.frame} object
-#' @param \dots additional parameters passed-in to the LPP (\code{.lpp})
+#' @param SPC result is a `SoilProfileCollection` object, otherwise a `data.frame` object
+#' @param \dots additional parameters passed-in to the LPP `.lpp`)
 #' function
-#' @return A \code{data.frame} or \code{SoilProfileCollection} object.
+#' @return A `data.frame` or `SoilProfileCollection` object.
 #' @note See examples for ideas on simulating several profiles at once.
 #' @author Dylan E. Beaudette
-#' @seealso \code{\link{profile_compare}, \link{hzDistinctnessCodeToOffset}}
+#' @seealso [hzDistinctnessCodeToOffset()]
 #' @references Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.;
 #' Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution
 #' soil profile data Geoderma, 2011, 166, 74-83.

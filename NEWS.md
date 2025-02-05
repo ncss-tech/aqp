@@ -1,6 +1,7 @@
-# aqp 2.1.1 (development)
+# aqp 2.2 (development)
  * fix for `hz_segment()` and `NCSP()` with _data.table_ `SoilProfileCollection` objects (#320)
  * fix for `generalize.hz()` to handle missing depths better and added `na.rm` argument (#321)
+ * `profile_compare()` removed, see `NCSP()`
  
 # aqp 2.1.0 (2024-10-16)
  * CRAN release

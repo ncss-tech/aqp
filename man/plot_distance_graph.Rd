@@ -42,7 +42,7 @@ plot_distance_graph(d, idx=12:18)
 https://casoilresource.lawr.ucdavis.edu/
 }
 \seealso{
-\code{\link{sp2}}, \code{\link{profile_compare}}
+\link{sp2}
 }
 \author{
 Dylan E Beaudette

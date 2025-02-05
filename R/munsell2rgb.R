@@ -394,9 +394,7 @@ munsell2rgb <- function(the_hue, the_value, the_chroma, alpha = 1, maxColorValue
   )
   
   ## benchmarks:
-  # plyr::join() 2x faster than base::merge
   # data.table::merge() (with conversion to/from) 5x faster than base::merge()
-  
   
   ## TODO: maybe more efficient with keys
   # round-trip through data.table is still faster

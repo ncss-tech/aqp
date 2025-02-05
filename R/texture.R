@@ -145,21 +145,21 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
   # fix for R CMD check
   #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
   soiltexture <- NULL
-
+  
   # clay is not NULL
   clay_not_null <- all(!is.null(clay))
   clay_is_null  <- !clay_not_null
-
+  
   # standardize the inputs
   df <- data.frame(texcl = tolower(as.character(texcl)),
                    stringsAsFactors = FALSE
-                   )
+  )
   if (clay_not_null) {
     df$clay <- as.integer(round(clay))
   }
   df$rn <- row.names(df)
-
-
+  
+  
   load(system.file("data/soiltexture.rda", package="aqp")[1])
   
   
@@ -170,21 +170,21 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
     texcl = ifelse(texcl %in% c("cosl", "fsl", "vfsl"), "sl", texcl)
   })
   
-
-
+  
+  
   # check for texcl that don't match
   idx <- ! df$texcl %in% unique(soiltexture$averages$texcl)
   if (any(idx)) {
     warning("not all the user supplied texcl values match the lookup table")
   }
-
-
+  
+  
   # check clay values within texcl
   if (clay_not_null) {
     clay_not_na <- !is.na(df$clay)
-
+    
     idx <- paste(df$texcl[clay_not_na], df$clay[clay_not_na]) %in% paste(soiltexture$values$texcl, soiltexture$values$clay)
-
+    
     if (any(!idx)) {
       warning("not all the user supplied clay values fall within the texcl, so they will be set to NA")
       
@@ -194,70 +194,70 @@ texcl_to_ssc <- function(texcl = NULL, clay = NULL, sample = FALSE) {
       clay_is_null  <- !clay_not_null
     }
   }
-
-
+  
+  
   # check clay ranges 0-100
   idx <- clay_not_null & any(clay < 0, na.rm = TRUE) & any(clay > 100, na.rm = TRUE)
   if (idx) {
     warning("some clay records < 0 or > 100%")
   }
-
-
+  
+  
   # if clay is present
   if (clay_not_null & sample == FALSE) {
-
+    
     st <- aggregate(sand ~ texcl + clay, data = soiltexture$values, function(x) as.integer(round(mean(x))))
     st$silt <- 100 - st$clay - st$sand
-
+    
     # some clay present (compute clay weighted averages)
     idx <- is.na(df$clay)
-     if (any(idx)) {
-       df_na <- merge(df[idx, c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)[c("texcl", "clay", "rn")]
-       df[idx, ] <- df_na
-     }
-
+    if (any(idx)) {
+      df_na <- merge(df[idx, c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)[c("texcl", "clay", "rn")]
+      df[idx, ] <- df_na
+    }
+    
     df <- merge(df[c("texcl", "clay", "rn")], st, by = c("texcl", "clay"), all.x = TRUE, sort = FALSE)
   } else {
     # clay missing (use average)
     df <- merge(df[c("texcl", "rn")], soiltexture$averages, by = "texcl", all.x = TRUE, sort = FALSE)
   }
-
-
+  
+  
   # randomly sample ssc from texcl lookup table
   if (sample == TRUE) {
-
+    
     if (clay_is_null) df$clay <- NA
-
+    
     split(df, df$texcl, drop = TRUE) ->.;
     lapply(., function(x) {
-
+      
       st    <- soiltexture$values
-
+      
       # clay present
       x$idx <- is.na(x$clay)
       x1 <- x[x$idx == FALSE, ]
       x2 <- x[x$idx == TRUE,  ]
-
+      
       if (clay_not_null) {
         temp1 <- st[st$texcl == x1$texcl[1] &
-                    st$clay %in% unique(x1$clay),
-                    ]
+                      st$clay %in% unique(x1$clay),
+        ]
         temp1 <- temp1[sample(1:nrow(temp1), size = nrow(x1), replace = TRUE), ]
         temp1 <- cbind(x1[x1$idx == FALSE, c("rn", "texcl")], temp1[c("clay", "sand")])
       } else temp1 <- NULL
-
+      
       # clay missing
       temp2 <- st[st$texcl == x2$texcl[1], ]
       temp2 <- temp2[sample(1:nrow(temp2), size = nrow(x2), replace = TRUE), ]
       temp2 <- cbind(x2[x2$idx == TRUE, c("rn", "texcl")], temp2[c("clay", "sand")])
-
+      
       return(rbind(temp1, temp2))
     }) ->.;
     do.call("rbind", .) -> df
     df$silt <- 100 - df$clay - df$sand
   }
-
-
+  
+  
   # standardize outputs
   vars <- c("sand", "silt", "clay")
   df <- df[(order(as.integer(df$rn))), vars]
@@ -277,31 +277,31 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, simplify = FALSE, as.is = FAL
   # fix for R CMD check:
   #  ssc_to_texcl: no visible binding for global variable ‘silt’
   silt <- NULL
-
+  
   # check lengths
   idx <- length(clay) != length(sand)
   if (idx) {
     stop("length of inputs do not match")
   }
-
-
+  
+  
   # standardize inputs
   df <- data.frame(sand = as.integer(round(sand)),
                    clay = as.integer(round(clay)),
                    stringsAsFactors = FALSE
   )
   df$silt <- 100 - df$clay - df$sand
-
-
+  
+  
   ## TODO: this needs some more work: sum will always be 100, but silt-by-difference may be illogical
-
+  
   # # check sand, silt and clay sum to 100
   # idx <- (df$sand + df$silt + df$clay) > 100 | (df$sand + df$silt + df$clay) < 100
   # if (any(idx) & any(complete.cases(df[c("sand", "clay")]))) {
   #   warning("some records sand, silt, and clay do not sum to 100 %")
   #   }
-
-
+  
+  
   # logic from the particle size estimator calculation from NASIS
   df <- within(df, {
     texcl = NA
@@ -318,16 +318,16 @@ ssc_to_texcl <- function(sand = NULL, clay = NULL, simplify = FALSE, as.is = FAL
     texcl[(silt + 1.5 * clay) >= 15 & (silt + 2 * clay) < 29.99] = "ls"
     texcl[!is.na(sand) & !is.na(clay) & is.na(texcl)] = "sl"
   })
-
+  
   # encoding according to approximate AWC, from Red Book version 3.0
   if (!as.is) {
     df$texcl <- factor(df$texcl, levels = SoilTextureLevels(which = 'codes', simplify = simplify), ordered = TRUE)
-
+    
     if (droplevels) {
       df$texcl <- droplevels(df$texcl)
     }
   }
-
+  
   return(df$texcl)
 }
 
@@ -362,7 +362,7 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   #  texcl_to_ssc: no visible binding for global variable ‘soiltexture’
   soiltexture <- NULL
   load(system.file("data/soiltexture.rda", package="aqp")[1])
-
+  
   
   # check inputs ----
   ## both present?
@@ -370,47 +370,47 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
   if (idx) {
     warning("texmod and lieutex should not both be present, they are mutually exclusive, only the results for texmod will be returned")
   }
-
+  
   # texmod and lieutex don't match
   idx <- ! df$texmod %in% soiltexture$texmod$texmod
   if (any(idx & !is.na(df$texmod))) {
     message("not all the texmod supplied match the lookup table")
   }
-
+  
   idx <-  ! df$lieutex %in% c("GR", "CB", "ST", "BY", "CN", "FL", "PG", "PCB", "PST", "PBY", "PCN", "PFL", "BR", "HMM", "MPM", "SPM", "MUCK", "PEAT", "ART", "CGM", "FGM", "ICE", "MAT", "W")
   if (any(idx & !is.na(df$lieutex))) {
     message("not all the lieutex supplied match the lookup table")
   }
-
-
+  
+  
   # merge
   df <- merge(df, soiltexture$texmod, by = "texmod", all.x = TRUE, sort = FALSE)
   df <- df[order(df$rn), ]
   df$rn <- NULL
-
-
+  
+  
   # lieutex
   if (any(!is.na(df$lieutex))) {
-
+    
     idx1 <- !is.na(df$lieutex) & df$lieutex %in% c("GR", "CB",  "ST",  "BY",  "CN", "FL")
     idx2 <- !is.na(df$lieutex) & df$lieutex %in% c("PG", "PCB", "PST", "PBY", "PCN", "PFL")
-
+    
     # df$lieutex <- toupper(lieutex)
-
+    
     df <- within(df, {
       fragvoltot_l = ifelse(idx1, 90, fragvoltot_l)
       fragvoltot_r = ifelse(idx1, 95, fragvoltot_l)
       fragvoltot_h = ifelse(idx1, 100, fragvoltot_l)
-
+      
       fragvoltot_l_nopf = ifelse(idx2, 0,  fragvoltot_l)
       fragvoltot_r_nopf = ifelse(idx2, 0,  fragvoltot_l)
       fragvoltot_h_nopf = ifelse(idx2, 0, fragvoltot_l)
-      })
+    })
     # df$lieutex <- lieutex
   }
   
   df[c("texmod", "lieutex", "texmod_label")] <- NULL
-
+  
   return(df)
 }
 
@@ -434,14 +434,14 @@ texmod_to_fragvoltot <- function(texmod = NULL, lieutex = NULL) {
 #' @export
 #'
 texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, sandvf = NULL, fragvoltot = NULL) {
-
+  
   # check lengths
   idx <- length(texcl) == length(clay) & length(clay) == length(sand) & length(sand) == length(fragvoltot)
   if (!idx) {
     stop("length of inputs do not match")
   }
-
-
+  
+  
   # standarize inputs
   if (is.null(sandvf)) sandvf <- NA
   
@@ -452,19 +452,19 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, sandv
                    fragvoltot = as.integer(round(fragvoltot)),
                    fpsc       = as.character(NA),
                    stringsAsFactors = FALSE
-                   )
+  )
   df$silt <- 100 - df$sand - df$clay
-
+  
   sandytextures <- c("cos", "s", "fs", "lcos", "ls", "lfs")
-
-
+  
+  
   # check texcl lookup
   idx <- any(! df$texcl[!is.na(df$texcl)] %in% SoilTextureLevels(which = 'codes'))
   if (idx) {
     warning("not all the texcl supplied match the lookup table")
   }
-
-
+  
+  
   # check percentages
   idx <- df$silt > 100 | df$silt < 0 | df$clay > 100 | df$clay < 0 | df$sand > 100 | df$sand < 0 | df$fragvoltot > 100 | df$fragvoltot < 0
   if (any(idx, na.rm = TRUE)) {
@@ -475,11 +475,11 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, sandv
   if (any(sandvf > sand & all(!is.na(sandvf)))) {
     warning("the sandvf values should not be greater than the sand values")
   }
-
-
+  
+  
   # check ssc_to_texcl() vs texcl
   df$texcl_calc <- suppressMessages(ssc_to_texcl(sand = df$sand, clay = df$clay, as.is = TRUE))
-
+  
   df <- within(df, {
     texcl_calc = ifelse(texcl_calc == "s"  & grepl("^cos$|^fs$|^vfs$",    texcl), texcl, texcl_calc)
     texcl_calc = ifelse(texcl_calc == "ls" & grepl("^lcos$|^lfs$|^lvfs$", texcl), texcl, texcl_calc)
@@ -494,29 +494,29 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, sandv
     sand = ifelse(!is.na(sandvf), sand - sandvf,  sand)
     silt = ifelse(!is.na(sandvf), silt + sandvf,  silt)
   })
-
+  
   idx <- any(df$texcl != df$texcl_calc, na.rm = TRUE)
   if (idx) {
     warning("some of the texcl records don't match the calculated texcl via ssc_to_texcl()")
   }
-
-
+  
+  
   # calculate family particle size control section
-
+  
   idx <- df$fragvoltot >= 35
   if (any(idx)) {
     df[idx,] <- within(df[idx,], {
       fpsc[clay >= 35]               = "clayey-skeletal"
       fpsc[clay <  35]               = "loamy-skeletal"
       fpsc[texcl %in% sandytextures] = "sandy-skeletal"
-      })
+    })
   }
-
+  
   idx <- df$fragvoltot < 35 & df$texcl %in% sandytextures
   if (any(idx)) {
     df[idx, ]$fpsc <- "sandy"
   }
-
+  
   idx <- df$fragvoltot < 35 & ! df$texcl %in% sandytextures
   if (any(idx)) {
     df[idx, ] <- within(df[idx,], {
@@ -526,11 +526,11 @@ texture_to_taxpartsize <- function(texcl = NULL, clay = NULL, sand = NULL, sandv
       fpsc[clay >= 18 & clay < 35 & sand < 15] = "fine-silty"
       fpsc[clay >= 35 & clay < 60] = "fine"
       fpsc[clay > 60] = "very-fine"
-      })
+    })
   }
-
+  
   df$fpsc <- ifelse(df$fragvoltot > 90, "fragmental", df$fpsc)
-
+  
   return(df$fpsc)
 }
 
@@ -705,22 +705,22 @@ texture_to_texmod <- function(texture, duplicates = "combine") {
 #' 
 #' }
 fragvol_to_texmod <- function(
-  object   = NULL,
-  gravel   = NULL, 
-  cobbles  = NULL,
-  stones   = NULL, 
-  boulders = NULL, 
-  channers = NULL, 
-  flagstones = NULL, 
-  paragravel     = NULL, 
-  paracobbles    = NULL, 
-  parastones     = NULL,
-  paraboulders   = NULL, 
-  parachanners   = NULL, 
-  paraflagstones = NULL,
-  as.is      = TRUE,
-  droplevels = TRUE
-  ) {
+    object   = NULL,
+    gravel   = NULL, 
+    cobbles  = NULL,
+    stones   = NULL, 
+    boulders = NULL, 
+    channers = NULL, 
+    flagstones = NULL, 
+    paragravel     = NULL, 
+    paracobbles    = NULL, 
+    parastones     = NULL,
+    paraboulders   = NULL, 
+    parachanners   = NULL, 
+    paraflagstones = NULL,
+    as.is      = TRUE,
+    droplevels = TRUE
+) {
   
   # standardize inputs ----
   var_cols <- c("gravel", "cobbles", "stones", "boulders", "channers", "flagstones", "paragravel", "paracobbles", "parastones", "paraboulders", "parachanners", "paraflagstones")
@@ -733,7 +733,7 @@ fragvol_to_texmod <- function(
   vars_l <- list(gravel, cobbles, stones, boulders, channers, flagstones, paragravel, paracobbles, parastones, paraboulders, parachanners, paraflagstones)
   names(vars_l) <- var_cols
   
-
+  
   # check inputs----
   vars_null <- sapply(vars_l, is.null)
   df_null   <- is.null(object)
@@ -781,7 +781,7 @@ fragvol_to_texmod <- function(
   # if (!all(sapply(df, function(x)  inherits(x, "integer") | inherits(x, "numeric")))) {
   #   stop("all fragments must be numeric or integer")
   # }
-
+  
   
   ## calculate sums ----
   gr  <- NULL;   cb <- NULL;  st <- NULL;  by <- NULL;  cn <- NULL;  fl <- NULL
@@ -789,7 +789,7 @@ fragvol_to_texmod <- function(
   gr_cn <- NULL; cb_fl <- NULL; pgr_pcn <- NULL; pcb_pfl <- NULL;
   sum_nopf <- NULL; sum_pf <- NULL;
   fgr  <- NULL; fcb <- NULL; fst <- NULL; fby <- NULL; fcn <- NULL; ffl <- NULL
-                                fgr_fcn <- NULL; fcb_ffl <- NULL;
+  fgr_fcn <- NULL; fcb_ffl <- NULL;
   sum_f <- NULL
   
   df$sum_nopf <- rowSums(df[, 1:6],  na.rm = TRUE)
@@ -801,7 +801,7 @@ fragvol_to_texmod <- function(
   
   df$pgr_pcn  <- rowSums(df[c("pgr", "pcn")], na.rm = TRUE)
   df$pcb_pfl  <- rowSums(df[c("pcb", "pfl")], na.rm = TRUE)
- 
+  
   df$fgr_fcn  <- rowSums(df[c("gr",  "cn", "pgr", "pcn")], na.rm = TRUE)
   df$fcb_ffl  <- rowSums(df[c("cb",  "fl", "pcb", "pfl")], na.rm = TRUE)
   
@@ -991,7 +991,7 @@ fragvol_to_texmod <- function(
         rep(var_mods[(1:6)],  times = 3,  length.out = 18)
       ),
       rep(c("", "v", "x"),    each  = 6,  length.out = 36)
-      )
+    )
     tn <- names(sort(table(df$texmod), decreasing = TRUE))
     lv <- c(lv, tn[! tn %in% lv])
     
@@ -1098,23 +1098,20 @@ lookup_taxpartsize <- function() {
   test <- strsplit(.pscs_sc, " over | or ")
   names(test) <- .pscs_sc
   
-  idx <- lapply(test, function(x) {
-    idx <- unlist(sapply(x, function(y) rank[which(fe == y)]))
-    
-    # select the 3rd value when "or" results in 3 values
-    if (length(idx) > 2) idx <- c(idx[1], idx[3])
-    
-    dif <- diff(idx)
-    idx <- idx[1] + sqrt(abs(dif)) * sign(dif)
-    # l <- dplyr::lag(idx)
-    # l <- idx[c(NA, 1:(length(idx) - 1))]
-    # idx <- ifelse(idx < l & !is.na(l), idx * -1, idx * 1)
-    # n   <- length(idx)
-    # idx <- sum(idx * c(1, 0.1, 0.01, 0.001)[1:n])
-    
-    
-    return(idx)
-    })
+  idx <- lapply(
+    test, function(x) {
+      idx <- unlist(sapply(x, function(y) rank[which(fe == y)]))
+      
+      # select the 3rd value when "or" results in 3 values
+      if (length(idx) > 2) idx <- c(idx[1], idx[3])
+      
+      dif <- diff(idx)
+      idx <- idx[1] + sqrt(abs(dif)) * sign(dif)
+      
+      return(idx)
+    }
+  )
+  
   idx <- round(unlist(idx), 1)
   
   # fe <- data.frame(rn = 1:length(fe), fe = fe)
