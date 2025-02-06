@@ -70,8 +70,10 @@
 #' a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
 #' 
 #'   # optionally plot with helper function
-#'   if(require(sharpshootR))
-#'     aggregateColorPlot(a)
+#'   # from sharpshootR package
+#'   if(requireNamespace('sharpshootR')) {
+#'     sharpshootR::aggregateColorPlot(a)
+#'   }
 #' 
 #' # a more interesting example
 #'   data(loafercreek, package = 'soilDB')

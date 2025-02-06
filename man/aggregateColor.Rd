@@ -82,8 +82,10 @@ s$slice <- factor(s$slice, levels=guessGenHzLevels(s, 'slice')$levels)
 a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
 
   # optionally plot with helper function
-  if(require(sharpshootR))
+  # from sharpshootR package
+  if(requireNamespace('sharpshootR')) {
     aggregateColorPlot(a)
+  }
 
 # a more interesting example
   data(loafercreek, package = 'soilDB')
