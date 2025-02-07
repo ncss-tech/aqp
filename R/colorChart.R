@@ -29,7 +29,7 @@
 #' @examples
 #' 
 #' # required for latticeExtra:useOuterStrips
-#' if(!requireNamespace('latticeExtra')) {
+#' if(requireNamespace('latticeExtra')) {
 #'   
 #'   # two hue pages
 #'   ric <- expand.grid(

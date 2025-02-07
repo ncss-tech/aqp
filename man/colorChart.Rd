@@ -50,7 +50,7 @@ Visualize soil colors in Munsell notation according to within-group frequency.
 \examples{
 
 # required for latticeExtra:useOuterStrips
-if(!requireNamespace('latticeExtra')) {
+if(requireNamespace('latticeExtra')) {
   
   # two hue pages
   ric <- expand.grid(

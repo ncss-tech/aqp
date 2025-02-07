@@ -9,7 +9,7 @@
 #' @references
 #' Gaurav Sharma, Wencheng Wu, Edul N. Dalal. (2005). The CIEDE2000 Color-Difference Formula: Implementation Notes, Supplementary Test Data, and Mathematical Observations. COLOR research and application. 30(1):21-30. http://www2.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf
 #' 
-#'  Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
+#' Thomas Lin Pedersen, Berendea Nicolae and Romain François (2020). farver: High Performance Colour Space Manipulation. R package version 2.0.3. https://CRAN.R-project.org/package=farver
 #'  
 #' Dong, C.E., Webb, J.B., Bottrell, M.C., Saginor, I., Lee, B.D. and Stern, L.A. (2020). Strengths, Limitations, and Recommendations for Instrumental Color Measurement in Forensic Soil Characterization. J Forensic Sci, 65: 438-449. https://doi.org/10.1111/1556-4029.14193
 #' 
@@ -50,7 +50,8 @@
 .makeEquivalentMunsellLUT <- function(threshold = 0.001) {
   munsell <- NULL
   load(system.file("data/munsell.rda", package = "aqp")[1])
-
+  
+  # 2024-10-04: added 8.5 and 9.5 value chips 
   # 2022-03-31: updated neutral chips and 2.5 value chips now included
   
   
@@ -72,16 +73,22 @@
   # user  system elapsed 
   # 190.73    0.73  194.42
   system.time(
-    x <- farver::compare_colour(from = munsell[,c('L','A','B')], from_space = 'lab',
-                              to = munsell[,c('L','A','B')], to_space = 'lab',
-                              method = 'cie2000', white_from = 'D65', white_to = 'D65')
+    x <- farver::compare_colour(
+      from = munsell[, c('L', 'A', 'B')],
+      from_space = 'lab',
+      to = munsell[, c('L', 'A', 'B')],
+      to_space = 'lab',
+      method = 'cie2000',
+      white_from = 'D65',
+      white_to = 'D65'
+    )
   )
   
   xdat <- x
   x[lower.tri(x, diag = TRUE)] <- NA 
   # remove lower triangle for statistics (only count each pair distance 1x)
 
-  # roughly dE00 ~ 2.24 -- this is close to the perceptible limit of average human color vision with "good" lighting
+  # dE00 ~2.158 -- this is close to the perceptible limit of average human color vision with "good" lighting
   # calculate quantiles
   xqtl <- quantile(x, p = threshold, na.rm = TRUE)[1]
 
@@ -134,7 +141,7 @@
   names(equivalent_munsell) <- sprintf("%s %s/%s", munsell$hue, munsell$value, munsell$chroma)
 
   # this is only 107kB written to Rda
-  # save(equivalent_munsell, file="data/equivalent_munsell.rda")
+  save(equivalent_munsell, file="data/equivalent_munsell.rda")
 
   return(equivalent_munsell)
 }
@@ -147,7 +154,7 @@
 #' 
 #' The intention is to identify Munsell chips that may be "functionally equivalent" to some other given whole value/chroma chip elsewhere in the Munsell color space -- as discretized in the \code{aqp::munsell} data table. This basic assumption needs to be validated against your end goal: probably by visual inspection of some or all of the resulting sets. See \code{\link{colorContrast}} and \code{\link{colorContrastPlot}}.
 #'
-#' "Equivalent" chips table are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.15. 
+#' "Equivalent" chips table are based (fairly arbitrarily) on the 0.001 probability level of dE00 (default Type 7 \code{quantile}) within the upper triangle of the 8467x8467 contrast matrix. This corresponds to a \code{dE00} contrast threshold of approximately 2.16. 
 
 #' @param hue A character vector containing Munsell hues
 #' @param value A numeric vector containing Munsell values (integer only)

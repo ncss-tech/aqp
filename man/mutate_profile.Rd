@@ -3,16 +3,23 @@
 \name{mutate_profile}
 \alias{mutate_profile}
 \alias{mutate_profile,SoilProfileCollection-method}
+\alias{mutate_profile_raw}
 \title{Transform a SPC (by profile) with a set of expressions}
 \usage{
-mutate_profile(object, ..., horizon_level = NULL)
+mutate_profile(object, ..., col_names = NULL, horizon_level = NULL)
+
+mutate_profile_raw(object, expr, col_names = NULL, horizon_level = NULL)
 }
 \arguments{
 \item{object}{A SoilProfileCollection}
 
 \item{...}{A set of comma-delimited R expressions that resolve to a transformation to be applied to a single profile e.g \code{mutate_profile(hzdept = max(hzdept) - hzdept)}}
 
+\item{col_names}{character. Optional column names. Should match the number of expressions in \code{...}.}
+
 \item{horizon_level}{logical. If \code{TRUE} results of expressions are added to the SoilProfileCollection's horizon slot, if \code{FALSE} the results are added to the site slot. If \code{NULL} (default) the results are stored in the site or horizon slot based on the number of rows in each slot compared to the length of the result calculated from the \emph{first} and \emph{last} profile in the collection.}
+
+\item{expr}{A list of expressions in terms of column names in site or horizon table of \code{object}}
 }
 \value{
 A SoilProfileCollection.
@@ -22,6 +29,40 @@ A SoilProfileCollection.
 }
 \details{
 If the length an expression's result matches the number of horizons, the result is stored as a horizon-level variable. If the result has length 1, it is stored as a site-level variable. In the ambiguous case where the first and last profile have only \emph{one} horizon, the results are stored in the horizon slot by default. To force results into site slot use \code{horizon_level = FALSE}.
+}
+\examples{
+
+data(sp4)
+depths(sp4) <- id ~ top + bottom
+
+mutate_profile(sp4, clay_wtd_average = weighted.mean(clay, bottom - top))
+
+data(jacobs2000)
+
+set.seed(123)
+
+## col_names allows for column names to be calculated
+x <- mutate_profile(jacobs2000, bottom - top / sum(bottom - top),
+                    col_names = paste0("relthk", floor(runif(1, 0, 100))))
+x$relthk28
+
+# mutate_profile_raw allows for lists of expressions to be evaluated
+master_desgn <- c("O", "A", "E", "B", "C", "R", "L", "M")
+thk_names <- paste0("thk_", master_desgn)
+
+# calculate thickness for each horizon
+x$thk <- x$bottom - x$top
+
+## construct an arbitrary number of expressions using variable inputs
+ops <- lapply(master_desgn, function(x) {
+  substitute(sum(thk[grepl(PATTERN, name)], na.rm = TRUE), list(PATTERN = x))
+})
+names(ops) <- thk_names
+
+# do mutation
+y <- mutate_profile_raw(x, ops)
+
+site(y)[c(idname(y), thk_names)]
 }
 \author{
 Andrew G. Brown.

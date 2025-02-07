@@ -14,8 +14,8 @@
 #' @param idx an integer sequence defining which individuals should be compared
 #' @return No value is returned.
 #' @author Dylan E Beaudette
-#' @seealso \code{\link{sp2}}, \code{\link{profile_compare}}
-#' @references http://casoilresource.lawr.ucdavis.edu/
+#' @seealso [sp2]
+#' @references https://casoilresource.lawr.ucdavis.edu/
 #' @keywords hplot
 #' @export
 #' @examples

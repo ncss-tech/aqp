@@ -9,12 +9,12 @@
 \S4method{replaceHorizons}{SoilProfileCollection}(object) <- value
 }
 \arguments{
-\item{object}{A SoilProfileCollection}
+\item{object}{A \code{SoilProfileCollection}}
 
 \item{value}{An object inheriting \code{data.frame}}
 }
 \description{
-Replaces horizon data with new data.frame object.
+Replaces horizon data with new \code{data.frame} object.
 }
 \examples{
 
@@ -31,7 +31,7 @@ p <- sp2[1,]
 length(horizonNames(sp2))
 
 # remove all but essential ones
-replaceHorizons(p) <- horizons(p)[,c(idname(p),hzidname(p),horizonDepths(p))]
+replaceHorizons(p) <- horizons(p)[,c(idname(p), hzidname(p), horizonDepths(p))]
 
 # inspect result (a clean slate)
 horizons(p)

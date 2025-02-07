@@ -90,6 +90,18 @@ setReplaceMethod("depths", "data.frame",
   return(depth)
 }
 
+.checkDepthOrder <- function(x, depthcols) {
+  if (any(x[[depthcols[2]]] < x[[depthcols[1]]], na.rm = TRUE)) {
+    warning("One or more horizon bottom depths are shallower than top depth. Check depth logic with aqp::checkHzDepthLogic()", call. = FALSE)
+  }
+}
+
+.screenDepths <- function(x, depthcols = horizonDepths(x)) {
+  .checkNAdepths(x[[depthcols[1]]], "top")
+  .checkNAdepths(x[[depthcols[2]]], "bottom")
+  .checkDepthOrder(x, depthcols)
+}
+
 # create 0-length spc from id and horizon depth columns (`idn`, `hzd`)
 #  - allows template horizon (`hz`) and site (`st`) data to be provided (for additional columns)
 .prototypeSPC <- function(idn, hzd, 
@@ -177,6 +189,9 @@ setReplaceMethod("depths", "data.frame",
   # enforce numeric depths and provide QC warnings as needed
   data[[depthcols[1]]] <- .checkNAdepths(data[[depthcols[1]]], "top")
   data[[depthcols[2]]] <- .checkNAdepths(data[[depthcols[2]]], "bottom")
+  
+  # warn if bottom depth shallower than top (old style O horizons, data entry issues, etc.)
+  .checkDepthOrder(data, depthcols)
   
   tdep <- data[[depthcols[1]]]
 
@@ -415,14 +430,16 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
 setGeneric('replaceHorizons<-', function(object, value)
   standardGeneric('replaceHorizons<-'))
 
-#' Replace Data in Horizon Slot
+#' @title Replace Data in Horizon Slot
 #'
 #' @name replaceHorizons<-
 #'
-#' @description Replaces horizon data with new data.frame object.
+#' @description Replaces horizon data with new `data.frame` object.
 #'
-#' @param object A SoilProfileCollection
-#' @param value An object inheriting \code{data.frame}
+#' @param object A `SoilProfileCollection`
+#' 
+#' @param value An object inheriting `data.frame`
+#' 
 #' @aliases replaceHorizons<-,SoilProfileCollection-method
 #' @docType methods
 #'
@@ -444,7 +461,7 @@ setGeneric('replaceHorizons<-', function(object, value)
 #' length(horizonNames(sp2))
 #'
 #' # remove all but essential ones
-#' replaceHorizons(p) <- horizons(p)[,c(idname(p),hzidname(p),horizonDepths(p))]
+#' replaceHorizons(p) <- horizons(p)[,c(idname(p), hzidname(p), horizonDepths(p))]
 #'
 #' # inspect result (a clean slate)
 #' horizons(p)
@@ -629,19 +646,19 @@ setReplaceMethod("horizons", signature(object = "SoilProfileCollection"),
 setGeneric('diagnostic_hz<-', function(object, value)
   standardGeneric('diagnostic_hz<-'))
 
-#' Add Data to Diagnostic Features Slot
-#'
 #' @name diagnostic_hz<-
 #'
-#' @description Diagnostic feature data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named columns containing profile ID on the left and right hand side to facilitate the join: \code{diagnostic_hz(spc) <- newdata}
-#'
+#' @description 
+#' 
+#'  - `diagnostic_hz<-` (set method): Set diagnostic feature data for a SoilProfileCollection. The profile ID column from `object` (`idname(object)`) must be present in the replacement `value` object.
+#' 
 #' @param object A SoilProfileCollection
-#' @param value An object inheriting \code{data.frame}
+#' @param value An object inheriting from \code{data.frame}
 #'
 #' @aliases diagnostic_hz<-,SoilProfileCollection-method
 #' @docType methods
 #' @export
-#' @rdname diagnostic_hz-set
+#' @rdname diagnostic_hz
 #'
 #' @examples
 #'
@@ -683,26 +700,29 @@ setReplaceMethod("diagnostic_hz",
   # test for the special case where internally-used functions
   # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
   # short-circut, and return original object
-  if(nrow(d) == 0 & nrow(value) == 0)
+  if (nrow(d) == 0 && nrow(value) == 0)
   	return(object)
 
   # test to make sure that our common ID is present in the new data
-  if(! idn %in% nm)
-  	stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call.=FALSE)
+  if (!idn %in% nm)
+    stop(paste("diagnostic horizon data are missing pedon ID column: ", idn), call. = FALSE)
 
-  # test to make sure that at least one of the IDS in candidate data are present within SPC
-  if(all( ! unique(value[[idn]]) %in% pIDs) )
-  	warning('candidate diagnostic horizon data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
-
+  uidm <- unique(value[[idn]]) %in% pIDs
   # warn user if some of the IDs in the candidate data are missing
-  if(any( ! unique(value[[idn]]) %in% pIDs) ) {
-    warning('some records in candidate diagnostic horizon data have no matching IDs in target SoilProfileCollection object')
+  if (any(!uidm)) {
+    # test to make sure that at least one of the IDS in candidate data are present within SPC
+    if (all(!uidm)) {
+      warning('candidate diagnostic horizon data have NO matching IDs in target SoilProfileCollection object!', call. = FALSE)
+    } else warning('some records in candidate diagnostic horizon data have no matching IDs in target SoilProfileCollection object', call. = FALSE)
   }
 
   # if data are already present, warn the user
-  if(nrow(d) > 0)
-  	warning('overwriting existing diagnostic horizon data!', call.=FALSE)
-
+  if (nrow(d) > 0)
+  	warning('overwriting existing diagnostic horizon data!', call. = FALSE)
+  
+  # convert id column to character to match @site
+  value[[idn]] <- as.character(value[[idn]])
+  
   # copy data over
   object@diagnostic <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
 
@@ -713,19 +733,18 @@ setReplaceMethod("diagnostic_hz",
 setGeneric('restrictions<-', function(object, value)
   standardGeneric('restrictions<-'))
 
-#' Add Data to Restrictions Slot
-#'
 #' @name restrictions<-
 #'
-#' @description Restrictions data in an object inheriting from \code{data.frame} can easily be added via merge (LEFT JOIN). There must be one or more same-named profile ID columns on the left and right hand side to facilitate the join: \code{restrictions(spc) <- newdata}.
-#'
+#' @description 
+#' 
+#'  - `restrictions<-` (set method): Set restriction data for a SoilProfileCollection. The profile ID column from `object` (`idname(object)`) must be present in the replacement `value` object.
 #' @param object A SoilProfileCollection
-#' @param value An object inheriting \code{data.frame}
+#' @param value An data.frame object containing at least a column with name `idname(object)`
 #'
 #' @aliases restrictions<-,SoilProfileCollection-method
 #' @docType methods
 #'
-#' @rdname restrictions-set
+#' @rdname restrictions
 #' @export
 #' @examples
 #'
@@ -760,31 +779,35 @@ setReplaceMethod("restrictions", signature(object = "SoilProfileCollection"),
 
                    # testing the class of the new data
                    if (!inherits(value, "data.frame"))
-                     stop("restriction data must be a data.frame", call.=FALSE)
+                     stop("restriction data must be a data.frame", call. = FALSE)
 
                    # test for the special case where internally-used functions
                    # are copying over data from one object to another, and diagnostic_hz(obj) is a 0-row data.frame
                    # short-circuit, and return original object
-                   if(nrow(d) == 0 & nrow(value) == 0)
+                   if (nrow(d) == 0 && nrow(value) == 0)
                      return(object)
 
                    # test to make sure that our common ID is present in the new data
-                   if(! idn %in% nm)
-                     stop(paste("restriction data are missing pedon ID column: ", idn), call.=FALSE)
-
-                   # test to make sure that at least one of the IDs in candidate data are present within SPC
-                   if(all(!unique(value[[idn]]) %in% pIDs) )
-                     warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
-
+                   if (!idn %in% nm)
+                     stop(paste("restriction data are missing pedon ID column: ", idn), call. = FALSE)
+                   
+                   uidm <- unique(value[[idn]]) %in% pIDs
                    # warn user if some of the IDs in the candidate data are missing
-                   if(any( ! unique(value[[idn]]) %in% pIDs) ) {
-                     warning('some records in restriction data have no matching IDs in target SoilProfileCollection object')
+                   if (any(!uidm)) {
+                     # test to make sure that at least one of the IDs in candidate data are present within SPC
+                     if (all(!uidm)) {
+                       warning('restriction data have no matching IDs in target SoilProfileCollection object!', call. = FALSE)
+                     } else warning('some records in restriction data have no matching IDs in target SoilProfileCollection object', call. = FALSE)
                    }
 
                    # if data are already present, warn the user
-                   if(nrow(d) > 0)
-                     warning('overwriting existing restriction data!', call.=FALSE)
 
+                   if (nrow(d) > 0)
+                     warning('overwriting existing restriction data!', call.=FALSE)
+                   
+                   # convert id column to character to match @site
+                   value[[idn]] <- as.character(value[[idn]])
+                  
                    # copy data over
                    object@restrictions <- .as.data.frame.aqp(value, metadata(object)$aqp_df_class)
 

@@ -30,7 +30,7 @@ z$.chunk <- makeChunks(seq_along(z), size = .size)
 
 ## TODO: this doesn't work for thematic sketches, as each panel gets its own legend
 
-par(mar = c(0, 0, 0, 2), mfrow = c(.n, 1))
+par(mar = c(0, 0, 0, 0), mfrow = c(.n, 1))
 
 for(i in .chunkIds) {
   .idx <- which(z$.chunk == i)
@@ -41,8 +41,8 @@ for(i in .chunkIds) {
     lwd = 0.1,
     divide.hz = FALSE, 
     width = 0.4, 
-    max.depth = 110, 
-    depth.axis = list(line = -4, cex = 1),
+    max.depth = 150, 
+    depth.axis = FALSE,
     n = .size,
     # color = 'texcl'
     # color = 'p1'

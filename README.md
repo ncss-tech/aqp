@@ -1,12 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![R build
-status](https://github.com/ncss-tech/aqp/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/aqp/actions)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/aqp)](http://cran.r-project.org/web/packages/aqp)
-[![Total_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/aqp)](https://cran.r-project.org/package=aqp)
-[![aqp
-Manual](https://img.shields.io/badge/docs-HTML-informational)](http://ncss-tech.github.io/aqp/)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/aqp)](https://CRAN.R-project.org/package=aqp)
+[![CRAN
+status](https://badges.cranchecks.info/worst/aqp.svg)](https://cran.r-project.org/web/checks/check_results_aqp.html)
+[![Development
+Version](https://ncss-tech.r-universe.dev/badges/aqp)](https://ncss-tech.r-universe.dev/)
+[![Monthly CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/aqp)](https://cran.r-project.org/package=aqp)
+![CRAN/METACRAN](https://img.shields.io/cran/l/aqp) [![aqp
+Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/aqp/)
 
 # Algorithms for Quantitative Pedology (aqp) package for R
 
@@ -28,7 +32,7 @@ processing tasks <doi:10.1016/j.cageo.2012.10.020>. These functions and
 data structures have been extensively tested and documented, applied to
 projects involving hundreds of thousands of soil profiles, and deeply
 integrated into widely used tools such as SoilWeb
-<https://casoilresource.lawr.ucdavis.edu/soilweb-apps/>. Components of
+<https://casoilresource.lawr.ucdavis.edu/soilweb-apps>. Components of
 the AQP project (aqp, soilDB, sharpshootR, soilReports packages) serve
 an important role in routine data analysis within the USDA-NRCS Soil
 Science Division. The AQP suite of R packages offer a convenient
@@ -55,7 +59,7 @@ Install suggested packages:
 p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
 "farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 
 install.packages(p)
 ```
@@ -95,7 +99,7 @@ plotSPC(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.svg" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" alt="testing 1 2" style="display: block; margin: auto;" />
 
 ## Citation
 
@@ -117,6 +121,21 @@ citation("aqp")
 #> 'options(citation.bibtex.max=999)'.
 ```
 
+## Related Papers and Book Chapters
+
+- Beaudette D.E., P. Roudier, and J. Skovlin. 2016. Probabilistic
+  representation of genetic soil horizons. In Book Digital soil
+  morphometrics. Springer.
+- Maynard, J.J., S.W. Salley, D.E. Beaudette, and J.E. Herrick. 2020.
+  Numerical soil classification supports soil identification by citizen
+  scientists using limited, simple soil observations. Soil Science
+  Society of America Journal 84:1675-1692.
+- Beaudette, D. E., J. Skovlin, A. G. Brown, P. Roudier, and S. M.
+  Roecker. “Algorithms for Quantitative Pedology.” In Geopedology,
+  edited by Joseph Alfred Zinck, Graciela Metternicht, Héctor Francisco
+  del Valle, and Marcos Angelini, 201–22. Cham: Springer International
+  Publishing, 2023. <https://doi.org/10.1007/978-3-031-20667-2_11>.
+
 ## Related Packages
 
 - [soilDB](https://github.com/ncss-tech/soilDB)
@@ -131,7 +150,7 @@ citation("aqp")
 - [Overlapping
   Annotation](https://ncss-tech.github.io/aqp/articles/label-placement.html)
 - [What is new in aqp
-  2.0?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
+  2.x?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
 
 ## Tutorials
 

@@ -39,10 +39,9 @@ or 'LPP'), see details}
 
 \item{HzDistinctSim}{optionally simulate horizon boundary distinctness codes}
 
-\item{SPC}{result is a \code{SoilProfileCollection} object, otherwise a
-\code{data.frame} object}
+\item{SPC}{result is a \code{SoilProfileCollection} object, otherwise a \code{data.frame} object}
 
-\item{\dots}{additional parameters passed-in to the LPP (\code{.lpp})
+\item{\dots}{additional parameters passed-in to the LPP \code{.lpp})
 function}
 }
 \value{
@@ -153,7 +152,7 @@ Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution
 soil profile data Geoderma, 2011, 166, 74-83.
 }
 \seealso{
-\code{\link{profile_compare}, \link{hzDistinctnessCodeToOffset}}
+\code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
 }
 \author{
 Dylan E. Beaudette

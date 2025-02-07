@@ -3,7 +3,7 @@
 #' 
 #' @description Non-standard Munsell notation ('7.9YR 2.7/2.0') can be matched (nearest-neighbor, no interpolation) to the closest color within the `munsell` sRGB/CIELAB look-up table via `getClosestMunsellChip()`. A more accurate estimate of sRGB values from non-standard notation can be achieved with the \href{https://CRAN.R-project.org/package=munsellinterpol}{munsellinterpol} package. For example, conversion from Munsell to CIELAB, assuming a D65 illuminant via: `MunsellToLab('0.1Y 3.3/4.4', white='D65', adapt='Bradford')`.
 #'
-#' @param munsellColor character vector of strings containing Munsell notation of color, e.g. '10YR 4/3'
+#' @param munsellColor character vector of strings containing Munsell notation of color, e.g. '10YR 4/3', not NA-safe
 #' @param convertColors logical, should parsed Munsell colors be converted into sRGB values
 #' @param ... further arguments to \code{munsell2rgb}
 #'
@@ -30,6 +30,20 @@ getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
   # This is a hack to avoid munsell2rgb: "no visible binding for global variable munsell" at package R CMD check
   munsell <- NULL
   
+  # # init working vectors
+  # # for NA propagation
+  # n <- length(munsellColor)
+  # closest.hue <- vector(mode = 'character', length = n)
+  # closest.value <- vector(mode = 'numeric', length = n)
+  # closest.chroma <- vector(mode = 'numeric', length = n)
+  # 
+  # # remove NA for now
+  # na.idx <- which(is.na(munsellColor))
+  # if(length(na.idx) > 0) {
+  #   x.na <- x[na.idx]
+  #   x <- x[-na.idx]
+  # }
+  
   # extract hue, value, chroma from single string
   cd <- parseMunsell(munsellColor, convertColors = FALSE)
   
@@ -41,21 +55,27 @@ getClosestMunsellChip <- function(munsellColor, convertColors = TRUE, ...) {
   ##       -> interpreting 10YR as the same as 0Y
   
   
+  ## TODO: make NA-safe  
+  
+  
   # note: this is incompatible with LazyData: true
   # extract pieces from unique Munsell hues
-  load(system.file("data/munsell.rda", package="aqp")[1])
+  load(system.file("data/munsell.rda", package = "aqp")[1])
   all.hue.data <- na.omit(.parseMunsellHue(unique(munsell$hue)))
   
   # locate closest chip in `munsell` set of hues
-  closest.hue <- vector(mode = 'character', length=nrow(hue.data))
+  closest.hue <- vector(mode = 'character', length = nrow(hue.data))
   for(i in 1:nrow(hue.data)) {
     # index possible rows based on character part of hue
     idx <- which(all.hue.data$hue.character == hue.data[i, ]$hue.character)
+    
     # compute Euclidean distance to all possible numeric parts of hue
     distances <- abs(hue.data$hue.numeric[i] - all.hue.data$hue.numeric[idx])
     closest.idx <- which.min(distances)
+    
     # compile closest hue
     closest.hue[i] <- paste0(all.hue.data[idx, ][closest.idx, ], collapse = '')
+    
   }
   
   # valid value / chroma in our LUT

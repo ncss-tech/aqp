@@ -32,6 +32,8 @@
 ## TODO: test that sum(x) == 1
 shannonEntropy <- function(x, b = 2) {
   # 0s automatically removed by na.rm=TRUE (0 * log(0) = Nan)
+  # consider: ifelse(x == 0, 0, x * log(x))
+  
   res <- -1 * sum(x * log(x, base = b), na.rm = TRUE)
   return(res)
 }

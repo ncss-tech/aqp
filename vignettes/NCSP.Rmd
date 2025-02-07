@@ -33,13 +33,11 @@ A more detailed version of this vignette can be found in the [Pair-Wise Distance
 
 # A Simple Example
 
-Consider three soil profiles, containing basic morphology associated with the [Appling](https://casoilresource.lawr.ucdavis.edu/sde/?series=appling), [Bonneau](https://casoilresource.lawr.ucdavis.edu/sde/?series=Bonneau), and [Cecil](https://casoilresource.lawr.ucdavis.edu/sde/?series=cecil) soil series. These data are provided in the example dataset "osd" as part of the {aqp} package.
+Consider three soil profiles, containing basic morphology associated with the [Appling](https://casoilresource.lawr.ucdavis.edu/sde/?series=appling), [Bonneau](https://casoilresource.lawr.ucdavis.edu/sde/?series=Bonneau), and [Cecil](https://casoilresource.lawr.ucdavis.edu/sde/?series=cecil) soil series. These data are provided in the example data set "osd" as part of the {aqp} package.
 
 ```{r}
 library(aqp)
 library(cluster)
-library(sharpshootR)
-library(ape)
 
 # load data and make a copy
 data("osd")
@@ -116,19 +114,23 @@ D <- Reduce(
 
 Investigate the final distance matrix using divisive hierarchical clustering. The `plotProfileDendrogram()` function from the {sharpshootR} package is a convenient way to combine the resulting dendrogram with soil profile sketches. Note that the site-level distances have a very strong effect on the overall clustering structure.
 ```{r fig.width=8.5, fig.height=6}
-# divisive hierarchical clustering
-h <- as.hclust(diana(D))
-
-# hang soil profile sketches from resulting dendrogram
-par(mar = c(1, 0, 0, 1))
-plotProfileDendrogram(z, clust = h, scaling.factor = 0.0075, y.offset = 0.15, width = 0.33, color = 'genhz', name = NA)
-
-# annotate dendorgram with subgroup classification
-# this handy function provided by the {ape} package
-tiplabels(pch = 15, col = c(2, 3)[z$subgroup], cex = 1.5, offset = 0.05)
-
-# helpful legend
-legend('topleft', legend = levels(z$subgroup), pch = 15, col = c(2, 3), bty = 'n')
+# this section requires the ape and sharpshootR packages
+if(requireNamespace('sharpshootR') & requireNamespace('ape')) {
+  
+  # divisive hierarchical clustering
+  h <- as.hclust(diana(D))
+  
+  # hang soil profile sketches from resulting dendrogram
+  par(mar = c(1, 0, 0, 1))
+  sharpshootR::plotProfileDendrogram(z, clust = h, scaling.factor = 0.0075, y.offset = 0.15, width = 0.33, color = 'genhz', name = NA)
+  
+  # annotate dendorgram with subgroup classification
+  # this handy function provided by the {ape} package
+  ape::tiplabels(pch = 15, col = c(2, 3)[z$subgroup], cex = 1.5, offset = 0.05)
+  
+  # helpful legend
+  legend('topleft', legend = levels(z$subgroup), pch = 15, col = c(2, 3), bty = 'n')
+}
 ```
 
 

@@ -74,7 +74,6 @@
 # object: SoilProfileCollection
 # fm: formula defining aggregation
 # slab.structure: either regular segment interval, or user-defined segment boundaries {starting from 0, or length of 2}
-# progress: plyr-progress display
 # slab.fun: aggregate function applied to data chunks (must return a single row / chunk)
 # cpm: class probability normalization mode
 # weights: character vector naming column in site slot containing weights

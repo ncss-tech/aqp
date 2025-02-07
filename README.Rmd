@@ -10,17 +10,20 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.align = 'center',
   fig.path = "man/figures/README-",
-  dev = "svglite",
+  dev = "png",
+  retina = 1.5,
   message = FALSE,
   warning = FALSE,
   tidy = FALSE
 )
 ```
 
-[![R build status](https://github.com/ncss-tech/aqp/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/aqp/actions)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/aqp)](http://cran.r-project.org/web/packages/aqp)
-[![Total_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/aqp)](https://cran.r-project.org/package=aqp)
-[![aqp Manual](https://img.shields.io/badge/docs-HTML-informational)](http://ncss-tech.github.io/aqp/)
+[![CRAN version](https://www.r-pkg.org/badges/version/aqp)](https://CRAN.R-project.org/package=aqp)
+[![CRAN status](https://badges.cranchecks.info/worst/aqp.svg)](https://cran.r-project.org/web/checks/check_results_aqp.html)
+[![Development Version](https://ncss-tech.r-universe.dev/badges/aqp)](https://ncss-tech.r-universe.dev/)
+[![Monthly CRAN Downloads](https://cranlogs.r-pkg.org/badges/aqp)](https://cran.r-project.org/package=aqp)
+![CRAN/METACRAN](https://img.shields.io/cran/l/aqp)
+[![aqp Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/aqp/)
 
 # Algorithms for Quantitative Pedology (aqp) package for R
 
@@ -28,7 +31,7 @@ knitr::opts_chunk$set(
 <a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png">
 <img src = "https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width = "45%" height = "45%" hspace="15" vspace="15" align="right"/></a>
 
-The Algorithms for Quantitative Pedology (AQP) project was started in 2009 to organize a loosely-related set of concepts and source code on the topic of soil profile visualization, aggregation, and classification into this package (aqp). Over the past 8 years, the project has grown into a suite of related R packages that enhance and simplify the quantitative analysis of soil profile data. Central to the AQP project is a new vocabulary of specialized functions and data structures that can accommodate the inherent complexity of soil profile information; freeing the scientist to focus on ideas rather than boilerplate data processing tasks <doi:10.1016/j.cageo.2012.10.020>. These functions and data structures have been extensively tested and documented, applied to projects involving hundreds of thousands of soil profiles, and deeply integrated into widely used tools such as SoilWeb <https://casoilresource.lawr.ucdavis.edu/soilweb-apps/>. Components of the AQP project (aqp, soilDB, sharpshootR, soilReports packages) serve an important role in routine data analysis within the USDA-NRCS Soil Science Division. The AQP suite of R packages offer a convenient platform for bridging the gap between pedometric theory and practice.
+The Algorithms for Quantitative Pedology (AQP) project was started in 2009 to organize a loosely-related set of concepts and source code on the topic of soil profile visualization, aggregation, and classification into this package (aqp). Over the past 8 years, the project has grown into a suite of related R packages that enhance and simplify the quantitative analysis of soil profile data. Central to the AQP project is a new vocabulary of specialized functions and data structures that can accommodate the inherent complexity of soil profile information; freeing the scientist to focus on ideas rather than boilerplate data processing tasks <doi:10.1016/j.cageo.2012.10.020>. These functions and data structures have been extensively tested and documented, applied to projects involving hundreds of thousands of soil profiles, and deeply integrated into widely used tools such as SoilWeb <https://casoilresource.lawr.ucdavis.edu/soilweb-apps>. Components of the AQP project (aqp, soilDB, sharpshootR, soilReports packages) serve an important role in routine data analysis within the USDA-NRCS Soil Science Division. The AQP suite of R packages offer a convenient platform for bridging the gap between pedometric theory and practice.
 
 ## Installation
 
@@ -49,7 +52,7 @@ Install suggested packages:
 p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
 "farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown")
+"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 
 install.packages(p)
 ```
@@ -59,7 +62,7 @@ install.packages(p)
 
 ## Examples
 
-```{r fig.width=9, fig.height=6}
+```{r fig.width=9, fig.height=6, fig.alt='testing 1 2', fig.caption='testing 1 2'}
 library(aqp)
 
 # example data from three official series descriptions
@@ -94,6 +97,11 @@ plotSPC(
 citation("aqp")
 ```
 
+## Related Papers and Book Chapters
+  * Beaudette D.E., P. Roudier, and J. Skovlin. 2016. Probabilistic representation of genetic soil horizons. In Book Digital soil morphometrics. Springer.
+  * Maynard, J.J., S.W. Salley, D.E. Beaudette, and J.E. Herrick. 2020. Numerical soil classification supports soil identification by citizen scientists using limited, simple soil observations. Soil Science Society of  America Journal 84:1675-1692.
+  * Beaudette, D. E., J. Skovlin, A. G. Brown, P. Roudier, and S. M. Roecker. "Algorithms for Quantitative Pedology." In Geopedology, edited by Joseph Alfred Zinck, Graciela Metternicht, Héctor Francisco del Valle, and Marcos Angelini, 201–22. Cham: Springer International Publishing, 2023. https://doi.org/10.1007/978-3-031-20667-2_11.
+
 ## Related Packages
   * [soilDB](https://github.com/ncss-tech/soilDB)
   * [sharpshootR](https://github.com/ncss-tech/sharpshootR)
@@ -102,7 +110,7 @@ citation("aqp")
   * [Introduction to SoilProfileCollection Objects](https://ncss-tech.github.io/aqp/articles/Introduction-to-SoilProfileCollection-Objects.html)
   * [Numerical Classification of Soil Profiles](https://ncss-tech.github.io/aqp/articles/NCSP.html)
   * [Overlapping Annotation](https://ncss-tech.github.io/aqp/articles/label-placement.html)
-  * [What is new in aqp 2.0?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
+  * [What is new in aqp 2.x?](https://ncss-tech.github.io/aqp/articles/new-in-aqp-2.html)
 
 ## Tutorials
   * [Soil Profile Sketches](https://ncss-tech.github.io/AQP/aqp/sketches.html)

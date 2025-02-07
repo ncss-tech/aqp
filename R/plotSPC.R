@@ -691,22 +691,7 @@ plotSPC <- function(
   hz.color.interpretation <- .interpretHorizonColor(h, color, default.color, col.palette, col.palette.bias, n.legend)
   h[['.color']] <- hz.color.interpretation$colors
   
-  # sketch parameters for follow-up overlay / inspection
-  lsp <- list('width' = width,
-              'plot.order' = plot.order,
-              'x0' = relative.pos + x.idx.offset,
-              'pIDs' = pIDs[plot.order],
-              'idname' = idname(x),
-              'y.offset' = y.offset,
-              'scaling.factor' = scaling.factor,
-              'max.depth' = max.depth,
-              'n' = n,
-              'extra_x_space' = extra_x_space,
-              'extra_y_space' = extra_y_space,
-              'hz.depth.LAI' = rep(NA_real_, n),
-              'legend.colors' = hz.color.interpretation$colors,
-              'legend.data' = hz.color.interpretation$color.legend.data
-  )
+  
   
   
   ####################
@@ -719,39 +704,35 @@ plotSPC <- function(
   tcol <- hzDepthCols[1]
   bcol <- hzDepthCols[2]
   
+  if (is.null(label)) {
+    label <- NA
+  }
+  
   # get profile labels from @site
   pLabels <- site(x)[[label]]
   
-  ## this should probably use strwidth() AFTER plot() has been called
-  # if profile style is auto, determine style based on font metrics
-  if(id.style == 'auto') {
-    sum.ID.str.width <- sum(sapply(pLabels, strwidth, units='inches', cex=cex.id, font=2))
-    plot.width <- par('pin')[1]
-    ID.width.ratio <- sum.ID.str.width  / plot.width
-    #   	print(ID.width.ratio)
-    
-    if(ID.width.ratio > 0.7)
-      id.style <- 'side'
-    else
-      id.style <- 'top'
+  if (is.null(pLabels) && !is.na(label) && nchar(label) > 0) {
+    warning("column name '", label, "' not found in site names", call. = FALSE)
   }
   
+  #######################################################################
+  ## init plotting region, unless we are appending to an existing plot ##
+  #######################################################################
   
+  # y-limits also include y.offset range
+  ylim.range <- c(
+    max.depth + max(y.offset), 
+    -extra_y_space
+  )
   
-  ## init plotting region, unless we are appending to an existing plot
+  # x-limits
+  xlim.range <- c(width * x_left_space_mult, n + extra_x_space)
+  
   # note that we are using some fudge-factors to get the plotting region just right
   if(!add) {
     # margins are set outside of this function
     
-    # y-limits also include y.offset range
-    ylim.range <- c(
-      max.depth + max(y.offset), 
-      -extra_y_space
-    )
-
-    # x-limits
-    xlim.range <- c(width * x_left_space_mult, n + extra_x_space)
-    
+    # make a new, empty plot
     plot(x = 0, y = 0, type = 'n', 
          xlim = xlim.range,
          ylim = ylim.range,
@@ -760,14 +741,87 @@ plotSPC <- function(
   }
   
   
+  
+  ########################
+  ## device information ##
+  ########################
+  
+  # note: all of this has to happen after plot(...), or if `add = TRUE`
+  
+  .par_usr <- par('usr')
+  .par_dev <- par('pin')
+  .par_xWidth <- diff(.par_usr[1:2])
+  .par_devWidth <- .par_dev[1]
+  
+  # profiles / device width (inches)
+  .dev_sketch_density <- (.par_xWidth / .par_devWidth)
+  
   # calculate width of a single character on current plot device
   one.char.width <- strwidth('W')
+  
+  
+  ################################
+  ## profile ID style selection ##
+  ################################
+  
+  # if profile style is auto, determine style based on font metrics
+  if(id.style == 'auto' & !is.null(pLabels)) {
+    sum.ID.str.width <- sum(sapply(pLabels, strwidth, units = 'inches', cex = cex.id, font = 2))
+    ID.width.ratio <- sum.ID.str.width  / .par_devWidth
+    
+    # debug
+    # print(ID.width.ratio)
+    
+    if(ID.width.ratio > 0.7) {
+      id.style <- 'side'
+    }
+    
+    else {
+      id.style <- 'top'
+    }
+    
+  }
+  
+  
+  ##########################################################
+  ## sketch parameters for follow-up overlay / inspection ##
+  ##########################################################
+  
+  lsp <- list('width' = width,
+              'plot.order' = plot.order,
+              'x0' = relative.pos + x.idx.offset,
+              'pIDs' = pIDs[plot.order],
+              'idname' = idname(x),
+              'y.offset' = y.offset,
+              'scaling.factor' = scaling.factor,
+              'max.depth' = max.depth,
+              'n' = n,
+              'xlim' = xlim.range,
+              'ylim' = ylim.range,
+              'extra_x_space' = extra_x_space,
+              'extra_y_space' = extra_y_space,
+              'hz.depth.LAI' = rep(NA_real_, n),
+              'legend.colors' = hz.color.interpretation$colors,
+              'legend.data' = hz.color.interpretation$color.legend.data
+  )
+  
+  
   
   ## TODO dynamically adjust `width` based on strwidth(longest.hz.name)
   ## TODO abstract single profile sketch code into a single function
   ## TODO skip sketch rendering when i == `n` outside of length(SPC) (depths are NA)
   
   ## TODO: NO DATA template for empty profiles (now possible)
+  
+  # extract horizon column names
+  cn <- names(h)
+  
+  # extract / generate horizon name
+  m <- match(name, cn)
+  
+  if(!is.null(name) && is.na(m) && !is.na(name) && nchar(name) > 0) {
+    warning("column name '", name, "' not found in horizon names", call. = FALSE)
+  }
   
   ## iterate over profile index from 1 -> n
   ## note: there may not be `n` profiles
@@ -796,9 +850,6 @@ plotSPC <- function(
       next
     }
     
-    # extract column names
-    cn <- names(this_profile_data)
-    
     # extract / generate horizon color
     # note: the ".color" horizon attribute is auto-generated above
     # missing and NA colors have already been dealt with above
@@ -823,9 +874,7 @@ plotSPC <- function(
     }
     
     
-    # extract / generate horizon name
-    m <- match(name, cn)
-    if(! is.na(m)) {
+    if(!is.na(m)) {
       this_profile_names <- as.character(this_profile_data[[m]])
     } else {
       # otherwise use an empty string
@@ -938,10 +987,13 @@ plotSPC <- function(
         if(truncation_flag_i & !all(is.na(xx))) {
           
           # must be an even number of oscillations
-          # computed as function of number of profiles
+          # computed as function of (ideal oscillations / 2) / sketch density
           # adjusted to width (n.osc increases with width)
-          # min value of 4
-          .raggedN <- pmax(4, round((2.5 * width) * 32 / (n / 2)) * 2)
+          # min value of 6
+          # max value of 32
+          .raggedN <- round((2.5 * width) * (8 / .dev_sketch_density)) * 2
+          .raggedN <- pmax(6, .raggedN)
+          .raggedN <- pmin(32, .raggedN)
           
           # ragged bottom line segment: lr -> ll ordering
           .r <- .raggedLines(x1 = x.ll, x2 = x.lr, y = y0[j], o = .raggedOffsets, n = .raggedN)
@@ -1027,10 +1079,15 @@ plotSPC <- function(
         if(truncation_flag_i & !all(is.na(xx))) {
           
           # must be an even number of oscillations
-          # computed as function of number of profiles
+          # computed as function of (ideal oscillations / 2) / sketch density
           # adjusted to width (n.osc increases with width)
-          # min value of 4
-          .raggedN <- pmax(4, round((2.5 * width) * 32 / (n / 2)) * 2)
+          # min value of 6
+          # max value of 32
+          .raggedN <- round((2.5 * width) * (8 / .dev_sketch_density)) * 2
+          .raggedN <- pmax(6, .raggedN)
+          .raggedN <- pmin(32, .raggedN)
+          
+          ## TODO: allow user adjustments via argument
           
           # ragged bottom line segment: lr -> ll ordering
           .r <- .raggedLines(x1 = x.ll, x2 = x.lr, y = y0[j], o = .raggedOffsets, n = .raggedN)
@@ -1696,6 +1753,5 @@ plotSPC <- function(
 #' @aliases plot,SoilProfileCollection-method plot,SoilProfileCollection,ANY-method
 #' @rdname SoilProfileCollection-plotting-methods
 #' @export
-setMethod("plot", signature(x = "SoilProfileCollection",
-                            y = "ANY"),
+setMethod("plot", signature(x = "SoilProfileCollection"),
           definition = {function(x, y, ...) plotSPC(x, ...)})

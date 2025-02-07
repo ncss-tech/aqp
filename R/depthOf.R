@@ -60,7 +60,7 @@ depthOf <- function(p,
                     pattern, 
                     FUN = NULL,
                     top = TRUE, 
-                    hzdesgn = guessHzDesgnName(p),
+                    hzdesgn = hzdesgnname(p, required = TRUE),
                     no.contact.depth = NULL, 
                     no.contact.assigned = NA_real_,
                     na.rm = TRUE,
@@ -89,14 +89,10 @@ depthOf <- function(p,
   
   id <- idname(p)
   hid <- hzidname(p)
-  hznames <- horizonNames(p)
 
   # if the user has not specified a column containing horizon designations
-  if (!hzdesgn %in% hznames) {
-    hzdesgn <- guessHzDesgnName(p, required = TRUE)
-    if (!hzdesgn %in% hznames) {
-      stop("depth estimation relies on a column containing horizon designations")
-    }
+  if (is.null(hzdesgn) || !hzdesgn %in% horizonNames(p)) {
+    stop("Horizon designation column (", hzdesgn, ") does not exist.")
   }
 
   # get horizons matching designation pattern
@@ -167,7 +163,7 @@ depthOf <- function(p,
                         pattern,
                         FUN,
                         top = TRUE,
-                        hzdesgn = guessHzDesgnName(p),
+                        hzdesgn = hzdesgnname(p, required = TRUE),
                         no.contact.depth = NULL,
                         no.contact.assigned = NA,
                         na.rm = TRUE,
@@ -216,7 +212,7 @@ depthOf <- function(p,
 maxDepthOf <- function(p,
                        pattern,
                        top = TRUE,
-                       hzdesgn = guessHzDesgnName(p),
+                       hzdesgn = hzdesgnname(p, required = TRUE),
                        no.contact.depth = NULL,
                        no.contact.assigned = NA,
                        na.rm = TRUE,
@@ -241,7 +237,7 @@ maxDepthOf <- function(p,
 minDepthOf <- function(p,
                        pattern,
                        top = TRUE,
-                       hzdesgn = guessHzDesgnName(p),
+                       hzdesgn = hzdesgnname(p, required = TRUE),
                        no.contact.depth = NULL,
                        no.contact.assigned = NA,
                        na.rm = TRUE,

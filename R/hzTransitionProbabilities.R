@@ -44,41 +44,6 @@
 #' (tp <- hzTransitionProbabilities(sp4, 'name'))
 #'
 #'
-#' \dontrun{
-#' ## plot TP matrix with functions from sharpshootR package
-#' library(sharpshootR)
-#' par(mar=c(0,0,0,0), mfcol=c(1,2))
-#' plotSPC(sp4, name = 'name', name.style = 'center-center')
-#' plotSoilRelationGraph(tp, graph.mode = 'directed', edge.arrow.size=0.5)
-#'
-#' ## demonstrate genhzTableToAdjMat usage
-#' data(loafercreek, package='soilDB')
-#'
-#' # convert contingency table -> adj matrix / TP matrix
-#' tab <- table(loafercreek$hzname, loafercreek$genhz)
-#' m <- genhzTableToAdjMat(tab)
-#'
-#' # plot
-#' par(mar=c(0,0,0,0), mfcol=c(1,1))
-#' plotSoilRelationGraph(m, graph.mode = 'directed', edge.arrow.size=0.5)
-#'
-#'
-#' ## demonstrate markovchain integration
-#' library(markovchain)
-#' tp.loops <- hzTransitionProbabilities(sp4, 'name', loopTerminalStates = TRUE)
-#'
-#' # init new markovchain from TP matrix
-#' mc <- new("markovchain", states=dimnames(tp.loops)[[1]], transitionMatrix = tp.loops)
-#'
-#' # simple plot
-#' plot(mc, edge.arrow.size=0.5)
-#'
-#' # check absorbing states
-#' absorbingStates(mc)
-#'
-#' # steady-state:
-#' steadyStates(mc)
-#' }
 #'
 hzTransitionProbabilities <- function(x, name = GHL(x, required = TRUE), loopTerminalStates = FALSE) {
 
