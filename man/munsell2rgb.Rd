@@ -49,6 +49,7 @@ See examples below.
 Care should be taken when using the resulting sRGB values; they are close to their Munsell counterparts, but will vary based on your monitor and ambient lighting conditions. Also, the value used for \code{maxColorValue} will affect the brightness of the colors. Th default value (1) will usually give acceptable results, but can be adjusted to force the colors closer to what the user thinks they should look like.
 }
 \examples{
+\dontshow{if (requireNamespace("colorspace", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # neutral hues (N) can be defined with chroma of 0 or NA 
 g <- expand.grid(hue='N', value = 2:8, chroma = 0, stringsAsFactors = FALSE)
@@ -100,7 +101,7 @@ getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
 
 # convert directly to hex notation of sRGB
 getClosestMunsellChip('7.9YR 2.7/2.0')
-
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

@@ -38,30 +38,30 @@ col = jacobs2000$depletion_color, pch = 16, cex.max = 0.5)
 
 # time saturated
 plotSPC(jacobs2000, color='time_saturated', cex.names=0.8, col.label = 'Time Saturated')
+if (requireNamespace("colorspace")) {
+  # color contrast: matrix vs. concentrations
+  cc <- colorContrast(jacobs2000$matrix_color_munsell, jacobs2000$concentration_munsell)
+  cc <- na.omit(cc)
 
-# color contrast: matrix vs. concentrations
-cc <- colorContrast(jacobs2000$matrix_color_munsell, jacobs2000$concentration_munsell)
-cc <- na.omit(cc)
+  cc <- cc[order(cc$dE00), ]
+  cc <- unique(cc)
 
-cc <- cc[order(cc$dE00), ]
-cc <- unique(cc)
-
-par(bg='black', fg='white')
-colorContrastPlot(cc$m1[1:10], cc$m2[1:10], labels = c('matrix', 'concentration'))
-colorContrastPlot(cc$m1[11:21], cc$m2[11:21], labels = c('matrix', 'concentration'))
-
-
-# color contrast: depletion vs. concentrations
-cc <- colorContrast(jacobs2000$depletion_munsell, jacobs2000$concentration_munsell)
-cc <- na.omit(cc)
-
-cc <- cc[order(cc$dE00), ]
-cc <- unique(cc)
-
-par(bg='black', fg='white')
-colorContrastPlot(cc$m1, cc$m2, labels = c('depletion', 'concentration'))
+  par(bg='black', fg='white')
+  colorContrastPlot(cc$m1[1:10], cc$m2[1:10], labels = c('matrix', 'concentration'))
+  colorContrastPlot(cc$m1[11:21], cc$m2[11:21], labels = c('matrix', 'concentration'))
 
 
+  # color contrast: depletion vs. concentrations
+  cc <- colorContrast(jacobs2000$depletion_munsell, jacobs2000$concentration_munsell)
+  cc <- na.omit(cc)
+
+  cc <- cc[order(cc$dE00), ]
+  cc <- unique(cc)
+
+  par(bg='black', fg='white')
+  colorContrastPlot(cc$m1, cc$m2, labels = c('depletion', 'concentration'))
+
+}
 }
 \references{
 Jacobs, P. M., L. T. West, and J. N. Shaw. 2002. Redoximorphic

@@ -25,7 +25,7 @@
 #' @seealso [colorContrast()]
 #' @keywords hplots
 #' @export
-#' @examples
+#' @examplesIf requireNamespace("colorspace", quietly = TRUE)
 #'
 #' # keep examples from using more than 2 cores
 #' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
@@ -39,7 +39,6 @@
 #'
 #' # graphical display
 #' colorContrastPlot(m1, m2)
-#'
 colorContrastPlot <- function(
            m1,
            m2,

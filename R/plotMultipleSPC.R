@@ -127,7 +127,7 @@ profileGroupLabels <- function(x0, x1, labels, y0=100, y1=98, label.offset=2, la
 #' 
 #' @keywords hplots
 #' @export
-#' @examples
+#' @examplesIf requireNamespace("scales", quietly = TRUE)
 #'
 #' ##
 #' ## Simple Example

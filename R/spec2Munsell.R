@@ -34,7 +34,7 @@
 #' 
 #' CIE. (n.d.). CIE 15:2004 Tables Data. Retrieved from https://law.resource.org/pub/us/cfr/ibr/003/cie.15.2004.tables.xls
 #' 
-#' @examples 
+#' @examples
 #' 
 #' # Munsell reference spectra
 #' data("munsell.spectra.wide")
@@ -57,24 +57,27 @@
 #' # format Munsell notation from pieces
 #' z$m <- sprintf("%s %s/%s", z$hue, z$value, z$chroma)
 #' 
-#' # compare
-#' colorContrastPlot(
-#'   m1 = cols, 
-#'   m2 = z$m, 
-#'   labels = c('original', 'spectral\ninterpretation')
-#' )
+#' if (requireNamespace("colorspace")) {
 #' 
-#' \dontrun{
-#' if(requireNamespace("gower")) {
-#' # mix colors, return spectra, convert to color
-#' cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
-#' res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
-#' 
-#' # note that they are slightly different
-#' res$mixed
-#' spec2Munsell(res$spec)
-#' 
+#'   # compare
+#'   colorContrastPlot(
+#'     m1 = cols, 
+#'     m2 = z$m, 
+#'     labels = c('original', 'spectral\ninterpretation')
+#'   )
+#'   
 #' }
+#' 
+#' if (requireNamespace("gower")) {
+#' 
+#'   # mix colors, return spectra, convert to color
+#'   cols <- c('10YR 6/2', '5YR 5/6', '10B 4/4')
+#'   res <- mixMunsell(cols, keepMixedSpec = TRUE, mixingMethod = 'reference')
+#' 
+#'   # note that they are slightly different
+#'   res$mixed
+#'   spec2Munsell(res$spec)
+#' 
 #' }
 #' 
 spec2Munsell <- function(x, res = 10, convert = TRUE, SO = c('CIE1931', 'CIE1964'), illuminant = c('D65', 'F2'), ...) {

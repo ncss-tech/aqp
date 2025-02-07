@@ -246,7 +246,7 @@ rgb2munsell <- function(color, colorSpace = c('CIE2000', 'LAB', 'sRGB'), nCloses
 #' 
 #' @export
 #'
-#' @examples
+#' @examplesIf requireNamespace("colorspace", quietly = TRUE)
 #' 
 #' # neutral hues (N) can be defined with chroma of 0 or NA 
 #' g <- expand.grid(hue='N', value = 2:8, chroma = 0, stringsAsFactors = FALSE)
