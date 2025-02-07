@@ -751,7 +751,6 @@ plotSPC(
   sp4,
   name = 'name',
   color = 'clay',
-  col.palette = RColorBrewer::brewer.pal(10, 'Spectral'),
   col.label = 'Clay Content (%)'
 )
 ```
@@ -764,7 +763,6 @@ plotSPC(
   sp4,
   name = 'name',
   color = 'name',
-  col.palette = RColorBrewer::brewer.pal(5, 'Set1'),
   col.label = 'Original Horizon Name'
 )
 ```
@@ -781,7 +779,6 @@ plotSPC(
   sp4,
   name = 'name',
   color = 'genhz',
-  col.palette = RColorBrewer::brewer.pal(3, 'Spectral'),
   col.label = 'Generalized Horizon Name'
 )
 ```
@@ -1189,7 +1186,6 @@ The following example is based on a set of 9 randomly generated profiles, re-ali
 
 ```{r, fig.height=4.5, fig.width=9}
 library(data.table)
-library(RColorBrewer)
 
 # 9 random profiles
 # 1 simulated property via logistic power peak (LPP) function
@@ -1269,7 +1265,6 @@ plotSPC(
   name = '',
   color = 'p1',
   col.label = 'Contributing Fraction',
-  col.palette = RColorBrewer::brewer.pal(10, 'Spectral')
 )
 mtext('GSM depths', side = 2, line = -1.5)
 ```

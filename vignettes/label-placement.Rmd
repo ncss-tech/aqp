@@ -189,8 +189,7 @@ testIt(x, fixOverlapArgs = list(method = 'E', q = 0.25))
 title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
 ```
 
-<!--
-```{r fig.width=8, fig.height=5}
+```{r eval=requireNamespace("soilDB", quietly=TRUE), fig.width=8, fig.height=5}
 library(aqp)
 library(soilDB)
 
@@ -210,8 +209,6 @@ plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
 
 plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 ```
--->
-
 
 ## General Cases
 The label adjustment functionality can be used outside of the context of `plotSPC()`. The function `overlapMetics()` can be used to determine overlap within a vector of positions based on a given distance threshold. 

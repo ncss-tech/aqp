@@ -26,7 +26,6 @@ options(width = 100, stringsAsFactors = FALSE, timeout = 600)
 
 ```{r}
 library(aqp)
-library(soilDB)
 ```
 
 
@@ -115,7 +114,8 @@ mtext('Absolute\nCompleteness (cm)', side = 1, at = 0.25, line = 2.75, cex = 0.8
 ```
 
 
-```{r}
+```{r, eval=requireNamespace("soilDB", quietly=TRUE)}
+library(soilDB)
 x <- fetchKSSL(series = 'pierre')
 par(mar = c(0, 0, 3, 2))
 
