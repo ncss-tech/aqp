@@ -84,7 +84,7 @@ a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
   # optionally plot with helper function
   # from sharpshootR package
   if(requireNamespace('sharpshootR')) {
-    aggregateColorPlot(a)
+    sharpshootR::aggregateColorPlot(a)
   }
 
 # a more interesting example

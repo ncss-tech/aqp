@@ -63,8 +63,12 @@ test_that("expected order from OSDs, depthSlices", {
   # only run this locally
   skip_on_cran()
   
-  skip_if_offline()
+  # curl is required to check if offline
+  skip_if_not_installed("curl")
   
+  skip_if_offline()
+ 
+  # TODO: consider not using soilDB for testing soilColorSignature()
   skip_if_not_installed("soilDB")
   
   suppressWarnings(library(soilDB, quietly = TRUE))

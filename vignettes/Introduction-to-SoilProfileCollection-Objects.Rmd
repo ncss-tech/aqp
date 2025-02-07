@@ -322,9 +322,11 @@ prj(sp4) <- '+proj=utm +zone=11 +datum=NAD83'
 # return CRS information
 prj(sp4)
 
-# extract spatial data + site level attributes in new spatial object
-sp4.sp <- as(sp4, 'SpatialPointsDataFrame')
-sp4.sf <- as(sp4, 'sf')
+if (requireNamespace("sf", quietly = TRUE)) {
+  # extract spatial data + site level attributes in new spatial object
+  sp4.sp <- as(sp4, 'SpatialPointsDataFrame')
+  sp4.sf <- as(sp4, 'sf')
+}
 ```
 
 # Validity and Horizon Logic

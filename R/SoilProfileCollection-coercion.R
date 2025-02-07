@@ -129,7 +129,7 @@ setAs("SoilProfileCollection", "data.table", function(from) {
 #' @docType methods
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
-  if (!requireNamespace("sf")) {
+  if (!requireNamespace("sf", quietly = TRUE)) {
     stop("Package 'sf' is required to coerce a SoilProfileCollection to SpatialPointsDataFrame object", call. = FALSE)
   }
   sf::as_Spatial(as(from, 'sf'))
@@ -144,7 +144,7 @@ setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
 setAs("SoilProfileCollection", "sf", 
   function(from) {
 
-    if (!requireNamespace("sf")) {
+    if (!requireNamespace("sf", quietly = TRUE)) {
       stop("Package 'sf' is required to coerce a SoilProfileCollection to sf object", call. = FALSE)
     }
     
@@ -173,7 +173,7 @@ setAs("SoilProfileCollection", "sf",
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPoints", function(from) {
   
-    if (!requireNamespace("sf")) {
+    if (!requireNamespace("sf", quietly = TRUE)) {
       stop("Package 'sf' is required to coerce a SoilProfileCollection to sf object", call. = FALSE)
     }
   
