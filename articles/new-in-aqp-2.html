@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.2</span>
       </span>
     </div>
 
@@ -108,8 +108,8 @@
 <p>This is a major update to {aqp} that may create some issues for code
 depending on specific inputs/outputs as of {aqp} &lt;= 1.42,
 particularly those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>,
-and <code><a href="../reference/profile_compare.html">profile_compare()</a></code>. As of {aqp} 2.0,
-<code><a href="../reference/slice.html">slice()</a></code> and <code><a href="../reference/profile_compare.html">profile_compare()</a></code> are deprecated,
+and <code>profile_compare()</code>. As of {aqp} 2.0,
+<code><a href="../reference/slice.html">slice()</a></code> and <code>profile_compare()</code> are deprecated,
 but will continue to work for the rest of calendar year 2023. There are
 no plans to maintain these functions beyond {aqp} 2.0. The new version
 of <code><a href="../reference/slab.html">slab()</a></code> is a drop-in replacement for the previous
@@ -123,7 +123,7 @@ issued when invalid depth logic is reported by
 and <code><a href="../reference/fillHzGaps.html">fillHzGaps()</a></code> can usually salvage problematic
 profiles.</p>
 <p>The <code>replace_na</code> and <code>add_soil_flag</code> arguments
-to <code><a href="../reference/profile_compare.html">profile_compare()</a></code> are not present in
+to <code>profile_compare()</code> are not present in
 <code><a href="../reference/NCSP.html">NCSP()</a></code>; missing data are always replaced by maximum
 dissimilarity (1 when Gower’s distance metric is used) and the
 soil/non-soil matrix is always used to compare profiles of different
@@ -138,7 +138,7 @@ existing code to use <code><a href="../reference/dice-SoilProfileCollection-meth
 names have changed.</li>
 <li>Complete overhaul of <code><a href="../reference/slab.html">slab()</a></code> (thanks to <span class="citation">@brownag</span>), with new arguments, faster back-end,
 and weighted aggregation implemented (finally).</li>
-<li>Deprecation of <code><a href="../reference/profile_compare.html">profile_compare()</a></code> in favor of the new
+<li>Deprecation of <code>profile_compare()</code> in favor of the new
 <code><a href="../reference/NCSP.html">NCSP()</a></code> function–a complete overhaul based on Maynard et
 al., 2020. Note that:
 <ul>

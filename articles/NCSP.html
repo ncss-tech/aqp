@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.2</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>With the release of {aqp} 2.0, the soil profile comparison algorithm
-implemented in <code><a href="../reference/profile_compare.html">profile_compare()</a></code> (Beaudette et al., 2013)
+implemented in <code>profile_compare()</code> (Beaudette et al., 2013)
 has been completely re-written as <code><a href="../reference/NCSP.html">NCSP()</a></code> and re-named the
 “Numerical Comparison of Soil Profiles”. A more recent discussion of
 this algorithm is provided in Maynard et al. (2020).</p>
@@ -117,7 +117,7 @@ this algorithm is provided in Maynard et al. (2020).</p>
 function from {aqp} 2.x to perform a pair-wise comparison of soil data
 encoded as a <code>SoilProfileCollection</code> object. The pair-wise
 comparison of site-level attributes, previously available in
-<code><a href="../reference/profile_compare.html">profile_compare()</a></code> has been removed from <code><a href="../reference/NCSP.html">NCSP()</a></code>
+<code>profile_compare()</code> has been removed from <code><a href="../reference/NCSP.html">NCSP()</a></code>
 and implemented as a stand-alone function named
 <code><a href="../reference/compareSites.html">compareSites()</a></code>. A final distance matrix (combining horizon
 and site level attributes) is created via weighted average. A more
@@ -131,13 +131,11 @@ Distances by Generalized Horizon Labels</a> tutorial.</p>
 with the <a href="https://casoilresource.lawr.ucdavis.edu/sde/?series=appling" class="external-link">Appling</a>,
 <a href="https://casoilresource.lawr.ucdavis.edu/sde/?series=Bonneau" class="external-link">Bonneau</a>,
 and <a href="https://casoilresource.lawr.ucdavis.edu/sde/?series=cecil" class="external-link">Cecil</a>
-soil series. These data are provided in the example dataset “osd” as
+soil series. These data are provided in the example data set “osd” as
 part of the {aqp} package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/sharpshootR" class="external-link">sharpshootR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emmanuelparadis/ape" class="external-link">ape</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load data and make a copy</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"osd"</span><span class="op">)</span></span>
@@ -220,25 +218,29 @@ arguments that can be used to further customize the comparison.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">d1</span> <span class="op">*</span> <span class="va">w1</span>, <span class="va">d2</span> <span class="op">*</span> <span class="va">w2</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="va">w1</span>, <span class="va">w2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Investigate the final distance matrix using divisive hierarchical
-clustering. The <code><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram()</a></code> function from the
+clustering. The <code>plotProfileDendrogram()</code> function from the
 {sharpshootR} package is a convenient way to combine the resulting
 dendrogram with soil profile sketches. Note that the site-level
 distances have a very strong effect on the overall clustering
 structure.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># divisive hierarchical clustering</span></span>
-<span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a></span><span class="op">(</span><span class="va">D</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># hang soil profile sketches from resulting dendrogram</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">z</span>, clust <span class="op">=</span> <span class="va">h</span>, scaling.factor <span class="op">=</span> <span class="fl">0.0075</span>, y.offset <span class="op">=</span> <span class="fl">0.15</span>, width <span class="op">=</span> <span class="fl">0.33</span>, color <span class="op">=</span> <span class="st">'genhz'</span>, name <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># annotate dendorgram with subgroup classification</span></span>
-<span><span class="co"># this handy function provided by the {ape} package</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">tiplabels</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">[</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">]</span>, cex <span class="op">=</span> <span class="fl">1.5</span>, offset <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># helpful legend</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'topleft'</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">15</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># this section requires the ape and sharpshootR packages</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">'sharpshootR'</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">'ape'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co"># divisive hierarchical clustering</span></span>
+<span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/as.hclust.html" class="external-link">as.hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a></span><span class="op">(</span><span class="va">D</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># hang soil profile sketches from resulting dendrogram</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">sharpshootR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span><span class="va">z</span>, clust <span class="op">=</span> <span class="va">h</span>, scaling.factor <span class="op">=</span> <span class="fl">0.0075</span>, y.offset <span class="op">=</span> <span class="fl">0.15</span>, width <span class="op">=</span> <span class="fl">0.33</span>, color <span class="op">=</span> <span class="st">'genhz'</span>, name <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># annotate dendorgram with subgroup classification</span></span>
+<span>  <span class="co"># this handy function provided by the {ape} package</span></span>
+<span>  <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">tiplabels</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">[</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">]</span>, cex <span class="op">=</span> <span class="fl">1.5</span>, offset <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># helpful legend</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'topleft'</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">subgroup</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">15</span>, col <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p><img src="NCSP_files/figure-html/unnamed-chunk-7-1.png" width="816" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">

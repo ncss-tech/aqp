@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">aqp</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.2</span>
       </span>
     </div>
 
@@ -76,9 +76,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.1.1" id="aqp-211-development">aqp 2.1.1 (development)<a class="anchor" aria-label="anchor" href="#aqp-211-development"></a></h2>
-<ul><li>fix for <code><a href="../reference/hz_segment.html">hz_segment()</a></code> and <code><a href="../reference/NCSP.html">NCSP()</a></code> with <em>data.table</em> <code>SoilProfileCollection</code> objects (<a href="https://github.com/ncss-tech/aqp/issues/320" class="external-link">#320</a>)</li>
+<h2 class="page-header" data-toc-text="2.2" id="aqp-22-2025-02-06">aqp 2.2 (2025-02-06)<a class="anchor" aria-label="anchor" href="#aqp-22-2025-02-06"></a></h2>
+<ul><li>CRAN release</li>
+<li>fix for <code><a href="../reference/hz_segment.html">hz_segment()</a></code> and <code><a href="../reference/NCSP.html">NCSP()</a></code> with <em>data.table</em> <code>SoilProfileCollection</code> objects (<a href="https://github.com/ncss-tech/aqp/issues/320" class="external-link">#320</a>)</li>
 <li>fix for <code><a href="../reference/generalize.hz.html">generalize.hz()</a></code> to handle missing depths better and added <code>na.rm</code> argument (<a href="https://github.com/ncss-tech/aqp/issues/321" class="external-link">#321</a>)</li>
+<li>finally dropping plyr from suggests (<a href="https://github.com/ncss-tech/aqp/issues/157" class="external-link">#157</a>)</li>
+<li>
+<code>profile_compare()</code> removed, see <code><a href="../reference/NCSP.html">NCSP()</a></code>
+</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.1.0" id="aqp-210-2024-10-16">aqp 2.1.0 (2024-10-16)<small>2024-10-19</small><a class="anchor" aria-label="anchor" href="#aqp-210-2024-10-16"></a></h2>
@@ -142,12 +147,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0" id="aqp-20-2023-08-28">aqp 2.0 (2023-08-28)<small>2023-08-28</small><a class="anchor" aria-label="anchor" href="#aqp-20-2023-08-28"></a></h2>
-<p>This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp &lt; 1.42, particularly those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>, and <code><a href="../reference/profile_compare.html">profile_compare()</a></code>. <code><a href="../reference/slice.html">slice()</a></code> and <code><a href="../reference/profile_compare.html">profile_compare()</a></code> are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of <code><a href="../reference/slab.html">slab()</a></code> is a drop-in replacement for the previous version of the function.</p>
+<p>This is a major update to aqp that may create some issues for code depending on specific inputs/outputs in aqp &lt; 1.42, particularly those relying on <code><a href="../reference/slice.html">slice()</a></code>, <code><a href="../reference/slab.html">slab()</a></code>, and <code>profile_compare()</code>. <code><a href="../reference/slice.html">slice()</a></code> and <code>profile_compare()</code> are now deprecated, but will continue to work for the rest of calendar year 2023. There are no plans to maintain these functions beyond aqp 2.0. The new version of <code><a href="../reference/slab.html">slab()</a></code> is a drop-in replacement for the previous version of the function.</p>
 <p>Notable changes include:</p>
 <ul><li>deprecation of <code><a href="../reference/slice.html">slice()</a></code> in favor of the new, faster, more robust implementation in <code><a href="../reference/dice-SoilProfileCollection-method.html">dice()</a></code>
 </li>
 <li>complete overhaul of <code><a href="../reference/slab.html">slab()</a></code>, with new arguments, faster back-end, and weighted aggregation implemented (finally)</li>
-<li>deprecation of <code><a href="../reference/profile_compare.html">profile_compare()</a></code> in favor of the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al., 2020
+<li>deprecation of <code>profile_compare()</code> in favor of the <code><a href="../reference/NCSP.html">NCSP()</a></code>–a complete overhaul based on Maynard et al., 2020
 <ul><li>site level attributes now handled by <code><a href="../reference/compareSites.html">compareSites()</a></code>
 </li>
 <li>variable weights now possible via argument</li>
@@ -726,7 +731,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.9.6" id="aqp-196-2016-02-23">aqp 1.9.6 (2016-02-23)<a class="anchor" aria-label="anchor" href="#aqp-196-2016-02-23"></a></h2>
-<ul><li>minor changes to <code><a href="../reference/profile_compare.html">profile_compare()</a></code>, getting ready for a complete overhaul to this function</li>
+<ul><li>minor changes to <code>profile_compare()</code>, getting ready for a complete overhaul to this function</li>
 <li>new function: <code><a href="../reference/evalMissingData.html">evalMissingData()</a></code>, see manual page</li>
 </ul></div>
     <div class="section level2">
@@ -1159,7 +1164,7 @@
 <li>this feature is still experimental! testing is advised</li>
 </ul></li>
 <li>
-<code><a href="../reference/profile_compare.html">profile_compare()</a></code> now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)</li>
+<code>profile_compare()</code> now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.98-4" id="aqp-098-4-2010-12-15">aqp 0.98-4 (2010-12-15)<a class="anchor" aria-label="anchor" href="#aqp-098-4-2010-12-15"></a></h2>
