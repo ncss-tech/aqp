@@ -7,3 +7,5 @@ docs/reference/*.pdf
 inst/doc
 CRAN-SUBMISSION
 cran-comments.md
+.Rprofile
+renv

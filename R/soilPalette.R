@@ -28,7 +28,7 @@
 #' 
 #' @keywords hplots
 #' @export
-#' @examples 
+#' @examplesIf requireNamespace("colorspace", quietly = TRUE)
 #' 
 #' # maybe useful for teaching about soil color
 #' 

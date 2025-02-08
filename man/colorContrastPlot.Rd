@@ -53,6 +53,7 @@ This function requires the \code{farver} package for calculation of CIE
 delta-E00.
 }
 \examples{
+\dontshow{if (requireNamespace("colorspace", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # keep examples from using more than 2 cores
 data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
@@ -66,7 +67,7 @@ colorContrast(m1, m2)
 
 # graphical display
 colorContrastPlot(m1, m2)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=colorContrast]{colorContrast()}}

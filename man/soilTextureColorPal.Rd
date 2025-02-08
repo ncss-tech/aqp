@@ -18,6 +18,7 @@ soilTextureColorPal(simplify = FALSE, schema = "soilweb")
 Suggested color palettes for USDA soil texture classes, ranked according to average plant-available water holding capacity. The default color mapping schema is based on a palette used by SoilWeb applications.
 }
 \examples{
+\dontshow{if (requireNamespace("colorspace", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
  
 # base 12 soil texture classes
 # ranked by plant available water-holding capacity
@@ -28,7 +29,7 @@ soilPalette(d$color, lab = d$class, lab.cex = 1)
 # ranked by plant available water-holding capacity
 d <- soilTextureColorPal(simplify = FALSE)
 soilPalette(d$color, lab = d$class, lab.cex = 1)
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 D.E. Beaudette, Mike Walkinshaw, A.T. O'Geen

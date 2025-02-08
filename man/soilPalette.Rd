@@ -36,6 +36,7 @@ A very simple function for generating labeled swatches of soil colors. Largely b
 The result is a simple figure on the active plotting device.
 }
 \examples{
+\dontshow{if (requireNamespace("colorspace", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # maybe useful for teaching about soil color
 
@@ -54,7 +55,7 @@ m <- sprintf('10YR 4/\%s', 2:8)
 cols <- parseMunsell(m)
 # plot
 soilPalette(cols, m)
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 D.E. Beaudette

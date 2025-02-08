@@ -5,6 +5,8 @@ test_that("basic coercion", {
 
   skip_on_cran()
 
+  skip_if_not_installed("tibble")
+  
   ###  create empty frames
   empty_df <- data.frame()
 
@@ -99,7 +101,9 @@ res <- lapply(dfclasses, function(use_class) {
     # construct a test object of type use_class
     test <- test_object(object = df, use_class = use_class)
     test2 <- test
-
+    
+    skip_if(is.null(test))
+    
     # promote to SPC -- convert numeric ids to character
     expect_message(depths(test) <- id ~ top + bottom,
                    c("converting profile IDs from integer to character"))
