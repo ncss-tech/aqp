@@ -49,7 +49,7 @@ remotes::install_github("ncss-tech/aqp", dependencies = FALSE, upgrade = FALSE, 
 
 Install suggested packages:
 ```{r eval=FALSE}
-p <- c("ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+p <- c("soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
 "Hmisc", "tibble", "RColorBrewer", "scales", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 

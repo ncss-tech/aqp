@@ -1279,6 +1279,7 @@ See the [function manual page](http://ncss-tech.github.io/aqp/reference/NCSP.htm
 
 ```{r fig.height=6, fig.width=10}
 library(cluster)
+library(ape)
 
 # start fresh
 data(sp4)
@@ -1297,28 +1298,21 @@ round(d, 1)
 # visualize dissimilarity matrix via divisive hierarchical clustering
 d.diana <- diana(d)
 
-if(requireNamespace('sharpshootR')) {
-  
-  # this function is from the sharpshootR package
-  library(sharpshootR)
-  
-  # may require some margin adjustments
-  par(mar = c(0, 0, 4, 0))
-  
-  plotProfileDendrogram(
-    sp4,
-    d.diana,
-    scaling.factor = 0.9,
-    y.offset = 5,
-    cex.names = 0.7,
-    width = 0.3,
-    color = 'ex_Ca_to_Mg',
-    name.style = 'center-center',
-    hz.depths = TRUE,
-    depth.axis = FALSE
-  )
-}
+# may require some margin adjustments
+par(mar = c(0, 0, 4, 0))
 
+plotProfileDendrogram(
+  sp4,
+  d.diana,
+  scaling.factor = 0.9,
+  y.offset = 5,
+  cex.names = 0.7,
+  width = 0.3,
+  color = 'ex_Ca_to_Mg',
+  name.style = 'center-center',
+  hz.depths = TRUE,
+  depth.axis = FALSE
+)
 ```
 
 Some additional examples can be found in:

@@ -37,11 +37,11 @@
 #' 
 #' @importFrom methods setClass setOldClass representation prototype new isGeneric setGeneric setReplaceMethod setMethod .hasSlot as new slot slot<- slotNames
 #' 
-#' @importFrom stats TukeyHSD aggregate aov approxfun as.dist as.formula cmdscale complete.cases dist formula median model.frame na.omit na.pass quantile rnorm runif sd splinefun terms update weighted.mean cov
+#' @importFrom stats TukeyHSD aggregate aov approxfun as.dist as.formula cmdscale complete.cases dist formula median model.frame na.omit na.pass quantile rnorm runif sd splinefun terms update weighted.mean cov as.hclust
 #' 
 #' @importFrom utils object.size packageVersion
 #' 
-#' @importFrom cluster pam daisy silhouette 
+#' @importFrom cluster pam daisy silhouette
 #' 
 #' @importFrom grid grid.text gpar unit
 #' 
@@ -56,6 +56,8 @@
 #' @importFrom farver convert_colour compare_colour
 #' 
 #' @importFrom colorspace deutan tritan protan
+#' 
+#' @importFrom ape as.phylo plot.phylo tiplabels
 #' 
 "_PACKAGE"
 
