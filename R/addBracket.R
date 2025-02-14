@@ -5,24 +5,24 @@
 #' @title Annotate Diagnostic Features
 #' @description Annotate diagnostic features within a sketch of soil profiles.
 #' 
-#' @param s \code{SoilProfileCollection} object
-#' @param kind filter applied to \code{feature} column of diagnostic horizons registered within \code{s}
+#' @param s `SoilProfileCollection` object
+#' @param kind filter applied to `feature` column of diagnostic horizons registered within `s`
 #' @param feature column name containing feature kind
 #' @param top column name containing feature top depth
 #' @param bottom column name containing feature top depth
-#' @param ... additional arguments passed to \code{addBracket}
+#' @param ... additional arguments passed to `addBracket`
 #'
-#' @details Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
+#' @details Additional examples can be found in [this tutorial](http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html).
 #' 
-#' @note This is a `low-level` plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+#' @note This is a `low-level` plotting function: you must first plot a `SoilProfileCollection` object before using this function.
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @seealso \code{\link{addBracket}, \link{plotSPC}}
+#' @seealso [addBracket()], [plotSPC()]
 #'
 #' @export
 #'
-addDiagnosticBracket <- function(s, kind, feature='featkind', top='featdept', bottom='featdepb', ...) {
+addDiagnosticBracket <- function(s, kind, feature = 'featkind', top = 'featdept', bottom = 'featdepb', ...) {
 
   # extract diagnostic horizon information
   # note: the idname is already present in `d`

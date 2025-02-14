@@ -117,16 +117,19 @@ Investigate the final distance matrix using divisive hierarchical clustering. Th
 # this section requires the ape and sharpshootR packages
 if(requireNamespace('sharpshootR') & requireNamespace('ape')) {
   
+  library(sharpshootR)
+  library(ape)
+  
   # divisive hierarchical clustering
   h <- as.hclust(diana(D))
   
   # hang soil profile sketches from resulting dendrogram
   par(mar = c(1, 0, 0, 1))
-  sharpshootR::plotProfileDendrogram(z, clust = h, scaling.factor = 0.0075, y.offset = 0.15, width = 0.33, color = 'genhz', name = NA)
+  plotProfileDendrogram(z, clust = h, scaling.factor = 0.0075, y.offset = 0.15, width = 0.33, color = 'genhz', name = NA)
   
   # annotate dendorgram with subgroup classification
   # this handy function provided by the {ape} package
-  ape::tiplabels(pch = 15, col = c(2, 3)[z$subgroup], cex = 1.5, offset = 0.05)
+  tiplabels(pch = 15, col = c(2, 3)[z$subgroup], cex = 1.5, offset = 0.05)
   
   # helpful legend
   legend('topleft', legend = levels(z$subgroup), pch = 15, col = c(2, 3), bty = 'n')

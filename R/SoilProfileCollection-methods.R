@@ -266,9 +266,6 @@ setMethod(
 setMethod(f = 'unique',
           signature(x = "SoilProfileCollection"),
           definition = function(x, vars, SPC = TRUE) {
-  
-            if(!requireNamespace("digest", quietly = TRUE))
-              stop("package `digest` is required", call.=FALSE)
             
             # compute hash by profile, for selected variables
             md5 <- profileApply(x, function(i) {

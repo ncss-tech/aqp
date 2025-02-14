@@ -6,7 +6,7 @@
 
 #' @title Soil Color Palette
 #' 
-#' @description A very simple function for generating labeled swatches of soil colors. Largely based on \code{colorspace::swatchplot}.
+#' @description A very simple function for generating labeled swatches of soil colors. Largely based on `colorspace::swatchplot`.
 #' 
 #' @param colors vector of hex colors (e.g. #A66E46FF)
 #' 
@@ -14,21 +14,23 @@
 #' 
 #' @param lab.cex character scaling for labels
 #' 
-#' @param dynamic.labels logical, adjust label colors for maximum contrast via \code{invertLabelColor}
+#' @param dynamic.labels logical, adjust label colors for maximum contrast via `invertLabelColor`
 #' 
 #' @param x.inset horizontal adjustment for labels
 #' 
 #' @param y.inset vertical adjustment for labels
 #' 
-#' @param \dots further arguments to \code{colorspace::swatchplot}
+#' @param \dots further arguments to `colorspace::swatchplot`
 #' 
 #' @author D.E. Beaudette
 #' 
 #' @note The result is a simple figure on the active plotting device.
 #' 
+#' @return nothing is returned, function called for graphic output
+#' 
 #' @keywords hplots
 #' @export
-#' @examplesIf requireNamespace("colorspace", quietly = TRUE)
+#' @examples
 #' 
 #' # maybe useful for teaching about soil color
 #' 
@@ -49,7 +51,9 @@
 #' soilPalette(cols, m)
 #' 
 
-soilPalette <- function(colors, lab = colors, lab.cex=0.75, dynamic.labels=TRUE, x.inset = 0.01, y.inset = 0.01, ...) {
+soilPalette <- function(colors, lab = colors, lab.cex=0.75, dynamic.labels = TRUE, x.inset = 0.01, y.inset = 0.01, ...) {
+  
+  ## TODO: consider extending swatchplot beyond the original scope, more flexibility
   # basic plot
   colorspace::swatchplot(colors, ...)
   

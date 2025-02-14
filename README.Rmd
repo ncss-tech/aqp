@@ -38,21 +38,20 @@ The Algorithms for Quantitative Pedology (AQP) project was started in 2009 to or
 Get the stable version from CRAN:
 
 ```r
-install.packages('aqp', dep=TRUE)
+install.packages('aqp')
 ```
 
 Get the development version from Github, after installing the CRAN version + dependencies:
 
 ```r
-remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
+remotes::install_github("ncss-tech/aqp", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 ```
 
 Install suggested packages:
 ```{r eval=FALSE}
-p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+p <- c("ape", "soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
-"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
+"Hmisc", "tibble", "RColorBrewer", "scales", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 
 install.packages(p)
 ```
@@ -89,7 +88,6 @@ plotSPC(
   depth.axis = FALSE, 
   hz.depths = TRUE
 )
-
 ```
 
 ## Citation

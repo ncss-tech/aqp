@@ -35,7 +35,6 @@ The most meaningful representation of color contrast is the CIE2000 (dE00) metri
 delta-E00 is computed by the \href{https://CRAN.R-project.org/package=farver}{farver package}.
 }
 \examples{
-\dontshow{if (requireNamespace("colorspace", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 # keep examples from using more than 2 cores
 data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
@@ -68,7 +67,7 @@ colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
 m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
 m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
 colorContrast(m1, m2)
-\dontshow{\}) # examplesIf}
+
 }
 \references{
 \enumerate{

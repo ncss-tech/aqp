@@ -1,14 +1,13 @@
 
-
 #' @title Shannon Entropy
 #' @description A very simple implementation of Shannon entropy.
 #'
 #' @param x vector of probabilities (0,1), must sum to 1, should not contain NA
 #' @param b logarithm base
 #' 
-#' @details `0`s are automatically removed by \code{na.rm = TRUE}, as \code{(0 * log(0) = Nan)}
+#' @details `0`s are automatically removed by `na.rm = TRUE`, as `(0 * log(0) = Nan)`
 #' 
-#' @note When \code{b = length(x)} the result is the normalized Shannon entropy of (Kempen et al, 2009).
+#' @note When `b = length(x)` the result is the normalized Shannon entropy of (Kempen et al, 2009).
 #'
 #' @return A single numeric value.
 #' 
@@ -68,24 +67,22 @@ confusionIndex <- function(x) {
   return(res)
 }
 
-# multinominal Brier score
-# x: data.frame, rows are predictions/observations, columns contain classes
-# classLabels: vector of class labels, corresponding to column names in x.i
-# actual: name of column containing the observed class
+
 
 #' @title Multinominal Brier Score
 #' 
 #' @description Compute a multinominal Brier score from predicted class probabilities and observed class label. Lower values are associated with a more accurate classifier.
 #'
-#' @param x \code{data.frame} of class probabilities (numeric) and observed class label (character), see examples
-#' @param classLabels vector of predicted class labels (probabilities), corresponding to column names in \code{x}
+#' @param x `data.frame` of class probabilities (numeric) and observed class label (character), see examples
+#' 
+#' @param classLabels vector of predicted class labels (probabilities), corresponding to column names in `x`
 #' @param actual name of column containing the observed class, should be character vector not factor
 #' 
 #' @references Brier, Glenn W. 1950. "Verification of Forecasts Expressed in Terms of Probability." Monthly Weather Review 78 (1): 1-3. doi:10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2.
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @return a single Brier score, representative of data in \code{x}
+#' @return a single Brier score, representative of data in `x`
 #' @export
 #'
 #' @examples
@@ -147,7 +144,7 @@ brierScore <- function(x, classLabels, actual = 'actual') {
   x.actual <- x[[actual]]
   
   # keep only probabilities as matrix
-  x <- as.matrix(x[, classLabels, drop=FALSE])
+  x <- as.matrix(x[, classLabels, drop = FALSE])
   
   # init new matrix to store most-likely class
   m <- matrix(0, ncol = ncol(x), nrow = n)
@@ -164,7 +161,7 @@ brierScore <- function(x, classLabels, actual = 'actual') {
   # 1/n * sum((x - m)^2)
   # x: matrix of predictions
   # m: indicator matrix of outcomes
-  bs <- (1/n) * sum((x - m)^2, na.rm=TRUE)
+  bs <- (1/n) * sum((x - m)^2, na.rm = TRUE)
   return(bs)
 }
 

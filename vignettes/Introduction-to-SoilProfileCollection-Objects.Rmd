@@ -1297,12 +1297,15 @@ round(d, 1)
 # visualize dissimilarity matrix via divisive hierarchical clustering
 d.diana <- diana(d)
 
-# this function is from the sharpshootR package
-# requires some manual adjustments
-par(mar = c(0, 0, 4, 0))
-
 if(requireNamespace('sharpshootR')) {
-  sharpshootR::plotProfileDendrogram(
+  
+  # this function is from the sharpshootR package
+  library(sharpshootR)
+  
+  # may require some margin adjustments
+  par(mar = c(0, 0, 4, 0))
+  
+  plotProfileDendrogram(
     sp4,
     d.diana,
     scaling.factor = 0.9,

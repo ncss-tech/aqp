@@ -62,10 +62,6 @@
 #' 
 previewColors <- function(cols, method = c('grid', 'MDS', 'manual'), labels = NULL, labels.cex = 1, col.order = NULL, nrow = ceiling(sqrt(length(cols))), ncol = nrow, border.col = 'black', pt.cex = 2, pt.pch = 15) {
 
-  # sanity check, need this for color distance eval
-  if(!requireNamespace('farver', quietly = TRUE))
-    stop('package `farver` is required', call.=FALSE)
-
   # remove NA
   cols <- na.omit(cols)
   

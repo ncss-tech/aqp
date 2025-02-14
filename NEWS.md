@@ -1,5 +1,6 @@
-# aqp 2.2 (2025-02-11)
+# aqp 2.2 (2025-02-14)
  * CRAN release
+ * migrating a few functions from sharpshootR to aqp ()
  * fix for `hz_segment()` and `NCSP()` with _data.table_ `SoilProfileCollection` objects (#320)
  * fix for `generalize.hz()` to handle missing depths better and added `na.rm` argument (#321)
  * finally dropping plyr from suggests (#157)

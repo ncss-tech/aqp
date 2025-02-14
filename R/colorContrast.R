@@ -33,7 +33,8 @@
 #'
 #' @keywords manip
 #' @export
-#' @examplesIf requireNamespace("colorspace", quietly = TRUE)
+#' 
+#' @examples
 #'
 #' # keep examples from using more than 2 cores
 #' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
@@ -68,10 +69,6 @@
 #' colorContrast(m1, m2)
 #' 
 colorContrast <- function(m1, m2) {
-
-  # sanity check, need this for color distance eval
-  if(!requireNamespace('farver', quietly = TRUE))
-    stop('please install the `farver` package.', call.=FALSE)
 
   # sanity check: length of colors to compare should be equal
   if(length(m1) != length(m2)) {

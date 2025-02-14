@@ -234,12 +234,6 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = c('color
   # sanity check on method
   method <- match.arg(method)
   
-  # farver pkg required for method = pam
-  if(method == 'pam') {
-    if (!requireNamespace('farver', quietly = TRUE))
-      stop('please install the `farver` package.', call.=FALSE)
-  }
-  
   # extract horizons
   h <- horizons(spc)
   
