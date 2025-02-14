@@ -364,7 +364,7 @@ NULL
 #'                show.tip.label = FALSE)
 #' 
 #' # get the last plot geometry
-#' lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+#' lastPP <- get("last_plot.phylo", envir = ape::.PlotPhyloEnv)
 #' 
 #' # the original labels, and new (indexed) order of pedons in dendrogram
 #' d.labels <- attr(d, 'Labels')
