@@ -1705,6 +1705,7 @@ manual page</a> and <a href="http://dx.doi.org/10.1016/j.cageo.2012.10.020" clas
 details.</p>
 <div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://svn.r-project.org/R-packages/trunk/cluster/" class="external-link">cluster</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emmanuelparadis/ape" class="external-link">ape</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># start fresh</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
@@ -1733,24 +1734,21 @@ details.</p>
 <code class="sourceCode R"><span><span class="co"># visualize dissimilarity matrix via divisive hierarchical clustering</span></span>
 <span><span class="va">d.diana</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cluster/man/diana.html" class="external-link">diana</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># this function is from the sharpshootR package</span></span>
-<span><span class="co"># requires some manual adjustments</span></span>
+<span><span class="co"># may require some margin adjustments</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">'sharpshootR'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">sharpshootR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/plotProfileDendrogram.html" class="external-link">plotProfileDendrogram</a></span><span class="op">(</span></span>
-<span>    <span class="va">sp4</span>,</span>
-<span>    <span class="va">d.diana</span>,</span>
-<span>    scaling.factor <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>    y.offset <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>    cex.names <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>    width <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>    color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span>,</span>
-<span>    name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span>
-<span>    hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    depth.axis <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/plotProfileDendrogram.html">plotProfileDendrogram</a></span><span class="op">(</span></span>
+<span>  <span class="va">sp4</span>,</span>
+<span>  <span class="va">d.diana</span>,</span>
+<span>  scaling.factor <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  y.offset <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  cex.names <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  width <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  color <span class="op">=</span> <span class="st">'ex_Ca_to_Mg'</span>,</span>
+<span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span>
+<span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  depth.axis <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-51-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>Some additional examples can be found in:</p>
 <ul>

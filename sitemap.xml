@@ -27,6 +27,7 @@
 <url><loc>/reference/addDiagnosticBracket.html</loc></url>
 <url><loc>/reference/addVolumeFraction.html</loc></url>
 <url><loc>/reference/aggregateColor.html</loc></url>
+<url><loc>/reference/aggregateColorPlot.html</loc></url>
 <url><loc>/reference/aggregateSoilDepth.html</loc></url>
 <url><loc>/reference/alignTransect.html</loc></url>
 <url><loc>/reference/allocate.html</loc></url>
@@ -161,6 +162,7 @@
 <url><loc>/reference/plotColorMixture.html</loc></url>
 <url><loc>/reference/plotColorQuantiles.html</loc></url>
 <url><loc>/reference/plotMultipleSPC.html</loc></url>
+<url><loc>/reference/plotProfileDendrogram.html</loc></url>
 <url><loc>/reference/plot_distance_graph.html</loc></url>
 <url><loc>/reference/previewColors.html</loc></url>
 <url><loc>/reference/profileApply.html</loc></url>
