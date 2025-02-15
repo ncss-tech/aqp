@@ -59,7 +59,6 @@
 #' 
 #' @importFrom ape as.phylo plot.phylo tiplabels
 #' 
-#' @importFrom MASS isoMDS
 #' 
 "_PACKAGE"
 

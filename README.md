@@ -59,7 +59,7 @@ Install suggested packages:
 p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
 "farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
-"MASS", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
+ "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 
 install.packages(p)
 ```
