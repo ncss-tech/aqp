@@ -116,7 +116,7 @@ be required to avoid overlapping annotation. Thin horizons and / or
 large font sizes almost always lead to overlapping horizon depth labels
 (see numbers just to the right of horizon boundaries in the figure
 below).</p>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-1-1.png" width="192" style="display: block; margin: auto;"></p>
 <p>Version 2.0 of the {aqp} package provides two algorithms for avoiding
 overlapping annotation, available in <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> for the
 adjustment of horizon depth annotation, and for general use via
@@ -152,7 +152,7 @@ three variations on the original template.</p>
 copies of each simulated variation on the original template. Colors
 represent sequence from top to bottom, as a visual aid across perturbed
 and duplicated profiles.
-<img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;"></p>
+<img src="label-placement_files/figure-html/unnamed-chunk-3-1.png" width="256" style="display: block; margin: auto;"></p>
 <p>Selecting the optimal label-adjustment methods and parameters will
 depend on the collection of profiles, horizonation, profile height, font
 sizes, and graphics device settings (figure height, resolution).</p>
@@ -183,7 +183,7 @@ number of iterations has been reached. Label adjustment solutions are
 deterministic and can be controlled by additional arguments to
 <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code>. The most common adjustment is via
 charge density (<code>q</code>). See comparisons below.</p>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-4-1.png" width="256" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="simulated-annealing">Simulated Annealing<a class="anchor" aria-label="anchor" href="#simulated-annealing"></a>
@@ -199,7 +199,7 @@ specific applications. These additional arguments are passed to
 <code><a href="../reference/SANN_1D.html">SANN_1D()</a></code> via <code><a href="../reference/fixOverlap.html">fixOverlap()</a></code>.</p>
 <p>Note that each solution, within duplicate profiles, is slightly
 different.
-<img src="label-placement_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;"></p>
+<img src="label-placement_files/figure-html/unnamed-chunk-5-1.png" width="256" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -283,7 +283,7 @@ adjustment is different, unless randomness is “controlled” using
 <span></span>
 <span><span class="fu">testIt</span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">'Electrostatic\nq = 0.25'</span>, line <span class="op">=</span> <span class="op">-</span><span class="fl">3.5</span>, adj <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-8-1.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/soilDB/" class="external-link">soilDB</a></span><span class="op">)</span></span>
@@ -297,22 +297,22 @@ adjustment is different, unless randomness is “controlled” using
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>.aqp.plotSPC.args <span class="op">=</span> <span class="va">.args</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1.25</span><span class="op">)</span>, max.depth <span class="op">=</span> <span class="fl">151</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-9-1.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, max.depth <span class="op">=</span> <span class="fl">151</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-9-2.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-9-2.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>, max.depth <span class="op">=</span> <span class="fl">151</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-9-3.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-9-3.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>, max.depth <span class="op">=</span> <span class="fl">151</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-9-4.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-9-4.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'E'</span>, q <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span>, max.depth <span class="op">=</span> <span class="fl">151</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-9-5.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-9-5.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">x</span>, fixOverlapArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span>, max.depth <span class="op">=</span> <span class="fl">151</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-9-6.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-9-6.png" width="256" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="general-cases">General Cases<a class="anchor" aria-label="anchor" href="#general-cases"></a>
@@ -342,8 +342,8 @@ signify that a successful solution was possible. See the manual page for
 <span></span>
 <span><span class="co"># simulated annealing, solution is non-deterministic</span></span>
 <span><span class="fu"><a href="../reference/fixOverlap.html">fixOverlap</a></span><span class="op">(</span><span class="va">s</span>, thresh <span class="op">=</span> <span class="fl">0.5</span>, method <span class="op">=</span> <span class="st">'S'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; 8 iterations</span></span></code></pre>
-<pre><code><span><span class="co">#&gt; [1] 1.000000 2.198432 2.775781 4.000000 5.000000 5.500000 7.000000</span></span>
+<pre><code><span><span class="co">#&gt; 5 iterations</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 1.000000 1.908535 2.464966 4.000000 5.000000 5.500000 7.000000</span></span>
 <span><span class="co">#&gt; attr(,"converged")</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -428,23 +428,23 @@ failure to converge.</p>
 <span></span>
 <span><span class="co"># just about right, very few perturbations required</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-13-1.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-13-1.png" width="272" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ok, but now most label positions are affected</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-13-2.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-13-2.png" width="272" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># too high, wasting time on more iterations</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-13-3.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-13-3.png" width="272" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># far too high, wasting more time with little gain</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-13-4.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-13-4.png" width="272" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># chaos and failure to converge</span></span>
 <span><span class="fu">evalMethods</span><span class="op">(</span><span class="va">x</span>, thresh <span class="op">=</span> <span class="fl">5</span>, q <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-13-5.png" width="816" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-13-5.png" width="272" style="display: block; margin: auto;"></p>
 <p>Additional examples to tinker with.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># threshold too large</span></span>
@@ -573,7 +573,7 @@ failure to converge.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect algorithm trace</span></span>
 <span><span class="fu">tracePlot</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-16-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-16-1.png" width="256" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># trace log</span></span>
 <span><span class="co"># B: boundary condition violation</span></span>
@@ -600,7 +600,7 @@ failure to converge.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect algorithm trace</span></span>
 <span><span class="fu">tracePlot</span><span class="op">(</span><span class="va">x</span>, <span class="va">z</span><span class="op">)</span></span></code></pre></div>
-<p><img src="label-placement_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="label-placement_files/figure-html/unnamed-chunk-17-1.png" width="256" style="display: block; margin: auto;"></p>
 <p>Cleanup.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reset plotSPC() options</span></span>
