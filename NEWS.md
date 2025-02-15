@@ -1,6 +1,6 @@
 # aqp 2.2 (2025-02-14)
  * CRAN release
- * `evanGenHz()` now uses `stats::cmdscale()` instead of `MASS:isoMDS()`
+ * `evalGenHz()` now uses `stats::cmdscale()` instead of `MASS:isoMDS()`
  * migrating a few functions from sharpshootR to aqp:
   - `plotProfileDendrogram()`
   - `aggregateColorPlot()`
