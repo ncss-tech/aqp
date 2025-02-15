@@ -41,9 +41,7 @@
 #' @keywords manip
 #' 
 #' @export
-evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching.code='not-used', stand=TRUE, trace=FALSE, metric='euclidean') {
-  if(!requireNamespace("MASS", quietly = TRUE))
-    stop("package `MASS` is required", call.=FALSE)
+evalGenHZ <- function(obj, genhz = GHL(obj, required = TRUE), vars, non.matching.code = 'not-used', stand = TRUE, trace = FALSE, metric = 'euclidean') {
 
   # hack to make R CMD check happy
   value <- summarize <- NULL

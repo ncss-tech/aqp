@@ -39,7 +39,7 @@ previewColors(
 \item{pt.pch}{point symbol used by "MDS" method}
 }
 \value{
-When \code{method = "grid" or "manual"} a vector of color order is returned. When \code{method = "MDS"}, the output from \code{MASS::cmdscale}.
+When \code{method} = "grid" or "manual", a vector of color order is returned. When \code{method = "MDS"}, the output from \code{\link[stats:cmdscale]{stats::cmdscale()}}.
 }
 \description{
 Preview colors arranged according to CIE2000 distances or manual specification.
