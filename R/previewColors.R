@@ -32,9 +32,8 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' 
 #'
-#' @return When \code{method = "grid" or "manual"} a vector of color order is returned. When \code{method = "MDS"}, the output from \code{MASS::cmdscale}.
+#' @return When `method` = "grid" or "manual", a vector of color order is returned. When `method = "MDS"`, the output from [stats::cmdscale()].
 #' @export
 #'
 #' @examples

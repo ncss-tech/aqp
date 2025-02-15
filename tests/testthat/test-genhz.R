@@ -152,3 +152,4 @@ test_that("generalizeHz SPC method", {
   
   expect_equal(GHL(sp4), "mylabel")
 })
+
