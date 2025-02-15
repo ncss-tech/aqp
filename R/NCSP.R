@@ -10,7 +10,7 @@
 #' 
 #' @param w numeric vector of length `ncol(m)`, optionally specified for weighted distance calc
 #' 
-#' @param isColor logical, `m` contains CIELAB color coordinates, CIE2000 color contrast metric is used, requires `farver` package
+#' @param isColor logical, `m` contains CIELAB color coordinates, CIE2000 color contrast metric is used
 #' 
 #' @note Sanity checking on inputs is performed outside of this function.
 #'
@@ -286,8 +286,7 @@ NCSP <- function(
   }
   
   # color comparisons require farver pkg for dE00
-  if(isColor & !requireNamespace('farver', quietly = TRUE)) {
-    stop('color comparison requires the `farver` package', call. =FALSE)
+  if(isColor) {
     
     # for now, color comparisons are based on CIELAB color coordinates
     # must be named "L", "A", "B" and in that order

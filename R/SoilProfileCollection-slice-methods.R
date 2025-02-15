@@ -37,7 +37,6 @@
 #' @keywords methods manip
 #' @export
 #' @rdname slice
-#' @importFrom stringr str_c fixed str_split
 #' @examples
 #'
 #' library(aqp)

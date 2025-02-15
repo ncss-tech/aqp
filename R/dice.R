@@ -17,7 +17,7 @@ setGeneric("dice", function(x,
                             verbose = FALSE)
   standardGeneric("dice"))
 
-#' @importFrom stringr str_c fixed str_split
+
 .dice <- function(x,
                   fm = NULL,
                   SPC = TRUE,

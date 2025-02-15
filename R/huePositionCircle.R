@@ -22,6 +22,7 @@
 #' 
 #' 
 #' @return an invisible `data.frame` of data used to create the figure
+#' 
 #' @export
 #'
 #' @examples
@@ -86,15 +87,13 @@ huePositionCircle <- function(hues = huePosition(returnHues = TRUE), value = 6, 
       stop("simulateCVD should be one of c('deutan', 'protan', 'tritan')", call. = FALSE)
     }
     
-    if(!requireNamespace('colorspace', quietly = TRUE))
-      stop('please install the `colorspace` package.', call.=FALSE)
-    
     # simulate full severity
-    d$cols <- switch(simulateCVD, 
-                     deutan = colorspace::deutan(d$cols, severity = CVDseverity),
-                     protan = colorspace::protan(d$cols, severity = CVDseverity),
-                     tritan = colorspace::tritan(d$cols, severity = CVDseverity)
-                     )
+    d$cols <- switch(
+      simulateCVD, 
+      deutan = colorspace::deutan(d$cols, severity = CVDseverity),
+      protan = colorspace::protan(d$cols, severity = CVDseverity),
+      tritan = colorspace::tritan(d$cols, severity = CVDseverity)
+    )
   }
   
   # neutral color at center

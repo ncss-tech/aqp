@@ -107,7 +107,8 @@ test1 <- subset(hz_fixed, is_valid)
 origO <- subset(hz, grepl("O", hzname))
 fixedO <- subset(hz_fixed, grepl("O", hzname))
 
-par(mfrow=c(2,1), mar=c(0,0,3,2))
+par(mfrow = c(2, 1), mar = c(0, 0, 3, 2))
+
 plotSPC(origO, max.depth = 25)
 plotSPC(fixedO, max.depth = 25)
 

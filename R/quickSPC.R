@@ -11,6 +11,7 @@
 #' @param interval, numeric, typically an integer and only specified when using character templates in mode 2. See Details.
 #'
 #' @return `SoilProfileCollection` object
+#' 
 #' @export
 #' 
 #' @details The list template for a single SPC allows for full specification of ID, horizon designation, bottom depths, and an arbitrary number of horizon-level attributes. A compact notation is used for profile ID (single value) and horizon depths (bottom depths, assuming datum of 0). Horizon designation and additional data (e.g. clay content) are specified as vectors all of equal length, matching the number of horizons in the profile.
@@ -210,8 +211,8 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
                  .data
                }
              },
-        # error condition: bad formatting
-        stop('incorrect horizon sequence specified', call. = FALSE)
+             # error condition: bad formatting
+             stop('incorrect horizon sequence specified', call. = FALSE)
       )
       
       .data
@@ -305,10 +306,6 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
   # IDs
   if(is.null(.s$id)) {
     # generate one via digest
-    if(!requireNamespace("digest", quietly = TRUE)) {
-      stop("package `digest` is required", call. = FALSE)
-    }
-    
     .data$id <- as.character(
       digest::digest(.data, algo = 'xxhash32')
     )
@@ -344,7 +341,7 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
   
   # sanity check
   if(any(.names == '')) {
-   stop('Empty horizon designation not allowed in this template', call. = FALSE) 
+    stop('Empty horizon designation not allowed in this template', call. = FALSE) 
   }
   
   # proportional horizon thickness
@@ -367,10 +364,6 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
   # IDs
   if(is.null(.s$id)) {
     # generate one via digest
-    if(!requireNamespace("digest", quietly = TRUE)) {
-      stop("package `digest` is required", call. = FALSE)
-    }
-    
     .data$id <- as.character(
       digest::digest(.data, algo = 'xxhash32')
     )

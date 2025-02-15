@@ -9,7 +9,6 @@
 #' @param x a `SoilProfileCollection` object
 #' @param groups the name of a horizon or site attribute used to group horizons, see examples
 #' @param col the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")
-#' @param colorSpace (now deprecated, removed in aqp 2.1) 'CIE2000' used for all cases
 #' @param k single integer specifying the number of colors discretized via PAM ([cluster::pam()]), see details
 #' @param profile_wt the name of a site-level attribute used to modify weighting, e.g. area
 #' 
@@ -17,8 +16,8 @@
 #'
 #' @return A list with the following components:
 #' 
-#' \item{scaled.data}{a `list` of colors and associated weights, one item for each generalized horizon label with at least one color specified in the source data}
-#' \item{aggregate.data}{a `data.frame` of weighted-mean colors, one row for each generalized horizon label with at least one color specified in the source data}
+#'  * `scaled.data`: a `list` of colors and associated weights, one item for each generalized horizon label with at least one color specified in the source data
+#'  * `aggregate.data`: a `data.frame` of weighted-mean colors, one row for each generalized horizon label with at least one color specified in the source data
 #' 
 #' @export
 #' 
@@ -26,10 +25,11 @@
 #' `w_i = sqrt(sum(thickness_i)) * n_i`
 #' where `w_i` is the weight associated with color `i`, `thickness_i` is the total thickness of all horizons associated with the color `i`, and `n_i` is the number of horizons associated with color `i`. Weights are computed within groups specified by `groups`.
 #' 
+#' See the [related tutorial for additional examples](http://ncss-tech.github.io/AQP/sharpshootR/aggregate-soil-color.html).
+#' 
 #' @author D.E. Beaudette
 #' 
-#' @seealso [generalize.hz()]
-#' 
+#' @seealso [generalize.hz()], [aggregateColorPlot()]
 #' 
 #' @examples
 #' 
@@ -37,7 +37,7 @@
 #' data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 #' 
 #' # load some example data
-#' data(sp1, package='aqp')
+#' data(sp1, package = 'aqp')
 #' 
 #' # upgrade to SoilProfileCollection and convert Munsell colors
 #' sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
@@ -55,55 +55,10 @@
 #' # check results
 #' str(a)
 #' 
-#' \dontrun{
-#' # aggregate colors over site-level attribute: 'group'
-#' a <- aggregateColor(sp1, groups = 'group', col = 'soil_color')
+#' # simple visualization
+#' aggregateColorPlot(a)
 #' 
-#' # aggregate colors over site-level attribute: 'group'
-#' # discretize colors to 4 per group
-#' a <- aggregateColor(sp1, groups = 'group', col = 'soil_color', k = 4)
-#' 
-#' # aggregate colors over depth-slices
-#' s <- dice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ soil_color)
-#' s$slice <- paste0(s$top, ' cm')
-#' s$slice <- factor(s$slice, levels=guessGenHzLevels(s, 'slice')$levels)
-#' a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
-#' 
-#'   # optionally plot with helper function
-#'   # from sharpshootR package
-#'   if(requireNamespace('sharpshootR')) {
-#'     sharpshootR::aggregateColorPlot(a)
-#'   }
-#' 
-#' # a more interesting example
-#'   data(loafercreek, package = 'soilDB')
-#'   
-#'   # generalize horizon names using REGEX rules
-#'   n <- c('Oi', 'A', 'BA','Bt1','Bt2','Bt3','Cr','R')
-#'   p <- c('O', '^A$|Ad|Ap|AB','BA$|Bw', 
-#'          'Bt1$|^B$','^Bt$|^Bt2$','^Bt3|^Bt4|CBt$|BCt$|2Bt|2CB$|^C$','Cr','R')
-#'   loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
-#'   
-#'   # remove non-matching generalized horizon names
-#'   loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
-#'   loafercreek$genhz <- factor(loafercreek$genhz)
-#'   
-#'   a <- aggregateColor(loafercreek, 'genhz')
-#'   
-#'   # plot results with helper function
-#'   par(mar=c(1,4,4,1))
-#'   aggregateColorPlot(a, print.n.hz = TRUE)
-#'   
-#'   # inspect aggregate data
-#'   a$aggregate.data
-#' }
-#' 
-aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace = 'CIE2000', k = NULL, profile_wt = NULL, mixingMethod = c('estimate', 'exact')) {
-  
-  # colorSpace argument is now deprecated
-  if(!missing(colorSpace)) {
-    message('colorSpace argument is now deprecated, CIE2000 distance is always used.')
-  }
+aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', k = NULL, profile_wt = NULL, mixingMethod = c('estimate', 'exact')) {
   
   # sanity check
   mixingMethod <- match.arg(mixingMethod)
@@ -111,10 +66,6 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
   # sanity check
   if(!is.null(k)) {
     k <- round(k)
-    
-    # sanity check, need this for color distance eval
-    if (!requireNamespace('farver', quietly = TRUE))
-      stop('please install the `farver` package.', call.=FALSE)
     
     if(is.na(k)) {
       stop('k must be a single integer > 0')
@@ -253,7 +204,6 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
     
     ## TODO: this is wasteful, as we likely "knew" the munsell notation before-hand
     # back-calculate the closest Munsell color
-    # m <- rgb2munsell(t(col2rgb(res[[col]])) / 255, colorSpace = colorSpace)
     m <- col2Munsell(res[[col]])
     
     
@@ -306,6 +256,8 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', colorSpace =
   names(s.agg)[1] <- groups
   row.names(s.agg) <- NULL
   
+  .res <- list(scaled.data = s.scaled, aggregate.data = s.agg)
+  
   # return scaled color data
-  return(list(scaled.data = s.scaled, aggregate.data = s.agg))
+  return(.res)
 }

@@ -8,7 +8,6 @@ aggregateColor(
   x,
   groups = "genhz",
   col = "soil_color",
-  colorSpace = "CIE2000",
   k = NULL,
   profile_wt = NULL,
   mixingMethod = c("estimate", "exact")
@@ -21,8 +20,6 @@ aggregateColor(
 
 \item{col}{the name of a horizon-level attribute with soil color specified in hexadecimal (i.e. "#rrggbb")}
 
-\item{colorSpace}{(now deprecated, removed in aqp 2.1) 'CIE2000' used for all cases}
-
 \item{k}{single integer specifying the number of colors discretized via PAM (\code{\link[cluster:pam]{cluster::pam()}}), see details}
 
 \item{profile_wt}{the name of a site-level attribute used to modify weighting, e.g. area}
@@ -31,9 +28,10 @@ aggregateColor(
 }
 \value{
 A list with the following components:
-
-\item{scaled.data}{a \code{list} of colors and associated weights, one item for each generalized horizon label with at least one color specified in the source data}
-\item{aggregate.data}{a \code{data.frame} of weighted-mean colors, one row for each generalized horizon label with at least one color specified in the source data}
+\itemize{
+\item \code{scaled.data}: a \code{list} of colors and associated weights, one item for each generalized horizon label with at least one color specified in the source data
+\item \code{aggregate.data}: a \code{data.frame} of weighted-mean colors, one row for each generalized horizon label with at least one color specified in the source data
+}
 }
 \description{
 Summarize soil color data, weighted by occurrence and horizon thickness.
@@ -42,6 +40,8 @@ Summarize soil color data, weighted by occurrence and horizon thickness.
 Weights are computed by:
 \code{w_i = sqrt(sum(thickness_i)) * n_i}
 where \code{w_i} is the weight associated with color \code{i}, \code{thickness_i} is the total thickness of all horizons associated with the color \code{i}, and \code{n_i} is the number of horizons associated with color \code{i}. Weights are computed within groups specified by \code{groups}.
+
+See the \href{http://ncss-tech.github.io/AQP/sharpshootR/aggregate-soil-color.html}{related tutorial for additional examples}.
 }
 \examples{
 
@@ -49,7 +49,7 @@ where \code{w_i} is the weight associated with color \code{i}, \code{thickness_i
 data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 
 # load some example data
-data(sp1, package='aqp')
+data(sp1, package = 'aqp')
 
 # upgrade to SoilProfileCollection and convert Munsell colors
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
@@ -67,52 +67,12 @@ a <- aggregateColor(sp1, groups = 'genhz', col = 'soil_color')
 # check results
 str(a)
 
-\dontrun{
-# aggregate colors over site-level attribute: 'group'
-a <- aggregateColor(sp1, groups = 'group', col = 'soil_color')
-
-# aggregate colors over site-level attribute: 'group'
-# discretize colors to 4 per group
-a <- aggregateColor(sp1, groups = 'group', col = 'soil_color', k = 4)
-
-# aggregate colors over depth-slices
-s <- dice(sp1, c(5, 10, 15, 25, 50, 100, 150) ~ soil_color)
-s$slice <- paste0(s$top, ' cm')
-s$slice <- factor(s$slice, levels=guessGenHzLevels(s, 'slice')$levels)
-a <- aggregateColor(s, groups = 'slice', col = 'soil_color')
-
-  # optionally plot with helper function
-  # from sharpshootR package
-  if(requireNamespace('sharpshootR')) {
-    sharpshootR::aggregateColorPlot(a)
-  }
-
-# a more interesting example
-  data(loafercreek, package = 'soilDB')
-  
-  # generalize horizon names using REGEX rules
-  n <- c('Oi', 'A', 'BA','Bt1','Bt2','Bt3','Cr','R')
-  p <- c('O', '^A$|Ad|Ap|AB','BA$|Bw', 
-         'Bt1$|^B$','^Bt$|^Bt2$','^Bt3|^Bt4|CBt$|BCt$|2Bt|2CB$|^C$','Cr','R')
-  loafercreek$genhz <- generalize.hz(loafercreek$hzname, n, p)
-  
-  # remove non-matching generalized horizon names
-  loafercreek$genhz[loafercreek$genhz == 'not-used'] <- NA
-  loafercreek$genhz <- factor(loafercreek$genhz)
-  
-  a <- aggregateColor(loafercreek, 'genhz')
-  
-  # plot results with helper function
-  par(mar=c(1,4,4,1))
-  aggregateColorPlot(a, print.n.hz = TRUE)
-  
-  # inspect aggregate data
-  a$aggregate.data
-}
+# simple visualization
+aggregateColorPlot(a)
 
 }
 \seealso{
-\code{\link[=generalize.hz]{generalize.hz()}}
+\code{\link[=generalize.hz]{generalize.hz()}}, \code{\link[=aggregateColorPlot]{aggregateColorPlot()}}
 }
 \author{
 D.E. Beaudette

@@ -59,16 +59,15 @@
 
 #' @title Parse Munsell Color Notation
 #' 
-#' @description Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by [`munsell2rgb`].
+#' @description Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by [munsell2rgb()].
 #'
 #' @param munsellColor character vector of Munsell colors (e.g. `c('10YR 3/4', '5YR 4/6')`)
 #' @param convertColors logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates
 #' @param delim optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.
-#' @param ... additional arguments to [`munsell2rgb`]
+#' @param ... additional arguments to [munsell2rgb()]
 #'
 #' @return a `data.frame` object
 #' 
-#' @importFrom stringr str_extract_all str_length str_trim
 #' @export
 #'
 #' @author P. Roudier and D.E. Beaudette

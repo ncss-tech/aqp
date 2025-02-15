@@ -17,7 +17,7 @@
 #' 
 #' @rdname soilTextureColorPal
 #' 
-#' @examplesIf requireNamespace("colorspace", quietly = TRUE)
+#' @examples
 #'  
 #' # base 12 soil texture classes
 #' # ranked by plant available water-holding capacity
