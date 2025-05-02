@@ -27,7 +27,7 @@
 #' 
 #' @export
 #' 
-#' @examplesIf requireNamespace('latticeExtra')
+#' @examplesIf requireNamespace('latticeExtra') && requireNamespace('scales')
 #' 
 #' library(lattice)
 #' 
@@ -87,8 +87,8 @@
 colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip.cex = 3, chip.cex.min = 0.1, chip.cex.max = 1.5, chip.border.col = 'black', annotate.cex = chip.cex * 0.25, annotate.type = c('count', 'percentage'), threshold = NULL) {
   
   # requires latticeExtra and scales
-  if(!requireNamespace('latticeExtra', quietly = TRUE) | !requireNamespace('scales', quietly = TRUE)) {
-    stop('pleast install the `latticeExtra` and `scales` packages.', call.=FALSE)
+  if(!requireNamespace('latticeExtra', quietly = TRUE) || !requireNamespace('scales', quietly = TRUE)) {
+    stop('please install the `latticeExtra` and `scales` packages.', call. = FALSE)
   }
   
   # custom panel function defined here, so that it can "find" data within the colorChart function scope

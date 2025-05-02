@@ -10,7 +10,7 @@
 mostLikelyHzSequence <- function(mc, t0, maxIterations = 10) {
 
   if(!requireNamespace('markovchain', quietly = TRUE))
-    stop('pleast install the `markovchain` package.', call. = FALSE)
+    stop('please install the `markovchain` package.', call. = FALSE)
 
   # check for ties
   if(!is.null(attr(as(mc, 'matrix'), 'ties')))

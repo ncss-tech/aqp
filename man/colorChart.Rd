@@ -48,7 +48,7 @@ a \code{trellis} object
 Visualize soil colors in Munsell notation according to within-group frequency.
 }
 \examples{
-\dontshow{if (requireNamespace('latticeExtra')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace('latticeExtra') && requireNamespace('scales')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(lattice)
 
