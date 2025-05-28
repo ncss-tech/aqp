@@ -1,4 +1,6 @@
 
+## TODO: generalize to a particle size clases
+
 
 #' @title Coarse Fragment Class Labels and Diameter
 #' @description This is a convenience function for accessing coarse fragment class labels and associated diameter (mm), as defined in various classification systems such as USDA, Unified, and AASHTO.

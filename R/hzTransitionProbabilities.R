@@ -94,7 +94,7 @@ hzTransitionProbabilities <- function(x, name = GHL(x, required = TRUE), loopTer
   # convert to probabilities by row
   m <- sweep(m, 1, rowSums(m), '/')
 
-  # rows wih all NaN are terminal states: they transition to nothing
+  # rows with all NaN are terminal states: they transition to nothing
   # optionally, create a loop (A -> A)
   # this ensures compatibility with markovchain package
   if(loopTerminalStates) {
