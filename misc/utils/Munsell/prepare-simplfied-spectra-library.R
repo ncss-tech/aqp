@@ -21,7 +21,7 @@ library(reshape2)
 x <- read.table('SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt.gz', skip = 13, header = TRUE, stringsAsFactors = FALSE, sep = ',')
 
 # long format simpler to work with
-m <- melt(x, id.vars = 'Name')
+m <- reshape2::melt(x, id.vars = 'Name')
 
 # remove leading 'X' from wavelength
 m$variable <- as.character(m$variable)
@@ -83,4 +83,8 @@ m.rel <- m.rel[order(m.rel$hue, m.rel$value, m.rel$chroma, m.rel$wavelength), ]
 
 # save
 saveRDS(m.rel, file = 'simplified-Munsell-spectra.rds', compress = 'xz')
+
+# cleanup
+rm(list = ls())
+gc(reset = TRUE)
 

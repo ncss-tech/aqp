@@ -3,8 +3,6 @@
 ##
 
 
-## TODO: test extrapolation of "1-chroma" spectra
-
 ## TODO: clamp to original range of Munsell chroma and value
 ## TODO: coordinate with `prepare-munsell-LUT.R`
 
@@ -48,6 +46,15 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
 )
 
 
+idx <- which(m.rel$hue %in% c('10YR') & m.rel$value == 2)
+s <- m.rel[idx, ]
+
+xyplot(reflectance ~ chroma | factor(wavelength), data=s, 
+       type='b', as.table=TRUE,
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='right'),
+       par.settings = tactile.theme()
+)
 
 
 # split by hue/value/wavelength
@@ -129,33 +136,33 @@ xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance <= 0,
 
 
 ## check: OK
-s <- subset(m.final, subset = hue == '5YR' & value == 4 & chroma %in% 2:4)
+s <- subset(m.final, subset = hue == '5YR' & value == 4 & chroma %in% 1:4)
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
        par.settings = tactile.theme()
 )
 
 
-s <- subset(m.final, subset = hue == '2.5Y' & value == 4 & chroma %in% 2:4)
+s <- subset(m.final, subset = hue == '2.5Y' & value == 4 & chroma %in% 1:4)
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
        par.settings = tactile.theme()
 )
 
 
 # 2025-06-03: fixed long-standing bug in REGEX-parsing of reflectance database
-s <- subset(m.final, subset = hue == '2.5Y' & value == 8.5 & chroma %in% 2:4)
+s <- subset(m.final, subset = hue == '2.5Y' & value == 8.5 & chroma %in% 1:4)
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
        par.settings = tactile.theme()
 )
 
@@ -184,7 +191,7 @@ str(m.final)
 
 
 # check for reflectance <= 0
-# 3368 rows, all very close to 0
+# 3363 rows, all very close to 0
 # most of these are very low value + low chroma | low value + high chroma
 nrow(m.final[m.final$reflectance <= 0, ])
 
@@ -213,9 +220,20 @@ s <- subset(m.final, subset = hue == '10YR' & chroma == 4 & value %in% c(2, 2.5,
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
        par.settings = tactile.theme()
 )
+
+# 2025-06-04: 1-chroma
+s <- subset(m.final, subset = hue == '7.5YR' & chroma == 1 & value %in% c(2, 2.5, 3, 4))
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
+       par.settings = tactile.theme()
+)
+
 
 # there should be no duplication of the few "8.5 value" spectra
 s <- subset(m.final, subset = hue == '2.5Y' & chroma == 4 & value %in% c(7, 8, 8.5, 9, 9.5, 10))
@@ -237,6 +255,32 @@ xyplot(reflectance ~ value | wavelength, data = s,
 
 
 
+## final check on reflectance, should be within [0, 1]
+summary(m.final$reflectance)
+# 4656 rows (~5% of total)
+nrow(m.final[which(m.final$reflectance > 1), ])
+# 0 rows
+nrow(m.final[which(m.final$reflectance < 0), ])
+
+table(m.final$hue[which(m.final$reflectance > 1)])
+
+s <- subset(m.final, subset = hue == '10YR' & chroma == 7 & value %in% c(7, 8, 8.5, 9, 9.5, 10))
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 5),
+       par.settings = tactile.theme(),
+       panel = function(...) {
+         panel.abline(h = 1)
+         panel.xyplot(...)
+       }
+)
+
+## clamp to max reflectance of 1
+m.final$reflectance <- pmin(m.final$reflectance, 1)
+
+
 ## long -> wide for comparisons
 reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 
@@ -250,6 +294,10 @@ reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 munsell.spectra <- m.final
 munsell.spectra.wide <- reference
 
+# remove row names
+row.names(munsell.spectra) <- NULL
+row.names(munsell.spectra.wide) <- NULL
+
 save(munsell.spectra, file = '../../../data/munsell.spectra.rda', compress = 'xz')
 save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda', compress = 'xz')
 
@@ -260,5 +308,9 @@ unlink(
     'simplified-Munsell-spectra.rds'
   )
 )
+
+# cleanup
+rm(list = ls())
+gc(reset = TRUE)
 
 

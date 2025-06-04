@@ -1,3 +1,7 @@
+##
+##
+##
+
 library(purrr)
 devtools::load_all()
 
@@ -23,21 +27,22 @@ cc <- colorContrast(
 
 hist(cc$dE00, breaks = 25)
 
+
 ## TODO: investigate these
+# 2026-06-04: much lower dE00 than before, after truncating reflectance to max of 1
 x <- cc[order(cc$dE00, decreasing = TRUE)[1:10], ]
 
 x
 
 
-# 10G 9.5/10
-.m <- '5YR 2.5/10'
+#
+.m <- '7.5RP 9/9'
 plot(munsell.spectra.wide[, 1], munsell.spectra.wide[, .m], type = 'b', las = 1, main = .m, ylim = c(0, 1.2))
 spec2Munsell(munsell.spectra.wide[, .m])
 
-
-# 10G 9.5/10
-.m <- '10G 9.5/10'
+#
+.m <- '7.5RP 9/9'
 plot(munsell.spectra.wide[, 1], munsell.spectra.wide[, .m], type = 'b', las = 1, main = .m, ylim = c(0, 1.2))
-lines(munsell.spectra.wide[, 1], munsell.spectra.wide[, '10G 6/10'], type = 'b', col = 2)
-lines(munsell.spectra.wide[, 1], munsell.spectra.wide[, '10G 8/6'], type = 'b', col = 2)
+lines(munsell.spectra.wide[, 1], munsell.spectra.wide[, '7.5RP 8/6'], type = 'b', col = 2)
+lines(munsell.spectra.wide[, 1], munsell.spectra.wide[, '7.5RP 9/6'], type = 'b', col = 2)
 spec2Munsell(munsell.spectra.wide[, .m])

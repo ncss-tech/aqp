@@ -20,7 +20,9 @@ interpolateOddChromaSpectra <- function(i) {
   r.reflectance <- range(i$reflectance)
   
   # sequence of candidate chroma
+  # odd numbers, including 1 if missing
   s <- seq(from = r.chroma[1], to = r.chroma[2], by = 1)
+  s <- c(1, s)
   s.chroma <- setdiff(s, u.chroma)
   
   # short circuit: single chroma, interpolation impossible
@@ -55,22 +57,15 @@ interpolateOddChromaSpectra <- function(i) {
     stringsAsFactors = FALSE
   )
   
-  
-  # debugging: graphical check
-  # OK
-  # plot(reflectance ~ chroma, data = i )
-  # lines(seq(r.chroma[1], r.chroma[2], by = 0.1), af(seq(r.chroma[1], r.chroma[2], by = 0.1)), col = 'red')
-  # points(s.chroma, s.reflectance, pch = 15)
-  
   return(res)
-  
 }
 
 
 interpolateValueSpectra <- function(i) {
   
   # new Munsell values
-  v.target <- c(2.5, 8.5, 9.5)
+  # there are no spectra > value 9
+  v.target <- c(2.5, 8.5, 9)
   
   # 0 or 1 row input: no interpolation possible
   if(nrow(i) < 2) {

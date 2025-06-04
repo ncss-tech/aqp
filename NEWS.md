@@ -1,3 +1,8 @@
+# aqp 2.2-1 (2025-06-03)
+ * minor fixes to preparation of Munsell reference spectra, reflectance now constrained to [0,1]
+ * removed _extrapolated_ Munsell chip spectra for values > 9
+ * added (estimated) Munsell spectra for chroma 1
+
 # aqp 2.2 (2025-02-14)
  * CRAN release
  * `evalGenHz()` now uses `stats::cmdscale()` instead of `MASS:isoMDS()`
