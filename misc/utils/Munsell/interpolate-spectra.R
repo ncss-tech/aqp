@@ -3,6 +3,7 @@
 ##
 
 
+## TODO: test extrapolation of "1-chroma" spectra
 
 ## TODO: clamp to original range of Munsell chroma and value
 ## TODO: coordinate with `prepare-munsell-LUT.R`
@@ -36,6 +37,19 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
        par.settings = tactile.theme()
 )
 
+idx <- which(m.rel$hue %in% c('7.5YR') & m.rel$value == 4)
+s <- m.rel[idx, ]
+
+xyplot(reflectance ~ chroma | factor(wavelength), data=s, 
+       type='b', as.table=TRUE,
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='right'),
+       par.settings = tactile.theme()
+)
+
+
+
+
 # split by hue/value/wavelength
 m <- split(m.rel, list(m.rel$hue, m.rel$value, m.rel$wavelength))
 
@@ -61,6 +75,16 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
 )
 
 idx <- which(m.final$hue %in% c('2.5YR') & m.final$value == 4)
+s <- m.final[idx, ]
+
+xyplot(reflectance ~ chroma | factor(wavelength), data=s, 
+       type='b', as.table=TRUE,
+       scales = list(y = list(tick.number = 10)),
+       par.settings = tactile.theme()
+)
+
+# 8.5 values
+idx <- which(m.final$hue %in% c('7.5Y') & m.final$value == 8.5)
 s <- m.final[idx, ]
 
 xyplot(reflectance ~ chroma | factor(wavelength), data=s, 
@@ -125,8 +149,20 @@ xyplot(reflectance ~ wavelength, data = s,
 )
 
 
+# 2025-06-03: fixed long-standing bug in REGEX-parsing of reflectance database
+s <- subset(m.final, subset = hue == '2.5Y' & value == 8.5 & chroma %in% 2:4)
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       par.settings = tactile.theme()
+)
+
+
 
 ## interpolate spectra for select half-chip Munsell values
+# note: there are some 8.5 value spectra in the source data (hues: "10Y"  "2.5Y" "5Y"   "7.5Y")
 
 # split by hue/chroma/wavelength
 m <- split(m.final, list(m.final$hue, m.final$chroma, m.final$wavelength))
@@ -148,7 +184,7 @@ str(m.final)
 
 
 # check for reflectance <= 0
-# 3403 rows, all very close to 0
+# 3368 rows, all very close to 0
 # most of these are very low value + low chroma | low value + high chroma
 nrow(m.final[m.final$reflectance <= 0, ])
 
@@ -181,12 +217,13 @@ xyplot(reflectance ~ wavelength, data = s,
        par.settings = tactile.theme()
 )
 
+# there should be no duplication of the few "8.5 value" spectra
 s <- subset(m.final, subset = hue == '2.5Y' & chroma == 4 & value %in% c(7, 8, 8.5, 9, 9.5, 10))
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 3),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 5),
        par.settings = tactile.theme()
 )
 

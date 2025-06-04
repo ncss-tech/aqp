@@ -69,16 +69,21 @@ interpolateOddChromaSpectra <- function(i) {
 
 interpolateValueSpectra <- function(i) {
   
+  # new Munsell values
+  v.target <- c(2.5, 8.5, 9.5)
+  
   # 0 or 1 row input: no interpolation possible
-  if(nrow(i) < 2)
+  if(nrow(i) < 2) {
     return(NULL)
+  }
+  
+  # there are a few spectra associated with 8.5 values
+  # if present, ignore 
+  v.target <- setdiff(v.target, i$value)
   
   # setup interpolation function: natural splines
   # fit is exact at training points
   a.fun <- splinefun(i$value, i$reflectance, method = 'natural')
-  
-  # new Munsell values
-  v.target <- c(2.5, 8.5, 9.5)
   
   # re-assemble into original format
   res <- data.frame(

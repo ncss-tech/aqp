@@ -1,4 +1,5 @@
 library(purrr)
+devtools::load_all()
 
 data("munsell.spectra.wide")
 
