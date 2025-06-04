@@ -4,8 +4,8 @@
 
 # make Munsell and related LUT
 # + neutral chips
-# + odd chroma
-# + 0.5 value 
+# + odd chroma chips
+# + 1/2 value chips
 # xyY [C] -> XYZ [D65] -> sRGB -> CIELAB
 source('prepare-munsell-LUT.R')
 

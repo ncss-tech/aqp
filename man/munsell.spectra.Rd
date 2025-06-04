@@ -20,7 +20,7 @@ A data frame with 89496 rows and 10 variables:
 data(munsell.spectra)
 }
 \description{
-The original database "SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt" was provided by Paul Centore and downloaded July, 2020. Reflectance values for odd chroma have been interpolated from adjacent chips. See \code{aqp/misc/utils/Munsell/} for the entire set of processing steps.
+The original database "SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt" was provided by Paul Centore and downloaded July, 2020. Reflectance values for odd chroma and 8.5-value chips have been interpolated from adjacent chips. See \code{aqp/misc/utils/Munsell/} for the entire set of processing steps.
 
 Munsell value typically ranges from 2-9, and chroma from 1-12. Ranges vary by hue. Run \code{aqp:::.summarizeMunsellSpectraRanges()} for a detailed listing by hue.
 
