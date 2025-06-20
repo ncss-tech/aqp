@@ -29,7 +29,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: any::pkgdown, any::svglite, local::.
           needs: website
           
       - name: Install soilDB/sharpshootR from r-universe 
