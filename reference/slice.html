@@ -180,13 +180,13 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-in"><span><span class="co"># init SoilProfileCollection object</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom name        p1         p2        p3        p4         p5 hzID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   0     28   H1  -8.11480 -4.0385981  2.344391 -4.589098   4.091567    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  28     33   H2 -12.31050 -5.5446737  7.390140  7.972591   1.350237    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  33     59   H3 -15.19766 -3.8702909  6.107026  1.339378  -2.038242    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 10   0      9   H1  -9.14086 -2.5672940  1.884982  6.057878  -3.203610    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10   9     29   H2 -15.64414 -0.4422915 -3.941346 14.046647 -14.451331    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 10  29     59   H3 -20.32191  4.6205974 -5.215878 24.373036 -15.486156    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id top bottom name        p1        p2          p3        p4         p5 hzID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   0     28   H1  9.201405 -6.835655   0.8525996  4.824201  -7.994531    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1  28     37   H2 15.312323 -5.353120  -3.0780103 22.126603  -5.419231    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1  37     64   H3 24.106495 -6.386571   2.0878183 20.331013   0.581044    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1  64     91   H4 19.940854 -4.466280   1.4647572 17.199065 -13.806440    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10   0     13   H1 14.852170 -4.626349  -3.5354367  5.675210  -1.138095    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 10  13     34   H2 17.246366 -2.943876 -23.2641706 11.316858   5.286298    6</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate single slice at 10 cm</span></span></span>
 <span class="r-in"><span><span class="co"># output is a SoilProfileCollection object</span></span></span>
@@ -212,13 +212,13 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-out co"><span class="r-pr">#&gt;</span> Depth range: 11 - 11 cm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Horizons (6 / 220 rows  |  10 / 13 columns) -----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id sliceID top bottom hzID name      p1        p2       p3        p4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       1   0      1    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       2   1      2    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       3   2      3    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       4   3      4    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       5   4      5    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1       6   5      6    1   H1 -8.1148 -4.038598 2.344391 -4.589098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  id sliceID top bottom hzID name       p1        p2        p3       p4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       1   0      1    1   H1 9.201405 -6.835655 0.8525996 4.824201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       2   1      2    1   H1 9.201405 -6.835655 0.8525996 4.824201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       3   2      3    1   H1 9.201405 -6.835655 0.8525996 4.824201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       4   3      4    1   H1 9.201405 -6.835655 0.8525996 4.824201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       5   4      5    1   H1 9.201405 -6.835655 0.8525996 4.824201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1       6   5      6    1   H1 9.201405 -6.835655 0.8525996 4.824201</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [... more horizons ...]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Sites (6 / 20 rows  |  1 / 1 columns) -----</span>
@@ -239,20 +239,20 @@ Geosciences, Volume 52, March 2013, Pages 258-268,
 <span class="r-in"><span><span class="va">d</span><span class="op">$</span><span class="va">p1</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="dice-SoilProfileCollection-method.html">dice</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">10</span> <span class="op">~</span> <span class="va">.</span>, SPC <span class="op">=</span> <span class="cn">FALSE</span>, pctMissing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   hzID id top bottom name        p1          p2        p3         p4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1  1  10     11   H1        NA  -4.0385981  2.344391  -4.589098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    5 10  10     11   H2        NA  -0.4422915 -3.941346  14.046647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    9 11  10     11   H2        NA -10.3652288 12.298109  -6.787727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   13 12  10     11   H1 12.247845   4.3251815  1.382016 -13.858707</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   19 13  10     11   H1  4.109318   5.8979316 -3.498424  -4.977782</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   24 14  10     11   H1  5.355912  -6.6952467  7.802510  -3.715831</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            p5 sliceID .oldTop .oldBottom .pctMissing</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   4.0915670      11       0         28   0.1666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -14.4513307      70       9         29   0.1666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  -1.0061679     140       9         36   0.1666667</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  -4.2897974     217       0         22   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.4193661     342       0         28   0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   3.6439653     469       0         29   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hzID id top bottom name        p1         p2          p3         p4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1  1  10     11   H1        NA -6.8356554   0.8525996   4.824201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    5 10  10     11   H1        NA -4.6263494  -3.5354367   5.675210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   11 11  10     11   H1  6.009662  1.3820162 -12.1439838 -13.858707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   15 12  10     11   H2  6.511279 -4.4183782 -25.1033888  -1.818884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   20 13  10     11   H1 10.972373 -1.6643068  -6.6952467 -10.342752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   24 14  10     11   H1  3.773004 -0.5507985   1.1623836   9.395569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           p5 sliceID .oldTop .oldBottom .pctMissing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  -7.994531      11       0         28   0.1666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  -1.138095     102       0         13   0.1666667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  -1.401404     208       0         27   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  -4.632886     274       9         26   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  -4.558176     367       0         28   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -14.160065     462       0         18   0.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
