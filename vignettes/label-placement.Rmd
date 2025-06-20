@@ -13,8 +13,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   background = '#F7F7F7',
   fig.align = 'center',
-  dev = 'png',
-  dpi = as.integer(Sys.getenv("R_AQP_VIGNETTE_IMAGE_DPI", unset = 32)),
+  dev = 'svglite',
+  # dpi = as.integer(Sys.getenv("R_AQP_VIGNETTE_IMAGE_DPI", unset = 180)),
   optipng = knitr::hook_optipng,
   comment = "#>"
 )
@@ -191,7 +191,8 @@ testIt(x, fixOverlapArgs = list(method = 'E', q = 0.25))
 title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
 ```
 
-```{r eval=requireNamespace("soilDB", quietly=TRUE), fig.width=8, fig.height=5}
+## Compare with Real Soil Series
+```{r eval=requireNamespace("soilDB", quietly=TRUE), fig.width=9, fig.height=5}
 library(aqp)
 library(soilDB)
 
@@ -200,7 +201,7 @@ x <- fetchOSD(s)
 
 par(mar = c(0, 0, 0, 3))
 
-.args <- list(width = 0.3, name.style = 'center-center', hz.depths = TRUE, cex.names = 1)
+.args <- list(width = 0.3, name.style = 'center-center', hz.depths = TRUE, cex.names = 0.8)
 options(.aqp.plotSPC.args = .args)
 
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
@@ -244,14 +245,14 @@ evalMethods <- function(x, thresh, q, ...) {
   cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
   cols <- colorRampPalette(cols)(length(x))
   
-  z <- fixOverlap(x, thresh = thresh, method = 'E', maxIter = 100, trace = TRUE, q = q)
+  z <- fixOverlap(x, thresh = thresh, method = 'E', maxIter = 250, trace = TRUE, q = q)
   .n <- nrow(z$states)
   
   op <- par(mar = c(0, 2, 2, 0.5), bg = 'black', fg = 'white')
   layout(matrix(c(1, 2, 3, 4), ncol = 2, nrow = 2), heights = c(0.33, 0.66))
   
   plot(seq_along(z$cost), z$cost, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(1, .n))
-  mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 0, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
+  mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 1, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
   matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1)
   
   points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
@@ -271,7 +272,7 @@ evalMethods <- function(x, thresh, q, ...) {
   .n <- nrow(z$states)
   
   plot(seq_along(z$stats), z$stats, las = 1, type = 'b', axes = FALSE, cex = 0.66, xlim = c(1, .n))
-  mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 0, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
+  mtext(text = sprintf("Converged (%s): %s", .n, z$converged), at = 1, side = 3, line = 0, cex = 0.75, font = 3, adj = 0)
   
   matplot(z$states, type = 'l', lty = 1, las = 1, axes = FALSE, col = cols)
   
@@ -293,7 +294,7 @@ evalMethods <- function(x, thresh, q, ...) {
 ```
 
 The top panels represent the objective function, smaller values are better. Bottom panels illustrate perturbations to elements of the position vector `x`. Larger values of charge density `q` are required applying the electrostatic simulation method to increasingly complex problems (e.g. larger thresholds, more overlap). However, setting `q` too high will result in chaos and failure to converge.
-```{r fig.width=8.5, fig.height=5}
+```{r fig.width=9.5, fig.height=5}
 # explore effect of charge (q)
 # too large -> chaos
 x <- c(0, 2, 5, 12, 18, 20, 35, 40, 50, 56, 90, 120, 145, 150)
@@ -310,7 +311,7 @@ evalMethods(x, thresh = 5, q = 3)
 # far too high, wasting more time with little gain
 evalMethods(x, thresh = 5, q = 4)
 
-# chaos and failure to converge
+# chaos and eventually convergence
 evalMethods(x, thresh = 5, q = 5)
 ```
 
@@ -318,7 +319,6 @@ Additional examples to tinker with.
 ```{r, eval = FALSE}
 # threshold too large
 evalMethods(x, thresh = 10, q = 3)
-
 
 # large threshold
 x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 145, 150)
@@ -378,7 +378,7 @@ tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # O: rank (order) violation
   # +: accepted perturbation
   # -: rejected perturbation
-  cols <- c(grey(0.5), grey(0.85), 'royalblue', 'firebrick')
+  cols <- c(grey(0.85), 'yellow', 'royalblue', 'firebrick')
   
   cols.lines <- hcl.colors(9, 'Zissou 1', rev = TRUE)
   cols.lines <- colorRampPalette(cols.lines)(length(x))

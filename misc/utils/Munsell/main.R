@@ -27,6 +27,5 @@ source('interpolate-spectra.R')
 # these are probably extrapolation artifacts
 source('investigate-spectral-interpolation-errors.R')
 
-
 # create Munsell hue position data
 source('make-munsellHuePosition.R')

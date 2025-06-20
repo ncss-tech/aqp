@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   background = '#F7F7F7',
   fig.align = 'center',
   dev = 'png',
-  dpi = as.integer(Sys.getenv("R_AQP_VIGNETTE_IMAGE_DPI", unset = 32)),
+  dpi = as.integer(Sys.getenv("R_AQP_VIGNETTE_IMAGE_DPI", unset = 120)),
   optipng = knitr::hook_optipng,
   comment = "#>"
 )
@@ -32,7 +32,10 @@ library(aqp)
 
 
 
-```{r}
+```{r fig.width=8, fig.height=4.5}
+# tighter margins
+op <- par(mar = c(2, 2.5, 3, 2))
+
 # example data
 data("jacobs2000")
 
@@ -116,10 +119,10 @@ mtext('Absolute\nCompleteness (cm)', side = 1, at = 0.25, line = 2.75, cex = 0.8
 ```
 
 
-```{r, eval=requireNamespace("soilDB", quietly=TRUE)}
+```{r, fig.width=8, fig.height=4.5, eval=requireNamespace("soilDB", quietly=TRUE)}
 library(soilDB)
 x <- fetchKSSL(series = 'pierre')
-par(mar = c(0, 0, 3, 2))
+par(mar = c(1, 0, 3, 2))
 
 plotSPC(x, color = 'clay', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
 plotSPC(x, color = 'cec7', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
@@ -128,25 +131,34 @@ plotSPC(x, color = 'ph_h2o', width = 0.3, name.style = 'center-center', label = 
 plotSPC(x, color = 'db_13b', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
 
 
-par(mar = c(1, 0, 3, 2))
-plotSPC(x, color = 'ph_h2o', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
-
-.b <- x[, , .LAST, .BOTTOM]
-text(x = 1:length(x), y = .b, labels = x$pi, cex = 0.85, pos = 1)
-mtext('Profile Information Index (bytes)', side = 1, line = -0.5)
 
 v <- c('clay', 'db_13b', 'cec7', 'ph_h2o')
+
+par(mar = c(1, 0, 3, 2), xpd = NA)
+
+x$pi <- profileInformationIndex(x, vars = v)
+o <- order(x$pi)
+
+plotSPC(x, color = 'ph_h2o', width = 0.33, name.style = 'center-center', label = 'pedon_completeness_index', plot.order = o)
+
+.b <- x[, , .LAST, .BOTTOM]
+text(x = 1:length(x), y = .b[o], labels = x$pi[o], cex = 0.75, pos = 1)
+mtext('Profile Information Index (bytes)', side = 1, line = -0.5)
+
+## TODO: document this!!
+
+
 x$rel.not.missing <- evalMissingData(x, vars = v, method = 'relative')
 x$abs.not.missing <- evalMissingData(x, vars = v, method = 'absolute')
 x$hz.not.missing <- evalMissingData(x, vars = v, method = 'horizon')
 
 o <- order(x$rel.not.missing)
-plotSPC(x, color = 'hz.not.missing', width = 0.33, name.style = 'center-center', label = 'pedon_completeness_index', plot.order = o)
+plotSPC(x, color = 'hz.not.missing', width = 0.33, name.style = 'center-center', label = 'pedon_completeness_index', plot.order = o, col.label = 'Non-Missing Fraction within Horizons')
 text(x = 1:length(x), y = .b[o], labels = round(x$rel.not.missing[o], 2), cex = 0.85, pos = 1)
 mtext('Relative Non-Missing Fraction', side = 1, line = -0.5)
 
 o <- order(x$abs.not.missing)
-plotSPC(x, color = 'hz.not.missing', width = 0.33, name.style = 'center-center', label = 'pedon_completeness_index', plot.order = o)
+plotSPC(x, color = 'hz.not.missing', width = 0.33, name.style = 'center-center', label = 'pedon_completeness_index', plot.order = o, col.label = 'Non-Missing Fraction within Horizons')
 text(x = 1:length(x), y = .b[o], labels = x$abs.not.missing[o], cex = 0.85, pos = 1)
 mtext('Absolute Non-Missing (cm)', side = 1, line = -0.5)
 

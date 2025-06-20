@@ -1,12 +1,16 @@
 
+
+## TODO: documentation needs a lot more detail!
+
+
 ## TODO: relationship to .pctMissing (1-unit slice eval)
 
 ## missing data fraction computed on a thickness basis
 ## this is meant to be run on a single profile at a time
 # x: single SPC
 # v: variables to consider
-# n: horizon designations
-# p: inverted pattern matching non-soil horizons
+# n: column containing horizon designations
+# p: pattern matching non-soil horizons
 # m: method, 'relative', 'absolute', 'horizon' 
 .getMissingDataFraction <- function(x, v, n, p, m) {
   # get horizons
@@ -198,7 +202,7 @@ evalMissingData <- function(x, vars, name = hzdesgnname(x), p = 'Cr|R|Cd', metho
     stop(sprintf('`%s` not a horizon level attribute', name), call. = FALSE)
   }
 
-  # check for bad hz attr
+  # check for incorrectly specified horizon level data
   if(length(sdv > 1)) {
     stop(sprintf('`%s` not horizon level attribute(s)', paste(sdv, collapse = ',')), call. = FALSE)
   }
