@@ -1,4 +1,7 @@
 
+## TODO: consider use of alternative distance metrics that DO NOT rescale always to 0,1
+
+
 ## Note: sanity checking on w is performed outside of this function
 
 
@@ -21,8 +24,10 @@
 #'
 .NCSP_distanceCalc <- function(m, sm, w = NULL, isColor) {
   
+  ## TODO: enable other metrics
+  
   # maximum distance used to replace soil + non-soil distances
-  # set to 1 for metric = gower
+  # set to 1 for metric = 'gower'
   d.max <- 1
   
   ## TODO: consider adding as an argument
@@ -58,7 +63,7 @@
     )
     
   } else {
-    # Gower distances
+    # Gower distances, these are always within 0-1
     
     # suppressing warnings issued when <2 unique values causes
     # WARNING: binary variable(s) 1, 2 treated as interval scaled
@@ -294,7 +299,7 @@ NCSP <- function(
       stop('CIELAB color coordinates must be specified as `L`, `A`, `B` in `vars`', call. =FALSE)  
     }
   }
-    
+  
   
   
   
@@ -340,7 +345,9 @@ NCSP <- function(
   ## dice
   # pctMissing is used to develop soil/non-soil matrix
   # NOTE: profiles with overlapping horizons will be removed
-  s <- suppressMessages(dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = TRUE, strict = TRUE))
+  s <- suppressMessages(
+    dice(x, fm = .fm, SPC = TRUE, fill = TRUE, byhz = FALSE, pctMissing = TRUE, strict = TRUE)
+  )
   
   # number of profiles, accounting for subset via dice()
   n.profiles <- length(s)
@@ -374,23 +381,25 @@ NCSP <- function(
     byrow = FALSE
   )
   
-  # "soil" has a pctMising very close to 0
+  # "soil" has a pctMissing very close to 0
   soil.matrix <- soil.matrix < 0.00001
   # keep track of profile IDs
   dimnames(soil.matrix)[[2]] <- .ids
   
- 
+  
   ## evaluate distances by slice
   ## accounting for soil/non-soil comparisons
   ## filling NA due to missing data
   .d <- list()
   
-  ## TODO: more efficient data reshaping without calling horizons() in each iteration
-  ## TODO: basic progress reporting
-  ## TODO: cache identical slices
-  ## TODO: convert this to parallel evaluation, maybe furrr package
+  # distance matrix cache
+  dCache <- list()
   
-  ## TODO: if !returnDepthDistances: do not retain full list of dist mat, accumulate in single variable
+  ## TODO:
+  ##  * more efficient data reshaping without calling horizons() in each iteration
+  ##  * basic progress reporting
+  ##  * convert this to parallel evaluation, maybe furrr package
+  ##  * if !returnDepthDistances: do not retain full list of dist mat, accumulate in single variable
   
   message(paste('Computing dissimilarity matrices from', n.profiles, 'profiles'), appendLF = FALSE)
   for(i in sliceSequence) {
@@ -399,18 +408,36 @@ NCSP <- function(
     .s <- horizons(s[, i])
     
     # characteristics for slice i
+    # NOTE: .data.frame.j() will reset rownames
     .s <- .data.frame.j(.s, vars)
+    
+    # hash is applied to entire slice of data AND soil matrix slice
+    # NOTE: row.names have been reset (those are included in the hash)
+    .hash <- digest(
+      list(
+        .s, soil.matrix[i, ]
+      )
+    )
     
     # preserve IDs in distance matrix
     row.names(.s) <- .ids
     
-    # compute distance, with rules related to soil/non-soil matrix
-    .d[[i]] <- .NCSP_distanceCalc(m = .s, sm = soil.matrix[i, ], w = weights, isColor = isColor)
+    # test cache for equivalent distance matrix via hash
+    if(is.element(.hash, names(dCache))) {
+      # copy from cache
+      .d[[i]] <- dCache[[.hash]]
+      
+    } else {
+      # compute distance, with rules related to soil/non-soil matrix
+      .d[[i]] <- .NCSP_distanceCalc(m = .s, sm = soil.matrix[i, ], w = weights, isColor = isColor)
+      
+      # update cache
+      dCache[[.hash]] <- .d[[i]]
+    }
     
     # apply depth-weighting
     .d[[i]] <- .d[[i]] * w[i]
   }
-  
   
   ## optionally return list of distance matrices
   if(returnDepthDistances) {
@@ -418,7 +445,11 @@ NCSP <- function(
   }
   
   # print total size of D
-  message(paste(" [", signif(object.size(.d) / 1024^2, 1), " Mb]", sep=''))
+  message(paste(" [", signif(object.size(.d) / 1024^2, 1), " Mb]", sep = ''))
+  
+  .msg <- sprintf("cache: %s | slices: %s", length(dCache), length(sliceSequence))
+  message(.msg)
+  
   
   ## flatten list of distance matrices
   .d <- Reduce('+', .d)
@@ -431,7 +462,7 @@ NCSP <- function(
   if(rescaleResult) {
     .d <- .d / max(.d, na.rm = TRUE)
   }
-    
+  
   
   ## metadata
   
@@ -442,9 +473,12 @@ NCSP <- function(
     attr(.d, 'Metric') <- 'Gower'
   }
   
+  # cache ratio, possibly related to SPC complexity as a function of vars and soil depth
+  attr(.d, 'cache factor') <- length(sliceSequence) / length(dCache) 
+  
   # removed profiles, if any
   attr(.d, 'removed.profiles') <- .removed.profiles
-
+  
   # remove warnings about NA from cluster::daisy()
   attr(.d, 'NA.message') <- NULL
   
@@ -455,6 +489,6 @@ NCSP <- function(
   
   # done
   return(.d)
-
+  
 }
 
