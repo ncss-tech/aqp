@@ -9,6 +9,7 @@
 #' 
 #'
 #' @param size integer, number of requested profiles 
+#' @param prefix prefix added to zero-padded, integer IDs
 #' @param ... additional arguments to [random_profile()]
 #'
 #' @returns a `SoilProfileCollection` object
@@ -19,15 +20,28 @@
 #' # generate a SoilProfileCollection object with 10 profiles
 #' # using 0-padded, integer IDs for intuitive sorting
 #' spc <- rp(10, method = 'LPP')
+#' plotSPC(spc, color = 'p1')
 #' 
-rp <- function(size, ...) {
+#' # apply a prefix to the IDs
+#' spc <- rp(10, prefix = 'A-', method = 'LPP')
+#' plotSPC(spc, color = 'p1')
+#' 
+rp <- function(size, prefix = NULL, ...) {
   
   # format string for just enough 0-padding 
   .padwidth <- nchar(size) + 1
-  .fmt <- sprintf("%%0%sd", .padwidth)
+  
+  # optionally add prefix create formatting string
+  if(is.null(prefix)) {
+    .fmt <- sprintf("%%0%sd", .padwidth)
+  } else {
+    .fmt <- sprintf("%s%%0%sd", prefix, .padwidth)
+  }
+  
+  # generate IDs
   .s <- sprintf(.fmt, 1:size)
   
-  # typical ivocation of random_profile() and combine()
+  # typical pattern of random_profile() then combine()
   .x <- lapply(.s, random_profile, SPC = TRUE, ...)
   .x <- combine(.x)
   

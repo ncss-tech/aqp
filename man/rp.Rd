@@ -4,10 +4,12 @@
 \alias{rp}
 \title{Generate a \code{SoilProfileCollection} of random profiles}
 \usage{
-rp(size, ...)
+rp(size, prefix = NULL, ...)
 }
 \arguments{
 \item{size}{integer, number of requested profiles}
+
+\item{prefix}{prefix added to zero-padded, integer IDs}
 
 \item{...}{additional arguments to \code{\link[=random_profile]{random_profile()}}}
 }
@@ -22,5 +24,10 @@ This function provides a convenient abstraction of \code{lapply()}, \code{\link[
 # generate a SoilProfileCollection object with 10 profiles
 # using 0-padded, integer IDs for intuitive sorting
 spc <- rp(10, method = 'LPP')
+plotSPC(spc, color = 'p1')
+
+# apply a prefix to the IDs
+spc <- rp(10, prefix = 'A-', method = 'LPP')
+plotSPC(spc, color = 'p1')
 
 }
