@@ -88,7 +88,8 @@ deposite <- function(x, z, depName = '2C', depColor = parseMunsell('5Y 6/2')) {
   x.new[[hzd]][idx] <- depName
   x.new$soil_color[idx] <- depColor
   
-  ## TODO: need mergeHorizons() to aggregate over deposition events
+  # TODO: collapse deposited 2C horizons
+  # x.new <- collapseHz(x.new, pattern = c(`2C` = '^2C'))
   
   return(x.new)
 

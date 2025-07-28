@@ -172,8 +172,7 @@ SoilTaxonomyDendrogram(
   cex.names = 0.66,
   width = 0.3, 
   name.style = 'center-center', 
-  plot.depth.axis = TRUE,
-  axis.line.offset = -3,
+  depth.axis = list(line = -3),
   hz.distinctness.offset = 'hzd',
   max.depth = 150
 )

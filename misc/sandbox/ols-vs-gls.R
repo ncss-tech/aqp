@@ -23,7 +23,7 @@ s <- dice(x)
 
 # graphical check
 par(mar = c(0, 0, 3, 0))
-groupedProfilePlot(s, groups = 'taxonname', color = 'clay', divide.hz = FALSE, name = NA, print.id = FALSE, plot.depth.axis = FALSE)
+groupedProfilePlot(s, groups = 'taxonname', color = 'clay', divide.hz = FALSE, name = NA, print.id = FALSE, depth.axis = FALSE)
 
 
 h <- as(s, 'data.frame')

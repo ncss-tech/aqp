@@ -1,14 +1,12 @@
 
 ## TODO:
-# * convert to terra, or
 # * use matrix / array 
 
 
 library(aqp)
-library(raster)
+library(terra)
 
-x <- lapply(1:100, random_profile, method = 'LPP', SPC = TRUE)
-x <- combine(x)
+x <- rp(100, method = 'LPP')
 
 ## TODO: will sometimes generate z+1 slices
 s <- dice(x, fm = 0:100 ~ .)
@@ -25,10 +23,23 @@ m[1, ] == s[, 1][[var]]
 m[, 1] == s[1, ][[var]]
 
 par(mar = c(1, 1, 3, 1))
-image(t(m), x = 1:length(s), y = z, ylim = c(100, 0), las = 1, ylab = '', xlab = '', axes = FALSE, col = viridis::viridis(12))
 
-r <- raster(m)
-plot(r, col = viridis::viridis(12))
+.cols <- hcl.colors(n = 12)
+
+image(
+  z = t(m), 
+  x = 1:length(s), 
+  y = z, 
+  ylim = c(100, 0), 
+  las = 1, 
+  ylab = '', 
+  xlab = '', 
+  axes = FALSE, 
+  col = .cols
+)
+
+r <- rast(m)
+plot(r, col = .cols)
 
 # ok
 r[1, ] == s[, 1][[var]]

@@ -363,4 +363,5 @@ setReplaceMethod("hzmetaname",
                      message = "\nSee ??hzmetaname",
                      allowednames = "horizon"
                    )
-                 })
+                 }
+)

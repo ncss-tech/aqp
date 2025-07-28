@@ -71,7 +71,7 @@ osds <- osds.full$SPC
 site(osds)$swaterdepth <- pmax(0, rnorm(n = length(osds), mean = 100, sd = 25))
 
 par(mar = c(0, 3, 0, 0))
-plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.25, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, id.style = 'side', y.offset = osds$swaterdepth, fixLabelCollisions = TRUE)
+plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.25, depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, id.style = 'side', y.offset = osds$swaterdepth, fixLabelCollisions = TRUE)
 
 addSurfaceWater(osds, sw = 'swaterdepth')
 
@@ -79,7 +79,7 @@ addSurfaceWater(osds, sw = 'swaterdepth')
 
 o <- order(osds$swaterdepth)
 
-plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.25, plot.depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, id.style = 'side', y.offset = osds$swaterdepth, fixLabelCollisions = TRUE, plot.order = o)
+plotSPC(osds, cex.names = 0.66, name.style = 'center-center', width = 0.25, depth.axis = FALSE, hz.depths = TRUE, hz.depths.offset = 0.05, id.style = 'side', y.offset = osds$swaterdepth, fixLabelCollisions = TRUE, plot.order = o)
 
 addSurfaceWater(osds, sw = 'swaterdepth')
 
