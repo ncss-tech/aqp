@@ -1,4 +1,41 @@
 
+
+
+
+#' @title Generate a `SoilProfileCollection` of random profiles
+#' 
+#' @description
+#' This function provides a convenient abstraction of `lapply()`, [random_profile()], and [combine()] which are typically used together to create a `SoilProfileCollection` object with >1 soil profiles. `rp()` creates zero-padded integer IDs for logical sorting and indexing of profiles. For more complex IDs or additional flexibility, see [random_profile()]. See [random_profile()] for all possible arguments.
+#' 
+#'
+#' @param size integer, number of requested profiles 
+#' @param ... additional arguments to [random_profile()]
+#'
+#' @returns a `SoilProfileCollection` object
+#' @export
+#'
+#' @examples
+#' 
+#' # generate a SoilProfileCollection object with 10 profiles
+#' # using 0-padded, integer IDs for intuitive sorting
+#' spc <- rp(10, method = 'LPP')
+#' 
+rp <- function(size, ...) {
+  
+  # format string for just enough 0-padding 
+  .padwidth <- nchar(size) + 1
+  .fmt <- sprintf("%%0%sd", .padwidth)
+  .s <- sprintf(.fmt, 1:size)
+  
+  # typical ivocation of random_profile() and combine()
+  .x <- lapply(.s, random_profile, SPC = TRUE, ...)
+  .x <- combine(.x)
+  
+  return(.x)
+}
+
+
+# logistic power peak function
 .lpp <- function(x, a, b, u, d, e) {
   # the exponential term
   f.exp <- exp((x + d * log(e) - u) / d)
@@ -10,6 +47,7 @@
   res <- a + f1 * f2
   return(res)
   }
+
 
 #' @title Random Profile
 #'
