@@ -117,7 +117,42 @@ test_that(".NCSP_distanceCalc() with color data", {
 
 
 
-
+test_that("NCSP() with genhz encoded as factor", {
+  
+  # simple SPC with deterministic structure
+  template <- c(
+    'A:AAAA|BBBBBBBB|CCCCC|RRRRRRRRRRR',
+    'B:AAAAA|BBBBBBBBBBBBBB|CCCCC|RRRRRR',
+    'C:AAAAAAA|BBBBBBBB|CCC|RRRRRRRRRRR',
+    'D:A|BBBBBBBB|CCCCC|RRRRRRRRRRRRR',
+    'E:AA|BBBBBBBB|CCCCC|RRRRRRRRRRRRR',
+    'F:AAAAA|BBB|C|RRRRRRRRRRRRRRRR'
+  )
+  
+  # init SPC and limit depth
+  x <- quickSPC(template)
+  x <- trunc(x, 0, 250)
+  
+  # init generalized hz labels
+  x$genhz <- factor(x$name, levels = c('A', 'B', 'C', 'R'))
+  
+  # plotSPC(x, name.style = 'center-center', color = 'genhz', cex.names = 0.8)
+  
+  d <- NCSP(x, vars = 'genhz')
+  
+  # par(mar = c(1, 0, 3, 0))
+  # plotProfileDendrogram(x, diana(d), name.style = 'center-center', color = 'genhz', cex.names = 0.8, scaling.factor = 1.1, y.offset = 20, width = 0.3, max.depth = 245, hz.depths = TRUE, depth.axis = FALSE)
+  
+  # should be a dist object
+  expect_true(inherits(d, 'dist'))
+  
+  # check results via digest
+  expect_equal(digest::digest(d), 'd603e066ad6790ba53b3f03eecb3800e')
+  
+  # check cache factor: should be close to 15
+  expect_true(attr(d, 'cache factor') - 15 < 1)
+  
+})
 
 
 

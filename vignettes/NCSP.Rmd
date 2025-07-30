@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
   background = '#F7F7F7',
   fig.align = 'center',
   dev = 'png',
-  dpi = as.integer(Sys.getenv("R_AQP_VIGNETTE_IMAGE_DPI", unset = 32)),
+  dpi = as.integer(Sys.getenv("R_AQP_VIGNETTE_IMAGE_DPI", unset = 90)),
   optipng = knitr::hook_optipng,
   comment = "#>"
 )
@@ -123,7 +123,7 @@ h <- as.hclust(diana(D))
 
 # hang soil profile sketches from resulting dendrogram
 par(mar = c(1, 0, 0, 1))
-plotProfileDendrogram(z, clust = h, scaling.factor = 0.0075, y.offset = 0.15, width = 0.33, color = 'genhz', name = NA)
+plotProfileDendrogram(z, clust = h, scaling.factor = 0.0075, y.offset = 0.1, width = 0.33, color = 'genhz', name = NA)
 
 # annotate dendrogram with subgroup classification
 # this handy function provided by the ape package

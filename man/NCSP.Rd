@@ -13,7 +13,6 @@ NCSP(
   k = 0,
   isColor = FALSE,
   rescaleResult = FALSE,
-  progress = TRUE,
   verbose = TRUE,
   returnDepthDistances = FALSE
 )
@@ -29,13 +28,11 @@ NCSP(
 
 \item{maxDepth}{numeric, maximum depth of analysis}
 
-\item{k}{numeric, weighting coefficient, see examples}
+\item{k}{numeric, weighting coefficient, usually between 0-1. A value of 0 results in no depth-weighting. See examples.}
 
 \item{isColor, }{logical: variables represent color, should be CIELAB coordinates (D65 illuminant), weights are ignored. Variables should be named \code{L}, \code{A}, \code{B} in specified in that order.}
 
 \item{rescaleResult}{logical, distance matrix is rescaled based on max(D)}
-
-\item{progress}{logical, report progress}
 
 \item{verbose}{logical, extra output messages}
 
@@ -45,11 +42,10 @@ NCSP(
 Replacement for \code{profile_compare()}.
 
 Performs a numerical comparison of soil profiles using named properties,
-based on a weighted, summed, depth-segment-aligned dissimilarity
-calculation.
+based on a weighted, summed, depth-segment-aligned dissimilarity calculation.
 
 Variability in soil depth can interfere significantly with the calculation
-of between-profile dissimilarity-- what is the numerical ``distance'' (or
+of between-profile dissimilarity--what is the numerical ``distance'' (or
 dissimilarity) between a slice of soil from profile A and the corresponding,
 but missing, slice from a shallower profile B? Gower's distance metric would
 yield a NULL distance, despite the fact that intuition suggests otherwise:
@@ -58,35 +54,29 @@ when a 25 cm deep profile is compared with a 50 cm deep profile, numerical
 distances are only accumulated for the first 25 cm of soil (distances from
 26 - 50 cm are NULL). When summed, the total distance between these profiles
 will generally be less than the distance between two profiles of equal
-depth. Our algorithm has an option (setting replace_na=TRUE) to replace NULL
+depth. Our algorithm will replace NULL
 distances with the maximum distance between any pair of profiles for the
 current depth slice. In this way, the numerical distance between a slice of
 soil and a corresponding slice of non-soil reflects the fact that these two
-materials should be treated very differently (i.e. maximum dissimilarity).
+materials should be treated very differently.
 
 This alternative calculation of dissimilarities between soil and non-soil
 slices solves the problem of comparing shallow profiles with deeper
 profiles. However, it can result in a new problem: distances calculated
 between two shallow profiles will be erroneously inflated beyond the extent
-of either profile's depth. Our algorithm has an additional option (setting
-add_soil_flag=TRUE) that will preserve NULL distances between slices when
-both slices represent non-soil material. With this option enabled, shallow
+of either profile's depth. Our algorithm will preserve NULL distances between slices when
+both slices represent non-soil material. Therefore, shallow
 profiles will only accumulate mutual dissimilarity to the depth of the
 deeper profile.
 
-Slices
-are classified as 'soil' down to the maximum depth to which at least one of
+Slices are classified as 'soil' down to the maximum depth to which at least one of
 variables used in the dissimilarity calculation is not NA. This will cause
 problems when profiles within a collection contain all NAs within the
 columns used to determine dissimilarity. An approach for identifying and
 removing these kind of profiles is presented in the examples section below.
 
-A notice is issued if there are any NA values within the matrix used for
-distance calculations, as these values are optionally replaced by the max
-dissimilarity.
-
 Our approach builds on the work of (Moore, 1972) and the previously
-mentioned depth-slicing algorithm.
+mentioned depth-slicing algorithm. See references below for a detailed explanation of the NCSP algorithm.
 }
 \note{
 \code{NCSP()} will overwrite the \code{removed.profiles} metadata from \code{x}.
