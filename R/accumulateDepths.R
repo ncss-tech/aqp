@@ -1,7 +1,8 @@
 # GENERIC FUNCTION for dealing with old-style O horizons and other? abnormalities in datum
 
-#' Accumulate horizon depths, and reflect reversed depths, relative to new datum
+#' @title Accumulate horizon depths, and reflect reversed depths, relative to new datum
 #' 
+#' @description
 #' Fix old-style organic horizon depths or depths with a non-standard datum by the "depth accumulation" method.
 #' 
 #' @details The "depth accumulation" method calculates thicknesses of individual horizons and then cumulative sums them after putting them in `id` + top depth order. The routine tries to determine context based on `hzname` and `pattern`. The main transformation is if a top depth is deeper than the bottom depth, the depths are reflected on the Z-axis (made negative). The data are then `id` + top depth sorted again, the thickness calculated and accumulated to replace the old depths.
@@ -19,13 +20,23 @@
 #' - Add 1 cm to bottom-most horizons with `NA` bottom depth
 #' - Add 1 cm thickness to horizons with top and bottom depth equal
 #' - Add 1 cm thickness to horizons with `NA` top depth and bottom depth `0`
+#' 
 #' @param x A `data.frame` or `SoilProfileCollection`
+#' 
 #' @param id unique profile ID. Default: `NULL`, if `x` is a SoilProfileCollection `idname(x)`
-#' @param hzdepths character vector containing horizon top and bottom depth column names. Default: `NULL`, if `x` is a SoilProfileCollection `horizonDepths(x)`
-#' @param hzname character vector containing horizon designation or other label column names. Default: `NULL`, if `x` is a SoilProfileCollection `hzdesgnname(x)`
+#' 
+#' @param hzdepths character vector containing horizon top and bottom depth column names. Default: `NULL`, if `x` is
+#'  a SoilProfileCollection `horizonDepths(x)`
+#'  
+#' @param hzname character vector containing horizon designation or other label column names. Default: `NULL`, if `x`
+#'  is a SoilProfileCollection `hzdesgnname(x)`
+#'  
 #' @param hzdatum a numeric vector to add to accumulated depths. Default: `0`. Can be equal in length to number of profiles if `x` is a `SoilProfileCollection` or number of (unique) IDs if `x` is a `data.frame`.
+#' 
 #' @param seqnum Optional: character vector containing record "sequence number" column name; used in-lieu of `hzname` (when `NA`) to identify "first" record in a profile
+#' 
 #' @param pattern pattern to search for in `hzname` to identify matching horizons to append the profile to
+#' 
 #' @param fix apply adjustments to missing (`NA`) depths and expand 0-thickness horizons? Default: `TRUE` 
 #'
 #' @return A horizon-level `data.frame`, suitable for promoting to SPC with `depths<-`, or a `SoilProfileCollection`, depending on the class of `x`.
@@ -190,6 +201,10 @@ accumulateDepths <- function(x,
     dat[bad.thk.idx2, ][[.TOP]] <- dat[[.BOTTOM]][bad.thk.idx2] + 1
   }
   
+  ## BUG: if any top depth is NA
+  ## sorting doesn't work
+  ## subsequent logic corrupts depths
+  
   # ORDER
   dat <- dat[order(as.character(dat[[.internalID]]), dat[[.TOP]]),]
   
@@ -228,6 +243,7 @@ accumulateDepths <- function(x,
   .BYLIST3 <- list(dat_after[[.internalID]])
   names(.BYLIST3) <- .internalID
   
+  ## TODO: this doesn't appear to be used
   # calculate number of rows in resulting horizon data
   test2 <- dat_after[, .N, by = .BYLIST3]
   
