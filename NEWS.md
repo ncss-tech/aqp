@@ -1,9 +1,10 @@
-# aqp 2.2-1 (2025-07-30)
+# aqp 2.2-1 (2025-08-22)
  * minor fixes to preparation of Munsell reference spectra, reflectance now constrained to [0,1]
  * removed _extrapolated_ Munsell chip spectra for values > 9
  * added (estimated) Munsell spectra for chroma 1
  * added `rp()` convenience wrapper to `random_profile()`
  * efficiency boost for `NCSP()` via caching pair-wise distances
+ * function `unroll()` has not been used since aqp < 2.0, it has been removed.
 
 # aqp 2.2 (2025-02-14)
  * CRAN release

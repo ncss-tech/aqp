@@ -64,9 +64,12 @@ the peak by "lpp.u", and abruptness by "lpp.d" and "lpp.e". Further
 description of the method is outlined in (Brenton et al, 2011). Simulated
 horizon distinctness codes are based on the USDA-NCSS field description
 methods.
+
 Simulated distinctness codes are constrained according to horizon thickness,
 i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that
 are thinner than 3x this vertical distance
+
+The \code{\link[=rp]{rp()}} function is a convenient wrapper to this function, when requesting a simulated \code{SoilProfileCollection} of specified size.
 }
 \note{
 See examples for ideas on simulating several profiles at once.
@@ -152,7 +155,7 @@ Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution
 soil profile data Geoderma, 2011, 166, 74-83.
 }
 \seealso{
-\code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
+\code{\link[=rp]{rp()}}, \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}
 }
 \author{
 Dylan E. Beaudette

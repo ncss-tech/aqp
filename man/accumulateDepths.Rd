@@ -20,9 +20,11 @@ accumulateDepths(
 
 \item{id}{unique profile ID. Default: \code{NULL}, if \code{x} is a SoilProfileCollection \code{idname(x)}}
 
-\item{hzdepths}{character vector containing horizon top and bottom depth column names. Default: \code{NULL}, if \code{x} is a SoilProfileCollection \code{horizonDepths(x)}}
+\item{hzdepths}{character vector containing horizon top and bottom depth column names. Default: \code{NULL}, if \code{x} is
+a SoilProfileCollection \code{horizonDepths(x)}}
 
-\item{hzname}{character vector containing horizon designation or other label column names. Default: \code{NULL}, if \code{x} is a SoilProfileCollection \code{hzdesgnname(x)}}
+\item{hzname}{character vector containing horizon designation or other label column names. Default: \code{NULL}, if \code{x}
+is a SoilProfileCollection \code{hzdesgnname(x)}}
 
 \item{hzdatum}{a numeric vector to add to accumulated depths. Default: \code{0}. Can be equal in length to number of profiles if \code{x} is a \code{SoilProfileCollection} or number of (unique) IDs if \code{x} is a \code{data.frame}.}
 

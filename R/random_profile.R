@@ -11,7 +11,7 @@
 #' @param size integer, number of requested profiles 
 #' @param prefix prefix added to zero-padded, integer IDs
 #' @param ... additional arguments to [random_profile()]
-#'
+#' 
 #' @returns a `SoilProfileCollection` object
 #' @export
 #'
@@ -81,9 +81,12 @@ rp <- function(size, prefix = NULL, ...) {
 #' description of the method is outlined in (Brenton et al, 2011). Simulated
 #' horizon distinctness codes are based on the USDA-NCSS field description
 #' methods.
+#' 
 #' Simulated distinctness codes are constrained according to horizon thickness,
 #' i.e. a gradual boundary (+/- 5cm) will not be simulated for horizons that
 #' are thinner than 3x this vertical distance
+#' 
+#' The [rp()] function is a convenient wrapper to this function, when requesting a simulated `SoilProfileCollection` of specified size.
 #'
 #' @aliases random_profile .lpp
 #' @param id a character or numeric id used for this profile
@@ -104,7 +107,7 @@ rp <- function(size, prefix = NULL, ...) {
 #' @return A `data.frame` or `SoilProfileCollection` object.
 #' @note See examples for ideas on simulating several profiles at once.
 #' @author Dylan E. Beaudette
-#' @seealso [hzDistinctnessCodeToOffset()]
+#' @seealso [rp()], [hzDistinctnessCodeToOffset()]
 #' @references Myers, D. B.; Kitchen, N. R.; Sudduth, K. A.; Miles, R. J.;
 #' Sadler, E. J. & Grunwald, S. Peak functions for modeling high resolution
 #' soil profile data Geoderma, 2011, 166, 74-83.
