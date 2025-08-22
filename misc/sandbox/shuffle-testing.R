@@ -62,6 +62,9 @@ x <- replicate(100, {
   profileInformationIndex(ss, vars = c('p1', 'p2', 'p3'))
 })
 
+# original
+x.o <- profileInformationIndex(s, vars = c('p1', 'p2', 'p3'))
+
 # rows: profile index
 # cols: simulation index
 str(x)
@@ -76,6 +79,11 @@ v.2 <- apply(x, 2, var)
 hist(v.1)
 hist(v.2)
 
+hist(v.2 / var(x.o), breaks = 15)
+
+d <- sweep(x, MARGIN = 1, STATS = x.o, FUN = '-')
+
+hist(d)
 
 # what does this mean?
 
