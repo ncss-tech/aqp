@@ -119,18 +119,19 @@ mtext('Absolute\nCompleteness (cm)', side = 1, at = 0.25, line = 2.75, cex = 0.8
 ```
 
 
-```{r, fig.width=8, fig.height=4.5, eval=requireNamespace("soilDB", quietly=TRUE)}
+```{r, eval=requireNamespace("soilDB", quietly=TRUE)}
 library(soilDB)
 x <- fetchKSSL(series = 'pierre')
-par(mar = c(1, 0, 3, 2))
+```
+
+```{r, fig.width=8, fig.height=4.5, eval=requireNamespace("soilDB", quietly=TRUE) && inherits(x, 'SoilProfileCollection')}
+par(mar = c(0, 0, 3, 2))
 
 plotSPC(x, color = 'clay', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
 plotSPC(x, color = 'cec7', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
 plotSPC(x, color = 'estimated_oc', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
 plotSPC(x, color = 'ph_h2o', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
 plotSPC(x, color = 'db_13b', width = 0.3, name.style = 'center-center', label = 'pedon_completeness_index')
-
-
 
 v <- c('clay', 'db_13b', 'cec7', 'ph_h2o')
 
@@ -145,9 +146,6 @@ plotSPC(x, color = 'ph_h2o', width = 0.33, name.style = 'center-center', label =
 text(x = 1:length(x), y = .b[o], labels = x$pi[o], cex = 0.75, pos = 1)
 mtext('Profile Information Index (bytes)', side = 1, line = -0.5)
 
-## TODO: document this!!
-
-
 x$rel.not.missing <- evalMissingData(x, vars = v, method = 'relative')
 x$abs.not.missing <- evalMissingData(x, vars = v, method = 'absolute')
 x$hz.not.missing <- evalMissingData(x, vars = v, method = 'horizon')
@@ -161,5 +159,4 @@ o <- order(x$abs.not.missing)
 plotSPC(x, color = 'hz.not.missing', width = 0.33, name.style = 'center-center', label = 'pedon_completeness_index', plot.order = o, col.label = 'Non-Missing Fraction within Horizons')
 text(x = 1:length(x), y = .b[o], labels = x$abs.not.missing[o], cex = 0.85, pos = 1)
 mtext('Absolute Non-Missing (cm)', side = 1, line = -0.5)
-
 ```
