@@ -132,7 +132,7 @@ plotSPC(x, color = 'db_13b', width = 0.3, name.style = 'center-center', label = 
 
 
 
-v <- c('clay', 'db_13b', 'cec7', 'ph_h2o')
+v <- c('ph_h2o')
 
 par(mar = c(1, 0, 3, 2), xpd = NA)
 
