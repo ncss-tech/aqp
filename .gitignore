@@ -9,3 +9,4 @@ CRAN-SUBMISSION
 cran-comments.md
 .Rprofile
 renv
+**/.quarto/

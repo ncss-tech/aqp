@@ -14,3 +14,6 @@ README.md
 ^revdep$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+^vignettes/articles$
+^vignettes/articles/\.quarto$
+^vignettes/articles/*_files$
