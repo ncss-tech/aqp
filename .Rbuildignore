@@ -17,3 +17,5 @@ README.md
 ^vignettes/articles$
 ^vignettes/articles/\.quarto$
 ^vignettes/articles/*_files$
+^_pkgdown\.yml$
+^pkgdown$
