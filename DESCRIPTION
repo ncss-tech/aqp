@@ -39,4 +39,4 @@ Encoding: UTF-8
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-Config/Needs/website: rmarkdown, quarto, r-lib/pkgdown
+Config/Needs/website: rmarkdown

@@ -2,7 +2,6 @@
 title: "Missing Data"
 author: "D.E. Beaudette"
 date: "`r Sys.Date()`"
-fig-format: svg
 out-width: 100%
 fig-column: page-right
 code-overflow: wrap
@@ -18,22 +17,12 @@ format:
   html:
     embed-resources: true
     toc: false
-
-knitr:
-  opts_chunk:
-    collapse: true
-    comment: '#>'
 ---
 
-```{r}
-#| label: setup
-library(aqp)
-```
 
-```{r}
-#| fig-width: 8
-#| fig-height: 4.5
-#| 
+```{r, fig.width=8, fig.height=4.5}
+library(aqp)
+
 # tighter margins
 op <- par(mar = c(2, 2.5, 3, 2))
 
@@ -120,20 +109,11 @@ mtext('Absolute\nCompleteness (cm)', side = 1, at = 0.25, line = 2.75, cex = 0.8
 ```
 
 
-```{r}
-#| eval: requireNamespace("soilDB", quietly=TRUE)
 
+```{r, eval=FALSE}
 library(soilDB)
 
 x <- fetchKSSL(series = 'pierre')
-```
-
-
-```{r}
-#| eval: requireNamespace("soilDB", quietly=TRUE) && inherits(x, 'SoilProfileCollection')
-#| fig-width: 8
-#| fig-height: 4.5
-
 
 par(mar = c(0, 0, 3, 2))
 
@@ -171,4 +151,5 @@ plotSPC(x, color = 'hz.not.missing', width = 0.33, name.style = 'center-center',
 text(x = 1:length(x), y = .b[o], labels = x$abs.not.missing[o], cex = 0.85, pos = 1)
 mtext('Absolute Non-Missing (cm)', side = 1, line = -0.5)
 ```
+
 
