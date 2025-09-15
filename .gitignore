@@ -10,3 +10,4 @@ cran-comments.md
 .Rprofile
 renv
 **/.quarto/
+docs/

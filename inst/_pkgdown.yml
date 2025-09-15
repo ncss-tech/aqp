@@ -1,8 +1,0 @@
-figures:
-  dev: grDevices::png
-  dpi: 96
-  dev.args: []
-  fig.ext: png
-  fig.width: 8
-  fig.height: ~
-  fig.retina: 2
