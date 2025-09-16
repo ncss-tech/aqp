@@ -104,9 +104,9 @@ getClosestMunsellChip('7.9YR 2.7/2.0')
 }
 \references{
 \itemize{
-\item \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-\item \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
-\item \url{https://www.rit.edu/science/munsell-color-lab}
+\item http://www.brucelindbloom.com/index.html?ColorCalcHelp.html
+\item https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html
+\item https://www.rit.edu/science/munsell-color-lab
 }
 }
 \author{

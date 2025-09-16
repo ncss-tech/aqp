@@ -17,10 +17,10 @@
 #' @author D.E. Beaudette
 #' 
 #' @references 
-#' \url{http://ncss-tech.github.io/AQP/}
-#' \url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-#' \url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
-#' http://www.cis.rit.edu/mcsl/online/munsell.php
+#'   * http://ncss-tech.github.io/AQP/
+#'   * http://www.brucelindbloom.com/index.html?ColorCalcHelp.html
+#'   * http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html
+#'   * http://www.cis.rit.edu/mcsl/online/munsell.php
 
 
 #' @return an (NA-padded) `data.frame` containing `hue`, `value`, `chroma`, and CIE delta-E 2000 color contrast metric between source and nearest matching color(s).

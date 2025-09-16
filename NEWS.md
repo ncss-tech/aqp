@@ -1,4 +1,4 @@
-# aqp 2.2-1 (2025-09-15)
+# aqp 2.2-1 (2025-09-16)
  * CRAN release
  * moving some vignettes to pkgdown articles (https://ncss-tech.github.io/aqp/)
  * minor fixes to preparation of Munsell reference spectra, reflectance now constrained to [0,1]

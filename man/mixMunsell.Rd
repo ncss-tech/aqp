@@ -58,7 +58,7 @@ See the \href{https://ncss-tech.github.io/AQP/aqp/mix-colors.html}{expanded tuto
 
 An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.
 
-Thankfully, \href{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}{Scott Burns has outlined the entire process}, and Paul Centore has provided a Munsell color chip \href{https://www.munsellcolourscienceforpainters.com}{reflectance spectra library}. The estimation of a subtractive mixture of soil colors can proceed as follows:
+Thankfully, \href{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}{Scott Burns has outlined the entire process}, and Paul Centore has provided a Munsell color chip reflectance spectra library (http://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:
 \enumerate{
 \item look up the associated spectra for each color in \code{x}
 \item compute the weighted (\code{w} argument) geometric mean of the spectra
@@ -88,7 +88,7 @@ Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Sci
 \itemize{
 \item \href{https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf}{inspiration / calculations based on the work of Scott Burns}
 \item \href{https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630}{related discussion on Stack Overflow}
-\item \href{https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt}{spectral library source}
+\item spectral library source: http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt
 }
 }
 \seealso{

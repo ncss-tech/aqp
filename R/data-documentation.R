@@ -1350,7 +1350,7 @@ NULL
 #' @usage data(munsell.spectra)
 #'
 #' @references
-#' Centore, Paul. Colour Tools for Painters. \url{https://www.munsellcolourscienceforpainters.com/}.
+#' Centore, Paul. Colour Tools for Painters. http://www.munsellcolourscienceforpainters.com/.
 #'
 #' @aliases munsell.spectra.wide
 #'

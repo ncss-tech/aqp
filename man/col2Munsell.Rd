@@ -84,10 +84,12 @@ col2Munsell(color, space = 'sRGB')
 
 }
 \references{
-\url{http://ncss-tech.github.io/AQP/}
-\url{http://www.brucelindbloom.com/index.html?ColorCalcHelp.html}
-\url{https://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html}
-http://www.cis.rit.edu/mcsl/online/munsell.php
+\itemize{
+\item http://ncss-tech.github.io/AQP/
+\item http://www.brucelindbloom.com/index.html?ColorCalcHelp.html
+\item http://www.munsellcolourscienceforpainters.com/MunsellAndKubelkaMunkToolbox/MunsellAndKubelkaMunkToolbox.html
+\item http://www.cis.rit.edu/mcsl/online/munsell.php
+}
 }
 \author{
 D.E. Beaudette
