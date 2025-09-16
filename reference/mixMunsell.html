@@ -109,7 +109,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>See the <a href="https://ncss-tech.github.io/AQP/aqp/mix-colors.html" class="external-link">expanded tutorial</a> for examples.</p>
 <p>An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.</p>
-<p>Thankfully, <a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf" class="external-link">Scott Burns has outlined the entire process</a>, and Paul Centore has provided a Munsell color chip <a href="https://www.munsellcolourscienceforpainters.com" class="external-link">reflectance spectra library</a>. The estimation of a subtractive mixture of soil colors can proceed as follows:</p><ol><li><p>look up the associated spectra for each color in <code>x</code></p></li>
+<p>Thankfully, <a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf" class="external-link">Scott Burns has outlined the entire process</a>, and Paul Centore has provided a Munsell color chip reflectance spectra library (http://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:</p><ol><li><p>look up the associated spectra for each color in <code>x</code></p></li>
 <li><p>compute the weighted (<code>w</code> argument) geometric mean of the spectra</p></li>
 <li><p>convert the spectral mixture to the closest Munsell color via:</p></li>
 </ol><ul><li><p>search for the closest <code>n</code> matching spectra in the reference library (<code>mixtureMethod = 'reference'</code>)</p></li>
@@ -125,7 +125,7 @@
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.</p><ul><li><p><a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf" class="external-link">inspiration / calculations based on the work of Scott Burns</a></p></li>
 <li><p><a href="https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630" class="external-link">related discussion on Stack Overflow</a></p></li>
-<li><p><a href="https://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt" class="external-link">spectral library source</a></p></li>
+<li><p>spectral library source: http://www.munsellcolourscienceforpainters.com/MunsellResources/SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
