@@ -137,11 +137,15 @@
            # use at - (text height)
            # .labY <- .at[-1] - (diff(.at) / 2)
            .labY <- .at
-           # select labels
+           
+           # remove depth units by splitting on space
+           .labels <- sapply(strsplit(.labels, split = ' ', fixed = TRUE), function(i) i[1])
+           
+           # label tape sections
            text(
              x = .x, 
              y = .labY, 
-             labels = .at, 
+             labels = .labels, 
              cex = .cex, 
              col = invertLabelColor(.cols), 
              offset = 0.25,
