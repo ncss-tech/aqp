@@ -1597,12 +1597,12 @@ profiles, re-aligned to the Global Soil Map (GSM) standard depths.</p>
 <span><span class="co">#&gt; 7       p1  2 16.26688             1.0000000   0      5</span></span></code></pre>
 <p>A simple graphical comparison of the original and re-aligned soil
 profile data, after converting <code><a href="../reference/slab.html">slab()</a></code> result from long
--&gt; wide format with {data.table} <code><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
+-&gt; wide format with {data.table} <code><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast()</a></code>:</p>
 <div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reshape to wide format</span></span>
 <span><span class="co"># this scales to &gt; 1 aggregated variables</span></span>
-<span><span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, </span>
+<span><span class="va">d.gsm.pedons</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, </span>
 <span>  formula <span class="op">=</span> <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, </span>
 <span>  value.var <span class="op">=</span> <span class="st">'value'</span></span>
 <span><span class="op">)</span></span>
@@ -1630,8 +1630,8 @@ shallower than the deepest of the new (re-aligned) horizon depths. The
 data were used to generate the new set of re-aligned data.</p>
 <div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># reshape to wide format</span></span>
-<span><span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, </span>
+<span><span class="va">d.gsm.pedons.2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="va">d.gsm</span><span class="op">)</span>, </span>
 <span>  formula <span class="op">=</span> <span class="va">id</span> <span class="op">+</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span> <span class="op">~</span> <span class="va">variable</span>, </span>
 <span>  value.var <span class="op">=</span> <span class="st">'contributing_fraction'</span></span>
 <span><span class="op">)</span></span>

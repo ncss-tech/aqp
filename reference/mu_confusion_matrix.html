@@ -91,15 +91,19 @@
     <p><code>mu_confusion_matrix</code> There are several common statistical measures used to gauge the accuracy of categorical maps. These measures are typically not estimated for soil surveys but can be inferred from a map unit’s soil component composition percentages and size (i.e. acres). In general, overall purity or accuracy (OP) is related to map unit kind (e.g. consociations vs complexes). For several reasons, the “true” accuracies are unknown, and these values should be interpreted as Bayesian prior estimates. However, it is likely that the estimates are optimistic if they haven't been derived from an external validation. Existing and future digital soil mapping products could be used to validate how optimistic the current OA estimates are.</p>
     </div>
     <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
+<ul><li><p>Brus DJ, Kempen B, Heuvelink GBM. 2011. Sampling for validation of digital soil maps. European Journal of Soil Science. 62(3):394–407. <a href="https://doi.org/10.1111/j.1365-2389.2011.01364.x" class="external-link">doi:10.1111/j.1365-2389.2011.01364.x</a></p></li>
+<li><p>Lark RM. 1995. Components of accuracy of maps with special reference to discriminant analysis on remote sensor data. International Journal of Remote Sensing. 16(8):1461–1480. <a href="https://doi.org/10.1080/01431169508954488" class="external-link">doi:10.1080/01431169508954488</a></p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="tauW.html">tauW()</a></code>, <code><a href="shannonEntropy.html">shannonEntropy()</a></code>, <code><a href="confusionIndex.html">confusionIndex()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Stephen Roecker</p>
-<p>#' @references</p><ul><li><p>Brus DJ, Kempen B, Heuvelink GBM. 2011. Sampling for validation of digital soil maps. European Journal of Soil Science. 62(3):394–407. <a href="https://doi.org/10.1111/j.1365-2389.2011.01364.x" class="external-link">doi:10.1111/j.1365-2389.2011.01364.x</a></p></li>
-<li><p>Lark RM. 1995. Components of accuracy of maps with special reference to discriminant analysis on remote sensor data. International Journal of Remote Sensing. 16(8):1461–1480. <a href="https://doi.org/10.1080/01431169508954488" class="external-link">doi:10.1080/01431169508954488</a></p></li>
-</ul></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -113,10 +117,9 @@
 <span class="r-in"><span><span class="fu">mu_confusion_matrix</span><span class="op">(</span><span class="va">mu</span>, mapunit <span class="op">=</span> <span class="st">"mapunit"</span>, cophase <span class="op">=</span> <span class="st">"cophase"</span>, comppct <span class="op">=</span> <span class="st">"comppct"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $confusion_matrix</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         component phase</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> map unit  Alpha   Beta  MP    H</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       A   90.00  10.00 0.9 0.47</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       B  300.00 700.00 0.7 0.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       CR   0.77   0.99  NA   NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> map unit Alpha Beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        A    90   10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        B   300  700</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $overall_purity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7181818</span>
