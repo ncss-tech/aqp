@@ -1,10 +1,13 @@
 Package: aqp
 Version: 2.2-1
 Title: Algorithms for Quantitative Pedology
-Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@usda.gov"), person(given="Pierre", family="Roudier", email="roudierp@landcareresearch.co.nz", role = c("aut", "ctb")), person(given="Andrew", family="Brown", email="andrew.g.brown@usda.gov", role = c("aut", "ctb")))
+Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@usda.gov", comment = c(ORCID="0009-0008-2780-4785")), 
+             person(given="Pierre", family="Roudier", email="roudierp@landcareresearch.co.nz", role = c("aut", "ctb")), 
+             person(given="Andrew", family="Brown", email="andrew.g.brown@usda.gov", role = c("aut", "ctb")), 
+             person(given="Stephen", family="Roecker", role = c("aut", "ctb")))
 Author: Dylan Beaudette [aut, cre], Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb]
 Maintainer: Dylan Beaudette <dylan.beaudette@usda.gov>
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 Imports: grDevices, graphics, stats, utils, methods, grid, lattice, cluster, stringr, data.table, farver, digest, colorspace, ape
 Suggests: 
     mvtnorm,
