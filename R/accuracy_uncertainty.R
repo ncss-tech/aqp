@@ -181,7 +181,7 @@ brierScore <- function(x, classLabels, actual = 'actual') {
 #' 
 #' @author Stephen Roecker
 #' 
-#' #' @references
+#' @references
 #'
 #'    - Brus DJ, Kempen B, Heuvelink GBM. 2011. Sampling for validation of digital soil maps. European Journal of Soil Science. 62(3):394–407. \doi{10.1111/j.1365-2389.2011.01364.x}
 #'    - Lark RM. 1995. Components of accuracy of maps with special reference to discriminant analysis on remote sensor data. International Journal of Remote Sensing. 16(8):1461–1480. \doi{10.1080/01431169508954488}
@@ -217,7 +217,7 @@ mu_confusion_matrix <- function(x, mapunit = "nationalmusym", cophase = "coiid",
   CR <- colmax / colSums(CM)
   OP <- sum(rowmax) / sum(CM)
   H  <- apply(CM, 1, function(x) aqp::shannonEntropy(x/sum(x)))
-  CM <- CM |> cbind(MP, H) |>  rbind(CR = c(CR, c(NA, NA)))
+  # CM <- CM |> cbind(MP, H) |>  rbind(CR = c(CR, c(NA, NA)))
   names(dimnames(CM)) <- c("map unit", "component phase")
   
   return(

@@ -43,15 +43,15 @@ mu <- rbind(
 mu_confusion_matrix(mu, mapunit = "mapunit", cophase = "cophase", comppct = "comppct")
 
 }
+\references{
+\itemize{
+\item Brus DJ, Kempen B, Heuvelink GBM. 2011. Sampling for validation of digital soil maps. European Journal of Soil Science. 62(3):394–407. \doi{10.1111/j.1365-2389.2011.01364.x}
+\item Lark RM. 1995. Components of accuracy of maps with special reference to discriminant analysis on remote sensor data. International Journal of Remote Sensing. 16(8):1461–1480. \doi{10.1080/01431169508954488}
+}
+}
 \seealso{
 \code{\link[=tauW]{tauW()}}, \code{\link[=shannonEntropy]{shannonEntropy()}}, \code{\link[=confusionIndex]{confusionIndex()}}
 }
 \author{
 Stephen Roecker
-
-#' @references
-\itemize{
-\item Brus DJ, Kempen B, Heuvelink GBM. 2011. Sampling for validation of digital soil maps. European Journal of Soil Science. 62(3):394–407. \doi{10.1111/j.1365-2389.2011.01364.x}
-\item Lark RM. 1995. Components of accuracy of maps with special reference to discriminant analysis on remote sensor data. International Journal of Remote Sensing. 16(8):1461–1480. \doi{10.1080/01431169508954488}
-}
 }
