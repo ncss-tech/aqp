@@ -37,7 +37,7 @@
 #' 
 #' @importFrom methods setClass setOldClass representation prototype new isGeneric setGeneric setReplaceMethod setMethod .hasSlot as new slot slot<- slotNames
 #' 
-#' @importFrom stats TukeyHSD aggregate aov approxfun as.dist as.formula cmdscale complete.cases dist formula median model.frame na.omit na.pass quantile rnorm runif sd splinefun terms update weighted.mean cov as.hclust
+#' @importFrom stats TukeyHSD aggregate aov approxfun as.dist as.formula cmdscale complete.cases dist formula median model.frame na.omit na.pass quantile rnorm runif sd splinefun terms update weighted.mean cov as.hclust xtabs
 #' 
 #' @importFrom utils object.size packageVersion combn
 #' 

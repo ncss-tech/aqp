@@ -1,3 +1,7 @@
+# aqp development version
+ * new function `mu_confusion_matrix()` (@smroecker)
+ * increasing dependence on R to >= 4.1
+
 # aqp 2.2-1 (2025-09-16)
  * CRAN release
  * moving some vignettes to pkgdown articles (https://ncss-tech.github.io/aqp/)
