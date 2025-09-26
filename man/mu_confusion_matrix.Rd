@@ -19,7 +19,7 @@ mu_confusion_matrix(
 
 \item{cophase}{\code{character} column name containing the soil component phase identifier (e.g. coiid or paste(compname, localphase))}
 
-\item{comppct}{\code{character} column name containint the component percent (e.g. comppct_r)}
+\item{comppct}{\code{character} column name containing the component percent (e.g. comppct_r)}
 
 \item{muacres}{\code{character} column name containing the total area of the mapunit (e.g. muacres)}
 }
