@@ -2,6 +2,12 @@
 ## TODO: compute mean, covariance, Dirichlet parameters for all samples 'soil-texture-separate-sim-by-class.R'
 ##       use those to bootstrap by soil texture class label
 
+## TODO: generalize to ignore letter case of sand, silt, clay columns
+
+## TODO: allow for specification of any two columns
+
+
+
 #'
 #' @title Bootstrap Soil Texture Data
 #' 
@@ -9,7 +15,7 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @param ssc a `data.frame` object with 3 columns: 'sand', 'silt', 'clay' and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.
+#' @param ssc a `data.frame` object with 3 columns: 'SAND', 'SILT', 'CLAY' and at least three rows of data within the range of 0-100 (percent). NA are automatically removed, but care should be taken to ensure that the sand/silt/clay values add to 100 percent. Simulations are based on these examples.
 #' 
 #' @param method type of simulation: 'dirichlet' or 'normal'. See details.
 #' 
