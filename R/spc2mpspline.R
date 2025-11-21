@@ -6,31 +6,52 @@
                                       hzdesgn = NULL, ...)
     standardGeneric("spc2mpspline"))
 
-#' @title SoilProfileCollection wrapper for `mpspline2::mpspline()` 
+#' SoilProfileCollection wrapper for `mpspline2::mpspline()`
 #'
-#' @description Generate mass-preserving splines for any numeric attribute in a SoilProfileCollection using `mpspline2::mpspline()`. mpspline2 implements the method described in Bishop et al. (1999). Currently this function only works with a single `var_name` at a time. 
+#' Generate mass-preserving splines for any numeric attribute in a
+#' SoilProfileCollection using `mpspline2::mpspline()`. mpspline2 implements the
+#' method described in Bishop et al. (1999). 
 #' 
-#' @details This function now relies on the missing data checks provided by the mpspline2 package. See `attr(..., 'removed')` to see whole profiles that were removed from the set. Horizons containing `NA` in the property of interest are dropped with a message.
+#' @details This function now relies on the missing data checks provided by the
+#'   mpspline2 package. See `attr(..., 'removed')` to see whole profiles that
+#'   were removed from the set. Horizons containing `NA` in the property of
+#'   interest are dropped with a message.
 #'
-#' Data completeness is assessed and the input SoilProfileCollection is filtered and truncated to create a container for the results from `mpspline2::mpspline()`.
+#'   Data completeness is assessed and the input SoilProfileCollection is
+#'   filtered and truncated to create a container for the results from
+#'   `mpspline2::mpspline()`.
 #'
 #' @param object A SoilProfileCollection
-#' @param var_name Column name in `@horizons` slot of `object` containing numeric values to spline
-#' @param pattern Regex pattern to match for bottom of profile (passed to `minDepthOf()`) default: "R|Cr|Cd|qm"; only used if `hzdesgn` is specified
-#' @param hzdesgn Column name in `@horizons` slot of `object` containing horizon designations default: `NULL`
-#' @param method Options include "est_1cm" (default; 1cm estimates), "est_icm" (estimates over original layer boundaries), "est_dcm" (estimates over constant interval, specified with `d` argument to `mpspline3::mpspline()`). Default value for `d` is `c(0, 5, 15, 30, 60, 100, 200)`.
+#' @param var_name Column name(s) in `@horizons` slot of `object` containing
+#'   numeric values to spline
+#' @param pattern Regex pattern to match for bottom of profile (passed to
+#'   `minDepthOf()`) default: "R|Cr|Cd|m"; only used if `hzdesgn` is specified
+#' @param hzdesgn Column name in `@horizons` slot of `object` containing horizon
+#'   designations default: `NULL`
+#' @param method Options include "est_1cm" (default; 1cm estimates), "est_icm"
+#'   (estimates over original layer boundaries), "est_dcm" (estimates over
+#'   constant interval, specified with `d` argument to `mpspline3::mpspline()`).
+#'   Default value for `d` is `c(0, 5, 15, 30, 60, 100, 200)`.
 #' @param ... Additional arguments to `mpspline2::mpspline()`
 #'
 #' @author Andrew G. Brown
 #'
-#' @return A SoilProfileCollection with 1cm slices. Spline variables are in columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed with "rmse_". If any profiles were removed from the collection, their profile IDs are stored in `attr(result, 'removed')`.
+#' @return A SoilProfileCollection with 1cm slices. Spline variables are in
+#'   columns prefixed with "spline_" and RMSE/RMSE_IQR are in columns prefixed
+#'   with "rmse_". If any profiles were removed from the collection, their
+#'   profile IDs are stored in `attr(result, 'removed')`.
 #'
 #' @export
 #' @aliases spc2mpspline
-#' @references Bishop, T.F.A., McBratney, A.B., Laslett, G.M. (1999) Modelling soil attribute depth functions with equal-area quadratic smoothing splines. Geoderma 91(1–2), pp. 27-45. \doi{https://doi.org/10.1016/S0016-7061(99)00003-8}
-#' 
-#' O'Brien, Lauren (2022). mpspline2: Mass-Preserving Spline Functions for Soil Data. R package version 0.1.6. \url{https://cran.r-project.org/package=mpspline2}
-#' 
+#' @references Bishop, T.F.A., McBratney, A.B., Laslett, G.M. (1999) Modelling
+#'   soil attribute depth functions with equal-area quadratic smoothing splines.
+#'   Geoderma 91(1–2), pp. 27-45.
+#'   \doi{https://doi.org/10.1016/S0016-7061(99)00003-8}
+#'
+#'   O'Brien, Lauren (2022). mpspline2: Mass-Preserving Spline Functions for
+#'   Soil Data. R package version 0.1.6.
+#'   \url{https://cran.r-project.org/package=mpspline2}
+#'
 #' @examples
 #' if (requireNamespace("mpspline2")) {
 #'   data(sp1)
@@ -59,7 +80,7 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
           function(object, 
                    var_name = NULL,
                    method = c("est_1cm", "est_icm", "est_dcm"),
-                   pattern = "R|Cr|Cd|qm",
+                   pattern = "R|Cr|Cd|m",
                    hzdesgn = NULL,
                    ...) {
             .NHZ <- NULL
