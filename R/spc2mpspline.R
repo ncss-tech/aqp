@@ -35,10 +35,25 @@
 #' if (requireNamespace("mpspline2")) {
 #'   data(sp1)
 #'   depths(sp1) <- id ~ top + bottom
+#'   hzdesgnname(sp1) <- "name"
 #'
+#'   # run on a single variable
 #'   res <- spc2mpspline(sp1, "prop")
 #'
+#'   # plot single-variable result
 #'   plotSPC(res[1:5,], color = "prop_spline", divide.hz = FALSE)
+#'   # add a second continuous numeric variable for demonstration
+#'   sp1$value2 <- runif(nrow(horizons(sp1)))
+#'
+#'   # run on multiple variables
+#'   res2 <- spc2mpspline(sp1, c("prop", "value2"))
+#'   
+#'   # plot multi-variable result
+#'   plotSPC(res2[1:5,], color = "value2_spline", divide.hz = FALSE)
+#'   
+#'   # run on multiple variables with custom depth intervals
+#'   res3 <- spc2mpspline(sp1, c("prop", "value2"), method = "est_dcm", d = c(0, 10, 20, 50, 100))
+#'   plotSPC(res3[1:5,], color = "value2_spline", divide.hz = FALSE)
 #' }
 setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
           function(object, 
@@ -54,8 +69,8 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             if (!requireNamespace('mpspline2'))
               stop("package `mpspline2` is required", call. = FALSE)
             
-            if (is.null(var_name) | !(var_name %in% horizonNames(object)))
-              stop("argument `var_name` must specify a single horizon-level variable", call. = FALSE)
+            if (is.null(var_name) || !all(var_name %in% horizonNames(object)))
+              stop("all `var_name` must specify horizon-level variables", call. = FALSE)
 
             method <- match.arg(method[1], c("est_1cm", "est_icm", "est_dcm"))
             
@@ -100,46 +115,49 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             # truncate using vectors of top and bottom
             spc.sub <- trunc(spc.sub, spc.sub$.mindepth, spc.sub$.maxdepth)
 
-            # do the splines
+            if (length(profile_id(spc.sub)) == 0) {
+              attr(object, "removed") <- unique(profile_id(object))
+              return(object[0, ])
+            }
+            
             res <- mpspline2::mpspline(horizons(spc.sub)[c(idname(spc.sub),
                                                            horizonDepths(spc.sub),
                                                            var_name)],
                                        var_name = var_name, ...)
+
+            # Handle the difference in mpspline2 return structure
+            # Single variable returns list with profile IDs as names
+            # Multiple variables returns list with variable names as top level
+            if (length(var_name) == 1 && inherits(res[[1]], "list") &&
+                "id" %in% names(res[[1]])) {
+              # Single variable case: convert to multi-variable structure
+              res <- list(res)
+              names(res) <- var_name
+            }
+
+            # Get all profile IDs that were successfully splined for at least one variable
+            all.splined.pids <- unique(unlist(lapply(res, function(v_res) {
+              if (inherits(v_res, "list")) {
+                names(v_res)
+              } else {
+                NULL # Handle cases where a variable's result might be NA
+              }
+            })))
             
-            # concatenate results for re-insertion
-            pid <- profile_id(spc.sub)
-            res2 <- do.call('c', lapply(seq_along(pid), function(i) {
-              switch(method,
-                "est_1cm" = {  
-                  drange <- spc.sub$.mindepth[i]:spc.sub$.maxdepth[i]
-                  zero.idx <- drange == 0
-                  if (any(zero.idx))
-                    drange <- drange[-which(zero.idx)]
-                  return(res[[pid[i]]]$est_1cm[drange])
-                }, {
-                  return(res[[pid[i]]][[method]])
-                }
-              )
-              # this returns the 1cm estimate which conforms with sliced spc
-              #
-              # debug: prove that mass is preserved in output by returning block estimates
-              # return(res[[pid]]$est_icm)
-            }))
+            # determine profiles that were splined and filter spc.sub
+            splined.profiles <- profile_id(spc.sub)[profile_id(spc.sub) %in% all.splined.pids]
+            spc.sub <- spc.sub[which(profile_id(spc.sub) %in% splined.profiles), ]
             
-            # get the RMSE
-            reserr <- do.call('c', lapply(profile_id(spc.sub), function(pid) {
-              return(res[[pid]]$est_err)
-            }))
+            # which profiles were removed?
+            removed.profiles <- profile_id(object)[!profile_id(object) %in% splined.profiles]
             
-            # make 1:1 with site
-            reserr_iqr <- reserr[names(reserr) == "RMSE_IQR"]
-            reserr <- reserr[names(reserr) == "RMSE"]
-            
-            # profiles removed (NA in all horizons)
-            spc.sub <- spc.sub[profile_id(spc.sub) %in% names(res),]
+            if (length(splined.profiles) == 0) {
+              attr(object, "removed") <- unique(removed.profiles)
+              return(object[0, ])
+            }
             
             # create slices 1cm thick to insert spline result
-            switch(method, 
+            switch(method,
                    "est_1cm" = {
                      spc.spl <- suppressMessages(aqp::dice(spc.sub))
                    },
@@ -148,36 +166,77 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
                    },
                    "est_dcm" = {
                      .new_d_horizons <- function(x, ...) {
-                       if (is.null(list(...)$d)) {
-                         d <- c(0, 5, 15, 30, 60, 100, 200)
-                       } else {
-                         d <- list(...)$d
-                       }                  
+                       d <- list(...)$d
+                       if (is.null(d)) d <- c(0, 5, 15, 30, 60, 100, 200)
+                       pids <- profile_id(x)
                        newhzd <- data.frame(
-                         id = profile_id(x),
-                         top = do.call('c', lapply(d[1:(length(d) - 1)], rep, length(x))),
-                         bottom = do.call('c', lapply(d[2:length(d)], rep, length(x)))
+                         id = rep(pids, each = length(d) - 1),
+                         top = rep(d[1:(length(d) - 1)], times = length(pids)),
+                         bottom = rep(d[2:length(d)], times = length(pids))
                        )
                        colnames(newhzd) <- c(idname(x), horizonDepths(x))
                        depths(newhzd) <- colnames(newhzd)
                        newhzd
                      }
-
                      spc.spl <- .new_d_horizons(spc.sub, ...)
                    })
-                   
-            # create new "spline_"+var_name variable
-            spc.spl[[paste0(var_name, "_spline")]] <- res2
-            
-            # create new "rmse_"+var_name as site level attributes
-            spc.spl[[paste0(var_name, "_rmse")]] <- reserr
-            spc.spl[[paste0(var_name, "_rmse_iqr")]] <- reserr_iqr
-            
-            # determine what profiles were removed
-            removed <- profile_id(object)[!profile_id(object) %in% profile_id(spc.spl)]
+
+            # Create profile ID to index mapping for efficient subsetting
+            spl_pids <- profile_id(spc.spl)
+            pid_idx <- setNames(seq_along(spl_pids), spl_pids)
+
+            # iterate over variables and add results to spc.spl
+            for(v in var_name){
+              res.v <- res[[v]]
+              current_splined_pids <- profile_id(spc.spl)
+              
+              res2 <- do.call('c', lapply(current_splined_pids, function(p) {
+                if (p %in% names(res.v) && !is.null(res.v[[p]])) {
+                  profile_res <- res.v[[p]]
+                  switch(method,
+                    "est_1cm" = {
+                      # Map spline results to 1cm intervals created by dice()
+                      p_idx <- pid_idx[p]
+                      max_depth <- max(horizons(spc.spl[p_idx, ])$bottom, na.rm = TRUE)
+                      vals <- profile_res$est_1cm[1:max_depth]
+                      # Pad with NA if needed
+                      if (length(vals) < max_depth) vals <- c(vals, rep(NA, max_depth - length(vals)))
+                      vals
+                    },
+                    "est_icm" = profile_res$est_icm,
+                    "est_dcm" = profile_res$est_dcm
+                  )
+                } else {
+                  # Return NA vector for profiles not splined for this variable
+                  if (p %in% names(pid_idx)) {
+                    p_idx <- pid_idx[p]
+                    num_hz <- nrow(horizons(spc.spl[p_idx, ]))
+                    if (num_hz > 0) rep(NA, num_hz) else NULL
+                  } else {
+                    NULL
+                  }
+                }
+              }))
+              
+              # Extract RMSE values (site-level attributes)
+              rmse_vals <- t(sapply(profile_id(spc.spl), function(p) {
+                if (p %in% names(res.v) && !is.null(res.v[[p]]) && "est_err" %in% names(res.v[[p]])) {
+                  res.v[[p]]$est_err[c("RMSE", "RMSE_IQR")]
+                } else {
+                  c(RMSE = NA_real_, RMSE_IQR = NA_real_)
+                }
+              }))
+              rmse_values <- rmse_vals[, "RMSE"]
+              rmse_iqr_values <- rmse_vals[, "RMSE_IQR"]
+              
+              # Add splined values and error estimates to spc.spl
+              spc.spl[[paste0(v, "_spline")]] <- res2
+              site(spc.spl)[[paste0(v, "_rmse")]] <- rmse_values
+              site(spc.spl)[[paste0(v, "_rmse_iqr")]] <- rmse_iqr_values
+            }
             
             # add an attribute with removed profile IDs
-            attr(spc.spl, "removed") <- unique(removed)
+            attr(spc.spl, "removed") <- unique(removed.profiles)
             
             if (method != "est_dcm") {
               spc.spl <- trunc(spc.spl, spc.sub$.mindepth_orig, spc.sub$.maxdepth)

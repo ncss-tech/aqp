@@ -42,10 +42,25 @@ Data completeness is assessed and the input SoilProfileCollection is filtered an
 if (requireNamespace("mpspline2")) {
   data(sp1)
   depths(sp1) <- id ~ top + bottom
+  hzdesgnname(sp1) <- "name"
 
+  # run on a single variable
   res <- spc2mpspline(sp1, "prop")
 
+  # plot single-variable result
   plotSPC(res[1:5,], color = "prop_spline", divide.hz = FALSE)
+  # add a second continuous numeric variable for demonstration
+  sp1$value2 <- runif(nrow(horizons(sp1)))
+
+  # run on multiple variables
+  res2 <- spc2mpspline(sp1, c("prop", "value2"))
+  
+  # plot multi-variable result
+  plotSPC(res2[1:5,], color = "value2_spline", divide.hz = FALSE)
+  
+  # run on multiple variables with custom depth intervals
+  res3 <- spc2mpspline(sp1, c("prop", "value2"), method = "est_dcm", d = c(0, 10, 20, 50, 100))
+  plotSPC(res3[1:5,], color = "value2_spline", divide.hz = FALSE)
 }
 }
 \references{
