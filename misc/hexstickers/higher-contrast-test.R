@@ -44,6 +44,41 @@ plotProfileDendrogram(
   dend.width = 2.5,
   max.depth = 150,
   lwd = 1
-  )
+)
+
+
+
+## not working yet
+library(hexSticker)
+
+s <- hexSticker::sticker(
+  ~{
+    par(mar = c(0, 0, 0, 0), bg = 'white', fg = 'black')
+    plotProfileDendrogram(
+      f, 
+      clust = as.hclust(p), 
+      print.id = FALSE,
+      name = NA,
+      # name.style = 'center-center',
+      scaling.factor = 0.7,
+      y.offset = 3,
+      depth.axis = FALSE,
+      hz.distinctness.offset = 'hzd',
+      # divide.hz = FALSE,
+      width = 0.3, 
+      dend.width = 2.5,
+      max.depth = 150,
+      lwd = 1
+    )
+  },
+  package = "aqp", p_size = 26, p_y = 1.5,
+  url = "https://ncss-tech.github.io/aqp/", u_size = 4,
+  filename = "misc/hexstickers/aqp_sticker_v3.png"
+)
+
+plot(s)
+
+
+
 
 
