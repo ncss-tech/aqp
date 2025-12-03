@@ -16,8 +16,8 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech
 
 <!-- aqp hexsticker! -->
 
-<a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png">
-<img src = "https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v2.png" alt = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width = "45%" height = "45%" hspace="15" vspace="15" align="right"/></a>
+<a href="https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v3-fixed.png">
+<img src = "https://raw.githubusercontent.com/ncss-tech/aqp/master/misc/hexstickers/aqp_sticker_v3-fixed.png" alt = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" title = "aqp hexsticker (Paxton, Montauk, Woodbridge, Ridgebury, Whitman, Catden soil series dendogram)" width = "45%" height = "45%" hspace="15" vspace="15" align="right"/></a>
 
 The Algorithms for Quantitative Pedology (AQP) project was started in
 2009 to organize a loosely-related set of concepts and source code on
@@ -43,23 +43,22 @@ platform for bridging the gap between pedometric theory and practice.
 Get the stable version from CRAN:
 
 ``` r
-install.packages('aqp', dep=TRUE)
+install.packages('aqp')
 ```
 
 Get the development version from Github, after installing the CRAN
 version + dependencies:
 
 ``` r
-remotes::install_github("ncss-tech/aqp", dependencies=FALSE, upgrade=FALSE, build=FALSE)
+remotes::install_github("ncss-tech/aqp", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 ```
 
 Install suggested packages:
 
 ``` r
-p <- c("colorspace", "ape", "soilDB", "latticeExtra", "tactile", "compositions", 
+p <- c("soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
-"farver", "Hmisc", "tibble", "RColorBrewer", "scales", "digest", 
- "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
+"Hmisc", "tibble", "RColorBrewer", "scales", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
 
 install.packages(p)
 ```
