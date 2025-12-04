@@ -32,7 +32,7 @@
   dE00 <- farver::compare_colour(x.slices[, -1], x.slices[, -1], from_space='lab', method='CIE2000', white_from='D65')
   dE00 <- as.dist(dE00)
   
-  # use PAM to cluster, note `pamonce=5`` used for optimization
+  # use PAM to cluster, note `pamonce = 5` used for optimization
   cl <- cluster::pam(dE00, k = k, diss = TRUE, pamonce = 5)
   
   # get data
@@ -167,7 +167,7 @@
 
 ## TODO: 
 #   * move method-specific arguments to ...
-#   * allow for specification of colors via: hex, sRGB, LAB
+#   * allow for specification of colors via: Munsell, hex ==> use built-in Munsell -> CIELAB conversion LUT
 #   * data.table optimization
 #   * better documentation!
 
