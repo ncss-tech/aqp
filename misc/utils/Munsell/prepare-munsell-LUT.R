@@ -468,6 +468,9 @@ m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 ## add neutral chips
 ##
 
+## TODO: 2025-12-05: scan missing half-chips 8.5 and 9.5
+
+
 # manually edited file, exported from Nix Pro app
 n <- read.csv(file = 'neutrals_colordata.csv')
 

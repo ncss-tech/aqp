@@ -281,6 +281,11 @@ xyplot(reflectance ~ wavelength, data = s,
 m.final$reflectance <- pmin(m.final$reflectance, 1)
 
 
+## add estimated neutral chip spectra
+## 2025-12-05
+
+
+
 ## long -> wide for comparisons
 reference <- dcast(m.final, wavelength ~ munsell, value.var = 'reflectance')
 
