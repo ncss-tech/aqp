@@ -472,6 +472,9 @@ m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 ## * 2025-12-05: TODO scan missing half-chips 8.5 and 9.5
 ## * 2025-12-08: interpolate in CIELAB results in colors that are too light (why?)
 
+## * TODO N 8.5/ and N 9/ appear too dark ---> rescan
+
+
 # manually edited file, exported from Nix Pro app
 n <- read.csv(file = 'neutrals_colordata.csv')
 

@@ -17,6 +17,7 @@ source('make-spectral-reference-RDA.R')
 source('traditional-names.R')
 
 # prepare a simplified spectral library of Munsell color chips
+# estimate neutral chip spectra (flat)
 source('prepare-simplfied-spectra-library.R')
 
 # interpolate odd chroma and select 1/2 chip value spectra

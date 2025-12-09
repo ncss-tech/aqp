@@ -6,7 +6,8 @@ library(tactile)
 
 ## assumptions: 
 ##              * current CIELAB definitions of neutral chips are accurate
-##              * neutral chips have relatively "flat" spectra (is that true?)
+##              * neutral chips have relatively "flat" spectra
+
 
 
 
@@ -14,7 +15,10 @@ library(tactile)
 library(pracma)
 
 
+## TODO: use intermediate objects vs. final .rda
+
 data("munsell.spectra")
+
 table(munsell.spectra$hue)
 
 
@@ -47,44 +51,41 @@ xyplot(
 
 
 
-# N 9/
-sn <- rep(0.5, times = 36)
-spec2Munsell(sn)
+## initial guesses -- close
 
-
-# N 8/
-sn <- rep(0.35, times = 36)
-spec2Munsell(sn)
-
-# N 7/
-sn <- rep(0.15, times = 36)
-spec2Munsell(sn)
-
-# N 6/
-sn <- rep(0.06, times = 36)
-spec2Munsell(sn)
-
-# N 5/
-sn <- rep(0.025, times = 36)
-spec2Munsell(sn)
-
-# N 4/
-sn <- rep(0.01, times = 36)
-spec2Munsell(sn)
-
-# N 3/
-sn <- rep(0.005, times = 36)
-spec2Munsell(sn)
-
-# N 2/
-sn <- rep(0.003, times = 36)
-spec2Munsell(sn)
-
-# sn <- rep(0.0001, times = 36)
+# # N 9/
+# sn <- rep(0.5, times = 36)
 # spec2Munsell(sn)
 # 
-# sn <- rep(0.000001, times = 36)
+# 
+# # N 8/
+# sn <- rep(0.35, times = 36)
 # spec2Munsell(sn)
+# 
+# # N 7/
+# sn <- rep(0.15, times = 36)
+# spec2Munsell(sn)
+# 
+# # N 6/
+# sn <- rep(0.06, times = 36)
+# spec2Munsell(sn)
+# 
+# # N 5/
+# sn <- rep(0.025, times = 36)
+# spec2Munsell(sn)
+# 
+# # N 4/
+# sn <- rep(0.01, times = 36)
+# spec2Munsell(sn)
+# 
+# # N 3/
+# sn <- rep(0.005, times = 36)
+# spec2Munsell(sn)
+# 
+# # N 2/
+# sn <- rep(0.003, times = 36)
+# spec2Munsell(sn)
+# 
 
 
 
@@ -173,7 +174,7 @@ abline(v = c(0.003, 0.005, 0.01, 0.025, 0.06, 0.15, 0.35, 0.5), col = 'red')
 
 
 ## search for reasonable spectra for neutral chips
-# assumption: spectra are approximately "flat"
+# assumption: spectra are "flat"
 n.2 <- findmins(obj2, v = 2, a = 0, b = 0.1)
 n.25 <- findmins(obj2, v = 2.5, a = 0, b = 0.1)
 n.3 <- findmins(obj2, v = 3, a = 0, b = 0.6)
@@ -182,12 +183,14 @@ n.5 <- findmins(obj2, v = 5, a = 0, b = 0.6)
 n.6 <- findmins(obj2, v = 6, a = 0, b = 0.6)
 n.7 <- findmins(obj2, v = 7, a = 0, b = 0.6)
 n.8 <- findmins(obj2, v = 8, a = 0, b = 0.6)
+n.85 <- findmins(obj2, v = 8.5, a = 0, b = 0.6)
 n.9 <- findmins(obj2, v = 9, a = 0, b = 0.6)
 
-n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.9)
+# combine
+n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9)
 
-.chips <- c(2, 2.5, 3:9)
-m <- sprintf("N %s/", c(2, 2.5, 3:9))
+.chips <- c(2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9)
+m <- sprintf("N %s/", .chips)
 
 cols <- parseMunsell(m)
 
