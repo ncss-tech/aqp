@@ -468,42 +468,61 @@ m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 ## add neutral chips
 ##
 
-## TODO: 2025-12-05: scan missing half-chips 8.5 and 9.5
-
+## NOTES:
+## * 2025-12-05: TODO scan missing half-chips 8.5 and 9.5
+## * 2025-12-08: interpolate in CIELAB results in colors that are too light (why?)
 
 # manually edited file, exported from Nix Pro app
 n <- read.csv(file = 'neutrals_colordata.csv')
 
-n <- n[, c('id', 'Lin.sRGB.R', 'Lin.sRGB.G', 'Lin.sRGB.B')]
-names(n) <- c('id', 'R', 'G', 'B')
+n <- n[, c('id', 'Lin.sRGB.R', 'Lin.sRGB.G', 'Lin.sRGB.B', 'L', 'A', 'B')]
+names(n) <- c('id', 'sR', 'sG', 'sB', 'L', 'A', 'B')
 
 n$V <- as.numeric(sapply(strsplit(n$id, '-', fixed = TRUE), '[', 1))
 
-previewColors(rgb(n$R, n$G, n$B))
-
-# TODO: eval over replicates
+# good
+previewColors(rgb(n$sR, n$sG, n$sB, maxColorValue = 1))
 
 # take mean over replicates
-n.agg <- aggregate(cbind(R, G, B) ~ V, data = n, FUN = mean)
+n.agg <- aggregate(cbind(sR, sG, sB) ~ V, data = n, FUN = mean)
 
 n.agg$H <- 'N'
 n.agg$C <- 0
 
-n.agg <- n.agg[, c('H', 'V', 'C', 'R', 'G', 'B')]
+n.agg <- n.agg[, c('H', 'V', 'C', 'sR', 'sG', 'sB')]
 
-# interpolate 2.5 value
-n.agg.2.5 <- interpolateValue(n.agg[1:2, ], vars = c('R', 'G', 'B'))
+# linear interpolation in sRGB space
+# 2.5 and 8.5 chips
+n.agg.2.5 <- interpolateValue(n.agg[1:2, ], vars = c('sR', 'sG', 'sB'), new.V = 2.5)
+n.agg.8.5 <- interpolateValue(n.agg[7:8, ], vars = c('sR', 'sG', 'sB'), new.V = 8.5)
 
-n.agg.final <- rbind(n.agg, n.agg.2.5)
+# combine and re-order based on value
+n.agg.final <- rbind(n.agg, n.agg.2.5, n.agg.8.5)
 n.agg.final <- n.agg.final[order(n.agg.final$V), ]
 
+names(n.agg.final)[4:6] <- c('R', 'G', 'B')
 
-# combine
+## 
+# # convert LAB -> sRGB
+# .rgb <- convertColor(n.agg.final[, c('L', 'A', 'B')], from = 'Lab', to = 'sRGB')
+# .rgb <- data.frame(.rgb)
+# names(.rgb) <- c('R', 'G', 'B')
+# 
+# # swap LAB for sRGB
+# n.agg.final <- cbind(n.agg.final[, 1:3], .rgb)
+
+# check:
+.cols <- rgb(n.agg.final$R, n.agg.final$G, n.agg.final$B, maxColorValue = 1)
+.labs <- sprintf("%s %s/", n.agg.final$H, n.agg.final$V)
+soilPalette(.cols, lab = .labs)
+
+# append neutral chips with rest of the data
 m.final <- rbind(m.final, n.agg.final)
 
-# 2022: 9,227 (2.5 value chips)
-# 2024a: 15,709 (all half-value chips)
-# 2024b: 10,447 (select half-value chips)
+# 2022:       9,227 (2.5 value chips)
+# 2024a:      15,709 (all half-value chips)
+# 2024b:      10,447 (select half-value chips)
+# 2025-12-08: 10,448 (additional N chips)
 nrow(m.final)
 
 
@@ -535,7 +554,8 @@ str(m.final.lab)
 ## 2024:
 ## dE00 > 0.4 (but all < 1.5) are 2.5 value chips
 ## 
-## likely related to interpolation over full range of V vs. single, linear interpolation 2->2.5<-3
+## likely related to interpolation over full range of V vs. single, 
+## linear interpolation 2->2.5<-3
 
 
 
