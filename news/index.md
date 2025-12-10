@@ -8,7 +8,9 @@
 - apq now requires R \>= 4.1
 - updated CIELAB and sRGB color coordinates for Munsell neutral chips,
   based on direct measurement
+  ([\#332](https://github.com/ncss-tech/aqp/issues/332))
 - added estimated spectra for Munsell neutral chips
+  ([\#332](https://github.com/ncss-tech/aqp/issues/332))
 
 ## aqp 2.2-1 (2025-09-16)
 
