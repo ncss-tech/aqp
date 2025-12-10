@@ -1,61 +1,31 @@
-library(aqp)
+
+# always use the latest version, even if not yet installed
+devtools::load_all()
+
 library(lattice)
 library(latticeExtra)
 library(tactile)
+
+
+# locate local minima
+library(pracma)
 
 
 ## assumptions: 
 ##              * current CIELAB definitions of neutral chips are accurate
 ##              * neutral chips have relatively "flat" spectra
 
+## notes:
+##              * each Munsell chip has a 36-element spectra
 
 
-
-# local minima!
-library(pracma)
-
-
-## TODO: use intermediate objects vs. final .rda
-
-data("munsell.spectra")
-
-table(munsell.spectra$hue)
-
-
-# all hues, limit to specific hue / chroma slice
-x <- munsell.spectra[munsell.spectra$value  == 2 & munsell.spectra$chroma == 1, ]
-
-# each Munsell chip has a 36-element spectra
-# ranging from 380-730 nm
-# table(x$munsell)
-
-# spectra IDs
-x$ID <- factor(x$munsell)
-# create a color / chip
-cols <- parseMunsell(as.character(levels(x$ID)))
-
-# plot style
-tps <- tactile.theme(superpose.line = list(col = cols, lwd = 2))
-
-# final figure
-xyplot(
-  reflectance ~ wavelength, groups = ID, data = x, 
-  par.settings = tps,
-  main = 'Value 6 / Chroma 8',
-  type = c('l', 'g'),
-  ylab = 'Reflectance',
-  xlab = 'Wavelength (nm)',
-  scales = list(tick.number = 12),
-  xlim = c(370, 740)
-)
-
-
-
-
-obj <- function(r) {
+# objective function: dE00(reflectance)
+obj1 <- function(r) {
   
+  # maximum dE00, helps keep local minimum identification more stable
   .max <- 10
   
+  # reflectance must be  within [0, 1]
   if(r > 1 | r < 0) {
     return(.max)
   }
@@ -66,26 +36,23 @@ obj <- function(r) {
   # find the closest Munsell chip
   .o <- spec2Munsell(.s)
   
-  # print(.o)
-  
-  # max obj fun value:
-  # not a neutral chip
+  # not a neutral chip -> max dE00
   if(!.o$hue == 'N') {
     return(.max)
   }
-  # # not the target value
-  # if(!.o$value == v) {
-  #   return(.max)
-  # }
-  # 
-  # dE00 is the objective function value
+  
+  # otherwise, dE00 between flat spectra at r and target N chip
   return(.o$sigma)
 }
 
+
+# objective function: dE00(reflectance, neutral chip munsell value)
 obj2 <- function(r, v) {
   
+  # maximum dE00, helps keep local minimum identification more stable
   .max <- 10
   
+  # reflectance must be  within [0, 1]
   if(r > 1 | r < 0) {
     return(.max)
   }
@@ -96,65 +63,76 @@ obj2 <- function(r, v) {
   # find the closest Munsell chip
   .o <- spec2Munsell(.s)
   
-  # print(.o)
-  
-  # max obj fun value:
-  # not a neutral chip
+  # not a neutral chip -> max dE00
   if(!.o$hue == 'N') {
     return(.max)
   }
-  # not the target value
+  
+  # not the target value -> max dE00
   if(!.o$value == v) {
     return(.max)
   }
-
-  # dE00 is the objective function value
+  
+  # otherwise, dE00 between flat spectra at r and target N chip
   return(.o$sigma)
 }
 
-obj(0.001)
+# test: ok
+obj1(0.03)
 
-obj2(0.001, v = 2)
-obj2(0.001, v = 5)
+obj2(0.03, v = 2)
+obj2(0.2, v = 5)
+obj2(0.85, v = 9.5)
 
-# more efficient
-x <- logseq(0.0005, 0.95, n = 500)
-y <- sapply(x, obj)
+# log-sequence covering estimated range
+.minr <- 0.003
+.maxr <- 0.9
+x <- logseq(.minr, .maxr, n = 500)
 
+# eval objective function over full range of reflectance, for any neutral chip
+y <- sapply(x, obj1)
+
+# viz objective function 1 over range of possible reflectance
 d <- data.frame(x, y)
+
+# ignore obvious incorrect values
 d <- subset(d, subset = y < 10)
 
+# looking for local minima
+# perfect
 plot(y ~ x, data = d, type = 'l', cex = 0.1,  log = 'x', las = 1)
-
-
-
-# xyplot(y ~ x, data = d, type = 'b', cex = 0.1, scales = list(x = list(log = 10, at = seq(0.001, 0.6, by = 0.01))), par.settings = tactile.theme())
-
+plot(y ~ x, data = d, type = 'l', cex = 0.1, las = 1)
 
 
 ## search for reasonable spectra for neutral chips
-# assumption: spectra are "flat"
-n.2 <- findmins(obj2, v = 2, a = 0, b = 0.1)
-n.25 <- findmins(obj2, v = 2.5, a = 0, b = 0.1)
-n.3 <- findmins(obj2, v = 3, a = 0, b = 0.95)
-n.4 <- findmins(obj2, v = 4, a = 0, b = 0.95)
-n.5 <- findmins(obj2, v = 5, a = 0, b = 0.95)
-n.6 <- findmins(obj2, v = 6, a = 0, b = 0.95)
-n.7 <- findmins(obj2, v = 7, a = 0, b = 0.95)
-n.8 <- findmins(obj2, v = 8, a = 0, b = 0.95)
-n.85 <- findmins(obj2, v = 8.5, a = 0, b = 0.95)
-n.9 <- findmins(obj2, v = 9, a = 0, b = 0.95)
-n.95 <- findmins(obj2, v = 9.5, a = 0, b = 0.95)
+# slower, but search entire range
+# ~ 1 minute
+system.time( {
+  n.2 <- findmins(obj2, v = 2, a = .minr, b = .maxr)
+  n.25 <- findmins(obj2, v = 2.5, a = .minr, b = .maxr)
+  n.3 <- findmins(obj2, v = 3, a = .minr, b = .maxr)
+  n.4 <- findmins(obj2, v = 4, a = .minr, b = .maxr)
+  n.5 <- findmins(obj2, v = 5, a = .minr, b = .maxr)
+  n.6 <- findmins(obj2, v = 6, a = .minr, b = .maxr)
+  n.7 <- findmins(obj2, v = 7, a = .minr, b = .maxr)
+  n.8 <- findmins(obj2, v = 8, a = .minr, b = .maxr)
+  n.85 <- findmins(obj2, v = 8.5, a = .minr, b = .maxr)
+  n.9 <- findmins(obj2, v = 9, a = .minr, b = .maxr)
+  n.95 <- findmins(obj2, v = 9.5, a = .minr, b = .maxr)
+}
+)
 
-# combine
-n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9, n.95)
+# combine local minima
+# looks good
+(n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9, n.95))
 
+# prepare chip colors and labels 
 .chips <- c(2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5)
-m <- sprintf("N %s/", .chips)
+.m <- sprintf("N %s/", .chips)
+.cols <- parseMunsell(.m)
 
-cols <- parseMunsell(m)
 
-
+# composite figure
 layout(matrix(c(1, 2), nrow = 2), heights = c(3, 1))
 
 par(mar = c(4, 4, 1, 0.25))
@@ -164,33 +142,73 @@ abline(v = n, col = 'royalblue', lty = 3)
 abline(h = 1.5, col = 'firebrick', lty = 2)
 axis(side = 2, las = 1)
 axis(side = 1, at = n, labels = round(n, 3), las = 2)
-text(x = n, y = 5, labels = m, cex = 0.75, font = 2)
+text(x = n, y = 5, labels = .m, cex = 0.75, font = 2)
 
 
 par(mar = c(1, 1, 1, 1))
-soilPalette(cols, lab = m)
+soilPalette(.cols, lab = .m)
 
 
-# TODO: create spectra
-n
+# check: ok!
+# dE00 all < 1
+n.dE00 <- sapply(n, obj1)
+summary(n.dE00)
+
+# these should all be <1, perhaps source data were changed?
+stopifnot(all(n.dE00 < 1))
+
+# compile results and save
+res <- data.frame(
+  V = .chips,
+  reflectance = n
+)
+
+saveRDS(res, file = 'neutral-reflectance-estimates.rds')
+
+
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
 
 
 
 
-
-
-
-
-
-
-# TODO: why doesn't this work?
-# # N 2/
-# optim(par = list(r = 0.001),  fn = obj, v = 2, method = 'BFGS')
 # 
-# optim(par = list(r = 0.001),  fn = obj, v = 3, method = 'BFGS')
 # 
-
-
+# ## TODO: use intermediate objects vs. final .rda
+# 
+# data("munsell.spectra")
+# 
+# table(munsell.spectra$hue)
+# 
+# 
+# # all hues, limit to specific hue / chroma slice
+# x <- munsell.spectra[munsell.spectra$value  == 2 & munsell.spectra$chroma == 1, ]
+# 
+# # each Munsell chip has a 36-element spectra
+# # ranging from 380-730 nm
+# # table(x$munsell)
+# 
+# # spectra IDs
+# x$ID <- factor(x$munsell)
+# # create a color / chip
+# cols <- parseMunsell(as.character(levels(x$ID)))
+# 
+# # plot style
+# tps <- tactile.theme(superpose.line = list(col = cols, lwd = 2))
+# 
+# # final figure
+# xyplot(
+#   reflectance ~ wavelength, groups = ID, data = x, 
+#   par.settings = tps,
+#   main = 'Value 6 / Chroma 8',
+#   type = c('l', 'g'),
+#   ylab = 'Reflectance',
+#   xlab = 'Wavelength (nm)',
+#   scales = list(tick.number = 12),
+#   xlim = c(370, 740)
+# )
 
 
 

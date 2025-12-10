@@ -24,3 +24,8 @@ save(traditionalColorNames, file = '../../../data/traditionalColorNames.rda', co
 # cb <- ColorBlockFromMunsell(colors)
 # 
 # ... save this to a new object perhaps
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
+

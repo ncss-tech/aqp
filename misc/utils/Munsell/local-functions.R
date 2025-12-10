@@ -64,13 +64,19 @@ interpolateOddChromaSpectra <- function(i) {
 interpolateValueSpectra <- function(i) {
   
   # new Munsell values
-  # there are no spectra > value 9
+  # there are no spectra > value 9 (except neutral chips)
   v.target <- c(2.5, 8.5, 9)
   
   # 0 or 1 row input: no interpolation possible
   if(nrow(i) < 2) {
     return(NULL)
   }
+  
+  # always ignore neutral spectra
+  if(any(i$hue == 'N')) {
+    return(NULL)
+  }
+  
   
   # there are a few spectra associated with 8.5 values
   # if present, ignore 

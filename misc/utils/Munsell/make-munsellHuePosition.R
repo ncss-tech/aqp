@@ -60,5 +60,9 @@ munsellHuePosition <- rbind(d, d.N)
 save(munsellHuePosition, file = '../../../data/munsellHuePosition.rda', compress = 'xz')
 
 
+# cleanup
+rm(list = ls())
+gc(reset = TRUE)
+
 
 
