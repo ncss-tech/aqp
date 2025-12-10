@@ -475,57 +475,45 @@ m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 ## * TODO N 8.5/ and N 9/ appear too dark ---> rescan
 
 
-# manually edited file, exported from Nix Pro app
-n <- read.csv(file = 'neutrals_colordata.csv')
+# 2025-12-09 measured and verified CIELAB coordinates, D65 illuminant, 2 deg. observer
+#            2.5 and 8.5 chips are included
+n <- read.csv(file = 'neutral-chips.csv')
 
-n <- n[, c('id', 'Lin.sRGB.R', 'Lin.sRGB.G', 'Lin.sRGB.B', 'L', 'A', 'B')]
-names(n) <- c('id', 'sR', 'sG', 'sB', 'L', 'A', 'B')
+# zero-out A,B coordinates
+n$A <- 0
+n$B <- 0
 
-n$V <- as.numeric(sapply(strsplit(n$id, '-', fixed = TRUE), '[', 1))
+# hue and chroma columns 
+n$H <- 'N'
+n$C <- 0
 
-# good
-previewColors(rgb(n$sR, n$sG, n$sB, maxColorValue = 1))
+# more intuitive ordering
+n <- n[, c('H', 'V', 'C', 'L', 'A', 'B')]
 
-# take mean over replicates
-n.agg <- aggregate(cbind(sR, sG, sB) ~ V, data = n, FUN = mean)
+# re-order, like other hues
+n <- n[order(n$V), ]
 
-n.agg$H <- 'N'
-n.agg$C <- 0
+# convert LAB -> sRGB
+# required so we can combine with other chips, only referenced to sRGB at this point
+.rgb <- convertColor(n[, c('L', 'A', 'B')], from = 'Lab', to = 'sRGB')
+.rgb <- data.frame(.rgb)
+names(.rgb) <- c('R', 'G', 'B')
 
-n.agg <- n.agg[, c('H', 'V', 'C', 'sR', 'sG', 'sB')]
-
-# linear interpolation in sRGB space
-# 2.5 and 8.5 chips
-n.agg.2.5 <- interpolateValue(n.agg[1:2, ], vars = c('sR', 'sG', 'sB'), new.V = 2.5)
-n.agg.8.5 <- interpolateValue(n.agg[7:8, ], vars = c('sR', 'sG', 'sB'), new.V = 8.5)
-
-# combine and re-order based on value
-n.agg.final <- rbind(n.agg, n.agg.2.5, n.agg.8.5)
-n.agg.final <- n.agg.final[order(n.agg.final$V), ]
-
-names(n.agg.final)[4:6] <- c('R', 'G', 'B')
-
-## 
-# # convert LAB -> sRGB
-# .rgb <- convertColor(n.agg.final[, c('L', 'A', 'B')], from = 'Lab', to = 'sRGB')
-# .rgb <- data.frame(.rgb)
-# names(.rgb) <- c('R', 'G', 'B')
-# 
-# # swap LAB for sRGB
-# n.agg.final <- cbind(n.agg.final[, 1:3], .rgb)
+# swap LAB for sRGB
+n.final <- cbind(n[, 1:3], .rgb)
 
 # check:
-.cols <- rgb(n.agg.final$R, n.agg.final$G, n.agg.final$B, maxColorValue = 1)
-.labs <- sprintf("%s %s/", n.agg.final$H, n.agg.final$V)
+.cols <- rgb(n.final$R, n.final$G, n.final$B, maxColorValue = 1)
+.labs <- sprintf("%s %s/", n.final$H, n.final$V)
 soilPalette(.cols, lab = .labs)
 
 # append neutral chips with rest of the data
-m.final <- rbind(m.final, n.agg.final)
+m.final <- rbind(m.final, n.final)
 
 # 2022:       9,227 (2.5 value chips)
 # 2024a:      15,709 (all half-value chips)
 # 2024b:      10,447 (select half-value chips)
-# 2025-12-08: 10,448 (additional N chips)
+# 2025-12-09: 10,449 (additional N chips)
 nrow(m.final)
 
 
@@ -578,8 +566,7 @@ xyplot(L.y ~ L.x, data = z)
 xyplot(A.y ~ A.x, data = z)
 xyplot(B.y ~ B.x, data = z)
 
-# my original estimates were too light
-z[z$hue == 'N', ]
+
 
 ## DE00 old vs new
 library(farver)

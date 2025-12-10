@@ -1,6 +1,8 @@
 # aqp development version
  * new function `mu_confusion_matrix()` (@smroecker)
  * increasing dependence on R to >= 4.1
+ * Munsell CIELAB and sRGB color coordinates for neutral chips have been updated
+ * estimated spectra for Munsell neutral chips have been added
 
 # aqp 2.2-1 (2025-09-16)
  * CRAN release

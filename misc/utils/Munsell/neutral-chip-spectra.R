@@ -51,43 +51,6 @@ xyplot(
 
 
 
-## initial guesses -- close
-
-# # N 9/
-# sn <- rep(0.5, times = 36)
-# spec2Munsell(sn)
-# 
-# 
-# # N 8/
-# sn <- rep(0.35, times = 36)
-# spec2Munsell(sn)
-# 
-# # N 7/
-# sn <- rep(0.15, times = 36)
-# spec2Munsell(sn)
-# 
-# # N 6/
-# sn <- rep(0.06, times = 36)
-# spec2Munsell(sn)
-# 
-# # N 5/
-# sn <- rep(0.025, times = 36)
-# spec2Munsell(sn)
-# 
-# # N 4/
-# sn <- rep(0.01, times = 36)
-# spec2Munsell(sn)
-# 
-# # N 3/
-# sn <- rep(0.005, times = 36)
-# spec2Munsell(sn)
-# 
-# # N 2/
-# sn <- rep(0.003, times = 36)
-# spec2Munsell(sn)
-# 
-
-
 
 obj <- function(r) {
   
@@ -154,10 +117,8 @@ obj(0.001)
 obj2(0.001, v = 2)
 obj2(0.001, v = 5)
 
-# x <- seq(0, 0.6,  by = 0.001)
-
 # more efficient
-x <- logseq(0.0005, 0.6, n = 500)
+x <- logseq(0.0005, 0.95, n = 500)
 y <- sapply(x, obj)
 
 d <- data.frame(x, y)
@@ -165,8 +126,6 @@ d <- subset(d, subset = y < 10)
 
 plot(y ~ x, data = d, type = 'l', cex = 0.1,  log = 'x', las = 1)
 
-# my original estimates
-abline(v = c(0.003, 0.005, 0.01, 0.025, 0.06, 0.15, 0.35, 0.5), col = 'red')
 
 
 # xyplot(y ~ x, data = d, type = 'b', cex = 0.1, scales = list(x = list(log = 10, at = seq(0.001, 0.6, by = 0.01))), par.settings = tactile.theme())
@@ -177,19 +136,20 @@ abline(v = c(0.003, 0.005, 0.01, 0.025, 0.06, 0.15, 0.35, 0.5), col = 'red')
 # assumption: spectra are "flat"
 n.2 <- findmins(obj2, v = 2, a = 0, b = 0.1)
 n.25 <- findmins(obj2, v = 2.5, a = 0, b = 0.1)
-n.3 <- findmins(obj2, v = 3, a = 0, b = 0.6)
-n.4 <- findmins(obj2, v = 4, a = 0, b = 0.6)
-n.5 <- findmins(obj2, v = 5, a = 0, b = 0.6)
-n.6 <- findmins(obj2, v = 6, a = 0, b = 0.6)
-n.7 <- findmins(obj2, v = 7, a = 0, b = 0.6)
-n.8 <- findmins(obj2, v = 8, a = 0, b = 0.6)
-n.85 <- findmins(obj2, v = 8.5, a = 0, b = 0.6)
-n.9 <- findmins(obj2, v = 9, a = 0, b = 0.6)
+n.3 <- findmins(obj2, v = 3, a = 0, b = 0.95)
+n.4 <- findmins(obj2, v = 4, a = 0, b = 0.95)
+n.5 <- findmins(obj2, v = 5, a = 0, b = 0.95)
+n.6 <- findmins(obj2, v = 6, a = 0, b = 0.95)
+n.7 <- findmins(obj2, v = 7, a = 0, b = 0.95)
+n.8 <- findmins(obj2, v = 8, a = 0, b = 0.95)
+n.85 <- findmins(obj2, v = 8.5, a = 0, b = 0.95)
+n.9 <- findmins(obj2, v = 9, a = 0, b = 0.95)
+n.95 <- findmins(obj2, v = 9.5, a = 0, b = 0.95)
 
 # combine
-n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9)
+n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9, n.95)
 
-.chips <- c(2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9)
+.chips <- c(2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5)
 m <- sprintf("N %s/", .chips)
 
 cols <- parseMunsell(m)
@@ -199,19 +159,20 @@ layout(matrix(c(1, 2), nrow = 2), heights = c(3, 1))
 
 par(mar = c(4, 4, 1, 0.25))
 
-plot(y ~ x, data = d, type = 'l', cex = 0.1,  log = 'x', ylab = 'dE00 from requested neutral chip', xlab = 'constant reflectance value', axes = FALSE, xlim = c(0.0025, 0.65))
+plot(y ~ x, data = d, type = 'l', cex = 0.1,  log = 'x', ylab = 'dE00 from requested neutral chip', xlab = 'constant reflectance value', axes = FALSE, xlim = c(0.025, 1))
 abline(v = n, col = 'royalblue', lty = 3)
 abline(h = 1.5, col = 'firebrick', lty = 2)
 axis(side = 2, las = 1)
-axis(side = 1, at = n, labels = round(n, 3))
-text(x = n, y = 5, labels = m, cex = 1, font = 2)
+axis(side = 1, at = n, labels = round(n, 3), las = 2)
+text(x = n, y = 5, labels = m, cex = 0.75, font = 2)
 
 
 par(mar = c(1, 1, 1, 1))
 soilPalette(cols, lab = m)
 
 
-
+# TODO: create spectra
+n
 
 
 
