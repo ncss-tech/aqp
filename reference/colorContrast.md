@@ -115,12 +115,12 @@ labels = c('helioblue-reddish', 'light cadmium yellow')
 # approximation / extension of the concept
 colorContrast(m1 = 'N 3/', m2 = 'N 6/')
 #>     m1   m2 dH dV dC     dE00       cc
-#> 1 N 3/ N 6/  0  3  0 17.20472 Distinct
+#> 1 N 3/ N 6/  0  3  0 27.24374 Distinct
 
 #
 colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
 #>         m1   m2 dH dV dC     dE00        cc
-#> 1 10YR 3/3 N 3/  1  0  3 22.01338 Prominent
+#> 1 10YR 3/3 N 3/  1  0  3 13.63413 Prominent
 
 m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
 m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
@@ -129,5 +129,5 @@ colorContrast(m1, m2)
 #> 1  10YR 6/3   5YR 3/4  2  3  1 31.286374 Prominent
 #> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.657423     Faint
 #> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint
-#> 4      N 3/ 7.5YR 6/3  1  3  3 47.668246 Prominent
+#> 4      N 3/ 7.5YR 6/3  1  3  3 32.702471 Prominent
 ```

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">aqp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2-2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,21 +126,21 @@ Non-standard Munsell notation (e.g. '7.9YR 2.7/2.0') can be matched (nearest-nei
 <span class="r-in"><span><span class="co"># neutral hues (N) can be defined with chroma of 0 or NA </span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>hue <span class="op">=</span> <span class="st">'N'</span>, value <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">8</span>, chroma <span class="op">=</span> <span class="fl">0</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">munsell2rgb</span><span class="op">(</span><span class="va">g</span><span class="op">$</span><span class="va">hue</span>, <span class="va">g</span><span class="op">$</span><span class="va">value</span>, <span class="va">g</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#080808FF" "#101111FF" "#1B1C1CFF" "#313233FF" "#464848FF" "#686A6AFF"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "#A3A4A2FF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#333333FF" "#484848FF" "#5C5C5CFF" "#767676FF" "#8F8F8FFF" "#AAAAAAFF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "#C3C3C3FF"</span>
 <span class="r-in"><span><span class="fu"><a href="soilPalette.html">soilPalette</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="munsell2rgb-1.png" alt="" width="700" height="1133"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># back-transform to Munsell notation</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="col2Munsell.html">col2Munsell</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/col2rgb.html" class="external-link">col2rgb</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">255</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   hue value chroma      sigma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   N     2      0 0.07161962</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   N     3      0 0.16006468</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   N     4      0 0.17996207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   N     5      0 0.51062566</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   N     6      0 0.28213437</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   N     7      0 0.25003053</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   N     8      0 0.24994119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hue value chroma       sigma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   N     2      0 0.032770672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   N     3      0 0.160816710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   N     4      0 0.151175139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   N     5      0 0.137384316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   N     6      0 0.084708684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   N     7      0 0.007867424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   N     8      0 0.074134031</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># basic example</span></span></span>

@@ -103,21 +103,21 @@ D.E. Beaudette
 # neutral hues (N) can be defined with chroma of 0 or NA 
 g <- expand.grid(hue = 'N', value = 2:8, chroma = 0, stringsAsFactors = FALSE)
 (m <- munsell2rgb(g$hue, g$value, g$chroma))
-#> [1] "#080808FF" "#101111FF" "#1B1C1CFF" "#313233FF" "#464848FF" "#686A6AFF"
-#> [7] "#A3A4A2FF"
+#> [1] "#333333FF" "#484848FF" "#5C5C5CFF" "#767676FF" "#8F8F8FFF" "#AAAAAAFF"
+#> [7] "#C3C3C3FF"
 soilPalette(m)
 
 
 # back-transform to Munsell notation
 col2Munsell(t(col2rgb(m)) / 255)
-#>   hue value chroma      sigma
-#> 1   N     2      0 0.07161962
-#> 2   N     3      0 0.16006468
-#> 3   N     4      0 0.17996207
-#> 4   N     5      0 0.51062566
-#> 5   N     6      0 0.28213437
-#> 6   N     7      0 0.25003053
-#> 7   N     8      0 0.24994119
+#>   hue value chroma       sigma
+#> 1   N     2      0 0.032770672
+#> 2   N     3      0 0.160816710
+#> 3   N     4      0 0.151175139
+#> 4   N     5      0 0.137384316
+#> 5   N     6      0 0.084708684
+#> 6   N     7      0 0.007867424
+#> 7   N     8      0 0.074134031
 
 
 # basic example
