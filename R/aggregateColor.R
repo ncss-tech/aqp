@@ -1,6 +1,6 @@
 
 ## TODO: consider using Munsell notation for `col`, this would save an entire round-trip through the conversion process
-
+## TODO: consider data.frame interface
 
 #' @title Summarize Soil Colors
 #' 
