@@ -7,18 +7,19 @@ color contrast classes (Soil Survey Technical Note 2) and CIE delta-E
 ## Usage
 
 ``` r
-colorContrast(m1, m2)
+colorContrast(m1, m2 = NULL)
 ```
 
 ## Arguments
 
 - m1:
 
-  vector of Munsell colors ('10YR 3/3')
+  vector of Munsell colors ('10YR 3/3'), must be \>1 color if `m2` is
+  not specified
 
 - m2:
 
-  vector of Munsell colors ('10YR 3/6')
+  optional vector of Munsell colors ('10YR 3/6')
 
 ## Value
 
@@ -44,14 +45,18 @@ colorContrast(m1, m2)
 
 ## Details
 
-This function is fully vectorized but expects input to be of the same
-length. Use [`expand.grid()`](https://rdrr.io/r/base/expand.grid.html)
-to generate suitable input from 1:many or many:1 type comparisons. See
-[this tutorial](http://ncss-tech.github.io/AQP/aqp/color-contrast.md)
-for an expanded discussion and more examples. Neutral colors are not
-mentioned in SSTN2: in this function any comparison to a neutral color
-(e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to
-be counted clock wise from 5R, it possible to get very large delta-hue
+This function is fully vectorized over elements of `m1` and `m2` when
+both are of the same length. Recycling is not implemented. The minimum
+set of all pair-wise comparisons are performed within elements of `m1`
+when `m2` is not specified. For example, comparisons between A, B, and C
+are limited to *A*x*B*, *A*x*C*, and *B*x*C*. Use
+[`expand.grid()`](https://rdrr.io/r/base/expand.grid.html) to generate
+suitable input from 1:many or many:1 type comparisons. See [this
+tutorial](http://ncss-tech.github.io/AQP/aqp/color-contrast.md) for an
+expanded discussion and more examples. Neutral colors are not mentioned
+in SSTN2: in this function any comparison to a neutral color (e.g. 'N
+3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be
+counted clock wise from 5R, it possible to get very large delta-hue
 values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be
 addressed in an update to the standards.
 
@@ -117,17 +122,18 @@ colorContrast(m1 = 'N 3/', m2 = 'N 6/')
 #>     m1   m2 dH dV dC     dE00       cc
 #> 1 N 3/ N 6/  0  3  0 27.24374 Distinct
 
-#
 colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
 #>         m1   m2 dH dV dC     dE00        cc
 #> 1 10YR 3/3 N 3/  1  0  3 13.63413 Prominent
 
+# pair-wise comparisons
 m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
-m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
-colorContrast(m1, m2)
+colorContrast(m1)
 #>          m1        m2 dH dV dC      dE00        cc
-#> 1  10YR 6/3   5YR 3/4  2  3  1 31.286374 Prominent
-#> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.657423     Faint
-#> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint
-#> 4      N 3/ 7.5YR 6/3  1  3  3 32.702471 Prominent
+#> 1  10YR 6/3 7.5YR 3/3  1  3  0 30.517796 Prominent
+#> 2  10YR 6/3  10YR 2/2  0  4  1 37.558326 Prominent
+#> 3  10YR 6/3      N 3/  1  3  3 32.761012 Prominent
+#> 4 7.5YR 3/3  10YR 2/2  1  1  1  9.252527     Faint
+#> 5 7.5YR 3/3      N 3/  1  0  3 14.016566 Prominent
+#> 6  10YR 2/2      N 3/  1  1  2 12.631128     Faint
 ```

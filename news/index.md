@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3 (2025-12-10)
+## aqp 2.3 (2025-12-15)
 
 - new function
   [`mu_confusion_matrix()`](https://ncss-tech.github.io/aqp/reference/mu_confusion_matrix.md)
@@ -11,6 +11,10 @@
   ([\#332](https://github.com/ncss-tech/aqp/issues/332))
 - added estimated spectra for Munsell neutral chips
   ([\#332](https://github.com/ncss-tech/aqp/issues/332))
+- [`colorContrast()`](https://ncss-tech.github.io/aqp/reference/colorContrast.md)
+  will now compute contrast data for pair-wise combinations of `m1` when
+  `m2` is not specified
+  ([\#330](https://github.com/ncss-tech/aqp/issues/330))
 
 ## aqp 2.2-1 (2025-09-16)
 

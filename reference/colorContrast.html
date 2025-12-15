@@ -49,7 +49,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, m2 <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -57,11 +57,11 @@
 
 
 <dl><dt id="arg-m-">m1<a class="anchor" aria-label="anchor" href="#arg-m-"></a></dt>
-<dd><p>vector of Munsell colors ('10YR 3/3')</p></dd>
+<dd><p>vector of Munsell colors ('10YR 3/3'), must be &gt;1 color if <code>m2</code> is not specified</p></dd>
 
 
 <dt id="arg-m-">m2<a class="anchor" aria-label="anchor" href="#arg-m-"></a></dt>
-<dd><p>vector of Munsell colors ('10YR 3/6')</p></dd>
+<dd><p>optional vector of Munsell colors ('10YR 3/6')</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,7 +76,7 @@
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function is fully vectorized but expects input to be of the same length. Use <code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid()</a></code> to generate suitable input from 1:many or many:1 type comparisons. See <a href="http://ncss-tech.github.io/AQP/aqp/color-contrast.html" class="external-link">this tutorial</a> for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.</p>
+    <p>This function is fully vectorized over elements of <code>m1</code> and <code>m2</code> when both are of the same length. Recycling is not implemented. The minimum set of all pair-wise comparisons are performed within elements of <code>m1</code> when <code>m2</code> is not specified. For example, comparisons between A, B, and C are limited to <em>A</em>x<em>B</em>, <em>A</em>x<em>C</em>, and <em>B</em>x<em>C</em>. Use <code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid()</a></code> to generate suitable input from 1:many or many:1 type comparisons. See <a href="http://ncss-tech.github.io/AQP/aqp/color-contrast.html" class="external-link">this tutorial</a> for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.</p>
 <p>The most meaningful representation of color contrast is the CIE2000 (dE00) metric.</p>
     </div>
     <div class="section level2">
@@ -137,19 +137,20 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     m1   m2 dH dV dC     dE00       cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 N 3/ N 6/  0  3  0 27.24374 Distinct</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">#</span></span></span>
 <span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span>m1 <span class="op">=</span> <span class="st">'10YR 3/3'</span>, m2 <span class="op">=</span> <span class="st">'N 3/'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         m1   m2 dH dV dC     dE00        cc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10YR 3/3 N 3/  1  0  3 13.63413 Prominent</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pair-wise comparisons</span></span></span>
 <span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 6/3'</span>, <span class="st">'7.5YR 3/3'</span>, <span class="st">'10YR 2/2'</span>, <span class="st">'N 3/'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'5YR 3/4'</span>, <span class="st">'7.5YR 4/4'</span>, <span class="st">'2.5YR 2/2'</span>, <span class="st">'7.5YR 6/3'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">colorContrast</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          m1        m2 dH dV dC      dE00        cc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3   5YR 3/4  2  3  1 31.286374 Prominent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 7.5YR 3/3 7.5YR 4/4  0  1  1  9.657423     Faint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 2/2 2.5YR 2/2  3  0  0  6.814101     Faint</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      N 3/ 7.5YR 6/3  1  3  3 32.702471 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  10YR 6/3 7.5YR 3/3  1  3  0 30.517796 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  10YR 6/3  10YR 2/2  0  4  1 37.558326 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  10YR 6/3      N 3/  1  3  3 32.761012 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 7.5YR 3/3  10YR 2/2  1  1  1  9.252527     Faint</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 7.5YR 3/3      N 3/  1  0  3 14.016566 Prominent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  10YR 2/2      N 3/  1  1  2 12.631128     Faint</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
