@@ -64,9 +64,9 @@ colorContrastPlot <- function(
   names(colors) <- labels
 
   # basic plot
-  colorspace::swatchplot(colors, cex=label.cex, font = label.font, ...)
+  colorspace::swatchplot(colors, cex = label.cex, font = label.font, ...)
 
-  # eval constrat metrics
+  # eval contrast metrics
   d <- colorContrast(m1, m2)
 
   ## TODO this could use some more thought
@@ -75,28 +75,28 @@ colorContrastPlot <- function(
   ny <- 2
 
   # positions of Munsell color labels
-  x.pos <- seq(from=0, to=1, by=1/nx)[1:nx]
-  y.pos1 <- rep(0.51, times=nx)
-  y.pos2 <- rep(0.01, times=nx)
+  x.pos <- seq(from = 0, to = 1, by = 1/nx)[1:nx]
+  y.pos1 <- rep(0.51, times = nx)
+  y.pos2 <- rep(0.01, times = nx)
 
   # create high-contrast label colors
   m1.label.colors <- invertLabelColor(colors[[1]])
   m2.label.colors <- invertLabelColor(colors[[2]])
 
   # annotate top row
-  text(x.pos, y.pos1, labels = m1, col=m1.label.colors, font=col.font, cex=col.cex, adj = c(-0.125, -0.33))
+  text(x.pos, y.pos1, labels = m1, col = m1.label.colors, font = col.font, cex = col.cex, adj = c(-0.125, -0.33))
   # annotate bottom row
-  text(x.pos, y.pos2, labels = m2, col=m2.label.colors, font=col.font, cex=col.cex, adj = c(-0.125, -0.33))
+  text(x.pos, y.pos2, labels = m2, col = m2.label.colors, font = col.font, cex = col.cex, adj = c(-0.125, -0.33))
 
   # usually want to add the contrast metrics, but sometimes it is handy to suppress
   if(printMetrics) {
     # positions for color contrast class
-    cc.y <- rep(0.46, times=nx)
+    cc.y <- rep(0.46, times = nx)
     cc.lab <- as.character(d$cc)
-    text(x.pos, cc.y, labels = cc.lab, adj = 0, font=cc.font, cex=d.cex)
+    text(x.pos, cc.y, labels = cc.lab, adj = 0, font = cc.font, cex = d.cex)
 
     # positions for dE00
-    dE00.y <- rep(0.39, times=nx)
+    dE00.y <- rep(0.39, times = nx)
     dE00.lab <- signif(d$dE00, 3)
 
     # this is clunky but I can't figure out a better solution
@@ -105,7 +105,7 @@ colorContrastPlot <- function(
     # https://lukemiller.org/index.php/2017/05/r-plotmath-functions-combined-with-variable-values/
     for(i in 1:nx) {
       dE00.lab.expr <- bquote(Delta*E['00']~.(dE00.lab[i]))
-      text(x.pos[i], dE00.y[i], labels = dE00.lab.expr, adj = 0, font=3, cex=d.cex)
+      text(x.pos[i], dE00.y[i], labels = dE00.lab.expr, adj = 0, font = 3, cex = d.cex)
     }
   }
 
