@@ -144,7 +144,7 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', k = NULL, pr
       k.adj <- pmin(k, n.cols - 1)
       
       # work with a unique subset, there is no need to compute distances / cluster all colors
-      lut <- data.frame(col=unique(i[[col]]), stringsAsFactors = FALSE)
+      lut <- data.frame(col = unique(i[[col]]))
       
       # same order as LUT
       # convert to sRGB
