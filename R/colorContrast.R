@@ -3,11 +3,11 @@
 #'
 #' @description Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes (Soil Survey Technical Note 2) and CIE delta-E 2000 metric.
 #'
-#' @param m1 vector of Munsell colors ('10YR 3/3')
+#' @param m1 vector of Munsell colors ('10YR 3/3'), must be >1 color if `m2` is not specified
 #'
-#' @param m2 vector of Munsell colors ('10YR 3/6')
+#' @param m2 optional vector of Munsell colors ('10YR 3/6')
 #'
-#' @details This function is fully vectorized but expects input to be of the same length. Use `expand.grid()` to generate suitable input from 1:many or many:1 type comparisons. See \href{http://ncss-tech.github.io/AQP/aqp/color-contrast.html}{this tutorial} for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.
+#' @details This function is fully vectorized over elements of `m1` and `m2` when both are of the same length. Recycling is not implemented. The minimum set of all pair-wise comparisons are performed within elements of `m1` when `m2` is not specified. For example, comparisons between A, B, and C are limited to *A*x*B*, *A*x*C*, and *B*x*C*. Use `expand.grid()` to generate suitable input from 1:many or many:1 type comparisons. See \href{http://ncss-tech.github.io/AQP/aqp/color-contrast.html}{this tutorial} for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.
 #' 
 #' The most meaningful representation of color contrast is the CIE2000 (dE00) metric.
 #'
@@ -61,34 +61,58 @@
 #' # approximation / extension of the concept
 #' colorContrast(m1 = 'N 3/', m2 = 'N 6/')
 #' 
-#' #
 #' colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
 #' 
+#' # pair-wise comparisons
 #' m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
-#' m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
-#' colorContrast(m1, m2)
+#' colorContrast(m1)
 #' 
-colorContrast <- function(m1, m2) {
-
-  # sanity check: length of colors to compare should be equal
-  if(length(m1) != length(m2)) {
-    stop('inputs must be the same length', call. = FALSE)
+colorContrast <- function(m1, m2 = NULL) {
+  
+  # if m2 is unspecified, re-create m1 and m2 from all combinations (direction doesn't matter)
+  if(is.null(m2)) {
+    
+    # m1 must be >1 color
+    if(length(m1) < 2) {
+      stop('m1 must contain >1 value if m2 is not specified')
+    }
+    
+    # in case colors are encoded as factors
+    m1 <- as.character(m1)
+    
+    # expand all combinations
+    .combinations <- t(combn(m1, m = 2))
+    
+    m1 <- .combinations[, 1]
+    m2 <- .combinations[, 2]
+    
+  } else {
+    # must be more than 0 entries
+    if(length(m1) < 1 | length(m2) < 1) {
+      stop('both m1 and m2 must have length > 0')
+    }
+    
+    # length of colors to compare should be equal if both are specified
+    if(length(m1) != length(m2)) {
+      stop('m1 and m2 must be the same length', call. = FALSE)
+    }
+    
+    # in case colors are encoded as factors
+    m1 <- as.character(m1)
+    m2 <- as.character(m2)
   }
-
-  # in case colors are encoded as factors
-  m1 <- as.character(m1)
-  m2 <- as.character(m2)
-
+  
+  
   # split into data.frame of hue/value/chroma
   m1.pieces <- parseMunsell(m1, convertColors = FALSE)
   m2.pieces <- parseMunsell(m2, convertColors = FALSE)
-
+  
   # convert to value and chroma to numeric
   m1.pieces[[2]] <- as.numeric(m1.pieces[[2]])
   m1.pieces[[3]] <- as.numeric(m1.pieces[[3]])
   m2.pieces[[2]] <- as.numeric(m2.pieces[[2]])
   m2.pieces[[3]] <- as.numeric(m2.pieces[[3]])
-
+  
   ## TODO: contrast with neutral hues are currently undefined
   ## TODO: incorporate new huePosition features for locating angular proximity CW or CCW
   ## TODO: add a notes / flag field in the results
@@ -98,7 +122,7 @@ colorContrast <- function(m1, m2) {
   # including neutral hues in position 1
   dH <- abs(huePosition(m1.pieces[[1]], includeNeutral = TRUE) - huePosition(m2.pieces[[1]], includeNeutral = TRUE))
   
-  ## TODO: not in standards
+  ## TODO: not in standards -> propose changes
   # correction for neutral hues, enforce with XOR
   #   no N: dH is left alone
   #   single N: dH is always 1
@@ -112,37 +136,45 @@ colorContrast <- function(m1, m2) {
   
   # difference in number of value chips
   dV <- abs(m1.pieces[[2]] - m2.pieces[[2]])
-
-    # difference in number of chroma chips
+  
+  # difference in number of chroma chips
   dC <- abs(m1.pieces[[3]] - m2.pieces[[3]])
-
+  
   # get CIE LAB representation
-  m1.lab <- parseMunsell(m1, convertColors = TRUE, returnLAB=TRUE)
-  m2.lab <- parseMunsell(m2, convertColors = TRUE, returnLAB=TRUE)
-
-
+  m1.lab <- parseMunsell(m1, convertColors = TRUE, returnLAB = TRUE)
+  m2.lab <- parseMunsell(m2, convertColors = TRUE, returnLAB = TRUE)
+  
+  
   ## TODO: there is likely room for improvement here:
   #         * parallel evaluation when length(m1) > 1000 (?) (simple via furrr)
   #         * vectorized call to compare_colour() -> reshaping of result
-
+  
   # delta E00
   #
   # we don't need the full distance matrix,
   # iterate over rows, likely scales better
   d <- list()
   for(i in 1:nrow(m1.lab)){
-    d[i] <- farver::compare_colour(m1.lab[i, ], m2.lab[i, ], from_space='lab', method = 'CIE2000', white_from = 'D65')
+    d[i] <- farver::compare_colour(m1.lab[i, ], m2.lab[i, ], from_space = 'lab', method = 'CIE2000', white_from = 'D65')
   }
   dE00 <- unlist(d)
-
+  
   # NCSS color contrast classes
   # Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)
   #
   # value1, chroma1, value2, chroma2, dH, dV, dC
-  cc <- contrastClass(m1.pieces[[2]], m1.pieces[[3]], m2.pieces[[2]], m2.pieces[[3]], dH, dV, dC)
-
+  cc <- contrastClass(
+    v1 = m1.pieces[[2]], 
+    c1 = m1.pieces[[3]], 
+    v2 = m2.pieces[[2]], 
+    c2 = m2.pieces[[3]], 
+    dH = dH, 
+    dV = dV, 
+    dC = dC
+  )
+  
   # combine into DF and return
-  res <- data.frame(m1, m2, dH, dV, dC, dE00, cc, stringsAsFactors = FALSE)
+  res <- data.frame(m1, m2, dH, dV, dC, dE00, cc)
   return(res)
 }
 

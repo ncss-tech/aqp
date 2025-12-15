@@ -42,6 +42,27 @@ test_that("contrastClass works as expected", {
 })
 
 
+test_that("only m1 specified, pair-wise comparisons", {
+  
+  # contrast metrics
+  d <- colorContrast(m1)
+  
+  # output should be a data.frame
+  expect_true(inherits(d, 'data.frame'))
+  
+  # both m1 and m2 columns should contain original m1
+  expect_true(
+    length(setdiff(m1, unique(c(d$m1, d$m2)))) == 0
+  )
+  
+  # color contrast should be an ordered factor
+  expect_true(is.factor(d$cc))
+  expect_true(is.ordered(d$cc))
+  
+})
+
+
+
 test_that("colorContrast works as expected", {
 
   # contrast metrics
@@ -74,6 +95,12 @@ test_that("colorContrast fails as expected", {
   # bogus Munsell colors, all NA
   d <- colorContrast(m1 = '123sdf', m2 = '345gg')
   expect_true(all(is.na(d[, -c(1:2)])))
+  
+  # m1 specified with < 2 values
+  expect_error(colorContrast('10YR 3/3'))
+  
+  # do not allow 0-length vectors
+  expect_error(colorContrast(character(0), character(0)))
 })
 
 
