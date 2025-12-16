@@ -9,14 +9,16 @@
   
   # can't go on without some data
   ## TODO: this will cause an error in the calling function if all results are NULL
-  if(nrow(h) == 0)
+  if(nrow(h) == 0) {
     return(NULL)
+  }
+    
   
   # cluster colors using frequency weights
   # https://stat.ethz.ch/pipermail/r-help/2008-February/153501.html
   hd <- horizonDepths(x)
-  top <- min(h[[hd[1]]], na.rm=TRUE)
-  bottom <- max(h[[hd[2]]], na.rm=TRUE)
+  top <- min(h[[hd[1]]], na.rm = TRUE)
+  bottom <- max(h[[hd[2]]], na.rm = TRUE)
   
   # slice to unwind weighted data into un-weighted data (weights are thickness)
   fm <- as.formula(paste0(top, ':', bottom, ' ~ L + A + B'))
@@ -25,11 +27,12 @@
   
   # have to have at least 1 more row than k
   ## TODO: this will cause an error in the calling function if all results are NULL
-  if(nrow(x.slices) < k+1)
+  if(nrow(x.slices) < k + 1) {
     return(NULL)
+  }
   
   # compute perceptually based distance matrix on sliced colors, CIELAB
-  dE00 <- farver::compare_colour(x.slices[, -1], x.slices[, -1], from_space='lab', method='CIE2000', white_from='D65')
+  dE00 <- farver::compare_colour(x.slices[, -1], x.slices[, -1], from_space = 'lab', method = 'CIE2000', white_from = 'D65')
   dE00 <- as.dist(dE00)
   
   # use PAM to cluster, note `pamonce = 5` used for optimization
@@ -87,7 +90,7 @@
   h$.mid <- round(((h[[hd[2]]] + h[[hd[1]]]) / 2))
   
   # use discontinuous style quantiles, to force quantiles to "fit" original data
-  sample.depths <- round(quantile(h$.mid, probs=p, na.rm=TRUE, type=1))
+  sample.depths <- round(quantile(h$.mid, probs = p, na.rm = TRUE, type = 1))
   
   # locate the horizons that are as close as possible to these depths
   sample.idx <- sapply(sample.depths, function(i) which.min(abs(i - h$.mid)))
@@ -152,7 +155,7 @@
     pigment <- pigment / sum(pigment, na.rm = TRUE)
   }
   
-  # results as a data.frame for simpler rbinding  
+  # results as a data.frame for simpler rbind-ing  
   res <- data.frame(
     .id = profile_id(x)[1],
     t(pigment),
@@ -315,6 +318,7 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = c('color
   
   # back to data.frame
   col.data <- do.call('rbind', col.data)
+  
   # reset rownames
   row.names(col.data) <- NULL
   
