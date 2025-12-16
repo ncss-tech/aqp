@@ -18,6 +18,60 @@ x.neutral <- parseMunsell('N 2/', return_triplets = TRUE)
 
 ## tests
 
+
+# internally-used function for detecting color specification
+test_that(".detectColorSpec", {
+  
+  expect_equal(
+    .detectColorSpec(matrix(c(1, 1, 1), nrow = 1)),
+    'color-coordinate-matrix'
+  )
+  
+  expect_equal(
+    .detectColorSpec(data.frame(r = 1, b = 1, g = 1)),
+    'color-coordinate-data.frame'
+  )
+  
+  expect_equal(
+    .detectColorSpec(c('red', 'blue', 'white')),
+    'named-colors'
+  )
+  
+  expect_equal(
+    .detectColorSpec(c('#AABBCC', '#EEFF22')),
+    'hex-sRGB'
+  )
+  
+  expect_equal(
+    .detectColorSpec(c('10YR 3/3', '5G 4/4')),
+    'munsell'
+  )
+  
+  # partial Munsell
+  expect_equal(
+    .detectColorSpec(c('10YR ', '5G 4')),
+    'munsell'
+  )
+  
+  # unknown conditions
+  expect_equal(
+    .detectColorSpec(c('red', 'blue', 'dd')),
+    'unknown'
+  )
+  
+  expect_equal(
+    .detectColorSpec(1),
+    'unknown'
+  )
+  
+  expect_equal(
+    .detectColorSpec(character(0)),
+    'unknown'
+  )
+  
+})
+
+
 test_that("col2Munsell works as expected", {
   
   # 10YR 3/4 as hex notation sRGB 
