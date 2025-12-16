@@ -43,7 +43,7 @@ test_that(".detectColorSpec", {
   )
   
   expect_equal(
-    .detectColorSpec(c('10YR 3/3', '5G 4/4')),
+    .detectColorSpec(c('10YR 3/3', '5G 4/4', 'N 3/')),
     'munsell'
   )
   

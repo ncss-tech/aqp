@@ -170,8 +170,7 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     hue = NA, 
     value = NA, 
     chroma = NA, 
-    sigma = NA, 
-    stringsAsFactors = FALSE
+    sigma = NA
   )
   
   # sacrifice to CRAN gods
