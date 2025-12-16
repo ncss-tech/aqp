@@ -12,7 +12,7 @@
   if(nrow(h) == 0) {
     return(NULL)
   }
-    
+  
   
   # cluster colors using frequency weights
   # https://stat.ethz.ch/pipermail/r-help/2008-February/153501.html
@@ -97,7 +97,7 @@
   
   # get data
   x.slices <- h[sample.idx, c(idname(x), 'L', 'A', 'B')]
-
+  
   # make depth IDs
   x.slices$depth.id <- paste0('.', p)
   
@@ -170,7 +170,6 @@
 
 ## TODO: 
 #   * move method-specific arguments to ...
-#   * allow for specification of colors via: Munsell, hex ==> use built-in Munsell -> CIELAB conversion LUT
 #   * data.table optimization
 #   * better documentation!
 
@@ -178,12 +177,14 @@
 #' @description Generate a color signature for each soil profile in a collection.
 #'
 #' @param spc a `SoilProfileCollection` object
-#' @param r horizon level attribute containing soil color (sRGB) red values
-#' @param g horizon level attribute containing soil color (sRGB) green values
-#' @param b horizon level attribute containing soil color (sRGB) blue values
+#' @param color horizon-level attributes, either character of length 1 specifiying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.
+#' @param space character, either 'sRGB' or 'LAB', specifying color space
+#' @param r deprecated, use `color` argument
+#' @param g deprecated, use `color` argument
+#' @param b deprecated, use `color` argument
 #' @param method algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`
 #' @param pam.k number of classes to request from `cluster::pam()`
-#' @param RescaleLightnessBy rescaling factor for CIE LAB L-coordinate
+#' @param RescaleLightnessBy rescaling factor for CIE LAB L-coordinate, ignored for `method = pam`
 #' @param useProportions use proportions or quantities, see details
 #' @param pigmentNames names for resulting pigment proportions or quantities
 #' @param apply.fun function passed to `aqp::profileApply(APPLY.FUN)` argument, can be used to add progress bars via `pbapply::pblapply`, or parallel processing with `furrr::future_map` 
@@ -223,37 +224,108 @@
 #' data(sp1)
 #' depths(sp1) <- id ~ top + bottom
 #' 
-#' # convert Munsell -> sRGB triplets
-#' rgb.data <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
-#' sp1$r <- rgb.data$r
-#' sp1$g <- rgb.data$g
-#' sp1$b <- rgb.data$b
+#' # Munsell notation
+#' sp1$m <- sprintf("%s %s/%s", sp1$hue, sp1$value, sp1$chroma)
 #' 
 #' # extract color signature
-#' pig <- soilColorSignature(sp1)
+#' pig <- soilColorSignature(sp1, color = 'm')
 #' 
-soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = c('colorBucket', 'depthSlices', 'pam'), pam.k = 3, RescaleLightnessBy = 1, useProportions = TRUE, pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment'), apply.fun = lapply) {
+soilColorSignature <- function(
+    spc, 
+    color,
+    space = c('sRGB', 'CIELAB'), 
+    r = NULL, 
+    g = NULL, 
+    b = NULL, 
+    method = c('colorBucket', 'depthSlices', 'pam'), 
+    pam.k = 3, 
+    RescaleLightnessBy = 1, 
+    useProportions = TRUE, 
+    pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment'), 
+    apply.fun = lapply
+) {
   
-  # sanity check on method
+  # 2025-12-16: deprecated arguments r, g, b
+  if(!is.null(r) || !is.null(g) || !is.null(b)) {
+    stop('arguments `r`, `g`, and `b` have been deprecated, please use the `color` argument instead')
+  }
+  
+  # sanity checks fixed choice arguments
   method <- match.arg(method)
+  space <- match.arg(space)
   
   # extract horizons
   h <- horizons(spc)
   
-  ## TODO: consider using farver to do the work, or LAB in `spc`
-  # create LAB colors
-  # note: source colors are sRGB
-  # note: convertColor() expects a matrix
-  lab.colors <- convertColor(as.matrix(h[, c(r, g, b)]), from = 'sRGB', to = 'Lab', from.ref.white = 'D65', to.ref.white = 'D65')
+  # detect color specification
+  # complicated because color could be length 1 or 3
+  if(length(color) == 1) {
+    # single column
+    .spec <- .detectColorSpec(h[[color]])
+  } else if(length(color) == 3) {
+    # three columns
+    .spec <- .detectColorSpec(h[, color])
+  } else{
+    # error condition
+    stop('`color` should be of length 1 or 3')
+  }
   
-  ## TODO: only for those methods NOT using dE00!
-  ## TODO: does it make sense to normalize based on limited data or entire possible range?
-  # normalize the L coordinate
-  lab.colors[, 1] <- lab.colors[, 1] / RescaleLightnessBy
+  
+  # conditionally convert colors to CIELAB
+  lab.colors <- switch(
+    .spec,
+    
+    `hex-sRGB` = {
+      # hex encoded sRGB color coordinates
+      # must rescale to [0,1]
+      convertColor(t(col2rgb(h[[color]]) / 255), from = 'sRGB', to = 'Lab', from.ref.white = 'D65', to.ref.white = 'D65')
+    },
+    
+    `color-coordinate-data.frame` = {
+      # 3 columns subset from a data.frame
+      .m <- as.matrix(h[, color])
+      
+      # convert to CIELAB
+      # data.frame -> matrix
+      if(space == 'sRGB') {
+        
+        # check for mis-specification of color space
+        if(any(range(.m, na.rm = TRUE) > 5)) {
+          stop('color space coordinates do not appear to be sRGB [0,1]: check `space` argument')
+        }
+        
+        .res <- convertColor(.m, from = 'sRGB', to = 'Lab', from.ref.white = 'D65', to.ref.white = 'D65')
+      }
+      
+      # no colorspace conversion
+      if(space == 'CIELAB') {
+        .res <- .m
+      }
+      
+      .res
+    },
+    
+    `munsell` = {
+      # plain Munsell notation
+      parseMunsell(h[[color]], returnLAB = TRUE)
+    },
+    
+    # all others
+    stop('unknown color specifcation')
+  )
   
   
+  # optionally normalize the L coordinate
+  # BUT NOT for methods which rely on CIE dE00
+  if(method == 'pam') {
+    message('`RescaleLightnessBy` ignored for methods based on CIE dE00')
+  } else{
+    lab.colors[, 1] <- lab.colors[, 1] / RescaleLightnessBy
+  }
+  
+  # choose method
   if(method == 'colorBucket') {
-    ## L is always positve
+    ## L is always positive
     ## split A/B axes into positive / negative pigments
     pos.A <- ifelse(lab.colors[, 2] > 0, lab.colors[, 2], 0)
     neg.A <- ifelse(lab.colors[, 2] < 0, -lab.colors[, 2], 0)
@@ -321,6 +393,9 @@ soilColorSignature <- function(spc, r = 'r', g = 'g', b = 'b', method = c('color
   
   # reset rownames
   row.names(col.data) <- NULL
+  
+  # set attributes as metadata
+  attr(col.data, 'colorspec') <- .spec
   
   return(col.data)
 }

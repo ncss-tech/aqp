@@ -6,9 +6,11 @@
 \usage{
 soilColorSignature(
   spc,
-  r = "r",
-  g = "g",
-  b = "b",
+  color,
+  space = c("sRGB", "CIELAB"),
+  r = NULL,
+  g = NULL,
+  b = NULL,
   method = c("colorBucket", "depthSlices", "pam"),
   pam.k = 3,
   RescaleLightnessBy = 1,
@@ -21,17 +23,21 @@ soilColorSignature(
 \arguments{
 \item{spc}{a \code{SoilProfileCollection} object}
 
-\item{r}{horizon level attribute containing soil color (sRGB) red values}
+\item{color}{horizon-level attributes, either character of length 1 specifiying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.}
 
-\item{g}{horizon level attribute containing soil color (sRGB) green values}
+\item{space}{character, either 'sRGB' or 'LAB', specifying color space}
 
-\item{b}{horizon level attribute containing soil color (sRGB) blue values}
+\item{r}{deprecated, use \code{color} argument}
+
+\item{g}{deprecated, use \code{color} argument}
+
+\item{b}{deprecated, use \code{color} argument}
 
 \item{method}{algorithm used to compute color signature, \code{colorBucket}, \code{depthSlices}, or \code{pam}}
 
 \item{pam.k}{number of classes to request from \code{cluster::pam()}}
 
-\item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate}
+\item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate, ignored for \code{method = pam}}
 
 \item{useProportions}{use proportions or quantities, see details}
 
@@ -68,14 +74,11 @@ See the \href{http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html}{rel
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 
-# convert Munsell -> sRGB triplets
-rgb.data <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
-sp1$r <- rgb.data$r
-sp1$g <- rgb.data$g
-sp1$b <- rgb.data$b
+# Munsell notation
+sp1$m <- sprintf("\%s \%s/\%s", sp1$hue, sp1$value, sp1$chroma)
 
 # extract color signature
-pig <- soilColorSignature(sp1)
+pig <- soilColorSignature(sp1, color = 'm')
 
 }
 \references{
