@@ -31,9 +31,10 @@ sp1$hex <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma)
 test_that("deprecation of r, g, b arguments", {
   
   # 2025-12-15
-  expect_error(soilColorSignature(sp1, r = 'r'), regexp = 'deprecated')
-  expect_error(soilColorSignature(sp1, g = 'g'), regexp = 'deprecated')
-  expect_error(soilColorSignature(sp1, b = 'b'), regexp = 'deprecated')
+  expect_warning(
+    pig <- soilColorSignature(sp1, r = 'r', g = 'g', b = 'b'), 
+    regexp = 'deprecated'
+  )
   
 })
 
@@ -118,7 +119,7 @@ test_that("expected order from OSDs, depthSlices", {
   skip_if_not_installed("curl")
   
   skip_if_offline()
- 
+  
   # TODO: consider not using soilDB for testing soilColorSignature()
   skip_if_not_installed("soilDB")
   
@@ -148,7 +149,7 @@ test_that("expected order from OSDs, depthSlices", {
       all(profile_id(s)[dd$order] ==  o)
     )
   }
-    
+  
 })
 
 

@@ -1,9 +1,11 @@
-# aqp 2.3 (2025-12-15)
+# aqp 2.3 (2025-12-16)
  * new function `mu_confusion_matrix()` (@smroecker)
  * apq now requires R >= 4.1
  * updated CIELAB and sRGB color coordinates for Munsell neutral chips, based on direct measurement (#332)
  * added estimated spectra for Munsell neutral chips (#332)
  * `colorContrast()` will now compute contrast data for pair-wise combinations of `m1` when `m2` is not specified (#330)
+ * `soilColorSignature()` gains generalized color specification, previously used arguments `r`, `g`, `b` deprecated (#335)
+  - a warning will be issued until the next major release
 
 # aqp 2.2-1 (2025-09-16)
  * CRAN release

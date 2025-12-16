@@ -247,7 +247,10 @@ soilColorSignature <- function(
   
   # 2025-12-16: deprecated arguments r, g, b
   if(!is.null(r) || !is.null(g) || !is.null(b)) {
-    stop('arguments `r`, `g`, and `b` have been deprecated, please use the `color` argument instead')
+    warning('arguments `r`, `g`, and `b` have been deprecated, please use the `color` argument instead')
+    
+    # temporarily cobble together the new specification
+    color <- c(r, g, b)
   }
   
   # sanity checks fixed choice arguments
