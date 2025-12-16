@@ -197,6 +197,10 @@
   : Get data from column of horizon or site data in a
   SoilProfileCollection
 
+- [`.detectColorSpec()`](https://ncss-tech.github.io/aqp/reference/dot-detectColorSpec.md)
+  : Detect color specification from a vector of values, or a matrix of
+  color coordinates
+
 - [`` `[[<-`( ``*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/doublebracket-set.md)
   : Add or change column of horizon or site data in a
   SoilProfileCollection

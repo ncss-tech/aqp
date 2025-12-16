@@ -51,9 +51,11 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">soilColorSignature</span><span class="op">(</span></span>
 <span>  <span class="va">spc</span>,</span>
-<span>  r <span class="op">=</span> <span class="st">"r"</span>,</span>
-<span>  g <span class="op">=</span> <span class="st">"g"</span>,</span>
-<span>  b <span class="op">=</span> <span class="st">"b"</span>,</span>
+<span>  <span class="va">color</span>,</span>
+<span>  space <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"sRGB"</span>, <span class="st">"CIELAB"</span><span class="op">)</span>,</span>
+<span>  r <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  g <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  b <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"colorBucket"</span>, <span class="st">"depthSlices"</span>, <span class="st">"pam"</span><span class="op">)</span>,</span>
 <span>  pam.k <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  RescaleLightnessBy <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -72,16 +74,24 @@
 <dd><p>a <code>SoilProfileCollection</code> object</p></dd>
 
 
+<dt id="arg-color">color<a class="anchor" aria-label="anchor" href="#arg-color"></a></dt>
+<dd><p>horizon-level attributes, either character of length 1 specifiying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.</p></dd>
+
+
+<dt id="arg-space">space<a class="anchor" aria-label="anchor" href="#arg-space"></a></dt>
+<dd><p>character, either 'sRGB' or 'LAB', specifying color space</p></dd>
+
+
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>horizon level attribute containing soil color (sRGB) red values</p></dd>
+<dd><p>deprecated, use <code>color</code> argument</p></dd>
 
 
 <dt id="arg-g">g<a class="anchor" aria-label="anchor" href="#arg-g"></a></dt>
-<dd><p>horizon level attribute containing soil color (sRGB) green values</p></dd>
+<dd><p>deprecated, use <code>color</code> argument</p></dd>
 
 
 <dt id="arg-b">b<a class="anchor" aria-label="anchor" href="#arg-b"></a></dt>
-<dd><p>horizon level attribute containing soil color (sRGB) blue values</p></dd>
+<dd><p>deprecated, use <code>color</code> argument</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -93,7 +103,7 @@
 
 
 <dt id="arg-rescalelightnessby">RescaleLightnessBy<a class="anchor" aria-label="anchor" href="#arg-rescalelightnessby"></a></dt>
-<dd><p>rescaling factor for CIE LAB L-coordinate</p></dd>
+<dd><p>rescaling factor for CIE LAB L-coordinate, ignored for <code>method = pam</code></p></dd>
 
 
 <dt id="arg-useproportions">useProportions<a class="anchor" aria-label="anchor" href="#arg-useproportions"></a></dt>
@@ -144,14 +154,11 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># convert Munsell -&gt; sRGB triplets</span></span></span>
-<span class="r-in"><span><span class="va">rgb.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">$</span><span class="va">hue</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">value</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">chroma</span>, return_triplets <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">r</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">r</span></span></span>
-<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">g</span></span></span>
-<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">rgb.data</span><span class="op">$</span><span class="va">b</span></span></span>
+<span class="r-in"><span><span class="co"># Munsell notation</span></span></span>
+<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s %s/%s"</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">hue</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">value</span>, <span class="va">sp1</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># extract color signature</span></span></span>
-<span class="r-in"><span><span class="va">pig</span> <span class="op">&lt;-</span> <span class="fu">soilColorSignature</span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pig</span> <span class="op">&lt;-</span> <span class="fu">soilColorSignature</span><span class="op">(</span><span class="va">sp1</span>, color <span class="op">=</span> <span class="st">'m'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

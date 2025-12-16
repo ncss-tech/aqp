@@ -7,9 +7,11 @@ Generate a color signature for each soil profile in a collection.
 ``` r
 soilColorSignature(
   spc,
-  r = "r",
-  g = "g",
-  b = "b",
+  color,
+  space = c("sRGB", "CIELAB"),
+  r = NULL,
+  g = NULL,
+  b = NULL,
   method = c("colorBucket", "depthSlices", "pam"),
   pam.k = 3,
   RescaleLightnessBy = 1,
@@ -26,17 +28,29 @@ soilColorSignature(
 
   a `SoilProfileCollection` object
 
+- color:
+
+  horizon-level attributes, either character of length 1 specifiying a
+  column containing Munsell or sRGB in hex notation, or character vector
+  of three column names containing either sRGB or CIELAB color
+  coordinates. sRGB color coordinates should be within the range of 0 to
+  1.
+
+- space:
+
+  character, either 'sRGB' or 'LAB', specifying color space
+
 - r:
 
-  horizon level attribute containing soil color (sRGB) red values
+  deprecated, use `color` argument
 
 - g:
 
-  horizon level attribute containing soil color (sRGB) green values
+  deprecated, use `color` argument
 
 - b:
 
-  horizon level attribute containing soil color (sRGB) blue values
+  deprecated, use `color` argument
 
 - method:
 
@@ -50,7 +64,7 @@ soilColorSignature(
 
 - RescaleLightnessBy:
 
-  rescaling factor for CIE LAB L-coordinate
+  rescaling factor for CIE LAB L-coordinate, ignored for `method = pam`
 
 - useProportions:
 
@@ -112,12 +126,9 @@ D.E. Beaudette
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 
-# convert Munsell -> sRGB triplets
-rgb.data <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
-sp1$r <- rgb.data$r
-sp1$g <- rgb.data$g
-sp1$b <- rgb.data$b
+# Munsell notation
+sp1$m <- sprintf("%s %s/%s", sp1$hue, sp1$value, sp1$chroma)
 
 # extract color signature
-pig <- soilColorSignature(sp1)
+pig <- soilColorSignature(sp1, color = 'm')
 ```

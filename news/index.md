@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3 (2025-12-15)
+## aqp 2.3 (2025-12-16)
 
 - new function
   [`mu_confusion_matrix()`](https://ncss-tech.github.io/aqp/reference/mu_confusion_matrix.md)
@@ -15,6 +15,11 @@
   will now compute contrast data for pair-wise combinations of `m1` when
   `m2` is not specified
   ([\#330](https://github.com/ncss-tech/aqp/issues/330))
+- [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md)
+  gains generalized color specification, previously used arguments `r`,
+  `g`, `b` deprecated
+  ([\#335](https://github.com/ncss-tech/aqp/issues/335))
+- a warning will be issued until the next major release
 
 ## aqp 2.2-1 (2025-09-16)
 
