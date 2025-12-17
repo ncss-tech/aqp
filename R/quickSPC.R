@@ -346,7 +346,7 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
   
   # proportional horizon thickness
   # count labels
-  .counts <- stringi::stri_count_fixed(.name.thick, .names)
+  .counts <- stri_count_fixed(.name.thick, .names)
   # interval-unit thickness per label instance
   .thick <- .counts * interval
   
