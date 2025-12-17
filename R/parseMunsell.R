@@ -139,11 +139,11 @@ parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
   ## split pieces
   
   # Extract hue number
-  hue_number <- str_trim(sub("[A-Z].*", "", mn), side = "both")
-  remaining <- substr(mn, str_length(hue_number) + 1, str_length(mn))
-  hue_letter <- str_trim(sub("[0-9].*", "", remaining), side = "both") 
-  remaining <- substr(remaining, str_length(hue_letter) + 1, str_length(remaining))
-  remaining <- str_trim(remaining, side = "both")
+  hue_number <- trimws(sub("[A-Z].*", "", mn), which = "both")
+  remaining <- substr(mn, nchar(hue_number) + 1, nchar(mn))
+  hue_letter <- trimws(sub("[0-9].*", "", remaining), which = "both") 
+  remaining <- substr(remaining, nchar(hue_letter) + 1, nchar(remaining))
+  remaining <- trimws(remaining, which = "both")
   
   # re-constitute hue
   hue <- paste0(hue_number, hue_letter)
@@ -160,8 +160,8 @@ parseMunsell <- function(munsellColor, convertColors = TRUE, delim = NA, ...) {
   chroma <- sapply(value_chroma, '[', 2)
   
   # clean any remaining whitespace
-  value <- str_trim(value, side = "both")
-  chroma <- str_trim(chroma, side = "both")
+  value <- trimws(value, which = "both")
+  chroma <- trimws(chroma, which = "both")
   
   # convert NA chroma -> 0 for N hues
   chroma <- ifelse(is.na(chroma) & hue == 'N', 0, chroma)
