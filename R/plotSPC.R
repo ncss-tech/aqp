@@ -412,16 +412,13 @@ plotSPC <- function(
 ) {
   
   
-  ############################
-  ## make R CMD check happy ##
-  ############################
+  # make R CMD check happy
   .LAST <- NULL
   .BOTTOM <- NULL
   
-  
-  ############################
-  ## arguments from options ##
-  ############################
+  # +++++++++++++++++++++++++++
+  # arguments from options ----
+  # +++++++++++++++++++++++++++
   
   # specified as: options(.aqp.plotSPC.args = list())
   
@@ -466,9 +463,9 @@ plotSPC <- function(
   }
   
   
-  ###################
-  ## sanity checks ##
-  ###################
+  # ++++++++++++++++++
+  # sanity checks ----
+  # ++++++++++++++++++
   
   # `x` should be a SoilProfileCollection
   if (!inherits(x, 'SoilProfileCollection')) {
@@ -562,9 +559,9 @@ plotSPC <- function(
   }
   
   
-  #################################
-  ## SPC truncation and flagging ##
-  #################################
+  # ++++++++++++++++++++++++++++++++
+  # SPC truncation and flagging ----
+  # ++++++++++++++++++++++++++++++++
   
   # keep track of truncation by max.depth via special site-level attr
   site(x)$.isTruncated <- FALSE
@@ -595,9 +592,9 @@ plotSPC <- function(
   .raggedOffsets <- scaling.factor * max.depth * c(-0.01,  0.03) / 2
   
   
-  ###################
-  ## SPC cleanup ? ##
-  ###################
+  # +++++++++++++++++
+  # SPC cleanup -----
+  # +++++++++++++++++
   
   # tempting, but I don't like the auto-magical nature of this
   # easy to miss important horizon logic errors
@@ -605,9 +602,9 @@ plotSPC <- function(
   # x <- repairMissingHzDepths(x)
   
   
-  ###################
-  ## fudge factors ##
-  ###################
+  # ++++++++++++++++++
+  # fudge factors ----
+  # ++++++++++++++++++
   
   # TODO: base calculations on strwidth() AFTER plot() has been called
   
@@ -661,9 +658,9 @@ plotSPC <- function(
   nm <- names(h)
   
   
-  #########################
-  ## horizon designation ##
-  #########################
+  # ++++++++++++++++++++++++
+  # horizon designation ----
+  # ++++++++++++++++++++++++
   
   # hzdesgnname() does most of the work here, with sensible defaults when metadata are missing
   
@@ -675,9 +672,11 @@ plotSPC <- function(
   
   
   
-  ####################
-  ## horizon colors ##
-  ####################
+  # +++++++++++++++++++
+  # horizon colors ----
+  # +++++++++++++++++++
+  
+  ## TODO: allow use of Munsell notation here
   
   # .interpretHorizonColors() expects numeric | categorical data
   # convert logical to factor
@@ -694,9 +693,9 @@ plotSPC <- function(
   
   
   
-  ####################
-  ## horizon depths ##
-  ####################
+  # +++++++++++++++++++
+  # horizon depths ----
+  # +++++++++++++++++++
   
   # get top/bottom column names
   IDcol <- idname(x)
@@ -715,9 +714,9 @@ plotSPC <- function(
     warning("column name '", label, "' not found in site names", call. = FALSE)
   }
   
-  #######################################################################
-  ## init plotting region, unless we are appending to an existing plot ##
-  #######################################################################
+  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # init plotting region, unless we are appending to an existing plot ----
+  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
   # y-limits also include y.offset range
   ylim.range <- c(
@@ -742,9 +741,9 @@ plotSPC <- function(
   
   
   
-  ########################
-  ## device information ##
-  ########################
+  # +++++++++++++++++++++++
+  # device information ----
+  # +++++++++++++++++++++++
   
   # note: all of this has to happen after plot(...), or if `add = TRUE`
   
@@ -760,9 +759,9 @@ plotSPC <- function(
   one.char.width <- strwidth('W')
   
   
-  ################################
-  ## profile ID style selection ##
-  ################################
+  # +++++++++++++++++++++++++++++++
+  # profile ID style selection ----
+  # +++++++++++++++++++++++++++++++
   
   # if profile style is auto, determine style based on font metrics
   if(id.style == 'auto' & !is.null(pLabels)) {
@@ -783,9 +782,9 @@ plotSPC <- function(
   }
   
   
-  ##########################################################
-  ## sketch parameters for follow-up overlay / inspection ##
-  ##########################################################
+  # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # sketch parameters for follow-up overlay / inspection ----
+  # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
   lsp <- list('width' = width,
               'plot.order' = plot.order,
@@ -823,8 +822,13 @@ plotSPC <- function(
     warning("column name '", name, "' not found in horizon names", call. = FALSE)
   }
   
-  ## iterate over profile index from 1 -> n
-  ## note: there may not be `n` profiles
+  
+  # ++++++++++++++++++++++++++
+  # iterate over profiles ----
+  # ++++++++++++++++++++++++++
+  
+  # iterate over profile index from 1 -> n
+  # note: there may not be `n` profiles
   for(i in 1:n) {
     # convert linear sequence into plotting order
     # this is NA when accessing beyond length(SPC)
@@ -883,9 +887,9 @@ plotSPC <- function(
     
     
     
-    ########################################
-    ## generate baseline horizon geometry ##
-    ########################################
+    # ++++++++++++++++++++++++++++++++++++++++
+    ## generate baseline horizon geometry ----
+    # ++++++++++++++++++++++++++++++++++++++++
     
     ## center of each sketch
     # 2019-07-15: added relative position feature, could use some more testing
@@ -900,9 +904,9 @@ plotSPC <- function(
     
     
     
-    ##############################
-    ## create horizons + colors ##
-    ##############################
+    # ++++++++++++++++++++++++++++++
+    ## create horizons + colors ----
+    # ++++++++++++++++++++++++++++++
     
     # horizons are parallelograms
     # offset described by hz.distinctness.offset
@@ -1215,9 +1219,9 @@ plotSPC <- function(
     
     
     
-    ##################################
-    ## horizon designations (names) ##
-    ##################################
+    # ++++++++++++++++++++++++++++++++++
+    ## horizon designations (names) ----
+    # ++++++++++++++++++++++++++++++++++
     switch(
       name.style,
       'right-center' = {
@@ -1319,9 +1323,9 @@ plotSPC <- function(
     }
     
     
-    ##################################
-    ## horizon depth annotation     ##
-    ##################################
+    # ++++++++++++++++++++++++++++++++++
+    ## horizon depth annotation     ----
+    # ++++++++++++++++++++++++++++++++++
     if(hz.depths) {
       
       # scaling factor for hz depths
@@ -1464,9 +1468,9 @@ plotSPC <- function(
       )
       
       
-      ##############################
-      ## hz depth connector lines ##
-      ##############################
+      # +++++++++++++++++++++++++++++
+      ## hz depth connector lines ---
+      # +++++++++++++++++++++++++++++
       if(hz.depths.lines) {
         
         # .x0, .y0: staring coordinates of spike
@@ -1548,9 +1552,9 @@ plotSPC <- function(
     ## TODO: move this to the top of profile-process loop, in case there is no hz data
     
     
-    #################
-    ## profile IDs ##
-    #################
+    # +++++++++++++++++++++
+    ## add profile IDs ----
+    # +++++++++++++++++++++
     
     # profile is placed relative to the y-offset vector
     
@@ -1577,9 +1581,9 @@ plotSPC <- function(
   } # end looping over profiles
   
   
-  ################
-  ## depth axis ##
-  ################
+  # ++++++++++++++++++++
+  # add depth axis ----
+  # ++++++++++++++++++++
   
   ## 
   ## retain for 2 (?) minor versions
@@ -1671,9 +1675,10 @@ plotSPC <- function(
   
   
   
-  ######################
-  ## alternate labels ##
-  ######################
+  # +++++++++++++++++++++
+  # alternate labels ----
+  # +++++++++++++++++++++
+  
   if(!missing(alt.label)) {
     al <- site(x)[[alt.label]]
     al <- al[plot.order]
@@ -1681,9 +1686,9 @@ plotSPC <- function(
   }
   
   
-  ########################################
-  ## legend for thematic profile sketch ##
-  ########################################
+  # +++++++++++++++++++++++++++++++++++++++
+  # legend for thematic profile sketch ----
+  # +++++++++++++++++++++++++++++++++++++++
   
   # optionally show legend
   if(show.legend) {
