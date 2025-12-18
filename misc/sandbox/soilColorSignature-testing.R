@@ -11,13 +11,69 @@ s <- fetchOSD(s.list)
 
 plotSPC(s)
 
+## TODO
+# * NA in soil colors ?
+#     s$soil_color[5] <- NA
+
+
+## colorBucket
+
+pig <- soilColorSignature(s, color = 'soil_color', method = 'colorBucket')
+row.names(pig) <- pig[, 1]
+
+d <- daisy(pig[, -1], stand = FALSE)
+dd <- diana(d)
+
+d <- daisy(pig[, -1], stand = TRUE)
+dd.stand <- diana(d)
+
+d <- daisy(pig[, -1], metric = 'gower', weights = c(0.85, 1, 1, 1, 1))
+dd.wt <- diana(d)
+
+
+
+par(mar = c(0, 0, 1, 1), mfrow = c(2, 1))
+
+plotProfileDendrogram(s, dd, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, scaling.factor = 0.0045, name = NA, rotateToProfileID = TRUE)
+title('colorBucket: Euclidean dist', line = 0, cex.main = 0.8)
+
+plotProfileDendrogram(s, dd.stand, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, scaling.factor = 0.08, name = NA, rotateToProfileID = TRUE)
+title('colorBucket: Euclidean dist, standardization', line = 0, cex.main = 0.8)
+
+
+plotProfileDendrogram(s, dd.stand, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, scaling.factor = 0.08, name = NA, rotateToProfileID = TRUE)
+title('colorBucket: Euclidean dist, standardization', line = 0, cex.main = 0.8)
+
+plotProfileDendrogram(s, dd.wt, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, scaling.factor = 0.006, name = NA, rotateToProfileID = TRUE)
+title('colorBucket: Gower dist, L-downweighted', line = 0, cex.main = 0.8)
+
+
+
+## depthSlices vs. pam
+
+d <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
+dd.slices <- diana(d)
+
+d <- soilColorSignature(s, color = 'soil_color', method = 'pam', perceptualDistMat = TRUE)
+dd.pam <- diana(d)
+
+
+par(mar = c(0, 0, 1, 1), mfrow = c(2, 1))
+
+plotProfileDendrogram(s, dd.slices, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, name = NA, rotateToProfileID = TRUE)
+title('depthSlices: perceptual dist', line = 0, cex.main = 0.8)
+
+plotProfileDendrogram(s, dd.pam, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, name = NA, rotateToProfileID = TRUE)
+title('PAM: perceptual dist', line = 0, cex.main = 0.8)
+
+
+
+
 
 pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices')
 
 pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', prob = 0.5)
 
-
-pig <- soilColorSignature(s, color = 'soil_color', method = 'colorBucket')
 
 
 pig <- soilColorSignature(s, color = 'soil_color', method = 'pam', pam.k = 3)
