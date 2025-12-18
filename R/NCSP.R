@@ -1,6 +1,6 @@
 
 ## TODO: consider use of alternative distance metrics that DO NOT rescale always to 0,1
-
+## TODO: interpret various forms of soil color via .detectColorSpec()
 
 ## Note: sanity checking on w is performed outside of this function
 
