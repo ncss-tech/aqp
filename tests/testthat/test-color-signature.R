@@ -98,11 +98,11 @@ test_that("depthSlices", {
   
   # add more of these
   expect_equal(pig$id[1], 'P001')
-  expect_equal(pig$A.0.1[1], 5.87, tolerance = 0.01)
-  expect_equal(pig$A.0.5[1], 5.57, tolerance = 0.01)
-  expect_equal(pig$B.0.1[1], 11.07, tolerance = 0.01)
-  expect_equal(pig$B.0.5[1], 17.86, tolerance = 0.01)
-  expect_equal(pig$L.0.1[1], 30.25, tolerance = 0.01)
+  expect_equal(pig$A.1[1], 5.87, tolerance = 0.01)
+  expect_equal(pig$A.2[1], 5.57, tolerance = 0.01)
+  expect_equal(pig$B.1[1], 11.07, tolerance = 0.01)
+  expect_equal(pig$B.2[1], 17.86, tolerance = 0.01)
+  expect_equal(pig$L.1[1], 30.25, tolerance = 0.01)
   
 })
 
@@ -133,16 +133,16 @@ test_that("expected order from OSDs, depthSlices", {
   
   if (!is.null(s)) {
     # use hex sRGB, provided by fetchOSD()
-    pig <- soilColorSignature(s, color = 'soil_color', RescaleLightnessBy = 5, method = 'depthSlices')
+    pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices')
     row.names(pig) <- pig[, 1]
     d <- daisy(pig[, -1])
     dd <- diana(d)
     
     # expected ordering
-    o <- c("AMADOR", "VLECK", "PENTZ", "YOLO", "HANFORD", "MOGLIA", "PARDEE", 
-           "HAYNER", "CANEYHEAD", "DRUMMER", "WILLOWS", "ZOOK", "SYCAMORE", 
-           "KLAMATH", "ARGONAUT", "REDDING", "MUSICK", "CECIL", "SIERRA", 
-           "PALAU")
+    o <- c("AMADOR", "MOGLIA", "VLECK", "HANFORD", "PARDEE", "CANEYHEAD", 
+           "HAYNER", "ARGONAUT", "MUSICK", "CECIL", "PALAU", "REDDING", 
+           "SIERRA", "DRUMMER", "ZOOK", "PENTZ", "YOLO", "SYCAMORE", "WILLOWS", 
+           "KLAMATH")
     
     
     expect_true(

@@ -38,8 +38,14 @@
   # use PAM to cluster, note `pamonce = 5` used for optimization
   cl <- cluster::pam(dE00, k = k, diss = TRUE, pamonce = 5)
   
-  # get data
+  # subset medoids
   x.medoids <- x.slices[cl$id.med, c(idname(x), 'L', 'A', 'B')]
+  
+  # 2025-12-18
+  # medoid order depends on source data
+  # approximate a standardization scheme
+  # by ordering medoids along L, A, B axes
+  x.medoids <- x.medoids[order(x.medoids$L, x.medoids$A, x.medoids$B), ]
   
   # make IDs
   x.medoids$.ids <- paste0('.', 1:k)
@@ -52,7 +58,7 @@
     measure.vars = c('L', 'A', 'B')
   )
   
-  # leave as data.table for dcast
+  # leave as data.table for dcast()
   
   # new ID
   m$variable <- paste0(m$variable, m$.ids)
@@ -71,9 +77,10 @@
 
 
 # compute LAB coordinates at select percentiles of depth
-.pigments.depths <- function(x, p = c(0.1, 0.5, 0.9)) {
+.pigments.depths <- function(x, p) {
   
-  # print(profile_id(x))
+  # index for naming columns in the results
+  .seq <- seq_along(p)
   
   # extract just horizons that have color data
   h <- horizons(x)
@@ -112,7 +119,7 @@
   # leave as data.table for re-shape
   
   # new ID
-  m$variable <- paste0(m$variable, m$depth.id)
+  m$variable <- sprintf("%s.%s", m$variable, .seq)
   
   # convert long -> wide format
   # using data.table::dcast
@@ -122,15 +129,16 @@
   # convert back to data.frame
   res <- as.data.frame(res)
   
+  # percentiles used
+  attr(res, 'p') <- p
+  
   # result is a data.frame with profile ID
   return(res)
 }
 
 
-## TODO: this doesn't always give the best results compared with PAM
 
-# https://en.wikipedia.org/wiki/Lab_color_space
-#
+# CIELAB axes interpretation
 # L - brightness
 # A - green | red
 # B - blue | yellow
@@ -149,13 +157,12 @@
   pigment <- colSums(hz.pigments, na.rm = TRUE)
   names(pigment) <- pigmentNames
   
-  ## NOTE: this removes the effect of soil depth
-  # convert to proportions
+  # convert to proportions: remove the effect of soil depth
   if(useProportions) {
     pigment <- pigment / sum(pigment, na.rm = TRUE)
   }
   
-  # results as a data.frame for simpler rbind-ing  
+  # results
   res <- data.frame(
     .id = profile_id(x)[1],
     t(pigment),
@@ -169,7 +176,6 @@
 }
 
 ## TODO: 
-#   * move method-specific arguments to ...
 #   * data.table optimization
 #   * better documentation!
 
@@ -183,37 +189,53 @@
 #' @param g deprecated, use `color` argument
 #' @param b deprecated, use `color` argument
 #' @param method algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`
-#' @param pam.k number of classes to request from `cluster::pam()`
-#' @param RescaleLightnessBy rescaling factor for CIE LAB L-coordinate, ignored for `method = pam`
+#' @param prob numeric vector, requested percentiles for `method = 'depthSlices'`
+#' @param pam.k number of color classes for `method = 'pam'`
+#' @param RescaleLightnessBy deprecated, scaling factor for CIELAB L-coordinate
 #' @param useProportions use proportions or quantities, see details
 #' @param pigmentNames names for resulting pigment proportions or quantities
 #' @param apply.fun function passed to `aqp::profileApply(APPLY.FUN)` argument, can be used to add progress bars via `pbapply::pblapply`, or parallel processing with `furrr::future_map` 
 #'
 #'
-#' @details See the [related tutorial](http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html).
+#' @details 
+#' 
+#' 
+#' See the [related tutorial](http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html).
 #' 
 #' @return
 #' 
-#' For the `colorBucket` method, a `data.frame` object containing:
+#' For the `colorBucket` method, a `data.frame`:
 #' 
 #'  * id column: set according to `idname(spc)`
-#'  * `.white.pigment`: proportion or quantity of CIE LAB L-values
-#'  * `.red.pigment`: proportion or quantity of CIE LAB positive A-values
-#'  * `.green.pigment`: proportion or quantity of CIE LAB negative A-values
-#'  * `.yellow.pigment`: proportion or quantity of CIE LAB positive B-values
-#'  * `.blue.pigment`: proportion or quantity of CIE LAB negative B-values
+#'  * `.white.pigment`: proportion or quantity of CIELAB L-values
+#'  * `.red.pigment`: proportion or quantity of CIELAB positive A-values
+#'  * `.green.pigment`: proportion or quantity of CIELAB negative A-values
+#'  * `.yellow.pigment`: proportion or quantity of CIELAB positive B-values
+#'  * `.blue.pigment`: proportion or quantity of CIELAB negative B-values
 #' 
 #' Column names can be adjusted with the `pigmentNames` argument.
 #' 
-#' For the `depthSlices` method ...
 #' 
-#' For the `pam` method ...
+#' For the `depthSlices` method, a `data.frame`:
+#' 
+#'  * id column: set according to `idname(spc)`
+#'  * `L.1`, `A.1`, `B.1`: CIELAB color coordinates associated with the first depth slice, defined as the percentile given in `prob[1]`
+#'  * ...
+#'  * `L.n`, `A.n`, `B.n`: CIELAB color coordinates associated with the `n` depth slice, defined as the percentile given in `prob[n]`
+#' 
+#' 
+#' For the `pam` method, a `data.frame`:
+#' 
+#'  * id column: set according to `idname(spc)`
+#'  * `L.1`, `A.1`, `B.1`: CIELAB color coordinates associated with the first color cluster, after sorting all clusters in ascending order along L, A, B axes.
+#'  * ...
+#'  * `L.n`, `A.n`, `B.n`: CIELAB color coordinates associated with the `nth` color cluster, after sorting all clusters in ascending order along L, A, B axes.
 #' 
 #' @references https://en.wikipedia.org/wiki/Lab_color_space
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @seealso \code{\link{munsell2rgb}}
+#' @seealso [plotProfileDendrogram()]
 #' 
 #' 
 #' @export
@@ -239,7 +261,8 @@ soilColorSignature <- function(
     b = NULL, 
     method = c('colorBucket', 'depthSlices', 'pam'), 
     pam.k = 3, 
-    RescaleLightnessBy = 1, 
+    prob = c(0.1, 0.5, 0.9),
+    RescaleLightnessBy = NULL, 
     useProportions = TRUE, 
     pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment'), 
     apply.fun = lapply
@@ -252,6 +275,12 @@ soilColorSignature <- function(
     # temporarily cobble together the new specification
     color <- c(r, g, b)
   }
+  
+  # 2025-12-18: deprecated argument RescaleLightnessBy
+  if(!is.null(RescaleLightnessBy)) {
+    warning('argument `RescaleLightnessBy` has been deprecated, consider weighting or standardizing color signature matrix before computing distances')
+  }
+  
   
   # sanity checks fixed choice arguments
   method <- match.arg(method)
@@ -318,14 +347,6 @@ soilColorSignature <- function(
   )
   
   
-  # optionally normalize the L coordinate
-  # BUT NOT for methods which rely on CIE dE00
-  if(method == 'pam') {
-    message('`RescaleLightnessBy` ignored for methods based on CIE dE00')
-  } else{
-    lab.colors[, 1] <- lab.colors[, 1] / RescaleLightnessBy
-  }
-  
   # choose method
   if(method == 'colorBucket') {
     ## L is always positive
@@ -367,6 +388,7 @@ soilColorSignature <- function(
     col.data <- profileApply(
       spc, 
       FUN = .pigments.depths, 
+      p = prob,
       simplify = FALSE,
       APPLY.FUN = apply.fun
     )
