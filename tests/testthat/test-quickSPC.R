@@ -79,11 +79,19 @@ test_that("character template, mode 2", {
   expect_equal(nrow(s), 4)
   expect_equal(hzdesgnname(s), 'name')
   
+  
+  # check total depth
+  expect_true(max(s) == 10 * 18)
+  
   # function is vectorized over these kind of templates
   s <- quickSPC(x.c.mode2)
   
   expect_true(inherits(s, 'SoilProfileCollection'))
   expect_equal(length(s), 3)
+  
+  # check all profile depths
+  expect_true(all(profileApply(s, max) == c(140, 140, 180)))
+  
   
   # garbage input, but still valid template
   s <- quickSPC('A|4|zz|12')

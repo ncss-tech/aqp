@@ -51,7 +51,7 @@
 #' 
 #' @importFrom digest digest
 #' 
-#' @importFrom stringi stri_count_fixed stri_split_fixed stri_split_regex
+#' @importFrom stringi stri_split_fixed stri_split_regex
 #' 
 #' @importFrom farver convert_colour compare_colour
 #' 
