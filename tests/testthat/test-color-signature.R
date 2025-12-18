@@ -107,6 +107,21 @@ test_that("depthSlices", {
 })
 
 
+test_that("perceptualDistMat = TRUE", {
+  
+  # result is a distance matrix
+  d <- soilColorSignature(sp1, color = 'm', method = 'depthSlices', perceptualDistMat = TRUE)
+  
+  # expected output
+  expect_true(inherits(d, 'dist'))
+  
+  # all profiles IDs should be present
+  expect_equal(length(setdiff(dimnames(d), profile_id(sp1))), 0)
+  
+})
+
+
+
 
 ## TODO: create / use local data to check ordering
 # using OSDs right now for a diverse range of colors

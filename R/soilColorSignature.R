@@ -1,4 +1,49 @@
 
+
+#' @title Interpret a color signature containing color groups of CIELAB coordinates using perceptual distance via CIE dE00
+#' 
+#' @param pig `data.frame` results from `soilColorSignature(..., method = c('pam', 'depthSlices))`
+#' @return dist object
+.colorSig2PerceptualDistMat <- function(pig) {
+  
+  # first column contains profile IDs
+  .ids <- pig[, 1]
+  row.names(pig) <- .ids
+  
+  # remaining columns are color groups of L,A,B coordinates
+  .n <- ncol(pig) - 1
+  .ngroup <- .n / 3
+  
+  # iterate over color groups, result is a distance matrix (CIE dE00)
+  dE00 <- lapply(1:.ngroup, function(i) {
+    
+    # LAB coordinates are named L.i, A.i, B.i, ...
+    v.names <- paste(c('L', 'A', 'B'), i, sep = '.')
+    
+    # pair-wise delta-E00
+    d.i <- farver::compare_colour(
+      pig[, v.names], 
+      pig[, v.names], 
+      from_space = 'lab', 
+      white_from = 'D65', 
+      method = 'cie2000'
+    )
+    
+    # retain IDs and convert to dist object
+    dimnames(d.i) <- list(.ids, .ids)
+    d.i <- as.dist(d.i)
+    
+    return(d.i)
+  })
+  
+  # sum distance matrices over color groups
+  d <- Reduce('+', dE00)
+  
+  return(d)
+}
+
+
+
 # compute LAB coordinates from clusters of slices
 .pigments.pam <- function(x, k) {
   
@@ -177,28 +222,39 @@
 
 ## TODO: 
 #   * data.table optimization
-#   * better documentation!
+#   * demonstrate convergence with NCSP()
 
 #' @title Soil Profile Color Signatures
 #' @description Generate a color signature for each soil profile in a collection.
 #'
 #' @param spc a `SoilProfileCollection` object
-#' @param color horizon-level attributes, either character of length 1 specifiying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.
+#' 
+#' @param color horizon-level attributes, either character of length 1 specifying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.
 #' @param space character, either 'sRGB' or 'LAB', specifying color space
+
+#' @param method algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`
+#' @param perceptualDistMat logical, optionally return a distance matrix based on perceptual color distances, when ``method` is one of 'depthSlices' or 'pam', see Details
+
+#' @param prob numeric vector, requested percentiles for `method = 'depthSlices'`
+#' @param pam.k number of color classes for `method = 'pam'`
+
+#' @param useProportions use proportions or quantities, see details
+#' @param pigmentNames names for resulting pigment proportions or quantities
+#' @param apply.fun function passed to `aqp::profileApply(APPLY.FUN)` argument, can be used to add progress bars via `pbapply::pblapply()`, or parallel processing with `furrr::future_map()` 
+#' 
 #' @param r deprecated, use `color` argument
 #' @param g deprecated, use `color` argument
 #' @param b deprecated, use `color` argument
-#' @param method algorithm used to compute color signature, `colorBucket`, `depthSlices`, or `pam`
-#' @param prob numeric vector, requested percentiles for `method = 'depthSlices'`
-#' @param pam.k number of color classes for `method = 'pam'`
 #' @param RescaleLightnessBy deprecated, scaling factor for CIELAB L-coordinate
-#' @param useProportions use proportions or quantities, see details
-#' @param pigmentNames names for resulting pigment proportions or quantities
-#' @param apply.fun function passed to `aqp::profileApply(APPLY.FUN)` argument, can be used to add progress bars via `pbapply::pblapply`, or parallel processing with `furrr::future_map` 
 #'
 #'
 #' @details 
 #' 
+#' Interpreation of color signature.
+#' 
+#' Choices related to weighting, scaling, and distance metric.
+#' 
+#' Perceptual distances (dE00), summed over color groups.
 #' 
 #' See the [related tutorial](http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html).
 #' 
@@ -219,9 +275,9 @@
 #' For the `depthSlices` method, a `data.frame`:
 #' 
 #'  * id column: set according to `idname(spc)`
-#'  * `L.1`, `A.1`, `B.1`: CIELAB color coordinates associated with the first depth slice, defined as the percentile given in `prob[1]`
+#'  * `L.1`, `A.1`, `B.1`: CIELAB color coordinates associated with the first depth slice, at depth percentile given in `prob[1]`
 #'  * ...
-#'  * `L.n`, `A.n`, `B.n`: CIELAB color coordinates associated with the `n` depth slice, defined as the percentile given in `prob[n]`
+#'  * `L.n`, `A.n`, `B.n`: CIELAB color coordinates associated with the `n` depth slice, at depth percentile given in `prob[n]`
 #' 
 #' 
 #' For the `pam` method, a `data.frame`:
@@ -230,6 +286,9 @@
 #'  * `L.1`, `A.1`, `B.1`: CIELAB color coordinates associated with the first color cluster, after sorting all clusters in ascending order along L, A, B axes.
 #'  * ...
 #'  * `L.n`, `A.n`, `B.n`: CIELAB color coordinates associated with the `nth` color cluster, after sorting all clusters in ascending order along L, A, B axes.
+#'  
+#'  When `perceptualDistMat = TRUE` and `method` is one of 'depthSlices' or 'pam', a distance matrix is returned.
+#'  
 #' 
 #' @references https://en.wikipedia.org/wiki/Lab_color_space
 #' 
@@ -256,16 +315,17 @@ soilColorSignature <- function(
     spc, 
     color,
     space = c('sRGB', 'CIELAB'), 
+    method = c('colorBucket', 'depthSlices', 'pam'), 
+    perceptualDistMat = FALSE,
+    pam.k = 3, 
+    prob = c(0.1, 0.5, 0.9),
+    useProportions = TRUE, 
+    pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment'), 
+    apply.fun = lapply,
     r = NULL, 
     g = NULL, 
     b = NULL, 
-    method = c('colorBucket', 'depthSlices', 'pam'), 
-    pam.k = 3, 
-    prob = c(0.1, 0.5, 0.9),
-    RescaleLightnessBy = NULL, 
-    useProportions = TRUE, 
-    pigmentNames = c('.white.pigment', '.red.pigment', '.green.pigment', '.yellow.pigment', '.blue.pigment'), 
-    apply.fun = lapply
+    RescaleLightnessBy = NULL
 ) {
   
   # 2025-12-16: deprecated arguments r, g, b
@@ -422,6 +482,13 @@ soilColorSignature <- function(
   # set attributes as metadata
   attr(col.data, 'colorspec') <- .spec
   
-  return(col.data)
+  # optionally convert color signature -> perceptual distance matrix
+  if(perceptualDistMat) {
+    return(.colorSig2PerceptualDistMat(col.data))
+  } else {
+    # just the signature
+    return(col.data)
+  }
+  
 }
 

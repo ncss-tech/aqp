@@ -8,24 +8,40 @@ soilColorSignature(
   spc,
   color,
   space = c("sRGB", "CIELAB"),
-  r = NULL,
-  g = NULL,
-  b = NULL,
   method = c("colorBucket", "depthSlices", "pam"),
+  perceptualDistMat = FALSE,
   pam.k = 3,
-  RescaleLightnessBy = 1,
+  prob = c(0.1, 0.5, 0.9),
   useProportions = TRUE,
   pigmentNames = c(".white.pigment", ".red.pigment", ".green.pigment", ".yellow.pigment",
     ".blue.pigment"),
-  apply.fun = lapply
+  apply.fun = lapply,
+  r = NULL,
+  g = NULL,
+  b = NULL,
+  RescaleLightnessBy = NULL
 )
 }
 \arguments{
 \item{spc}{a \code{SoilProfileCollection} object}
 
-\item{color}{horizon-level attributes, either character of length 1 specifiying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.}
+\item{color}{horizon-level attributes, either character of length 1 specifying a column containing Munsell or sRGB in hex notation, or character vector of three column names containing either sRGB or CIELAB color coordinates. sRGB color coordinates should be within the range of 0 to 1.}
 
 \item{space}{character, either 'sRGB' or 'LAB', specifying color space}
+
+\item{method}{algorithm used to compute color signature, \code{colorBucket}, \code{depthSlices}, or \code{pam}}
+
+\item{perceptualDistMat}{logical, optionally return a distance matrix based on perceptual color distances, when ``method` is one of 'depthSlices' or 'pam', see Details}
+
+\item{pam.k}{number of color classes for \code{method = 'pam'}}
+
+\item{prob}{numeric vector, requested percentiles for \code{method = 'depthSlices'}}
+
+\item{useProportions}{use proportions or quantities, see details}
+
+\item{pigmentNames}{names for resulting pigment proportions or quantities}
+
+\item{apply.fun}{function passed to \code{aqp::profileApply(APPLY.FUN)} argument, can be used to add progress bars via \code{pbapply::pblapply()}, or parallel processing with \code{furrr::future_map()}}
 
 \item{r}{deprecated, use \code{color} argument}
 
@@ -33,39 +49,49 @@ soilColorSignature(
 
 \item{b}{deprecated, use \code{color} argument}
 
-\item{method}{algorithm used to compute color signature, \code{colorBucket}, \code{depthSlices}, or \code{pam}}
-
-\item{pam.k}{number of classes to request from \code{cluster::pam()}}
-
-\item{RescaleLightnessBy}{rescaling factor for CIE LAB L-coordinate, ignored for \code{method = pam}}
-
-\item{useProportions}{use proportions or quantities, see details}
-
-\item{pigmentNames}{names for resulting pigment proportions or quantities}
-
-\item{apply.fun}{function passed to \code{aqp::profileApply(APPLY.FUN)} argument, can be used to add progress bars via \code{pbapply::pblapply}, or parallel processing with \code{furrr::future_map}}
+\item{RescaleLightnessBy}{deprecated, scaling factor for CIELAB L-coordinate}
 }
 \value{
-For the \code{colorBucket} method, a \code{data.frame} object containing:
+For the \code{colorBucket} method, a \code{data.frame}:
 \itemize{
 \item id column: set according to \code{idname(spc)}
-\item \code{.white.pigment}: proportion or quantity of CIE LAB L-values
-\item \code{.red.pigment}: proportion or quantity of CIE LAB positive A-values
-\item \code{.green.pigment}: proportion or quantity of CIE LAB negative A-values
-\item \code{.yellow.pigment}: proportion or quantity of CIE LAB positive B-values
-\item \code{.blue.pigment}: proportion or quantity of CIE LAB negative B-values
+\item \code{.white.pigment}: proportion or quantity of CIELAB L-values
+\item \code{.red.pigment}: proportion or quantity of CIELAB positive A-values
+\item \code{.green.pigment}: proportion or quantity of CIELAB negative A-values
+\item \code{.yellow.pigment}: proportion or quantity of CIELAB positive B-values
+\item \code{.blue.pigment}: proportion or quantity of CIELAB negative B-values
 }
 
 Column names can be adjusted with the \code{pigmentNames} argument.
 
-For the \code{depthSlices} method ...
+For the \code{depthSlices} method, a \code{data.frame}:
+\itemize{
+\item id column: set according to \code{idname(spc)}
+\item \code{L.1}, \code{A.1}, \code{B.1}: CIELAB color coordinates associated with the first depth slice, at depth percentile given in \code{prob[1]}
+\item ...
+\item \code{L.n}, \code{A.n}, \code{B.n}: CIELAB color coordinates associated with the \code{n} depth slice, at depth percentile given in \code{prob[n]}
+}
 
-For the \code{pam} method ...
+For the \code{pam} method, a \code{data.frame}:
+\itemize{
+\item id column: set according to \code{idname(spc)}
+\item \code{L.1}, \code{A.1}, \code{B.1}: CIELAB color coordinates associated with the first color cluster, after sorting all clusters in ascending order along L, A, B axes.
+\item ...
+\item \code{L.n}, \code{A.n}, \code{B.n}: CIELAB color coordinates associated with the \code{nth} color cluster, after sorting all clusters in ascending order along L, A, B axes.
+}
+
+When \code{perceptualDistMat = TRUE} and \code{method} is one of 'depthSlices' or 'pam', a distance matrix is returned.
 }
 \description{
 Generate a color signature for each soil profile in a collection.
 }
 \details{
+Interpreation of color signature.
+
+Choices related to weighting, scaling, and distance metric.
+
+Perceptual distances (dE00), summed over color groups.
+
 See the \href{http://ncss-tech.github.io/AQP/aqp/soil-color-signatures.html}{related tutorial}.
 }
 \examples{
@@ -85,7 +111,7 @@ pig <- soilColorSignature(sp1, color = 'm')
 https://en.wikipedia.org/wiki/Lab_color_space
 }
 \seealso{
-\code{\link{munsell2rgb}}
+\code{\link[=plotProfileDendrogram]{plotProfileDendrogram()}}
 }
 \author{
 D.E. Beaudette
