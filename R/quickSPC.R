@@ -346,7 +346,6 @@ quickSPC <- function(x, id = 'id', d = 'depths', n = 'name', m = 'soil_color', i
   
   # proportional horizon thickness
   # count labels
-  # .counts <- stri_count_fixed(.name.thick, .names)
   .matches <- mapply(gregexpr, pattern = .names, text = .name.thick)
   .counts <- sapply(.matches, length)
   

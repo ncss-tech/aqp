@@ -51,8 +51,6 @@
 #' 
 #' @importFrom digest digest
 #' 
-#' @importFrom stringi stri_split_fixed stri_split_regex
-#' 
 #' @importFrom farver convert_colour compare_colour
 #' 
 #' @importFrom colorspace deutan tritan protan

@@ -7,6 +7,7 @@
  * `colorContrast()` will now compute contrast data for pair-wise combinations of `m1` when `m2` is not specified (#330)
  * `soilColorSignature()` gains generalized color specification, previously used arguments `r`, `g`, `b` deprecated (#335)
   - a warning will be issued until the next major release
+ * stringr package removed from imports
 
 # aqp 2.2-1 (2025-09-16)
  * CRAN release
