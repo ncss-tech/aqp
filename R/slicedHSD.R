@@ -17,8 +17,8 @@
 
   # extract components of the formula:
   fm.str <- paste(deparse(fm, 500), collapse = '')
-  fm.elements <- str_split(fm.str, fixed("~"))[[1]]
-  fm.elements <- lapply(str_split(fm.elements, "[+*]"), str_trim)
+  fm.elements <- strsplit(x = fm.str, split = '~', fixed = )[[1]]
+  fm.elements <- lapply(strsplit(x = fm.elements, split = '[+*]'), trimws)
 
   # sanity check:
   if(length(fm.elements) != 2) {

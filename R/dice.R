@@ -65,9 +65,9 @@ setGeneric("dice", function(x,
     }
     
     # extract components of the formula:
-    fm <- stringr::str_c(deparse(fm, 500), collapse = "")
-    elements <- stringr::str_split(fm, stringr::fixed("~"))[[1]]
-    fm <- lapply(stringr::str_split(elements, "[+*]"), str_trim)
+    fm <- paste(deparse(fm, 500), collapse = '')
+    elements <- strsplit(x = fm, split = '~', fixed = )[[1]]
+    fm <- lapply(strsplit(x = elements, split = '[+*]'), trimws)
     
     # test for a multi-part formula A ~ B ~ C ?
     if (length(fm) > 2) {

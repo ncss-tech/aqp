@@ -8,7 +8,7 @@ Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), e
 Author: Dylan Beaudette [aut, cre], Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb]
 Maintainer: Dylan Beaudette <dylan.beaudette@usda.gov>
 Depends: R (>= 4.1.0)
-Imports: grDevices, graphics, stats, utils, methods, grid, lattice, cluster, stringr, data.table, farver, digest, colorspace, ape
+Imports: grDevices, graphics, stats, utils, methods, grid, lattice, cluster, data.table, farver, digest, colorspace, ape
 Suggests: 
     mvtnorm,
     soilDB,

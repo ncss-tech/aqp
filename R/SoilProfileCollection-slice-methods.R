@@ -123,9 +123,9 @@ slice.fast <- function(object, fm, top.down=TRUE, just.the.data=FALSE, strict=TR
 
 
   # extract components of the formula:
-  formula <- stringr::str_c(deparse(fm, 500), collapse="")
-  elements <- stringr::str_split(formula, stringr::fixed("~"))[[1]]
-  formula <- lapply(stringr::str_split(elements, "[+*]"), str_trim)
+  formula <- paste(deparse(fm, 500), collapse = "")
+  elements <- strsplit(x = fm, split = '~', fixed = )[[1]]
+  formula <- lapply(strsplit(x = elements, split = '[+*]'), trimws)
 
   # TODO: this will have to be changed when we implement no LHS = all slices
   if (length(formula) > 2)
