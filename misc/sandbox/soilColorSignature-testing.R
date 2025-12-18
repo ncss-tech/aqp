@@ -96,9 +96,54 @@ par(mar=c(0,0,1,1))
 plotProfileDendrogram(s, dd, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 210)
 
 
+##
+## nMDS is a better way to view distances
+##
+library(MASS)
+
+d <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
+mds <- sammon(d)
+
+par(mar = c(1, 1, 1, 1), xpd = NA)
+plot(mds$points, type = 'n', axes = FALSE)
+abline(h = 0, v = 0, lty = 3)
+text(mds$points[, 1], mds$points[, 2], labels = row.names(mds$points), cex = 0.8, font = 2)
 
 
-s## 
+# re-scale nMDS axis 1 to the typical horizontal scale used by plotSPC 
+xoff <- aqp:::.rescaleRange(mds$points[, 1], x0 = 1, x1 = length(s))
+
+# adjust to reduce overlap
+# with an expansion of the x-axis out to length(s) + 5
+set.seed(10110)
+xoff.fixed <- fixOverlap(xoff, thresh = 0.4, min.x = 1, max.x = length(s) + 5, method = 'S')
+
+# re-scale nMDS axis 2 to the typical vertical scale used by plotSPC  
+yoff <- aqp:::.rescaleRange(mds$points[, 2], x0 = -10, x1 = max(s))
+
+par(mar = c(0.25, 0.25, 0.25, 0.25))
+
+plotSPC(s, y.offset = yoff, relative.pos = xoff.fixed, width = 0.25, name = NA, scaling.factor = 0.5, shrink = TRUE, divide.hz = FALSE)
+
+box()
+
+
+
+## TODO: interpret MDS axes
+#   MDS1 ~ lightness
+#   MDS2 ~ redness
+
+set.seed(10110)
+pos <- alignTransect(yoff, x.min = 1, x.max = length(s) + 4, thresh = 0.7)
+
+par(mar = c(0.25, 0.25, 0.25, 0.25))
+
+plotSPC(s, n = length(s) + 4, y.offset = yoff[pos$order], plot.order = pos$order, relative.pos = pos$relative.pos, width = 0.25, name.style = 'center-center', scaling.factor = 0.8, shrink = TRUE)
+
+
+
+
+############## 
 
 k <- 3
 pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', pam.k = 3)
