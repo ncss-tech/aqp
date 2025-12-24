@@ -1,4 +1,5 @@
 # aqp 2.3 (2025-12-24)
+ * CRAN release
  * aqp now requires R >= 4.1
  * new function `mu_confusion_matrix()` (@smroecker)
  * updated CIELAB and sRGB color coordinates for Munsell neutral chips, based on direct measurement (#332)
