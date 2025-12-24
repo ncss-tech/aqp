@@ -2,6 +2,7 @@
 
 ## aqp 2.3 (2025-12-24)
 
+- CRAN release
 - aqp now requires R \>= 4.1
 - new function
   [`mu_confusion_matrix()`](https://ncss-tech.github.io/aqp/reference/mu_confusion_matrix.md)
