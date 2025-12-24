@@ -10,30 +10,10 @@ s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford'
 # get these soil series
 s <- fetchOSD(s.list)
 
-# manually convert Munsell -> sRGB
-rgb.data <- munsell2rgb(s$hue, s$value, s$chroma, return_triplets = TRUE)
-s$r <- rgb.data$r
-s$g <- rgb.data$g
-s$b <- rgb.data$b
-
+# color signature -> perceptual distance matrix
 k <- 4
-pig <- soilColorSignature(s, RescaleLightnessBy = 5, method = 'pam', pam.k = k)
+d <- soilColorSignature(s, color = 'soil_color', method = 'pam', pam.k = k, perceptualDistMat = TRUE)
 
-# iterate over clusters, result is a distance matrix (delta-E00)
-delta.E00 <- lapply(1:k, function(i) {
-  # LAB coordinates are named by cluster 1:k
-  v.names <- paste(c('L', 'A', 'B'), i, sep = '.')
-  # delta-E00
-  d.i <- farver::compare_colour(pig[, v.names], from_space='lab', white_from = 'D65', method='cie2000')
-  # copy over SPC ids
-  dimnames(d.i) <- list(pig[, 1], pig[, 1])
-  # convert to dist object
-  d.i <- as.dist(t(d.i))
-  return(d.i)
-})
-
-# sum distance matrices
-d <- Reduce('+', delta.E00)
 # divisive clustering
 dd <- diana(d)
 
@@ -43,13 +23,13 @@ s$color.group <- factor(cutree(dd, 3))
 
 
 ## map distance matrix to 2D space via principal coordinates
-d.betadisper <- betadisper(d, group=s$color.group, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
+d.betadisper <- betadisper(d, group = s$color.group, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
 
 p <- plot(d.betadisper)
 ordilabel(p)
 
 anova(d.betadisper)
-boxplot(d.betadisper)
+boxplot(d.betadisper, las = 1)
 
 plot(TukeyHSD(d.betadisper))
 
@@ -61,20 +41,20 @@ cols <- brewer.pal(9, 'Set1')
 cols <- cols[c(1:5,7,9)]
 
 
-par(mar=c(0,0,1,1))
+par(mar = c(0, 0, 1, 1))
 
-plotProfileDendrogram(s, dd, dend.y.scale = max(d) * 2, scaling.factor = 0.45, y.offset = 6, width=0.33, cex.names=0.45, name.style='left-center')
+plotProfileDendrogram(s, dd, width = 0.33, cex.names = 0.45, name.style = 'left-center', max.depth = 250)
 
-ape::tiplabels(s$color.group, bg = NA, frame = 'none', offset = 2, font=2, cex=0.85)
+ape::tiplabels(s$color.group, bg = NA, frame = 'none', offset = 4, font = 2, cex = 0.66)
 
 
-par(mar=c(1,1,3,1))
+par(mar = c(1, 1, 3, 1))
 
 p <- plot(
-  d.betadisper, hull=FALSE, ellipse=TRUE, conf=0.9,
-  col=cols, main='Soil Color Groups\n90% Probability Ellipse', sub='MLRA 15, 18, 22A, 22B'
+  d.betadisper, hull = FALSE, ellipse = TRUE, conf = 0.9,
+  col = cols, main = 'Soil Color Groups\n90% Probability Ellipse'
 )
-ordilabel(p, labels = site(s)$id, cex=0.75)
+ordilabel(p, labels = site(s)$id, cex = 0.75)
 
 
 
@@ -82,7 +62,7 @@ ordilabel(p, labels = site(s)$id, cex=0.75)
 ## better example, using surface soil color for several soil series
 
 
-x <- fetchKSSL(series=c('holland', 'drummer'), returnMorphologicData = TRUE, simplifyColors = TRUE)
+x <- fetchKSSL(series = c('holland', 'drummer'), returnMorphologicData = TRUE, simplifyColors = TRUE)
 
 s <- x$SPC
 s$taxonname <- toupper(s$taxonname)
@@ -98,6 +78,7 @@ groupedProfilePlot(z, groups = 'taxonname', color = 'moist_soil_color', name = N
 h <- as(z, 'data.frame')
 h <- na.omit(h[, c('pedon_key', 'taxonname', 'm_r', 'm_g', 'm_b')])
 
+# output is transpose of expected
 d <- farver::compare_colour(h[, c('m_r', 'm_g', 'm_b')], from_space = 'rgb', white_from = 'D65', method='cie2000')
 
 # copy over SPC ids
@@ -107,7 +88,7 @@ d <- as.dist(t(d))
 
 
 ## map distance matrix to 2D space via principal coordinates
-d.betadisper <- betadisper(d, group = h$taxonname, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
+d.betadisper <- betadisper(d, group = h$taxonname, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
 
 p <- plot(
   d.betadisper, hull = FALSE, ellipse = TRUE, conf = 0.9,
@@ -184,6 +165,6 @@ p <- ordiplot(mds, type='none', axes=FALSE, xlab='', ylab='')
 points(p, 'sites', col=cc$data$color, pch=15)
 ordisurf(p, cc$data$dE00, add=TRUE, col='black')
 
-## how can you highlight the orignial color
+## how can you highlight the original color
 
 
