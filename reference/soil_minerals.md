@@ -80,33 +80,18 @@ soil_minerals$col <- munsell2rgb(
 n <- ceiling(sqrt(nrow(soil_minerals)))
 
 # read from top-left to bottom-right
-g <- expand.grid(x=1:n, y=n:1)[1:nrow(soil_minerals),]
+g <- expand.grid(x = 1:n, y = n:1)[1:nrow(soil_minerals),]
 
-# convert Munsell -> sRGB -> LAB
-col.rgb <- munsell2rgb(
-  soil_minerals$hue,
-  soil_minerals$value,
-  soil_minerals$chroma,
-  return_triplets = TRUE
-)
-
-# sRGB values expected to be in the range [0,255]
-col.rgb <- col.rgb * 255
-
-# convert from sRGB -> CIE LAB
-col.lab <- convert_colour(
-  col.rgb , from = 'rgb',
-  to = 'lab', white_from = 'D65'
-)
+# convert Munsell -> CIELAB
+col.lab <- parseMunsell(soil_minerals$color, returnLAB = TRUE)
 
 # keep track of soil mineral names
 # in a way that will persist in a dist obj
 row.names(col.lab) <- soil_minerals$mineral
 
-# perceptual distance via CIE dE00
+# pair-wise perceptual distances via CIE dE00
 d <- compare_colour(
   from = col.lab,
-  to = col.lab,
   from_space = 'lab',
   to_space = 'lab',
   white_from = 'D65',
@@ -114,7 +99,9 @@ d <- compare_colour(
 )
 
 # matrix -> dist
-d <- as.dist(d)
+# note transpose, 
+# required when specifying only `from` to compare_colour()
+d <- as.dist(t(d))
 
 # divisive hierarchical clustering of LAB coordinates
 h <- as.hclust(diana(d))

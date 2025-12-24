@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3 (2025-12-18)
+## aqp 2.3 (2025-12-24)
 
 - aqp now requires R \>= 4.1
 - new function
