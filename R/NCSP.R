@@ -53,6 +53,7 @@
     
     ## TODO: verify result when NA are present in data matrix
     # result is the full form of a distance matrix
+    # requesting the full matrix form is slower
     d <- farver::compare_colour(
       from = m, 
       to = m, 

@@ -162,8 +162,16 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', k = NULL, pr
       )
       
       # compute perceptually based distance matrix on unique colors
-      dE00 <- farver::compare_colour(v, v, from_space = 'lab', method = 'CIE2000', white_from = 'D65')
-      dE00 <- as.dist(dE00)
+      # output is transposed relative to `dist` object
+      dE00 <- farver::compare_colour(
+        from = v, 
+        from_space = 'lab', 
+        method = 'CIE2000', 
+        white_from = 'D65'
+      )
+      
+      # note transpose
+      dE00 <- as.dist(t(dE00))
       
       # clustering from distance matrix
       # TODO: save clustering results for later

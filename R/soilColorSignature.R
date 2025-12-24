@@ -21,17 +21,18 @@
     v.names <- paste(c('L', 'A', 'B'), i, sep = '.')
     
     # pair-wise delta-E00
+    # IDs are preserved via row.names in pig
+    # more efficient than compare_colour(x, x, ...)
+    # output is transposed relative to `dist` object
     d.i <- farver::compare_colour(
-      pig[, v.names], 
       pig[, v.names], 
       from_space = 'lab', 
       white_from = 'D65', 
       method = 'cie2000'
     )
     
-    # retain IDs and convert to dist object
-    dimnames(d.i) <- list(.ids, .ids)
-    d.i <- as.dist(d.i)
+    # convert to dist object, note transpose
+    d.i <- as.dist(t(d.i))
     
     return(d.i)
   })
@@ -77,8 +78,18 @@
   }
   
   # compute perceptually based distance matrix on sliced colors, CIELAB
-  dE00 <- farver::compare_colour(x.slices[, -1], x.slices[, -1], from_space = 'lab', method = 'CIE2000', white_from = 'D65')
-  dE00 <- as.dist(dE00)
+  # IDs are preserved via row.names in pig
+  # more efficient than compare_colour(x, x, ...)
+  # output is transposed relative to `dist` object
+  dE00 <- farver::compare_colour(
+    x.slices[, -1], 
+    from_space = 'lab',
+    method = 'CIE2000', 
+    white_from = 'D65'
+  )
+  
+  # convert to dist object, note transpose
+  dE00 <- as.dist(t(dE00))
   
   # use PAM to cluster, note `pamonce = 5` used for optimization
   cl <- cluster::pam(dE00, k = k, diss = TRUE, pamonce = 5)

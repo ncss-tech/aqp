@@ -113,7 +113,7 @@ colorContrast <- function(m1, m2 = NULL) {
   m2.pieces[[2]] <- as.numeric(m2.pieces[[2]])
   m2.pieces[[3]] <- as.numeric(m2.pieces[[3]])
   
-  ## TODO: contrast with neutral hues are currently undefined
+  ## TODO: contrast with neutral hues are currently undefined in TN 2
   ## TODO: incorporate new huePosition features for locating angular proximity CW or CCW
   ## TODO: add a notes / flag field in the results
   

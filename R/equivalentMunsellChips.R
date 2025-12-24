@@ -67,7 +67,13 @@
   # xdat <- x
 
   # TODO: ... some unholy indexry I cant quite figure out; the stats are right but order is wrong
+  
+  # indexing strategy:
+  # x <- as.dist(t(x))
+  # x <- as.matrix(x)
 
+  
+  
   # this one that takes 2x as long to built the LUT, and is 2x as big in memory
   # user  system elapsed 
   # 190.73    0.73  194.42
