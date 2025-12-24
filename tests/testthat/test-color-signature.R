@@ -115,8 +115,8 @@ test_that("perceptualDistMat = TRUE", {
   # expected output
   expect_true(inherits(d, 'dist'))
   
-  # all profiles IDs should be present
-  expect_equal(length(setdiff(dimnames(d), profile_id(sp1))), 0)
+  # all profiles IDs should be present and in the same order
+  expect_equal(attr(d, 'Labels'), profile_id(sp1))
   
 })
 
