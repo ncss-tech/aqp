@@ -107,7 +107,7 @@ mds <- sammon(d)
 par(mar = c(1, 1, 1, 1), xpd = NA)
 plot(mds$points, type = 'n', axes = FALSE)
 abline(h = 0, v = 0, lty = 3)
-text(mds$points[, 1], mds$points[, 2], labels = row.names(mds$points), cex = 0.8, font = 2)
+text(mds$points[, 1], mds$points[, 2], labels = row.names(mds$points), cex = 0.8, font = 2, xlab = '', ylab = '')
 
 
 # re-scale nMDS axis 1 to the typical horizontal scale used by plotSPC 
