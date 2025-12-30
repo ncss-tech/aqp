@@ -4,7 +4,7 @@ test_that("basic slab functionality", {
   
   data(sp1, package = 'aqp')
   depths(sp1) <- id ~ top + bottom
- 
+  
   # aggregate entire collection
   # 1-unit slabs
   a.1 <- slab(sp1, fm = ~ prop, strict=TRUE)
@@ -80,11 +80,11 @@ test_that("extended slab functionality: weighted aggregation", {
   
   # custom function, with actual comppct_r
   a.0 <- slab(x, ~ ph1to1h2o_r,
-      slab.structure = c(0, 10),
-      weights = "comppct_r",
-      slab.fun = weighted.mean,
-      na.rm = TRUE
-    )
+              slab.structure = c(0, 10),
+              weights = "comppct_r",
+              slab.fun = weighted.mean,
+              na.rm = TRUE
+  )
   expect_equal(a.0$value, 6.54, tolerance = 0.005) 
   
   skip_if_not_installed("Hmisc")
@@ -110,7 +110,7 @@ test_that("extended slab functionality: weighted aggregation", {
   #   soilDB::get_SDA_property(property = 'ph1to1h2o_r', method = "weighted average",
   #                            mukeys = 461268, miscellaneous_areas = FALSE, include_minors = TRUE,
   #                            top_depth = 0, bottom_depth = 10)
-                                  
+  
   # comppct_r adjusted to get higher result more like doemill
   x$comppct_r <- c(90, 10)
   a.1 <- slab(x, ~ ph1to1h2o_r, slab.structure = c(0, 10), weights = "comppct_r")
@@ -139,13 +139,13 @@ test_that("slab calculations: mean, single profile", {
   # aggregate single profile
   # custom slabs
   a <- slab(
-      sp1[1,],
-      fm = ~ prop,
-      strict = TRUE,
-      slab.structure = c(0, 5, 10, 25, 100),
-      slab.fun = mean,
-      na.rm = TRUE
-    )
+    sp1[1,],
+    fm = ~ prop,
+    strict = TRUE,
+    slab.structure = c(0, 5, 10, 25, 100),
+    slab.fun = mean,
+    na.rm = TRUE
+  )
   
   # using mean and similar functions will cause slab to store single result / slab into 'value' column
   expect_true(any(grepl('value', names(a))))
@@ -191,6 +191,38 @@ test_that("slab calculations: mean, several profiles", {
   
 })
 
+
+test_that("edge case: slab.structure[2] >= slab.structure[1]", {
+  
+  data(sp1, package = 'aqp')
+  depths(sp1) <- id ~ top + bottom
+  
+  # top == bottom
+  expect_error(
+    slab(
+      sp1, 
+      fm = ~ prop, 
+      strict = TRUE, 
+      slab.structure = c(20, 20), 
+      slab.fun = mean, 
+      na.rm = TRUE
+    ), regexp = 'invalid slab structure'
+  )
+  
+  # top > bottom
+  expect_error(
+    slab(
+      sp1, 
+      fm = ~ prop, 
+      strict = TRUE, 
+      slab.structure = c(30, 20), 
+      slab.fun = mean, 
+      na.rm = TRUE
+    ), regexp = 'invalid slab structure'
+  )
+  
+  
+})
 
 test_that("edge case: slab.structure[2] > max(x)", {
   

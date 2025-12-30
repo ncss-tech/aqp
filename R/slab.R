@@ -120,6 +120,12 @@
 	
 	# make formula for slicing
 	if (length(slab.structure) == 2) {
+	  
+	  # ensure that top < bottom
+	  if(slab.structure[1] >= slab.structure[2]) {
+	    stop('invalid slab structure', call. = FALSE)
+	  }
+	  
   	# user-defined single slab
 	  fm.slice <- formula(paste(slab.structure[1], ':', slab.structure[2], ' ~ ', paste(vars, collapse = ' + '), sep = ''))
 	} else {
