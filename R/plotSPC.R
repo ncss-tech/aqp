@@ -1421,6 +1421,10 @@ plotSPC <- function(
           fixOverlapArgs[['x']] <- .pos
           fixOverlapArgs[['thresh']] <- y.thresh
           
+          ## TODO: increase top / bottom q-values
+          # https://github.com/ncss-tech/aqp/issues/293
+          
+          
           # find / fix overlap using electrostatic simulation
           # this includes top/bottom anchor points
           hzd.txt.y.fixed <- suppressMessages(
