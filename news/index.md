@@ -30,6 +30,8 @@
   [`.detectColorSpec()`](https://ncss-tech.github.io/aqp/reference/dot-detectColorSpec.md)
 - stringr package removed from imports
   ([\#331](https://github.com/ncss-tech/aqp/issues/331))
+- [`electroStatics_1D()`](https://ncss-tech.github.io/aqp/reference/electroStatics_1D.md)
+  can now use varying charge when `q` is a vector of length \> 1
 
 ## aqp 2.2-1 (2025-09-16)
 
