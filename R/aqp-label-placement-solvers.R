@@ -126,20 +126,93 @@ overlapMetrics <- function(x, thresh) {
 #' 
 #' @examples 
 #' 
-#' aqp:::.electricForce(Q1 = 1, Q2 = 1, Qk = 0.5, d = 5)
+#' ## d is vector
+#' # 0.4
+#' aqp:::.electricForce(Q1 = 1, Q2 = 1, Qk = 0.5, d = 1)
+#' 
+#' # 0.4, 0.118
+#' aqp:::.electricForce(Q1 = 1, Q2 = 1, Qk = 0.5, d = c(1, 2))
+#' 
+#' ## varying charge
+#' # 0.2, 0.0588
+#' aqp:::.electricForce(Q1 = 1, Q2 = 0.5, Qk = 0.5, d = c(1, 2))
 #'
+#'
+#' # d is a square matrix of pair-wise displacement
+#' m <- matrix(
+#' c(NA, 1, 1, 
+#' 1, NA, 1,
+#' 1, 1, NA), 
+#' nrow = 3, byrow = TRUE,
+#' )
+#' 
+#' # constant charge
+#' aqp:::.electricForce(Q1 = 1, Q2 = 1, Qk = 0.5, d = m)
+#' 
+#' # varying charge
+#' aqp:::.electricForce(Q1 = c(1, 1, 2), Q2 = c(1, 1, 2), Qk = 0.5, d = m)
+#'
+#' @param Q1 numeric vector of point charges (length of 1, `length(d)`, or `ncol(d)`)
+#' @param Q2 numeric vector of point charges (length of 1, `length(d)`, or `ncol(d)`)
+#' @param Qk numeric scalar, charge constant
+#' @param d numeric vector of length >=1, or numeric, square matrix of displacement values
 .electricForce <- function(Q1, Q2, Qk, d, tiny = 0.0001, ex = 2, const = 0.25) {
+  
+  
+  # sanity checks
+  if(length(Q1) != length(Q2)) {
+    stop('charge vectors must be of the same length', call. = FALSE)
+  }
+  
+  if(is.matrix(d)) {
+    
+    if(length(Q1) > 1 & (ncol(d) != length(Q1))) {
+      stop('charge vectors must be of length ncol(d)', call. = FALSE)
+    }
+    
+    if(ncol(d) != nrow(d)) {
+      stop('displacement matrix must be square', call. = FALSE)
+    }
+  }
+  
   
   # fix for 0-distance where force is infinite
   d <- ifelse(d < tiny, tiny, d)
   
   # traditional definition of electrostatic force
-  # (Qk * Q1 * Q2) / (d^ex + const)
+  # (Qk * Q1 * Q2) / d^2
   
   # modified version, c/o K.C. Thompson
   # increase const --> dampen chaotic oscillation during simulation 
   # "softening" in N-body simulation
-  res <- (Qk * Q1 * Q2 ) / (d^ex + const)
+  # (Qk * Q1 * Q2) / (d^ex + const)
+  
+  
+  # when d is a numeric vector, use simple calculation
+  if(is.vector(d)) {
+    res <- (Qk * Q1 * Q2 ) / (d^ex + const)
+    return(res)
+  }
+  
+  # generalize to 
+  #  * Q1 and Q2 as scalars or vectors
+  #  * d is a square matrix of pair-wise displacement
+  
+  # factor out point charges
+  res.1 <- (Qk) / (d^ex + const)
+  
+  # sweep product of point charges across lower triangle
+  res.2 <- sweep(res.1, MARGIN = 1, STATS = Q1 * Q2, FUN = '*')
+  
+  # sweep product of point charges across upper triangle
+  res.3 <- sweep(res.1, MARGIN = 2, STATS = Q1 * Q2, FUN = '*')
+  
+  # init new result matrix, diagonals are NA
+  res <- res.1
+  
+  # transfer lower and upper triangles
+  res[lower.tri(res, diag = FALSE)] <- res.2[lower.tri(res.2, diag = FALSE)]
+  res[upper.tri(res, diag = FALSE)] <- res.3[upper.tri(res.3, diag = FALSE)]
   
   return(res)
 }
@@ -264,7 +337,9 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   
   # exponential decay schedule for particle charge
   # from t = 1 -> maxIter
-  .q <- q * exp(-1 * chargeDecayRate * 1:maxIter)
+  # q can be either scalar or vector of length x.n
+  # safely compute product by elements of q
+  qe <- outer(q, exp(-1 * chargeDecayRate * 1:maxIter), FUN = '*')
   
   # simulation
   for(i in 1:maxIter) {
@@ -297,8 +372,11 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     # remove distance to self
     diag(m) <- NA
     
+    
     ## TODO: consider given higher charge density to left/right anchors
     ## https://github.com/ncss-tech/aqp/issues/293
+    ## 2025-12-30: now possible with q specified as a vector
+    
     # repelling forces (same charge) between all particles
     .F <- .electricForce(Q1 = q, Q2 = q, Qk = .Qk, d = m, tiny = tiny, const = const)
     
@@ -355,8 +433,10 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
     # update locations
     x <- xnew[[i]]
     
-    # exponential decay of all charges with each iteration
-    q <- .q[i]
+    # apply exponential decay of all charges with each iteration
+    # iterations are stored as columns
+    # individual charges, or single charge as rows
+    q <- qe[, i]
     
     # compute overlap metrics at threshold, after displacement
     .om <- overlapMetrics(x, thresh = thresh)
@@ -380,8 +460,8 @@ electroStatics_1D <- function(x, thresh, q = 1, chargeDecayRate = 0.01, QkA_Grow
   ## TODO: optionally re-run with lower / higher q
   
   # check for convergence
-  # 1. no overlap
-  # 2. no change in rank order
+  # 1. no change in rank order
+  # 2. no overlap
   .converged <- all(rank(xnew[nrow(xnew), ]) == rank(x.orig) & length(.om$idx) < 1)
   
   if(trace) {

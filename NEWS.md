@@ -12,6 +12,7 @@
   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
  * new internal function for detecting a color specification `.detectColorSpec()`
  * stringr package removed from imports (#331)
+ * `electroStatics_1D()` can now use varying charge when `q` is a vector of length > 1
 
 # aqp 2.2-1 (2025-09-16)
  * CRAN release

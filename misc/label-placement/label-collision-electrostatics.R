@@ -11,11 +11,11 @@ devtools::load_all()
 
 ## 
 x <- c(0, 5, 12, 18, 20, 35, 40, 55, 90, 120, 150)
-.thresh <- 9
+.thresh <- 6
 
 
 z.s <- fixOverlap(x, thresh = .thresh, method = 'S')
-z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 1)
+z.e <- fixOverlap(x, thresh = .thresh, method = 'E', q = 1.1, maxIter = 250)
 
 s <- rep(1, times = length(x))
 r <- rank(x)
