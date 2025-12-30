@@ -11,6 +11,8 @@
 
 - **Stephen Roecker**. Author, contributor.
 
+- **David Rossiter**. Contributor.
+
 ## Citation
 
 Source:

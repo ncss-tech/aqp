@@ -3,6 +3,51 @@
 Aggregate soil properties along user-defined `slabs`, and optionally
 within groups.
 
+Multiple continuous variables OR a single categorical (factor) variable
+can be aggregated within a call to `slab()`. Basic error checking is
+performed to make sure that top and bottom horizon boundaries make
+sense. User-defined aggregate functions (`slab.fun`) should return a
+named vector of results. A new, named column will appear in the results
+of `slab()` for every named element of a vector returned by `slab.fun`.
+See examples below for a simple example of a slab function that computes
+mean, mean +/- 1 standard deviation. The default slab function wraps
+[`stats::quantile()`](https://rdrr.io/r/stats/quantile.html). Note that
+if `group` is a factor it must not contain NAs.
+
+`slab()` uses
+[`dice()`](https://ncss-tech.github.io/aqp/reference/dice-SoilProfileCollection-method.md)
+to "resample" profiles to 1cm slices from depth 0 to `max(x)` (or
+`slab.structure[2]`, if defined).
+
+Sometimes `slab()` is used to conveniently re-arrange data vs.
+aggregate. This is performed by specifying `identity` in `slab.fun`. See
+examples below for a demonstration of this functionality.
+
+The default `slab.fun` was changed 2019-10-30 from a wrapper around
+[`Hmisc::hdquantile()`](https://rdrr.io/pkg/Hmisc/man/hdquantile.html)
+to a wrapper around
+[`stats::quantile()`](https://rdrr.io/r/stats/quantile.html). See
+examples below for a simple way to switch to the HD quantile estimator.
+
+Execution time scales linearly (slower) with the total number of
+profiles in `object`, and exponentially (faster) as the number of
+profiles / group is increased. `slab()` and
+[`dice()`](https://ncss-tech.github.io/aqp/reference/dice-SoilProfileCollection-method.md)
+are much faster and require less memory if input data are either numeric
+or character.
+
+There are several possible ways to define slabs, using `slab.structure`:
+
+- a single integer, e.g. 10: data are aggregated over a regular sequence
+  of 10-unit thickness slabs
+
+- a vector of 2 integers, e.g. c(50, 60): data are aggregated over
+  depths spanning 50-60 depth units
+
+- a vector of 3 or more integers, e.g. c(0, 5, 10, 50, 100): data are
+  aggregated over the depths spanning 0-5, 5-10, 10-50, 50-100 depth
+  units
+
 ## Usage
 
 ``` r
@@ -39,8 +84,7 @@ slab_function(
 
 - slab.structure:
 
-  A user-defined slab thickness (defined by an integer), or user-defined
-  structure (numeric vector). See details below.
+  integer vector: user-defined slab structure. See Details.
 
 - strict:
 
@@ -62,10 +106,13 @@ slab_function(
 - cpm:
 
   Strategy for normalizing slice-wise probabilities, dividing by either:
-  number of profiles with data at the current slice (`cpm=1`), or by the
-  number of profiles in the collection (cpm=2). Mode 1 values will
-  always sum to the contributing fraction, while mode 2 values will
-  always sum to 1.
+
+  - number of profiles with data at the current slice (`cpm = 1`), or
+
+  - by the number of profiles in the collection (`cpm = 2`).
+
+  Mode 1 values will always sum to the contributing fraction, while mode
+  2 values will always sum to 1.
 
 - weights:
 
@@ -88,139 +135,53 @@ variable described in the `fm` argument, and depth-wise 'slab'.
 
 Aggregation of numeric variables, using the default slab function:
 
-- variable:
+- variable: The names of variables included in `fm`
 
-  The names of variables included in the call to `slab`.
+- groupname: The name of the grouping variable when provided, otherwise
+  a fake grouping variable named 'all.profiles'.
 
-- groupname:
+- p.q5: The slice-wise 5th percentile.
 
-  The name of the grouping variable when provided, otherwise a fake
-  grouping variable named 'all.profiles'.
+- p.q25: The slice-wise 25th percentile
 
-- p.q5:
+- p.q50: The slice-wise 50th percentile (median)
 
-  The slice-wise 5th percentile.
+- p.q75: The slice-wise 75th percentile
 
-- p.q25:
+- p.q95: The slice-wise 95th percentile
 
-  The slice-wise 25th percentile
+- top: The slab top boundary
 
-- p.q50:
+- bottom The slab bottom boundary.
 
-  The slice-wise 50th percentile (median)
-
-- p.q75:
-
-  The slice-wise 75th percentile
-
-- p.q95:
-
-  The slice-wise 95th percentile
-
-- top:
-
-  The slab top boundary.
-
-- bottom:
-
-  The slab bottom boundary.
-
-- contributing_fraction:
-
-  The fraction of profiles contributing to the aggregate value, ranges
-  from 1/n_profiles to 1.
+- contributing_fraction: The fraction of profiles contributing to the
+  aggregate value, ranges from 1/n_profiles to 1
 
 When a single factor variable is used, slice-wise probabilities for each
 level of that factor are returned as:
 
-- variable:
+- variable: The names of factor variable included in `fm`
 
-  The names of variables included in the call to `slab`.
+- groupname: The name of the grouping variable when provided, otherwise
+  a fake grouping variable named 'all.profiles'
 
-- groupname:
+- A: The slice-wise probability of level A
 
-  The name of the grouping variable when provided, otherwise a fake
-  grouping variable named 'all.profiles'.
+- B: The slice-wise probability of level B
 
-- A:
+- n: The slice-wise probability of level n
 
-  The slice-wise probability of level A
+- top: The slab top boundary.
 
-- B:
+- bottom: The slab bottom boundary
 
-  The slice-wise probability of level B
-
-- list():
-
-- n:
-
-  The slice-wise probability of level n
-
-- top:
-
-  The slab top boundary.
-
-- bottom:
-
-  The slab bottom boundary.
-
-- contributing_fraction:
-
-  The fraction of profiles contributing to the aggregate value, ranges
-  from 1/n_profiles to 1.
+- contributing_fraction: The fraction of profiles contributing to the
+  aggregate value, ranges from 1/n_profiles to 1
 
 `slab_function()`: return an aggregation function based on the `method`
 argument
 
 ## Details
-
-Multiple continuous variables OR a single categorical (factor) variable
-can be aggregated within a call to `slab`. Basic error checking is
-performed to make sure that top and bottom horizon boundaries make
-sense. User-defined aggregate functions (`slab.fun`) should return a
-named vector of results. A new, named column will appear in the results
-of `slab` for every named element of a vector returned by `slab.fun`.
-See examples below for a simple example of a slab function that computes
-mean, mean-1SD and mean+1SD. The default slab function wraps
-[`stats::quantile`](https://rdrr.io/r/stats/quantile.html) from the
-Hmisc package, which requires at least 2 observations per chunk. Note
-that if `group` is a factor it must not contain NAs.
-
-`slab()` uses
-[`dice()`](https://ncss-tech.github.io/aqp/reference/dice-SoilProfileCollection-method.md)
-to "resample" profiles to 1cm slices from depth 0 to `max(x)` (or
-`slab.structure[2]`, if defined).
-
-Sometimes `slab` is used to conveniently re-arrange data vs. aggregate.
-This is performed by specifying `identity` in `slab.fun`. See examples
-beflow for a demonstration of this functionality.
-
-The default `slab.fun` was changed 2019-10-30 from a wrapper around
-[`Hmisc::hdquantile`](https://rdrr.io/pkg/Hmisc/man/hdquantile.html) to
-a wrapper around
-[`stats::quantile`](https://rdrr.io/r/stats/quantile.html). See examples
-below for a simple way to switch to the HD quantile estimator.
-
-Execution time scales linearly (slower) with the total number of
-profiles in `object`, and exponentially (faster) as the number of
-profiles / group is increased. `slab` and `slice` are much faster and
-require less memory if input data are either numeric or character.
-
-There are several possible ways to define slabs, using `slab.structure`:
-
-- a single integer:
-
-  e.g. 10: data are aggregated over a regular sequence of 10-unit
-  thickness slabs
-
-- a vector of 2 integers:
-
-  e.g. c(50, 60): data are aggregated over depths spanning 50–60 units
-
-- a vector of 3 or more integers:
-
-  e.g. c(0, 5, 10, 50, 100): data are aggregated over the depths
-  spanning 0–5, 5–10, 10–50, 50–100 units
 
 `slab_function()`: The default `"numeric"` aggregation method is the
 `"fast"` numeric (quantile) method. Additional methods include
@@ -230,11 +191,12 @@ Distribution-Free Quantile Estimator from the Hmisc package, and
 
 ## Note
 
-Arguments to `slab` have changed with `aqp` 1.5 (2012-12-29) as part of
+Arguments to `slab()` have changed with aqp 1.5 (2012-12-29) as part of
 a code clean-up and optimization. Calculation of weighted-summaries was
-broken in `aqp` 1.2-6 (2012-06-26), and removed as of `aqp` 1.5
-(2012-12-29). `slab` replaced the previously defined
-`soil.slot.multiple` function as of `aqp` 0.98-8.58 (2011-12-21).
+broken in
+`aqp 1.2-6 (2012-06-26), and removed as of aqp 1.5 (2012-12-29). `slab()“
+replaced the previously defined `soil.slot.multiple` function as of aqp
+0.98-8.58 (2011-12-21).
 
 ## Methods
 
@@ -254,7 +216,7 @@ Biometrika 69:635-640.
 
 ## See also
 
-[`slice`](https://ncss-tech.github.io/aqp/reference/slice.md)`, `[`quantile`](https://rdrr.io/r/stats/quantile.html)
+[`dice()`](https://ncss-tech.github.io/aqp/reference/dice-SoilProfileCollection-method.md)
 
 ## Author
 
