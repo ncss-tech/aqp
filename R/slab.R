@@ -88,6 +88,10 @@
                   weights = NULL,
                   ...) {
 
+  # ***********
+  # setup -----
+  # ***********
+  
   # define keywords for data.table
   .SD <- NULL; .N <- NULL; value <- NULL
 
@@ -107,16 +111,45 @@
 	g <- all.vars(update(fm, . ~ 0)) # left-hand side
 	vars <- all.vars(update(fm, 0 ~ .)) # right-hand side
 	
-	# sanity check:
-	if (!inherits(fm, "formula"))
-	  stop('must provide a valid formula: groups ~ var1 + var2 + ...', call. = FALSE)
 	
+	# ******************
+	# sanity checks ----
+	# ******************
+	
+	# formula
+	if (!inherits(fm, "formula")) {
+	  stop('must provide a valid formula: groups ~ var1 + var2 + ...', call. = FALSE)
+	}
+	  
 	# check for bogus left/right side problems with the formula
-	if (length(g) > 0 && !any(g %in% object.names) && g != '.') # bogus grouping column
+	# bogus grouping column
+	if (length(g) > 0 && !any(g %in% object.names) && g != '.') {
 	  stop('group name either missing from formula, or does match any columns in data.frame', call. = FALSE)
-
-	if (any(vars %in% object.names) == FALSE) # bogus column names in right-hand side
+	}
+	  
+	# bogus column names in right-hand side
+	if (any(vars %in% object.names) == FALSE) {
 	  stop('column names in formula do not match column names in data.frame', call. = FALSE)
+	}
+	
+	# non-integer depths in slab.structure
+	if(any(round(slab.structure) != slab.structure)) {
+	  stop('slab.structure may only contain integer depths', call. = FALSE)
+	}
+	
+	
+	# change / reset options ----
+	
+	# prevent very large integers from using scientific notation
+	.op <- options(scipen = 10)
+	
+	# safely return to previous state
+	on.exit(options(.op))
+	
+	
+	# ******************************
+	# interpret slab.structure ----
+	# ******************************
 	
 	# make formula for slicing
 	if (length(slab.structure) == 2) {
@@ -300,107 +333,111 @@ setGeneric("slab", function(object,
                               ...)
     standardGeneric("slab"))
 
-#' Slab-Wise Aggregation of SoilProfileCollection Objects
+#' @title Slab-Wise Aggregation of SoilProfileCollection Objects
 #'
+#' @description
 #' Aggregate soil properties along user-defined `slabs`, and optionally within
 #' groups.
 #'
 #' Multiple continuous variables OR a single categorical (factor) variable can
-#' be aggregated within a call to \code{slab}. Basic error checking is
+#' be aggregated within a call to `slab()`. Basic error checking is
 #' performed to make sure that top and bottom horizon boundaries make sense.
-#' User-defined aggregate functions (\code{slab.fun}) should return a named
+#' User-defined aggregate functions (`slab.fun`) should return a named
 #' vector of results. A new, named column will appear in the results of
-#' \code{slab} for every named element of a vector returned by \code{slab.fun}.
+#' `slab()` for every named element of a vector returned by `slab.fun`.
 #' See examples below for a simple example of a slab function that computes
-#' mean, mean-1SD and mean+1SD. The default slab function wraps
-#' \code{stats::quantile} from the Hmisc package, which requires at least 2
-#' observations per chunk. Note that if `group` is a factor it must not contain
-#' NAs.
+#' mean, mean +/- 1 standard deviation. The default slab function wraps
+#' [stats::quantile()]. Note that if `group` is a factor it must not contain NAs.
 #' 
 #' `slab()` uses `dice()` to "resample" profiles to 1cm slices from depth 0 to `max(x)` (or `slab.structure[2]`, if defined).
 #'
-#' Sometimes \code{slab} is used to conveniently re-arrange data vs. aggregate.
-#' This is performed by specifying \code{identity} in \code{slab.fun}. See
-#' examples beflow for a demonstration of this functionality.
+#' Sometimes `slab()` is used to conveniently re-arrange data vs. aggregate.
+#' This is performed by specifying `identity` in `slab.fun`. See
+#' examples below for a demonstration of this functionality.
 #'
 #' The default \code{slab.fun} was changed 2019-10-30 from a wrapper around
-#' \code{Hmisc::hdquantile} to a wrapper around \code{stats::quantile}. See
+#' [Hmisc::hdquantile()] to a wrapper around [stats::quantile()]. See
 #' examples below for a simple way to switch to the HD quantile estimator.
 #'
 #' Execution time scales linearly (slower) with the total number of profiles in
-#' \code{object}, and exponentially (faster) as the number of profiles / group
-#' is increased. \code{slab} and \code{slice} are much faster and require less
+#' `object`, and exponentially (faster) as the number of profiles / group
+#' is increased. `slab()` and [dice()] are much faster and require less
 #' memory if input data are either numeric or character.
 #'
-#' There are several possible ways to define slabs, using
-#' \code{slab.structure}:
+#' There are several possible ways to define slabs, using `slab.structure`:
 #'
-#' \describe{ \item{a single integer}{e.g. 10: data are aggregated over a
-#' regular sequence of 10-unit thickness slabs} \item{a vector of 2
-#' integers}{e.g. c(50, 60): data are aggregated over depths spanning 50--60
-#' units} \item{a vector of 3 or more integers}{e.g. c(0, 5, 10, 50, 100): data
-#' are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
-#' }
-#'
+#'  * a single integer, e.g. 10: data are aggregated over a regular sequence of 10-unit thickness slabs
+#'  * a vector of 2 integers, e.g. c(50, 60): data are aggregated over depths spanning 50-60 depth units
+#'  * a vector of 3 or more integers, e.g. c(0, 5, 10, 50, 100): data are aggregated over the depths spanning 0-5, 5-10, 10-50, 50-100 depth units
+#'  
 #' @name slab
 #' @aliases slab slab,SoilProfileCollection-method
 #' @docType methods
+#' 
 #' @param object a SoilProfileCollection
+#' 
 #' @param fm A formula: either `groups ~ var1 + var2 + var3` where named
 #' variables are aggregated within `groups' OR where named variables are
 #' aggregated across the entire collection ` ~ var1 + var2 + var3`. If `groups`
 #' is a factor it must not contain `NA`
-#' @param slab.structure A user-defined slab thickness (defined by an integer),
-#' or user-defined structure (numeric vector). See details below.
-#' @param strict logical: should horizons be strictly checked for
-#' self-consistency?
+#' 
+#' @param slab.structure integer vector: user-defined slab structure. See Details.
+#' 
+#' @param strict logical: should horizons be strictly checked for self-consistency?
+#' 
 #' @param byhz logical: should horizons or whole profiles be removed by logic checks in `strict`? Default `TRUE` removes only offending horizons, `FALSE` removes whole profiles with one or more illogical horizons.
-#' @param slab.fun Function used to process each 'slab' of data, ideally
-#' returning a vector with names attribute. Defaults to a wrapper function
-#' around `stats::quantile()`. See details.
-#' @param cpm Strategy for normalizing slice-wise probabilities, dividing by
-#' either: number of profiles with data at the current slice (`cpm=1`), or by the
-#' number of profiles in the collection (cpm=2). Mode 1 values will always sum
-#' to the contributing fraction, while mode 2 values will always sum to 1.
+#' 
+#' @param slab.fun Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around [stats::quantile()]. See details.
+#' 
+#' @param cpm Strategy for normalizing slice-wise probabilities, dividing by either: 
+
+#'   * number of profiles with data at the current slice (`cpm = 1`), or 
+#'   * by the number of profiles in the collection (`cpm = 2`). 
+#'   
+#' Mode 1 values will always sum to the contributing fraction, while mode 2 values will always sum to 1.
+#' 
 #' @param weights Column name containing site-level weights
+#' 
 #' @param \dots further arguments passed to `slab.fun`
-#' @return Output is returned in long format, such that slice-wise aggregates
-#' are returned once for each combination of grouping level (optional),
-#' variable described in the `fm` argument, and depth-wise 'slab'.
+#' 
+#' @return Output is returned in long format, such that slice-wise aggregates are returned once for each combination of grouping level (optional), variable described in the `fm` argument, and depth-wise 'slab'.
 #'
 #' Aggregation of numeric variables, using the default slab function:
-#' \describe{ \item{variable}{The names of variables included in the call to
-#' \code{slab}.} \item{groupname}{The name of the grouping variable when
-#' provided, otherwise a fake grouping variable named 'all.profiles'.}
-#' \item{p.q5}{The slice-wise 5th percentile.} \item{p.q25}{The slice-wise 25th
-#' percentile} \item{p.q50}{The slice-wise 50th percentile (median)}
-#' \item{p.q75}{The slice-wise 75th percentile} \item{p.q95}{The slice-wise
-#' 95th percentile} \item{top}{The slab top boundary.} \item{bottom}{The slab
-#' bottom boundary.} \item{contributing_fraction}{The fraction of profiles
-#' contributing to the aggregate value, ranges from 1/n_profiles to 1.} }
+#' 
+#'   * variable: The names of variables included in `fm`
+#'   * groupname: The name of the grouping variable when provided, otherwise a fake grouping variable named 'all.profiles'.
+#'   * p.q5: The slice-wise 5th percentile.
+#'   * p.q25: The slice-wise 25th percentile
+#'   * p.q50: The slice-wise 50th percentile (median)
+#'   * p.q75: The slice-wise 75th percentile
+#'   * p.q95: The slice-wise 95th percentile
+#'   * top: The slab top boundary
+#'   * bottom The slab bottom boundary.
+#'   * contributing_fraction: The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1
 #'
 #' When a single factor variable is used, slice-wise probabilities for each
-#' level of that factor are returned as: \describe{ \item{variable}{The names
-#' of variables included in the call to \code{slab}.} \item{groupname}{The name
-#' of the grouping variable when provided, otherwise a fake grouping variable
-#' named 'all.profiles'.} \item{A}{The slice-wise probability of level A}
-#' \item{B}{The slice-wise probability of level B} \item{list()}{} \item{n}{The
-#' slice-wise probability of level n} \item{top}{The slab top boundary.}
-#' \item{bottom}{The slab bottom boundary.} \item{contributing_fraction}{The
-#' fraction of profiles contributing to the aggregate value, ranges from
-#' 1/n_profiles to 1.}
-#'
-#' }
-#' @note Arguments to \code{slab} have changed with \code{aqp} 1.5 (2012-12-29)
-#' as part of a code clean-up and optimization. Calculation of
-#' weighted-summaries was broken in \code{aqp} 1.2-6 (2012-06-26), and removed
-#' as of \code{aqp} 1.5 (2012-12-29).  \code{slab} replaced the previously
-#' defined \code{soil.slot.multiple} function as of \code{aqp} 0.98-8.58
-#' (2011-12-21).
+#' level of that factor are returned as: 
+#' 
+#'   * variable: The names of factor variable included in `fm`
+#'   * groupname: The name of the grouping variable when provided, otherwise a fake grouping variable named 'all.profiles'
+#'   * A: The slice-wise probability of level A
+#'   * B: The slice-wise probability of level B 
+#'   * n: The slice-wise probability of level n
+#'   * top: The slab top boundary.
+#'   * bottom: The slab bottom boundary
+#'   * contributing_fraction: The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1
+
+#' 
+#' @note Arguments to `slab()` have changed with aqp 1.5 (2012-12-29) as part of a code clean-up and optimization. Calculation of
+#' weighted-summaries was broken in `aqp 1.2-6 (2012-06-26), and removed as of aqp 1.5 (2012-12-29). `slab()`` replaced the previously defined `soil.slot.multiple` function as of aqp 0.98-8.58 (2011-12-21).
+#' 
 #' @section Methods: \describe{ \item{data = "SoilProfileCollection"}{Typical
 #' usage, where input is a \code{\link{SoilProfileCollection}}.} }
+#' 
 #' @author D.E. Beaudette
-#' @seealso \code{\link{slice}, \link{quantile}}
+#' 
+#' @seealso [dice()]
+#' 
 #' @references D.E. Beaudette, P. Roudier, A.T. O'Geen, Algorithms for
 #' quantitative pedology: A toolkit for soil scientists, Computers &
 #' Geosciences, Volume 52, March 2013, Pages 258-268,
@@ -408,6 +445,7 @@ setGeneric("slab", function(object,
 #'
 #' Harrell FE, Davis CE (1982): A new distribution-free quantile estimator.
 #' Biometrika 69:635-640.
+#' 
 #' @keywords methods manip
 #' @export
 #' @examples
@@ -742,6 +780,7 @@ setGeneric("slab", function(object,
 setMethod(f = 'slab',
           signature = 'SoilProfileCollection',
           definition = .slab)
+
 
 #' @param method one of `"numeric"`, `"factor"`, `"hd"`, `"weighted.numeric"`, `"weighted.factor"`, `"fast"`
 #' @details `slab_function()`: The default `"numeric"` aggregation method is the `"fast"` numeric (quantile) method. Additional methods include `"factor"` for categorical data, `"hd"` to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "`weighted`" to use a weighted quantile method from the Hmisc package

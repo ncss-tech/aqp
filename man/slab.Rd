@@ -29,22 +29,21 @@ slab_function(
 \item{fm}{A formula: either \code{groups ~ var1 + var2 + var3} where named
 variables are aggregated within \verb{groups' OR where named variables are aggregated across the entire collection } ~ var1 + var2 + var3\verb{. If }groups\verb{is a factor it must not contain}NA`}
 
-\item{slab.structure}{A user-defined slab thickness (defined by an integer),
-or user-defined structure (numeric vector). See details below.}
+\item{slab.structure}{integer vector: user-defined slab structure. See Details.}
 
-\item{strict}{logical: should horizons be strictly checked for
-self-consistency?}
+\item{strict}{logical: should horizons be strictly checked for self-consistency?}
 
 \item{byhz}{logical: should horizons or whole profiles be removed by logic checks in \code{strict}? Default \code{TRUE} removes only offending horizons, \code{FALSE} removes whole profiles with one or more illogical horizons.}
 
-\item{slab.fun}{Function used to process each 'slab' of data, ideally
-returning a vector with names attribute. Defaults to a wrapper function
-around \code{stats::quantile()}. See details.}
+\item{slab.fun}{Function used to process each 'slab' of data, ideally returning a vector with names attribute. Defaults to a wrapper function around \code{\link[stats:quantile]{stats::quantile()}}. See details.}
 
-\item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by
-either: number of profiles with data at the current slice (\code{cpm=1}), or by the
-number of profiles in the collection (cpm=2). Mode 1 values will always sum
-to the contributing fraction, while mode 2 values will always sum to 1.}
+\item{cpm}{Strategy for normalizing slice-wise probabilities, dividing by either:
+\itemize{
+\item number of profiles with data at the current slice (\code{cpm = 1}), or
+\item by the number of profiles in the collection (\code{cpm = 2}).
+}
+
+Mode 1 values will always sum to the contributing fraction, while mode 2 values will always sum to 1.}
 
 \item{weights}{Column name containing site-level weights}
 
@@ -53,32 +52,33 @@ to the contributing fraction, while mode 2 values will always sum to 1.}
 \item{method}{one of \code{"numeric"}, \code{"factor"}, \code{"hd"}, \code{"weighted.numeric"}, \code{"weighted.factor"}, \code{"fast"}}
 }
 \value{
-Output is returned in long format, such that slice-wise aggregates
-are returned once for each combination of grouping level (optional),
-variable described in the \code{fm} argument, and depth-wise 'slab'.
+Output is returned in long format, such that slice-wise aggregates are returned once for each combination of grouping level (optional), variable described in the \code{fm} argument, and depth-wise 'slab'.
 
 Aggregation of numeric variables, using the default slab function:
-\describe{ \item{variable}{The names of variables included in the call to
-\code{slab}.} \item{groupname}{The name of the grouping variable when
-provided, otherwise a fake grouping variable named 'all.profiles'.}
-\item{p.q5}{The slice-wise 5th percentile.} \item{p.q25}{The slice-wise 25th
-percentile} \item{p.q50}{The slice-wise 50th percentile (median)}
-\item{p.q75}{The slice-wise 75th percentile} \item{p.q95}{The slice-wise
-95th percentile} \item{top}{The slab top boundary.} \item{bottom}{The slab
-bottom boundary.} \item{contributing_fraction}{The fraction of profiles
-contributing to the aggregate value, ranges from 1/n_profiles to 1.} }
+\itemize{
+\item variable: The names of variables included in \code{fm}
+\item groupname: The name of the grouping variable when provided, otherwise a fake grouping variable named 'all.profiles'.
+\item p.q5: The slice-wise 5th percentile.
+\item p.q25: The slice-wise 25th percentile
+\item p.q50: The slice-wise 50th percentile (median)
+\item p.q75: The slice-wise 75th percentile
+\item p.q95: The slice-wise 95th percentile
+\item top: The slab top boundary
+\item bottom The slab bottom boundary.
+\item contributing_fraction: The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1
+}
 
 When a single factor variable is used, slice-wise probabilities for each
-level of that factor are returned as: \describe{ \item{variable}{The names
-of variables included in the call to \code{slab}.} \item{groupname}{The name
-of the grouping variable when provided, otherwise a fake grouping variable
-named 'all.profiles'.} \item{A}{The slice-wise probability of level A}
-\item{B}{The slice-wise probability of level B} \item{list()}{} \item{n}{The
-slice-wise probability of level n} \item{top}{The slab top boundary.}
-\item{bottom}{The slab bottom boundary.} \item{contributing_fraction}{The
-fraction of profiles contributing to the aggregate value, ranges from
-1/n_profiles to 1.}
-
+level of that factor are returned as:
+\itemize{
+\item variable: The names of factor variable included in \code{fm}
+\item groupname: The name of the grouping variable when provided, otherwise a fake grouping variable named 'all.profiles'
+\item A: The slice-wise probability of level A
+\item B: The slice-wise probability of level B
+\item n: The slice-wise probability of level n
+\item top: The slab top boundary.
+\item bottom: The slab bottom boundary
+\item contributing_fraction: The fraction of profiles contributing to the aggregate value, ranges from 1/n_profiles to 1
 }
 
 \code{slab_function()}: return an aggregation function based on the \code{method} argument
@@ -86,54 +86,45 @@ fraction of profiles contributing to the aggregate value, ranges from
 \description{
 Aggregate soil properties along user-defined \code{slabs}, and optionally within
 groups.
-}
-\details{
+
 Multiple continuous variables OR a single categorical (factor) variable can
-be aggregated within a call to \code{slab}. Basic error checking is
+be aggregated within a call to \code{slab()}. Basic error checking is
 performed to make sure that top and bottom horizon boundaries make sense.
 User-defined aggregate functions (\code{slab.fun}) should return a named
 vector of results. A new, named column will appear in the results of
-\code{slab} for every named element of a vector returned by \code{slab.fun}.
+\code{slab()} for every named element of a vector returned by \code{slab.fun}.
 See examples below for a simple example of a slab function that computes
-mean, mean-1SD and mean+1SD. The default slab function wraps
-\code{stats::quantile} from the Hmisc package, which requires at least 2
-observations per chunk. Note that if \code{group} is a factor it must not contain
-NAs.
+mean, mean +/- 1 standard deviation. The default slab function wraps
+\code{\link[stats:quantile]{stats::quantile()}}. Note that if \code{group} is a factor it must not contain NAs.
 
 \code{slab()} uses \code{dice()} to "resample" profiles to 1cm slices from depth 0 to \code{max(x)} (or \code{slab.structure[2]}, if defined).
 
-Sometimes \code{slab} is used to conveniently re-arrange data vs. aggregate.
+Sometimes \code{slab()} is used to conveniently re-arrange data vs. aggregate.
 This is performed by specifying \code{identity} in \code{slab.fun}. See
-examples beflow for a demonstration of this functionality.
+examples below for a demonstration of this functionality.
 
 The default \code{slab.fun} was changed 2019-10-30 from a wrapper around
-\code{Hmisc::hdquantile} to a wrapper around \code{stats::quantile}. See
+\code{\link[Hmisc:hdquantile]{Hmisc::hdquantile()}} to a wrapper around \code{\link[stats:quantile]{stats::quantile()}}. See
 examples below for a simple way to switch to the HD quantile estimator.
 
 Execution time scales linearly (slower) with the total number of profiles in
 \code{object}, and exponentially (faster) as the number of profiles / group
-is increased. \code{slab} and \code{slice} are much faster and require less
+is increased. \code{slab()} and \code{\link[=dice]{dice()}} are much faster and require less
 memory if input data are either numeric or character.
 
-There are several possible ways to define slabs, using
-\code{slab.structure}:
-
-\describe{ \item{a single integer}{e.g. 10: data are aggregated over a
-regular sequence of 10-unit thickness slabs} \item{a vector of 2
-integers}{e.g. c(50, 60): data are aggregated over depths spanning 50--60
-units} \item{a vector of 3 or more integers}{e.g. c(0, 5, 10, 50, 100): data
-are aggregated over the depths spanning 0--5, 5--10, 10--50, 50--100 units}
+There are several possible ways to define slabs, using \code{slab.structure}:
+\itemize{
+\item a single integer, e.g. 10: data are aggregated over a regular sequence of 10-unit thickness slabs
+\item a vector of 2 integers, e.g. c(50, 60): data are aggregated over depths spanning 50-60 depth units
+\item a vector of 3 or more integers, e.g. c(0, 5, 10, 50, 100): data are aggregated over the depths spanning 0-5, 5-10, 10-50, 50-100 depth units
 }
-
+}
+\details{
 \code{slab_function()}: The default \code{"numeric"} aggregation method is the \code{"fast"} numeric (quantile) method. Additional methods include \code{"factor"} for categorical data, \code{"hd"} to use the Harrell-Davis Distribution-Free Quantile Estimator from the Hmisc package, and "\code{weighted}" to use a weighted quantile method from the Hmisc package
 }
 \note{
-Arguments to \code{slab} have changed with \code{aqp} 1.5 (2012-12-29)
-as part of a code clean-up and optimization. Calculation of
-weighted-summaries was broken in \code{aqp} 1.2-6 (2012-06-26), and removed
-as of \code{aqp} 1.5 (2012-12-29).  \code{slab} replaced the previously
-defined \code{soil.slot.multiple} function as of \code{aqp} 0.98-8.58
-(2011-12-21).
+Arguments to \code{slab()} have changed with aqp 1.5 (2012-12-29) as part of a code clean-up and optimization. Calculation of
+weighted-summaries was broken in \verb{aqp 1.2-6 (2012-06-26), and removed as of aqp 1.5 (2012-12-29). }slab()`` replaced the previously defined \code{soil.slot.multiple} function as of aqp 0.98-8.58 (2011-12-21).
 }
 \section{Methods}{
  \describe{ \item{data = "SoilProfileCollection"}{Typical
@@ -479,7 +470,7 @@ Harrell FE, Davis CE (1982): A new distribution-free quantile estimator.
 Biometrika 69:635-640.
 }
 \seealso{
-\code{\link{slice}, \link{quantile}}
+\code{\link[=dice]{dice()}}
 }
 \author{
 D.E. Beaudette

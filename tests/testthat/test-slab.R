@@ -192,6 +192,38 @@ test_that("slab calculations: mean, several profiles", {
 })
 
 
+test_that("edge case: non-integer values in slab.structure", {
+  
+  data(sp1, package = 'aqp')
+  depths(sp1) <- id ~ top + bottom
+  
+  # top == bottom
+  expect_error(
+    slab(
+      sp1, 
+      fm = ~ prop, 
+      strict = TRUE, 
+      slab.structure = c(5.5, 20), 
+      slab.fun = mean, 
+      na.rm = TRUE
+    ), regexp = 'slab.structure may only contain integer depths'
+  )
+  
+  # top > bottom
+  expect_error(
+    slab(
+      sp1, 
+      fm = ~ prop, 
+      strict = TRUE, 
+      slab.structure = 10.3, 
+      slab.fun = mean, 
+      na.rm = TRUE
+    ), regexp = 'slab.structure may only contain integer depths'
+  )
+  
+  
+})
+
 test_that("edge case: slab.structure[2] >= slab.structure[1]", {
   
   data(sp1, package = 'aqp')
