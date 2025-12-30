@@ -240,6 +240,7 @@ xyplot(top ~ value,
        data = a.long,
        groups = variable,
        subset = value > 0,
+       ylab = 'Depth (cm)',
        ylim = c(150, -5),
        type = c('S','g'),
        horizontal = TRUE,
@@ -443,20 +444,10 @@ data.table::dcast(
 )
 
 
-## aggregate the entire collection, using default slab function (hdquantile)
+## aggregate the entire collection, using default slab function
 ## note the missing left-hand side of the formula
-a <- slab(sp3, fm= ~ L + A + B)
+a <- slab(sp3, fm = ~ L + A + B)
 
-
-
-## weighted-aggregation -- NOT YET IMPLEMENTED --
-# load sample data, upgrade to SoilProfileCollection
-data(sp1)
-depths(sp1) <- id ~ top + bottom
-
-# generate pretend weights as site-level attribute
-set.seed(10101)
-sp1$site.wts <- runif(n=length(sp1), min=20, max=100)
 }
 
 }
