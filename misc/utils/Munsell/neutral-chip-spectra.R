@@ -1,3 +1,7 @@
+## Estimate reflectance spectra from chip CIELAB color coordinates
+## 2025-12-20
+## D.E. Beaudette
+
 
 # always use the latest version, even if not yet installed
 devtools::load_all()
@@ -11,15 +15,23 @@ library(tactile)
 library(pracma)
 
 
-## assumptions: 
-##              * current CIELAB definitions of neutral chips are accurate
-##              * neutral chips have relatively "flat" spectra
+## Methods:
+# 1. New measurements (2025-12-09) of neutral chips from Munsell Book of Color (Nix Pro: D65 illuminant, 2 deg. observer). Cross-referenced CIELAB coordinates. Included 2.5 and 8.5 chips.
+#
+# 2. Converted CIELAB to sRGB, included with munsell.rda.
+# 
+# 3. Assuming perfectly flat reflectance spectra for neutral chips, find spectra (at each value) that are as close as possible via spec2Munsell() (dE00, D65 illuminant, 2 deg. observer) to measured neutral chip colors.
+# 
+# 4. Append these spectra to simplified spectral library, no follow-up interpolation.
+#
 
 ## notes:
-##              * each Munsell chip has a 36-element spectra
+#         * each Munsell chip has a 36-element spectra
 
 
-# objective function: dE00(reflectance)
+
+# objective function for any neutral chip
+# r: reflectance spectra
 obj1 <- function(r) {
   
   # maximum dE00, helps keep local minimum identification more stable
@@ -46,7 +58,9 @@ obj1 <- function(r) {
 }
 
 
-# objective function: dE00(reflectance, neutral chip munsell value)
+# objective function specific neutral chip, specified by Munsell value
+# r: reflectance spectra
+# v: value
 obj2 <- function(r, v) {
   
   # maximum dE00, helps keep local minimum identification more stable
