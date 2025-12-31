@@ -49,7 +49,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">warpHorizons</span><span class="op">(</span><span class="va">x</span>, <span class="va">fact</span>, updateProfileID <span class="op">=</span> <span class="cn">TRUE</span>, suffix <span class="op">=</span> <span class="st">"-w"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">warpHorizons</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  fact <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scaleTo <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  soilDepthFun <span class="op">=</span> <span class="va">estimateSoilDepth</span>,</span>
+<span>  updateProfileID <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  suffix <span class="op">=</span> <span class="st">"-w"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -57,11 +64,21 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a <code>SoilProfileCollection</code> object</p></dd>
+<dd><p>a <code>SoilProfileCollection</code> object with a single soil profile</p></dd>
 
 
 <dt id="arg-fact">fact<a class="anchor" aria-label="anchor" href="#arg-fact"></a></dt>
-<dd><p>numeric or character; warping factor specified as a single numeric value, vector of numeric values (length = nrow(x)), or column name of a horizon level attribute containing numeric values</p></dd>
+<dd><p>numeric or character; warping factor specified as a single numeric value, vector of numeric values (length = <code>nrow(x)</code>), or column name of a horizon level attribute containing numeric values</p></dd>
+
+
+<dt id="arg-scaleto">scaleTo<a class="anchor" aria-label="anchor" href="#arg-scaleto"></a></dt>
+<dd><p>numeric, target depth resulting from rescaling all horizon thickness values, due to rounding the actual depth may be within +/- 1 depth unit</p></dd>
+
+
+<dt id="arg-soildepthfun">soilDepthFun<a class="anchor" aria-label="anchor" href="#arg-soildepthfun"></a></dt>
+<dd><p>function for computing soil depth, either:</p><ul><li><p><code><a href="estimateSoilDepth.html">estimateSoilDepth()</a></code>: "soil depth" is defined as depth to contact, requires that <code><a href="hzdesgnname.html">hzdesgnname()</a></code> be set, see <code><a href="estimateSoilDepth.html">estimateSoilDepth()</a></code> for details</p></li>
+<li><p><code><a href="max.html">max()</a></code>: "soil depth" is defined as the bottom depth of the soil profile</p></li>
+</ul></dd>
 
 
 <dt id="arg-updateprofileid">updateProfileID<a class="anchor" aria-label="anchor" href="#arg-updateprofileid"></a></dt>
@@ -115,7 +132,7 @@
 <span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">0.8</span>, </span></span>
 <span class="r-in"><span>  width <span class="op">=</span> <span class="fl">0.2</span>, </span></span>
 <span class="r-in"><span>  max.depth <span class="op">=</span> <span class="fl">150</span>, </span></span>
-<span class="r-in"><span>  depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">3</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>  depth.axis <span class="op">=</span> <span class="cn">FALSE</span>, </span></span>
 <span class="r-in"><span>  y.offset <span class="op">=</span> <span class="va">.yoff</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> depth axis is disabled when more than 1 unique y offsets are supplied</span>
@@ -133,7 +150,7 @@
 <span class="r-in"><span><span class="va">.template</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span><span class="st">'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd'</span>,</span></span>
 <span class="r-in"><span><span class="st">'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'</span>,</span></span>
-<span class="r-in"><span><span class="st">'P3: A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'</span></span></span>
+<span class="r-in"><span><span class="st">'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># each horizon label is '10' depth-units (default)</span></span></span>
@@ -163,6 +180,46 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="warpHorizons-2.png" alt="" width="700" height="1133"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># rescale all profiles to 100cm soil depth (depth to contact)</span></span></span>
+<span class="r-in"><span><span class="va">.template</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P4:AAAAA|CCC|RRRRRR'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># each horizon label is '10' depth-units (default)</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="quickSPC.html">quickSPC</a></span><span class="op">(</span><span class="va">.template</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># warp horizons by profile, result is a list of SPCs</span></span></span>
+<span class="r-in"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">s</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">warpHorizons</span><span class="op">(</span><span class="va">i</span>, scaleTo <span class="op">=</span> <span class="fl">100</span>, soilDepthFun <span class="op">=</span> <span class="va">estimateSoilDepth</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># flatten list -&gt; SoilProfileCollection</span></span></span>
+<span class="r-in"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">combine</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># combine with original SPC</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">combine</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">w</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># highlight "contact"</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">0.9</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">color</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'R|Cr|Cd'</span>, <span class="va">x</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">'royalblue'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sketches</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">2.5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  color <span class="op">=</span> <span class="st">'color'</span>,</span></span>
+<span class="r-in"><span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span></span>
+<span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>  width <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
+<span class="r-in"><span>  max.depth <span class="op">=</span> <span class="fl">165</span>,</span></span>
+<span class="r-in"><span>  depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">100</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="warpHorizons-3.png" alt="" width="700" height="1133"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

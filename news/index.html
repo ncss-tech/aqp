@@ -43,16 +43,21 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.3" id="aqp-23-2025-12-24">aqp 2.3 (2025-12-24)<a class="anchor" aria-label="anchor" href="#aqp-23-2025-12-24"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.3" id="aqp-23-2025-12-31">aqp 2.3 (2025-12-31)<a class="anchor" aria-label="anchor" href="#aqp-23-2025-12-31"></a></h2>
 <ul><li>CRAN release</li>
 <li>aqp now requires R &gt;= 4.1</li>
-<li>new function <code><a href="../reference/mu_confusion_matrix.html">mu_confusion_matrix()</a></code> (<a href="https://github.com/smroecker" class="external-link">@smroecker</a>)</li>
+<li>stringr package removed from imports (<a href="https://github.com/ncss-tech/aqp/issues/331" class="external-link">#331</a>)</li>
 <li>updated CIELAB and sRGB color coordinates for Munsell neutral chips, based on direct measurement (<a href="https://github.com/ncss-tech/aqp/issues/332" class="external-link">#332</a>)</li>
 <li>added estimated spectra for Munsell neutral chips (<a href="https://github.com/ncss-tech/aqp/issues/332" class="external-link">#332</a>)</li>
+<li>new function <code><a href="../reference/mu_confusion_matrix.html">mu_confusion_matrix()</a></code> (<a href="https://github.com/smroecker" class="external-link">@smroecker</a>)</li>
+<li>
+<code><a href="../reference/dot-detectColorSpec.html">.detectColorSpec()</a></code> is a new internal function for detecting a color specification</li>
 <li>
 <code><a href="../reference/colorContrast.html">colorContrast()</a></code> will now compute contrast data for pair-wise combinations of <code>m1</code> when <code>m2</code> is not specified (<a href="https://github.com/ncss-tech/aqp/issues/330" class="external-link">#330</a>)</li>
 <li>
 <code><a href="../reference/plotProfileDendrogram.html">plotProfileDendrogram()</a></code> gets better default arguments for scaling, offset, etc.</li>
+<li>
+<code><a href="../reference/warpHorizons.html">warpHorizons()</a></code> gains <code>scaleTo</code> argument for scaling profiles to specific soil depth</li>
 <li>
 <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> changes (<a href="https://github.com/ncss-tech/aqp/issues/335" class="external-link">#335</a>):</li>
 <li>gains generalized color specification via new arguments <code>color</code> and <code>space</code>
@@ -60,9 +65,6 @@
 <li>new argument to control development of a perceptual distance matrix: <code>perceptualDistMat = TRUE</code>
 </li>
 <li>deprecated arguments <code>r</code>, <code>g</code>, <code>b</code>, <code>RescaleLightnessBy</code>, warning issued until the next major release</li>
-<li>new internal function for detecting a color specification <code><a href="../reference/dot-detectColorSpec.html">.detectColorSpec()</a></code>
-</li>
-<li>stringr package removed from imports (<a href="https://github.com/ncss-tech/aqp/issues/331" class="external-link">#331</a>)</li>
 <li>
 <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code> can now use varying charge when <code>q</code> is a vector of length &gt; 1</li>
 </ul></div>
