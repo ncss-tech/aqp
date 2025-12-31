@@ -1,4 +1,4 @@
-# aqp 2.3 (2025-12-24)
+# aqp 2.3 (2025-12-31)
  * CRAN release
  * aqp now requires R >= 4.1
  * new function `mu_confusion_matrix()` (@smroecker)
@@ -6,6 +6,7 @@
  * added estimated spectra for Munsell neutral chips (#332)
  * `colorContrast()` will now compute contrast data for pair-wise combinations of `m1` when `m2` is not specified (#330)
  * `plotProfileDendrogram()` gets better default arguments for scaling, offset, etc.
+ * `warpHorizons()` gains `scaleTo` argument for scaling profiles to specific soil depth
  * `soilColorSignature()` changes (#335): 
   - gains generalized color specification via new arguments `color` and `space`
   - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`

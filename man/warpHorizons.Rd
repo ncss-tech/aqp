@@ -4,12 +4,27 @@
 \alias{warpHorizons}
 \title{Inflate / Deflate Horizon Thickness}
 \usage{
-warpHorizons(x, fact, updateProfileID = TRUE, suffix = "-w")
+warpHorizons(
+  x,
+  fact = NULL,
+  scaleTo = NULL,
+  soilDepthFun = estimateSoilDepth,
+  updateProfileID = TRUE,
+  suffix = "-w"
+)
 }
 \arguments{
-\item{x}{a \code{SoilProfileCollection} object}
+\item{x}{a \code{SoilProfileCollection} object with a single soil profile}
 
-\item{fact}{numeric or character; warping factor specified as a single numeric value, vector of numeric values (length = nrow(x)), or column name of a horizon level attribute containing numeric values}
+\item{fact}{numeric or character; warping factor specified as a single numeric value, vector of numeric values (length = \code{nrow(x)}), or column name of a horizon level attribute containing numeric values}
+
+\item{scaleTo}{numeric, target depth resulting from rescaling all horizon thickness values, due to rounding the actual depth may be within +/- 1 depth unit}
+
+\item{soilDepthFun}{function for computing soil depth, either:
+\itemize{
+\item \code{estimateSoilDepth()}: "soil depth" is defined as depth to contact, requires that \code{hzdesgnname()} be set, see \code{\link[=estimateSoilDepth]{estimateSoilDepth()}} for details
+\item \code{max()}: "soil depth" is defined as the bottom depth of the soil profile
+}}
 
 \item{updateProfileID}{logical; modify profile IDs}
 
@@ -54,7 +69,7 @@ plotSPC(
   cex.names = 0.8, 
   width = 0.2, 
   max.depth = 150, 
-  depth.axis = list(line = -3), 
+  depth.axis = FALSE, 
   y.offset = .yoff
 )
 
@@ -70,7 +85,7 @@ axis(side = 4, line = -3.5, las = 1, at = seq(from = 0, to = 150, by = 25))
 .template <- c(
 'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
 'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC',
-'P3: A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'
+'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'
 )
 
 # each horizon label is '10' depth-units (default)
@@ -99,6 +114,45 @@ plotSPC(
   depth.axis = list(line = -2)
 )
 
+# rescale all profiles to 100cm soil depth (depth to contact)
+.template <- c(
+  'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+  'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+  'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+  'P4:AAAAA|CCC|RRRRRR'
+)
+
+# each horizon label is '10' depth-units (default)
+s <- quickSPC(.template)
+
+# warp horizons by profile, result is a list of SPCs
+w <- profileApply(s, FUN = function(i) {
+  warpHorizons(i, scaleTo = 100, soilDepthFun = estimateSoilDepth)
+})
+
+# flatten list -> SoilProfileCollection
+w <- combine(w)
+
+# combine with original SPC
+x <- combine(s, w)
+
+# highlight "contact"
+x$color <- rep(grey(0.9), times = nrow(x))
+x$color[grep('R|Cr|Cd', x$name)] <- 'royalblue'
+
+# sketches
+par(mar = c(0.5, 0, 0, 2.5))
+plotSPC(
+  x,
+  color = 'color',
+  name.style = 'center-center',
+  cex.names = 0.8,
+  width = 0.3,
+  max.depth = 165,
+  depth.axis = list(line = -2)
+)
+
+abline(h = 100, lty = 3)
 
 }
 \author{
