@@ -1,9 +1,11 @@
 # aqp 2.3 (2025-12-31)
  * CRAN release
  * aqp now requires R >= 4.1
- * new function `mu_confusion_matrix()` (@smroecker)
+ * stringr package removed from imports (#331)
  * updated CIELAB and sRGB color coordinates for Munsell neutral chips, based on direct measurement (#332)
  * added estimated spectra for Munsell neutral chips (#332)
+ * new function `mu_confusion_matrix()` (@smroecker)
+ * `.detectColorSpec()` is a new internal function for detecting a color specification
  * `colorContrast()` will now compute contrast data for pair-wise combinations of `m1` when `m2` is not specified (#330)
  * `plotProfileDendrogram()` gets better default arguments for scaling, offset, etc.
  * `warpHorizons()` gains `scaleTo` argument for scaling profiles to specific soil depth
@@ -11,8 +13,6 @@
   - gains generalized color specification via new arguments `color` and `space`
   - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`
   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
- * new internal function for detecting a color specification `.detectColorSpec()`
- * stringr package removed from imports (#331)
  * `electroStatics_1D()` can now use varying charge when `q` is a vector of length > 1
 
 # aqp 2.2-1 (2025-09-16)

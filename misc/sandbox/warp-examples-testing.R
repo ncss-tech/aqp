@@ -83,6 +83,80 @@ p <- procrustes(
 summary(p)
 
 
+###
+
+# scale soil depth to specific value
+
+s <- quickSPC('p1:AA|Bt1Bt1Bt1|Bt2Bt2B|Bt3|Cr|RRRRR')
+
+w <- warpHorizons(s, scaleTo = c(100))
+
+# combine original + warped
+x <- combine(s, w)
+
+# depths for line segments connecting horizon tops
+.y1 <- x[1, , .BOTTOM]
+.y2 <- x[2, , .BOTTOM]
+
+# sketches
+# can't automatically add a depth axis
+par(mar = c(0.5, 0, 0, 2))
+plotSPC(
+  x,
+  name.style = 'center-center',
+  cex.names = 0.8,
+  width = 0.2
+)
+
+abline(h = c(0, 100), lty = 3)
+
+# illustrate warping with arrows
+arrows(x0 = 1 + 0.25, y0 = .y1, x1 = 2 - 0.25, y1 = .y2, len = 0.1, col = 2)
+
+
+
+
+# rescale all profiles to 100cm soil depth
+# (depth to contact)
+.template <- c(
+  'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+  'P2:ApAp|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+  'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+  'P4:AAAAA|CCC|RRRRRR'
+)
+
+# each horizon label is '10' depth-units (default)
+s <- quickSPC(.template)
+
+# warp horizons by profile, result is a list of SPCs
+w <- profileApply(s, FUN = function(i) {
+  warpHorizons(i, scaleTo = 100, soilDepthFun = estimateSoilDepth)
+})
+
+# flatten list -> SoilProfileCollection
+w <- combine(w)
+
+# combine with original SPC
+x <- combine(s, w)
+
+# highlight "contact"
+x$color <- rep(grey(0.9), times = nrow(x))
+x$color[grep('R|Cr|Cd', x$name)] <- 'royalblue'
+
+# sketches
+par(mar = c(0.5, 0, 0, 2.5))
+plotSPC(
+  x,
+  color = 'color',
+  name.style = 'center-center',
+  cex.names = 0.8,
+  cex.id = 0.85,
+  width = 0.3,
+  max.depth = 165,
+  depth.axis = list(line = -2)
+)
+
+abline(h = 100, lty = 3)
 
 
 ## real data
