@@ -1,4 +1,4 @@
-# aqp 2.3 (2025-12-31)
+# aqp 2.3 (2026-01-02)
  * CRAN release
  * aqp now requires R >= 4.1
  * stringr package removed from imports (#331)
@@ -14,6 +14,7 @@
   - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`
   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
  * `electroStatics_1D()` can now use varying charge when `q` is a vector of length > 1
+ * `estimateSoilColor()` transformation parameters updated
 
 # aqp 2.2-1 (2025-09-16)
  * CRAN release

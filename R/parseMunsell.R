@@ -3,6 +3,8 @@
 
 # additional ideas from munsellinterpol::HueNumberFromString
 
+# TODO: consider a strict argument for only allowing standard hues
+
 # output:
 # hue.numeric hue.character
 #     2.3            YR

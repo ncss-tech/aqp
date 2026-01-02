@@ -2,6 +2,7 @@
 
 # TODO: behavior not defined for horizons with an indefinite lower boundary
 # TODO: move some of the processing outside of the main loop: column names, etc.
+# TODO: use .detectColorSpec() for interpreting colors, then add Munsell notation as option
 
 #' @title Create Soil Profile Sketches
 #' @name plotSPC

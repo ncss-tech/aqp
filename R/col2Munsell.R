@@ -1,4 +1,6 @@
 
+# TODO: incorrect interpretation: .detectColorSpec(c('red', 1, NA))
+
 #' @title Detect color specification from a vector of values, or a matrix of color coordinates
 #' @param col character vector, numeric matrix with 3 columns, or data.frame with 3 columns
 .detectColorSpec <- function(col) {
