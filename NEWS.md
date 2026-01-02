@@ -5,6 +5,7 @@
  * updated CIELAB and sRGB color coordinates for Munsell neutral chips, based on direct measurement (#332)
  * added estimated spectra for Munsell neutral chips (#332)
  * new function `mu_confusion_matrix()` (@smroecker)
+ * new function `shuffle()` for re-ordering horizon data or horizons within a `SoilProfileCollection` object (#328)
  * `.detectColorSpec()` is a new internal function for detecting a color specification
  * `colorContrast()` will now compute contrast data for pair-wise combinations of `m1` when `m2` is not specified (#330)
  * `plotProfileDendrogram()` gets better default arguments for scaling, offset, etc.
@@ -13,7 +14,7 @@
   - gains generalized color specification via new arguments `color` and `space`
   - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`
   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
- * `electroStatics_1D()` can now use varying charge when `q` is a vector of length > 1
+ * `electroStatics_1D()` now accepts vector of charge density `q` vs. single value
  * `estimateSoilColor()` transformation parameters updated
 
 # aqp 2.2-1 (2025-09-16)
