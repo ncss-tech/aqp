@@ -14,7 +14,7 @@
   - gains generalized color specification via new arguments `color` and `space`
   - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`
   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
- * `electroStatics_1D()` now accepts vector of charge density `q` vs. single value
+ * `electroStatics_1D()` now accepts vector of charge density `q` or single value (original implementation)
  * `estimateSoilColor()` transformation parameters updated
 
 # aqp 2.2-1 (2025-09-16)
