@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3 (2025-12-31)
+## aqp 2.3 (2026-01-02)
 
 - CRAN release
 - aqp now requires R \>= 4.1
@@ -14,6 +14,11 @@
 - new function
   [`mu_confusion_matrix()`](https://ncss-tech.github.io/aqp/reference/mu_confusion_matrix.md)
   ([@smroecker](https://github.com/smroecker))
+- new function
+  [`shuffle()`](https://ncss-tech.github.io/aqp/reference/shuffle.md)
+  for re-ordering horizon data or horizons within a
+  `SoilProfileCollection` object
+  ([\#328](https://github.com/ncss-tech/aqp/issues/328))
 - [`.detectColorSpec()`](https://ncss-tech.github.io/aqp/reference/dot-detectColorSpec.md)
   is a new internal function for detecting a color specification
 - [`colorContrast()`](https://ncss-tech.github.io/aqp/reference/colorContrast.md)
@@ -33,7 +38,10 @@
 - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning
   issued until the next major release
 - [`electroStatics_1D()`](https://ncss-tech.github.io/aqp/reference/electroStatics_1D.md)
-  can now use varying charge when `q` is a vector of length \> 1
+  now accepts vector of charge density `q` or single value (original
+  implementation)
+- [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
+  transformation parameters updated
 
 ## aqp 2.2-1 (2025-09-16)
 

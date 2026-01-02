@@ -611,6 +611,9 @@
 - [`shannonEntropy()`](https://ncss-tech.github.io/aqp/reference/shannonEntropy.md)
   : Shannon Entropy
 
+- [`shuffle()`](https://ncss-tech.github.io/aqp/reference/shuffle.md) :
+  Shuffle Horizons of a SoilProfileCollection
+
 - [`sierraTransect`](https://ncss-tech.github.io/aqp/reference/sierraTransect.md)
   : Soil Physical and Chemical Data Related to Studies in the Sierra
   Nevada Mountains, CA, USA.

@@ -70,10 +70,10 @@ data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 
 estimateSoilColor(hue = '10YR', value = 3, chroma = 3, sourceMoistureState = 'moist')
 #>    hue value chroma    sigma
-#> 1 10YR     5      3 3.883131
+#> 1 10YR     4      4 4.112413
 
 # note that estimation is not symmetric
 estimateSoilColor(hue = '10YR', value = 5, chroma = 3, sourceMoistureState = 'dry')
-#>    hue value chroma    sigma
-#> 1 10YR     4      3 4.144553
+#>     hue value chroma    sigma
+#> 1 7.5YR     4      2 1.867093
 ```
