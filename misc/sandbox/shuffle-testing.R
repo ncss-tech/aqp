@@ -1,5 +1,13 @@
 library(aqp)
 
+
+## idea: information content of soil profile vs. many times shuffled variants
+##        * smaller deviations => less information
+##        * larger deviations => more information
+
+
+
+
 data('osd', package = 'aqp')
 o <- osd
 
@@ -49,6 +57,41 @@ dd <- soilColorSignature(d, color = 'soil_color', method = 'depthSlices', percep
 plotProfileDendrogram(d, cluster::diana(dd))
 
 ## NCSP
+library(soilDB)
+library(cluster)
+library(vegan)
+
+
+o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer'))
+o <- trunc(o, 0, 150)
+
+d <- duplicate(o, times = 25)
+
+# plotSPC(d)
+
+d <- aqp::shuffle(d, mode = 'horizon')
+
+
+plotSPC(d, color = 'texture_class', show.legend = FALSE, print.id = FALSE, name = NA, divide.hz = FALSE)
+
+o$pii <- profileInformationIndex(o, vars = c('texture_class'))
+d$pii <- profileInformationIndex(d, vars = c('texture_class'))
+
+
+site(o)[, c('id', 'pii')]
+tapply(d$pii, d$.oldID, mean)
+tapply(d$pii, d$.oldID, sd)
+
+tapply(d$pii, d$.oldID, mean) / tapply(d$pii, d$.oldID, var)
+
+
+dd <- NCSP(d, vars = 'texture_class')
+
+b <- betadisper(dd, group = d$.oldID, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
+
+b
+
+
 
 
 
