@@ -85,8 +85,8 @@ soil attribute depth functions with equal-area quadratic smoothing splines.
 Geoderma 91(1–2), pp. 27-45.
 \doi{https://doi.org/10.1016/S0016-7061(99)00003-8}
 
-O'Brien, Lauren (2022). mpspline2: Mass-Preserving Spline Functions for
-Soil Data. R package version 0.1.6.
+O'Brien, Lauren (2025). mpspline2: Mass-Preserving Spline Functions for
+Soil Data. R package version 0.1.9.
 \url{https://cran.r-project.org/package=mpspline2}
 }
 \author{
