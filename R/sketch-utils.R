@@ -180,8 +180,10 @@
   }
 }
 
-## generalize and make into an exported function
+## TODO: switch to .detectColorSpec()
+## TODO: allow direct interpretation of Munsell notation
 
+# generalize and make into an exported function
 .interpretHorizonColor <- function(h, color, default.color, col.palette, col.palette.bias, n.legend) {
   
   # this is optionally replaced with real data when using thematic colors
@@ -357,6 +359,7 @@
 }
 
 
+## TODO: switch to .detectColorSpec()
 # Test for valid colors in vector `x`:
 #   1. named colors from colors()
 #   2. RGB / RGBA encoding of colors

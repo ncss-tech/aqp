@@ -51,46 +51,49 @@ estimateSoilColor <- function(hue, value, chroma, sourceMoistureState = c('dry',
   
   # select transformation
   # transformation parameters via vegan::procrustes()
+  # updated 2026-01-02
   params <- switch(sourceMoistureState,
-         dry = {
-           # dry -> moist
-           list(
-             scale = 0.812898619142037,
-             
-             rotation = structure(c(0.995675622919053, 0.0257258722497405, -0.0892649618929251, 
-                                    -0.0197691154694856, 0.997558105087928, 0.0669851404935216, 0.0907702374036196, 
-                                    -0.0649307821481665, 0.993752865420432), dim = c(3L, 3L)),
-             
-             translation = structure(c(-4.08321328666085, 1.61159422497282, -0.753817567156023
-             ), dim = c(1L, 3L))
-           )
-         },
-         
-         moist = {
-           # moist -> dry  
-           list(
-             scale = 0.832203042606691,
-             
-             rotation = structure(c(0.995675622919054, -0.0197691154694851, 0.0907702374036196, 
-                                    0.0257258722497396, 0.997558105087928, -0.0649307821481645, -0.0892649618929251, 
-                                    0.0669851404935191, 0.993752865420432), dim = c(3L, 3L)),
-             
-             translation = structure(c(21.1915203051648, 0.411048926770148, 6.01556883263775
-             ), dim = c(1L, 3L))
-           )
-           }
+                   dry = {
+                     # dry -> moist
+                     list(
+                       scale = 0.817488,
+                       
+                       rotation = structure(
+                         c(0.99556760, -0.01633258, 0.09261960, 
+                           0.02238987, 0.99765080, -0.06474236, 
+                           -0.09134461, 0.06652914, 0.99359450
+                         ), dim = c(3L, 3L)),
+                       
+                       translation = structure(c(-4.306294, 1.424194, -0.9546662), dim = c(1L, 3L))
+                     )
+                   },
+                   
+                   moist = {
+                     # moist -> dry  
+                     list(
+                       scale = 0.8329229,
+                       
+                       rotation = structure(
+                         c(0.99556760, 0.02238987, -0.09134461,
+                           -0.01633258, 0.99765080, 0.06652914, 
+                           0.09261960, -0.06474236, 0.99359450
+                         ), dim = c(3L, 3L)),
+                       
+                       translation = structure(c(21.16093, 0.5293671, 6.101675), dim = c(1L, 3L))
+                     )
+                   }
   )
   
   
-  ## apply transformation
+  # apply transformation
   Y <- as.matrix(z)
   Y <- params$scale * Y %*% params$rotation
   Y <- sweep(Y, MARGIN = 2, STATS = params$translation, FUN = "+")
   
-  ## CIELAB -> closest Munsel
+  # CIELAB -> closest Munsel
   res <- col2Munsell(Y, space = 'CIELAB', nClosest = 1)
   
-
+  
   ## TODO: post-processing or additional diagnostics?
   
   return(res)

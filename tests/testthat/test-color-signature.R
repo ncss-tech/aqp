@@ -5,19 +5,71 @@ context("color signature")
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 
-# convert Munsell -> sRGB triplets
-rgb.data <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
-sp1$r <- rgb.data$r
-sp1$g <- rgb.data$g
-sp1$b <- rgb.data$b
+# sRGB color coordinates in [0, 1]
+.rgb <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, return_triplets = TRUE)
+sp1$r <- .rgb$r
+sp1$g <- .rgb$g
+sp1$b <- .rgb$b
+
+# CIELAB color
+.lab <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma, returnLAB = TRUE)
+sp1$CIE_L <- .lab$L
+sp1$CIE_A <- .lab$A
+sp1$CIE_B <- .lab$B
+
+# Munsell notation
+sp1$m <- sprintf("%s %s/%s", sp1$hue, sp1$value, sp1$chroma)
+
+# hex sRGB
+sp1$hex <- munsell2rgb(sp1$hue, sp1$value, sp1$chroma)
+
 
 ## tests
+
+
+## REMOVE this once arguments have been removed
+test_that("deprecation of r, g, b arguments", {
+  
+  # 2025-12-15
+  expect_warning(
+    pig <- soilColorSignature(sp1, r = 'r', g = 'g', b = 'b'), 
+    regexp = 'deprecated'
+  )
+  
+})
+
+
+
+test_that("color specification detection / interpretation", {
+  
+  # sRGB coordinates
+  pig <- soilColorSignature(sp1, color = c('r', 'g', 'b'))
+  expect_equal(attr(pig, 'colorspec'), 'color-coordinate-data.frame')
+  
+  # error condition
+  # CIELAB coordinates, without correct space argument
+  expect_error(soilColorSignature(sp1, color = c('CIE_L', 'CIE_A', 'CIE_B')))
+  
+  # CIELAB coordinates
+  pig <- soilColorSignature(sp1, color = c('CIE_L', 'CIE_A', 'CIE_B'), space = 'CIELAB')
+  expect_equal(attr(pig, 'colorspec'), 'color-coordinate-data.frame')
+  
+  # sRGB hex
+  pig <- soilColorSignature(sp1, color = 'hex')
+  expect_equal(attr(pig, 'colorspec'), 'hex-sRGB')
+  
+  # Munsell notation
+  pig <- soilColorSignature(sp1, color = 'm')
+  expect_equal(attr(pig, 'colorspec'), 'munsell')
+  
+})
+
 
 
 test_that("colorBucket", {
   
   # extract color signature
-  pig <- soilColorSignature(sp1, method = 'colorBucket')
+  pig <- soilColorSignature(sp1, color = 'm', method = 'colorBucket')
   
   # expected output
   expect_true(inherits(pig, 'data.frame'))
@@ -37,7 +89,7 @@ test_that("colorBucket", {
 test_that("depthSlices", {
   
   # extract color signature
-  pig <- soilColorSignature(sp1, method = 'depthSlices')
+  pig <- soilColorSignature(sp1, color = 'm', method = 'depthSlices')
   
   # expected output
   expect_true(inherits(pig, 'data.frame'))
@@ -46,13 +98,28 @@ test_that("depthSlices", {
   
   # add more of these
   expect_equal(pig$id[1], 'P001')
-  expect_equal(pig$A.0.1[1], 5.87, tolerance = 0.01)
-  expect_equal(pig$A.0.5[1], 5.57, tolerance = 0.01)
-  expect_equal(pig$B.0.1[1], 11.07, tolerance = 0.01)
-  expect_equal(pig$B.0.5[1], 17.86, tolerance = 0.01)
-  expect_equal(pig$L.0.1[1], 30.25, tolerance = 0.01)
+  expect_equal(pig$A.1[1], 5.87, tolerance = 0.01)
+  expect_equal(pig$A.2[1], 5.57, tolerance = 0.01)
+  expect_equal(pig$B.1[1], 11.07, tolerance = 0.01)
+  expect_equal(pig$B.2[1], 17.86, tolerance = 0.01)
+  expect_equal(pig$L.1[1], 30.25, tolerance = 0.01)
   
 })
+
+
+test_that("perceptualDistMat = TRUE", {
+  
+  # result is a distance matrix
+  d <- soilColorSignature(sp1, color = 'm', method = 'depthSlices', perceptualDistMat = TRUE)
+  
+  # expected output
+  expect_true(inherits(d, 'dist'))
+  
+  # all profiles IDs should be present and in the same order
+  expect_equal(attr(d, 'Labels'), profile_id(sp1))
+  
+})
+
 
 
 
@@ -67,7 +134,7 @@ test_that("expected order from OSDs, depthSlices", {
   skip_if_not_installed("curl")
   
   skip_if_offline()
- 
+  
   # TODO: consider not using soilDB for testing soilColorSignature()
   skip_if_not_installed("soilDB")
   
@@ -80,31 +147,24 @@ test_that("expected order from OSDs, depthSlices", {
   s <- soilDB::fetchOSD(s.list)
   
   if (!is.null(s)) {
-    ## TODO: this will be simplified soon
-    # manually convert Munsell -> sRGB
-    rgb.data <- munsell2rgb(s$hue, s$value, s$chroma, return_triplets = TRUE)
-    s$r <- rgb.data$r
-    s$g <- rgb.data$g
-    s$b <- rgb.data$b
-    
-    # 
-    pig <- soilColorSignature(s, RescaleLightnessBy = 5, method = 'depthSlices')
+    # use hex sRGB, provided by fetchOSD()
+    pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices')
     row.names(pig) <- pig[, 1]
     d <- daisy(pig[, -1])
     dd <- diana(d)
     
     # expected ordering
-    o <- c("AMADOR", "VLECK", "PENTZ", "YOLO", "HANFORD", "MOGLIA", "PARDEE", 
-           "HAYNER", "CANEYHEAD", "DRUMMER", "WILLOWS", "ZOOK", "SYCAMORE", 
-           "KLAMATH", "ARGONAUT", "REDDING", "MUSICK", "CECIL", "SIERRA", 
-           "PALAU")
+    o <- c("AMADOR", "MOGLIA", "VLECK", "HANFORD", "PARDEE", "CANEYHEAD", 
+           "HAYNER", "ARGONAUT", "MUSICK", "CECIL", "PALAU", "REDDING", 
+           "SIERRA", "DRUMMER", "ZOOK", "PENTZ", "YOLO", "SYCAMORE", "WILLOWS", 
+           "KLAMATH")
     
     
     expect_true(
       all(profile_id(s)[dd$order] ==  o)
     )
   }
-    
+  
 })
 
 

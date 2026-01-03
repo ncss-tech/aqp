@@ -1,4 +1,71 @@
 
+# TODO: incorrect interpretation: .detectColorSpec(c('red', 1, NA))
+
+#' @title Detect color specification from a vector of values, or a matrix of color coordinates
+#' @param col character vector, numeric matrix with 3 columns, or data.frame with 3 columns
+.detectColorSpec <- function(col) {
+  
+  # filter NA
+  col <- na.omit(col)
+  
+  # matrix
+  if(inherits(col, 'matrix')) {
+    
+    # trap 0-length input
+    if(nrow(col) < 1) {
+      return('unknown')
+    }
+    
+    if(ncol(col) == 3) {
+      return('color-coordinate-matrix')
+    }
+  }
+  
+  # data.frame
+  if(inherits(col, 'data.frame')) {
+    
+    # trap 0-length input
+    if(nrow(col) < 1) {
+      return('unknown')
+    }
+    
+    if(ncol(col) == 3) {
+      return('color-coordinate-data.frame')
+    }
+  }
+  
+  # character vectors
+  if(inherits(col, 'character')) {
+    
+    # trap 0-length input
+    if(length(col) < 1) {
+      return('unknown')
+    }
+    
+    # hex notation of sRGB
+    if(all(grepl('#', fixed = TRUE, x = col))) {
+      return('hex-sRGB')
+    }
+    
+    # Munsell notation
+    # partial notation will return TRUE
+    if(! all(is.na(unlist(parseMunsell(col, convertColors = FALSE))))) {
+      return('munsell')
+    }
+    
+    # named colors: error on invalid color names
+    if(! inherits(try(col2rgb(col), silent = TRUE), 'try-error')) {
+      return('named-colors')
+    }
+    
+  }
+  
+  # otherwise, inconsistent / illegal color specification
+  return('unknown')
+}
+
+
+
 
 #' @title Convert colors into Munsell Notation
 #' 
@@ -105,8 +172,7 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     hue = NA, 
     value = NA, 
     chroma = NA, 
-    sigma = NA, 
-    stringsAsFactors = FALSE
+    sigma = NA
   )
   
   # sacrifice to CRAN gods

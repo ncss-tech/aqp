@@ -1,6 +1,6 @@
 ## Simplify the Munsell spectral reference data for later use. Results are temporary.
-##
-##
+## 2025-12-10
+## D.E. Beaudette
 
 ## From the internal description:
 # This file contains spectral reflectance measurements of X-Rite's 2007 Munsell Book
@@ -16,6 +16,7 @@
 
 library(aqp)
 library(reshape2)
+library(purrr)
 
 # missing odd chroma
 x <- read.table('SpectralReflectancesOf2007MunsellBookOfColorGlossy.txt.gz', skip = 13, header = TRUE, stringsAsFactors = FALSE, sep = ',')
@@ -74,12 +75,45 @@ m.rel <- data.frame(
   value = d$value, 
   chroma = d$chroma, 
   wavelength = m$wavelength, 
-  reflectance = m$reflectance, 
-  stringsAsFactors = FALSE
+  reflectance = m$reflectance
 )
+
+
+# neutral chip spectra, via estimation ()
+n <- readRDS('neutral-reflectance-estimates.rds')
+
+# wavelength sequence from our spectral database
+.w <- unique(m.rel$wavelength)
+.len <- length(.w)
+
+# iterate over neutral chips + constant reflectance
+# generate full spectra and Munsell notation
+n.spec <- map_df(1:nrow(n), .f = function(i) {
+  
+  .res <- data.frame(
+    munsell = sprintf("N %s/", n$V[i]),
+    hue = 'N',
+    value = n$V[i],
+    chroma = 0,
+    wavelength = .w,
+    reflectance = rep(n$reflectance[i], times = .len)
+  )
+  
+  return(.res)
+  
+})
+
+# combine with other spectra
+m.rel <- rbind(m.rel, n.spec)
 
 # sort
 m.rel <- m.rel[order(m.rel$hue, m.rel$value, m.rel$chroma, m.rel$wavelength), ]
+
+# check
+all(table(m.rel$munsell) == 36)
+
+table(m.rel$hue)
+
 
 # save
 saveRDS(m.rel, file = 'simplified-Munsell-spectra.rds', compress = 'xz')

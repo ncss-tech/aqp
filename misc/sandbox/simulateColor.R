@@ -120,7 +120,7 @@ colorChart(cols$m, g = cols$g, annotate = TRUE)
 colorChart(cols$m, g = cols$g)
 
 a <- aggregateColor(loafercreek, 'genhz', k = 8)
-sharpshootR::aggregateColorPlot(a)
+aggregateColorPlot(a)
 
 ## aggregateColor proportions
 

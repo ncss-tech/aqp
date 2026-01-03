@@ -9,3 +9,7 @@ spectral.reference <- read.csv('spectral-reference-data.csv')
 
 # save to local data
 save(spectral.reference, file = '../../../data/spectral.reference.rda', compress = 'xz')
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)

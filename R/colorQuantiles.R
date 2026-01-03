@@ -58,13 +58,13 @@
 #' }
 #' 
 colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
-
+  
   # sanity check, need this for L1 median
   if(!requireNamespace('Gmedian')) {
     stop('package `Gmedian` is required', call. = FALSE)
   }
-    
-
+  
+  
   # hex representation -> sRGB
   soilColors.srgb <- t(col2rgb(soilColors)) / 255
   
@@ -74,65 +74,70 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
   # convert to DF for use in diana
   soilColors.lab <- as.data.frame(soilColors.lab)
   names(soilColors.lab) <- c('L', 'A', 'B')
-
+  
   # marginal quantiles
   q.L <- quantile(soilColors.lab$L, probs = p, na.rm = TRUE)
   q.A <- quantile(soilColors.lab$A, probs = p, na.rm = TRUE)
   q.B <- quantile(soilColors.lab$B, probs = p, na.rm = TRUE)
-
+  
   # find observed color with the closest L-coordinate, linear distances
   L.q.idx <- c(
     which.min(sqrt((q.L[1] - soilColors.lab$L) ^ 2)),
     which.min(sqrt((q.L[2] - soilColors.lab$L) ^ 2)),
     which.min(sqrt((q.L[3] - soilColors.lab$L) ^ 2))
   )
-
+  
   # find observed color with the closest A-coordinate, linear distances
   A.q.idx <- c(
     which.min(sqrt((q.A[1] - soilColors.lab$A) ^ 2)),
     which.min(sqrt((q.A[2] - soilColors.lab$A) ^ 2)),
     which.min(sqrt((q.A[3] - soilColors.lab$A) ^ 2))
   )
-
+  
   # find observed color with the closest B-coordinate, linear distances
   B.q.idx <- c(
     which.min(sqrt((q.B[1] - soilColors.lab$B) ^ 2)),
     which.min(sqrt((q.B[2] - soilColors.lab$B) ^ 2)),
     which.min(sqrt((q.B[3] - soilColors.lab$B) ^ 2))
   )
-
+  
   # L1 median
   # close to but not actually an obs within original data... why?
   # this is sometimes quite distant from marginal medians... why?
   L1 <- Gmedian::Gmedian(soilColors.lab, nstart = 10)
-
+  
   ## find closest Munsell chips via CIE LAB coordinates
   # this is the closest Munsell chip to the L1 median color
   L1.closest <- .formatClosestMunsell(L1)
-
+  
   # closest munsell chip to marginal L,A,B quantiles
   L.closest <- .formatClosestMunsell(soilColors.lab[L.q.idx, ])
   A.closest <- .formatClosestMunsell(soilColors.lab[A.q.idx, ])
   B.closest <- .formatClosestMunsell(soilColors.lab[B.q.idx, ])
-
-
+  
+  
   ## find closest observed color to L1 median via CIE2000 distance metric
-  d <- farver::compare_colour(from=L1, to=soilColors.lab, from_space='lab', method = 'cie2000')
+  d <- farver::compare_colour(
+    from = L1, 
+    to = soilColors.lab, 
+    from_space = 'lab', 
+    method = 'cie2000'
+  )
   
   # assign L1 color
   L1.color <- soilColors[which.min(d)]
-
+  
   # closest observed colors to marginal quantiles
   q.L.colors <- soilColors[L.q.idx]
   q.A.colors <- soilColors[A.q.idx]
   q.B.colors <- soilColors[B.q.idx]
-
+  
   # marginal quantiles
   q.L.values <- soilColors.lab$L[L.q.idx]
   q.A.values <- soilColors.lab$A[A.q.idx]
   q.B.values <- soilColors.lab$B[B.q.idx]
-
-
+  
+  
   # combine into single DF for plotting
   res <- list(
     marginal = data.frame(
@@ -158,9 +163,9 @@ colorQuantiles <- function(soilColors, p = c(0.05, 0.5, 0.95)) {
       stringsAsFactors = FALSE
     )
   )
-
+  
   return(res)
-
+  
 }
 
 
@@ -188,7 +193,7 @@ plotColorQuantiles <- function(res, pt.cex = 7, lab.cex = 0.66) {
   m.long <- melt(
     data.table::as.data.table(res$marginal), 
     id.var = c('p', 'L_colors', 'A_colors', 'B_colors', 'L_chip', 'A_chip', 'B_chip')
-    )
+  )
   
   # convert back to data.frame
   m.long <- as.data.frame(m.long)

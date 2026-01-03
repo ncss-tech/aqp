@@ -142,7 +142,7 @@ bwplot(genhz ~ color.dist, data = horizons(s), par.settings = tactile.theme())
 
 ##
 
-pig <- soilColorSignature(s, r = 'm_r', g = 'm_g', b='m_g', method = 'depthSlices')
+pig <- soilColorSignature(s, color = 'moist_soil_color', method = 'depthSlices')
 
 
 # move row names over for distance matrix

@@ -13,7 +13,7 @@ table(s$taxonname)
 s$taxonname <- factor(toupper(s$taxonname))
 
 agg <- aggregateColor(s, groups = 'taxonname', col = 'moist_soil_color', k = 12)
-sharpshootR::aggregateColorPlot(agg)
+aggregateColorPlot(agg)
 
 m <- paste0(s$m_hue, ' ', s$m_value, '/', s$m_chroma)
 colorChart(m)

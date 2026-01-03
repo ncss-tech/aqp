@@ -40,7 +40,33 @@ for(i in seq(0.1, 1.5, length.out = .npanel^2)) {
 # dev.off()
 
 
-for(i in seq(0, 0.5, length.out = .npanel^2)) {
+
+## variable q
+for(i in 1:.npanel^2) {
+  
+  
+  cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
+  cols <- colorRampPalette(cols)(length(x))
+  
+  .q <- runif(length(x), min = 0.5, max = 1)
+  
+  ## TODO: argument for uniform spacing attractive force schedule
+  ## TODO: argument for pre-sorting
+  
+  z <- fixOverlap(x, thresh = 2, q = .q, method = 'E', maxIter = 100, trace = TRUE)
+  .n <- nrow(z$states)
+  
+  matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')
+  
+  # points(x = rep(1, times = length(x)), y = x, cex = 0.66, pch = 16, col = cols)
+  # points(x = rep(.n + 1, times = length(x)), y = z$states[.n, ], cex = 0.66, pch = 16, col = cols)
+  
+}
+
+
+
+
+for(i in seq(0, 0.1, length.out = .npanel^2)) {
   
   
   cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
@@ -49,7 +75,7 @@ for(i in seq(0, 0.5, length.out = .npanel^2)) {
   ## TODO: argument for uniform spacing attractive force schedule
   ## TODO: argument for pre-sorting
   
-  z <- fixOverlap(x, thresh = 2, q = 2, chargeDecay = i, QkA_GrowthRate = 0.05, method = 'E', maxIter = 100, trace = TRUE)
+  z <- fixOverlap(x, thresh = 2, q = 1, chargeDecay = i, QkA_GrowthRate = 0.05, method = 'E', maxIter = 100, trace = TRUE)
   .n <- nrow(z$states)
   
   matplot(rbind(x, z$states), type = 'l', lty = 1, las = 1, axes = FALSE, col = cols, lwd = 1, log = 'x')

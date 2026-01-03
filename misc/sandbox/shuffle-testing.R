@@ -1,51 +1,99 @@
 library(aqp)
-data("osd")
 
+
+## idea: information content of soil profile vs. many times shuffled variants
+##        * smaller deviations => less information
+##        * larger deviations => more information
+
+
+
+
+data('osd', package = 'aqp')
 o <- osd
 
-
-# shuffle horizon data, excluding id, top, bottom
-shuffle <- function(i) {
-  .hzd <- horizonDepths(i)
-  .id <- idname(i)
-  .h <- horizons(i)
-  .nm <- horizonNames(i)
-  
-  # static horizon data
-  .hs <- .h[, c(.id, .hzd)]
-  
-  # dynamic horizon data -> these will be shuffled
-  .hd <- .h[, which(! .nm %in% c(.hzd, .id))]
-  
-  # shuffle
-  .idx <- sample(1:nrow(.hd))
-  .hd <- .hd[.idx, ]
-  
-  # combine static + shuffled
-  .hnew <- cbind(.hs, .hd)
-  
-  # replace and return
-  replaceHorizons(i) <- .hnew
-  
-  return(i)
-}
-
-
 # apply shuffling by-profile
-oo <- combine(
-  profileApply(o, FUN = shuffle)
-)
+o.d <- shuffle(o, mode = 'data')
 
-# TODO: implement via data.table
+# appl
+o.h <- shuffle(o, mode = 'horizon')
 
+# sampling with replacement
+o.h2 <- shuffle(o, mode = 'horizon', replace = TRUE)
+
+# add method to IDs
+profile_id(o.d) <- sprintf("%s\ndata", profile_id(o.d))
+profile_id(o.h) <- sprintf("%s\nhz", profile_id(o.h))
+profile_id(o.h2) <- sprintf("%s\nhz R", profile_id(o.h2))
+
+# combine into single SPC
+g <- combine(o, o.d, o.h, o.h2)
 
 # graphical comparison
-plotSPC(o, name.style = 'center-center', cex.names = 0.66, width = 0.2, x.idx.offset = 0.25)
-plotSPC(oo, name.style = 'center-center', cex.names = 0.66, width = 0.2, add = TRUE, x.idx.offset = -0.25, print.id = FALSE, depth.axis = FALSE)
+op <- par(mar = c(0, 0, 0.5, 2.5))
+plotSPC(g, name.style = 'center-center', cex.names = 0.66, width = 0.3, cex.id = 0.75)
+
+par(op)
 
 
+## interpret...
 profileInformationIndex(o, vars = 'hzname')
-profileInformationIndex(oo, vars = 'hzname')
+profileInformationIndex(o.d, vars = 'hzname')
+profileInformationIndex(o.h, vars = 'hzname')
+
+
+d <- duplicate(o, times = 10)
+
+d <- shuffle(d, mode = 'horizon')
+
+d <- combine(o, d)
+
+plotSPC(d, name.style = 'center-center', cex.names = 0.66, width = 0.3)
+profileInformationIndex(d, vars = 'hzname')
+
+
+## 
+dd <- soilColorSignature(d, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
+
+plotProfileDendrogram(d, cluster::diana(dd))
+
+## NCSP
+library(soilDB)
+library(cluster)
+library(vegan)
+
+
+o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer'))
+o <- trunc(o, 0, 150)
+
+d <- duplicate(o, times = 25)
+
+# plotSPC(d)
+
+d <- aqp::shuffle(d, mode = 'horizon')
+
+
+plotSPC(d, color = 'texture_class', show.legend = FALSE, print.id = FALSE, name = NA, divide.hz = FALSE)
+
+o$pii <- profileInformationIndex(o, vars = c('texture_class'))
+d$pii <- profileInformationIndex(d, vars = c('texture_class'))
+
+
+site(o)[, c('id', 'pii')]
+tapply(d$pii, d$.oldID, mean)
+tapply(d$pii, d$.oldID, sd)
+
+tapply(d$pii, d$.oldID, mean) / tapply(d$pii, d$.oldID, var)
+
+
+dd <- NCSP(d, vars = 'texture_class')
+
+b <- betadisper(dd, group = d$.oldID, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
+
+b
+
+
+
+
 
 
 ## simulate some data

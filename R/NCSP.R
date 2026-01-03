@@ -1,6 +1,6 @@
 
 ## TODO: consider use of alternative distance metrics that DO NOT rescale always to 0,1
-
+## TODO: interpret various forms of soil color via .detectColorSpec()
 
 ## Note: sanity checking on w is performed outside of this function
 
@@ -53,6 +53,7 @@
     
     ## TODO: verify result when NA are present in data matrix
     # result is the full form of a distance matrix
+    # requesting the full matrix form is slower
     d <- farver::compare_colour(
       from = m, 
       to = m, 

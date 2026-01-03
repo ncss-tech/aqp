@@ -1,6 +1,6 @@
 
 ## TODO: consider using Munsell notation for `col`, this would save an entire round-trip through the conversion process
-
+## TODO: consider data.frame interface
 
 #' @title Summarize Soil Colors
 #' 
@@ -144,7 +144,7 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', k = NULL, pr
       k.adj <- pmin(k, n.cols - 1)
       
       # work with a unique subset, there is no need to compute distances / cluster all colors
-      lut <- data.frame(col=unique(i[[col]]), stringsAsFactors = FALSE)
+      lut <- data.frame(col = unique(i[[col]]))
       
       # same order as LUT
       # convert to sRGB
@@ -162,8 +162,16 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', k = NULL, pr
       )
       
       # compute perceptually based distance matrix on unique colors
-      dE00 <- farver::compare_colour(v, v, from_space = 'lab', method = 'CIE2000', white_from = 'D65')
-      dE00 <- as.dist(dE00)
+      # output is transposed relative to `dist` object
+      dE00 <- farver::compare_colour(
+        from = v, 
+        from_space = 'lab', 
+        method = 'CIE2000', 
+        white_from = 'D65'
+      )
+      
+      # note transpose
+      dE00 <- as.dist(t(dE00))
       
       # clustering from distance matrix
       # TODO: save clustering results for later

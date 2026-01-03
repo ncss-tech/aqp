@@ -1,10 +1,8 @@
-##
-##
-##
-
+## Interpolate missing spectra
+## 2025-12-10
+## D.E. Beaudette
 
 ## TODO: clamp to original range of Munsell chroma and value
-## TODO: coordinate with `prepare-munsell-LUT.R`
 
 
 library(lattice)
@@ -15,6 +13,7 @@ library(reshape2)
 source('local-functions.R')
 
 # load simplified spectra
+# neutral spectra included
 m.rel <- readRDS('simplified-Munsell-spectra.rds')
 
 # review original range
@@ -61,6 +60,7 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
 m <- split(m.rel, list(m.rel$hue, m.rel$value, m.rel$wavelength))
 
 # do interpolation
+# neutral chips will be ignored, all 0-chroma
 mm <- map(m, .f = interpolateOddChromaSpectra, .progress = TRUE)
 
 # combine
@@ -101,6 +101,18 @@ xyplot(reflectance ~ chroma | factor(wavelength), data=s,
 )
 
 
+# neutral chips have a single point
+idx <- which(m.final$hue == 'N' & m.final$value == 6)
+s <- m.final[idx, ]
+
+xyplot(reflectance ~ chroma | factor(wavelength), data=s, 
+       type='b', as.table=TRUE,
+       scales = list(y = list(tick.number = 10)),
+       par.settings = tactile.theme()
+)
+
+
+
 
 # check for reflectance <= 0
 # 6 rows
@@ -117,7 +129,7 @@ xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance <= 0, dat
        par.settings = tactile.theme()
 )
 
-# probably spline undershoots
+# spline undershoots
 idx <- which(m.final$reflectance <= 0)
 m.final[idx, ]
 
@@ -166,16 +178,28 @@ xyplot(reflectance ~ wavelength, data = s,
        par.settings = tactile.theme()
 )
 
+# 2025-12-10: neutral chip spectra
+s <- subset(m.final, subset = hue == 'N' & value %in% c(2.5, 4, 6, 8.5))
+
+xyplot(reflectance ~ wavelength, data = s, 
+       groups = munsell, type='b',
+       scales = list(y = list(tick.number = 10)),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
+       par.settings = tactile.theme()
+)
+
+
 
 
 ## interpolate spectra for select half-chip Munsell values
-# note: there are some 8.5 value spectra in the source data (hues: "10Y"  "2.5Y" "5Y"   "7.5Y")
+# note: there are some 8.5 value spectra in the source data (hues: "10Y"  "2.5Y" "5Y" "7.5Y", "N")
 
 # split by hue/chroma/wavelength
 m <- split(m.final, list(m.final$hue, m.final$chroma, m.final$wavelength))
 
 
 # do interpolation
+# neutral chips are ignored
 mm <- map(m, .f = interpolateValueSpectra, .progress = TRUE)
 
 # combine
@@ -206,16 +230,14 @@ xyplot(reflectance ~ chroma | factor(wavelength), groups = reflectance <= 0, dat
        par.settings = tactile.theme()
 )
 
-# probably spline undershoots
+# spline undershoots
 idx <- which(m.final$reflectance <= 0)
 
 # replace with minimum reflectance, ignoring these values
 m.final$reflectance[idx] <- min.reflectance
 
 
-
-
-s <- subset(m.final, subset = hue == '10YR' & chroma == 4 & value %in% c(2, 2.5, 3, 4))
+s <- subset(m.final, subset = hue == '10YR' & chroma == 2 & value %in% c(2, 2.5, 3, 4))
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
@@ -236,12 +258,12 @@ xyplot(reflectance ~ wavelength, data = s,
 
 
 # there should be no duplication of the few "8.5 value" spectra
-s <- subset(m.final, subset = hue == '2.5Y' & chroma == 4 & value %in% c(7, 8, 8.5, 9, 9.5, 10))
+s <- subset(m.final, subset = hue == '2.5Y' & chroma == 4 & value %in% c(7, 8, 8.5, 9))
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
        scales = list(y = list(tick.number = 10)),
-       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 5),
+       auto.key=list(lines=TRUE, points=FALSE, cex=1, space='top', columns = 4),
        par.settings = tactile.theme()
 )
 
@@ -264,7 +286,7 @@ nrow(m.final[which(m.final$reflectance < 0), ])
 
 table(m.final$hue[which(m.final$reflectance > 1)])
 
-s <- subset(m.final, subset = hue == '10YR' & chroma == 7 & value %in% c(7, 8, 8.5, 9, 9.5, 10))
+s <- subset(m.final, subset = hue == '10YR' & chroma == 7 & value %in% c(7, 8, 8.5, 9, 9.5))
 
 xyplot(reflectance ~ wavelength, data = s, 
        groups = munsell, type='b',
@@ -279,6 +301,14 @@ xyplot(reflectance ~ wavelength, data = s,
 
 ## clamp to max reflectance of 1
 m.final$reflectance <- pmin(m.final$reflectance, 1)
+
+# each color chip should have 36 entries
+stopifnot(all(table(m.final$munsell) == 36))
+
+# check plausible ranges for value and chroma
+table(m.final$value)
+table(m.final$chroma)
+
 
 
 ## long -> wide for comparisons
@@ -301,11 +331,12 @@ row.names(munsell.spectra.wide) <- NULL
 save(munsell.spectra, file = '../../../data/munsell.spectra.rda', compress = 'xz')
 save(munsell.spectra.wide, file = '../../../data/munsell.spectra.wide.rda', compress = 'xz')
 
-# cleanup
+# cleanup intermediate pieces
 unlink(
   c('interpolated-Munsell-spectra-wide.rds', 
     'interpolated-Munsell-spectra.rds', 
-    'simplified-Munsell-spectra.rds'
+    'simplified-Munsell-spectra.rds', 
+    'neutral-reflectance-estimates.rds'
   )
 )
 

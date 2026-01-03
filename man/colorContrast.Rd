@@ -4,12 +4,12 @@
 \alias{colorContrast}
 \title{Metrics of Contrast Suitable for Comparing Soil Colors}
 \usage{
-colorContrast(m1, m2)
+colorContrast(m1, m2 = NULL)
 }
 \arguments{
-\item{m1}{vector of Munsell colors ('10YR 3/3')}
+\item{m1}{vector of Munsell colors ('10YR 3/3'), must be >1 color if \code{m2} is not specified}
 
-\item{m2}{vector of Munsell colors ('10YR 3/6')}
+\item{m2}{optional vector of Munsell colors ('10YR 3/6')}
 }
 \value{
 \code{data.frame} with the following columns:
@@ -27,7 +27,7 @@ colorContrast(m1, m2)
 Pair-wise comparisons of Munsell color specifications, based on the NCSS color contrast classes (Soil Survey Technical Note 2) and CIE delta-E 2000 metric.
 }
 \details{
-This function is fully vectorized but expects input to be of the same length. Use \code{expand.grid()} to generate suitable input from 1:many or many:1 type comparisons. See \href{http://ncss-tech.github.io/AQP/aqp/color-contrast.html}{this tutorial} for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.
+This function is fully vectorized over elements of \code{m1} and \code{m2} when both are of the same length. Recycling is not implemented. The minimum set of all pair-wise comparisons are performed within elements of \code{m1} when \code{m2} is not specified. For example, comparisons between A, B, and C are limited to \emph{A}x\emph{B}, \emph{A}x\emph{C}, and \emph{B}x\emph{C}. Use \code{expand.grid()} to generate suitable input from 1:many or many:1 type comparisons. See \href{http://ncss-tech.github.io/AQP/aqp/color-contrast.html}{this tutorial} for an expanded discussion and more examples. Neutral colors are not mentioned in SSTN2: in this function any comparison to a neutral color (e.g. 'N 3/') are assigned a delta-hue of 1. Since SSTN2 expects hues to be counted clock wise from 5R, it possible to get very large delta-hue values for otherwise adjacent colors: '5R' vs. '2.5R'. This will be addressed in an update to the standards.
 
 The most meaningful representation of color contrast is the CIE2000 (dE00) metric.
 }
@@ -61,12 +61,11 @@ labels = c('helioblue-reddish', 'light cadmium yellow')
 # approximation / extension of the concept
 colorContrast(m1 = 'N 3/', m2 = 'N 6/')
 
-#
 colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
 
+# pair-wise comparisons
 m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
-m2 <- c('5YR 3/4', '7.5YR 4/4', '2.5YR 2/2', '7.5YR 6/3')
-colorContrast(m1, m2)
+colorContrast(m1)
 
 }
 \references{

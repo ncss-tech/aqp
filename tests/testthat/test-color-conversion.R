@@ -18,6 +18,60 @@ x.neutral <- parseMunsell('N 2/', return_triplets = TRUE)
 
 ## tests
 
+
+# internally-used function for detecting color specification
+test_that(".detectColorSpec", {
+  
+  expect_equal(
+    .detectColorSpec(matrix(c(1, 1, 1), nrow = 1)),
+    'color-coordinate-matrix'
+  )
+  
+  expect_equal(
+    .detectColorSpec(data.frame(r = 1, b = 1, g = 1)),
+    'color-coordinate-data.frame'
+  )
+  
+  expect_equal(
+    .detectColorSpec(c('red', 'blue', 'white')),
+    'named-colors'
+  )
+  
+  expect_equal(
+    .detectColorSpec(c('#AABBCC', '#EEFF22')),
+    'hex-sRGB'
+  )
+  
+  expect_equal(
+    .detectColorSpec(c('10YR 3/3', '5G 4/4', 'N 3/')),
+    'munsell'
+  )
+  
+  # partial Munsell
+  expect_equal(
+    .detectColorSpec(c('10YR ', '5G 4')),
+    'munsell'
+  )
+  
+  # unknown conditions
+  expect_equal(
+    .detectColorSpec(c('red', 'blue', 'dd')),
+    'unknown'
+  )
+  
+  expect_equal(
+    .detectColorSpec(1),
+    'unknown'
+  )
+  
+  expect_equal(
+    .detectColorSpec(character(0)),
+    'unknown'
+  )
+  
+})
+
+
 test_that("col2Munsell works as expected", {
   
   # 10YR 3/4 as hex notation sRGB 
@@ -182,9 +236,9 @@ test_that("Munsell <--> sRGB and back again", {
   expect_equal(m.rgb$b, 0.1337521, tolerance=0.0001)
   
   # neutral colors
-  expect_equal(x.neutral$r, 0.03278, tolerance=0.001)
-  expect_equal(x.neutral$g, 0.03305, tolerance=0.001)
-  expect_equal(x.neutral$b, 0.03305, tolerance=0.001)
+  expect_equal(x.neutral$r, 0.1996, tolerance=0.001)
+  expect_equal(x.neutral$g, 0.1996, tolerance=0.001)
+  expect_equal(x.neutral$b, 0.1996, tolerance=0.001)
   
   # sRGB --> Munsell
   expect_equal(x.back$hue, '10YR')
@@ -249,26 +303,26 @@ test_that("neutral hues", {
   
   N2 <- parseMunsell('N 2/')
   N6 <- parseMunsell('N 6/')
-  expect_equal(N2, '#080808FF')
-  expect_equal(N6, '#464848FF')
+  expect_equal(N2, '#333333FF')
+  expect_equal(N6, '#8F8F8FFF')
   
   # alternative notation
   N2 <- parseMunsell('N 2')
   N6 <- parseMunsell('N 6/0')
-  expect_equal(N2, '#080808FF')
-  expect_equal(N6, '#464848FF')
+  expect_equal(N2, '#333333FF')
+  expect_equal(N6, '#8F8F8FFF')
   
   # missing, 0, or bogus chroma are all ignored
   N2 <- munsell2rgb('N', 2, NA)
   N4 <- munsell2rgb('N', 4, 0)
   N6 <- munsell2rgb('N', 6, 4)
-  expect_equal(N2, '#080808FF')
-  expect_equal(N4, '#1B1C1CFF')
-  expect_equal(N6, '#464848FF')
+  expect_equal(N2, '#333333FF')
+  expect_equal(N4, '#5C5C5CFF')
+  expect_equal(N6, '#8F8F8FFF')
   
   # 0 chroma with any hue -> neutral
   N <- munsell2rgb('10YR', 4, 0)
-  expect_equal(N, '#1B1C1CFF')
+  expect_equal(N, '#5C5C5CFF')
 })
 
 

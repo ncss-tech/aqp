@@ -1,6 +1,6 @@
-## Prepare `munsell` LUT from Renotation Database
+## Prepare `munsell` LUT from Munsell Renotation Database and Munsell Color Atlas
 ## D.E. Beaudette
-## 2024-10-03
+## 2025-12-10
 ##
 ## Originally based on code from ~2006 as part of the Pedlogic project.
 ##
@@ -13,8 +13,7 @@ library(purrr)
 library(aqp)
 
 
-# starting from aqp base directory
-setwd('misc/utils/Munsell')
+# starting from this directory
 source('local-functions.R') 
 
 
@@ -468,39 +467,48 @@ m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 ## add neutral chips
 ##
 
-# manually edited file, exported from Nix Pro app
-n <- read.csv(file = 'neutrals_colordata.csv')
+## NOTES:
+# 
+# * 2025-12-09: measured and verified CIELAB coordinates, D65 illuminant, 2 deg. observer, 2.5 and 8.5 chips included
+n <- read.csv(file = 'neutral-chips.csv')
 
-n <- n[, c('id', 'Lin.sRGB.R', 'Lin.sRGB.G', 'Lin.sRGB.B')]
-names(n) <- c('id', 'R', 'G', 'B')
+# zero-out A,B coordinates
+n$A <- 0
+n$B <- 0
 
-n$V <- as.numeric(sapply(strsplit(n$id, '-', fixed = TRUE), '[', 1))
+# hue and chroma columns 
+n$H <- 'N'
+n$C <- 0
 
-previewColors(rgb(n$R, n$G, n$B))
+# more intuitive ordering
+n <- n[, c('H', 'V', 'C', 'L', 'A', 'B')]
 
-# TODO: eval over replicates
+# re-order, like other hues
+n <- n[order(n$V), ]
 
-# take mean over replicates
-n.agg <- aggregate(cbind(R, G, B) ~ V, data = n, FUN = mean)
+# convert LAB -> sRGB
+# required so we can combine with other chips, only referenced to sRGB at this point
+.rgb <- convertColor(n[, c('L', 'A', 'B')], from = 'Lab', to = 'sRGB')
+.rgb <- data.frame(.rgb)
+names(.rgb) <- c('R', 'G', 'B')
 
-n.agg$H <- 'N'
-n.agg$C <- 0
+# swap LAB for sRGB
+n.final <- cbind(n[, 1:3], .rgb)
 
-n.agg <- n.agg[, c('H', 'V', 'C', 'R', 'G', 'B')]
+# check:
+.cols <- rgb(n.final$R, n.final$G, n.final$B, maxColorValue = 1)
+.labs <- sprintf("%s %s/", n.final$H, n.final$V)
+soilPalette(.cols, lab = .labs)
 
-# interpolate 2.5 value
-n.agg.2.5 <- interpolateValue(n.agg[1:2, ], vars = c('R', 'G', 'B'))
-
-n.agg.final <- rbind(n.agg, n.agg.2.5)
-n.agg.final <- n.agg.final[order(n.agg.final$V), ]
+# append neutral chips with rest of the data
+m.final <- rbind(m.final, n.final)
 
 
-# combine
-m.final <- rbind(m.final, n.agg.final)
-
-# 2022: 9,227 (2.5 value chips)
-# 2024a: 15,709 (all half-value chips)
-# 2024b: 10,447 (select half-value chips)
+## summary:
+# 2022:       9,227 (2.5 value chips)
+# 2024a:      15,709 (all half-value chips)
+# 2024b:      10,447 (select half-value chips)
+# 2025-12-09: 10,449 (additional N chips)
 nrow(m.final)
 
 
@@ -510,6 +518,7 @@ nrow(m.final)
 lab <- convertColor(m.final[, c('R', 'G', 'B')], from = 'sRGB', to = 'Lab')
 m.final.lab <- data.frame(m.final, lab)
 
+
 ##
 ## cleanup names / row.names
 ##
@@ -517,6 +526,20 @@ names(m.final.lab) <- c('hue', 'value', 'chroma', 'r', 'g', 'b', 'L', 'A', 'B')
 row.names(m.final.lab) <- NULL
 
 str(m.final.lab)
+
+
+
+##
+## save to munsell.rda
+##
+munsell <- m.final.lab
+save(munsell, file = '../../../data/munsell.rda', compress = 'xz')
+
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
+
 
 
 ##
@@ -532,83 +555,76 @@ str(m.final.lab)
 ## 2024:
 ## dE00 > 0.4 (but all < 1.5) are 2.5 value chips
 ## 
-## likely related to interpolation over full range of V vs. single, linear interpolation 2->2.5<-3
+## likely related to interpolation over full range of V vs. single, 
+## linear interpolation 2->2.5<-3
 
+# 
+# 
+# 
+# ## make backup copy of old LUT
+# # data(munsell)
+# # saveRDS(munsell, file = 'munsell-LUT-2024-09-25.rds')
+# 
+# z.old <- readRDS('munsell-LUT-2024-09-25.rds')
+# 
+# z <- merge(z.old, m.final.lab, by = c('hue', 'value', 'chroma'), all.x = TRUE, sort = FALSE)
+# 
+# str(z)
+# 
+# # looks pretty good, note changes in N chips
+# xyplot(L.y ~ L.x, data = z)
+# xyplot(A.y ~ A.x, data = z)
+# xyplot(B.y ~ B.x, data = z)
+# 
+# 
+# 
+# ## DE00 old vs new
+# library(farver)
+# 
+# d <- vector(mode = 'numeric', length = nrow(z))
+# 
+# for(i in 1:nrow(z)) {
+#   d[i] <- compare_colour(
+#     from = z[i, c('L.x', 'A.x', 'B.x')], 
+#     to = z[i, c('L.y', 'A.y', 'B.y')], 
+#     from_space = 'lab', 
+#     to_space = 'lab', 
+#     white_from = 'D65', 
+#     white_to = 'D65', 
+#     method = 'cie2000'
+#   )
+# }
+# 
+# hist(d)
+# 
+# 
+# # changes with dE00 > 2
+# idx <- which(d > 2)
+# zz <- z[idx, ]
+# zz$dE00 <- d[idx]
+# zz <- zz[order(zz$dE00, decreasing = TRUE), ]
+# 
+# head(zz, 50)
+# 
+# table(zz$hue)
+# table(zz$value)
+# table(zz$chroma)
+# 
+# 
+# # changes with dE00 > 0.4
+# idx <- which(d > 0.4)
+# zz <- z[idx, ]
+# zz$dE00 <- d[idx]
+# zz <- zz[order(zz$dE00, decreasing = TRUE), ]
+# 
+# nrow(zz)
+# head(zz, 20)
+# 
+# table(zz$hue)
+# table(zz$value)
+# table(zz$chroma)
+# 
 
-
-
-## make backup copy of old LUT
-# data(munsell)
-# saveRDS(munsell, file = 'munsell-LUT-2024-09-25.rds')
-
-z.old <- readRDS('munsell-LUT-2024-09-25.rds')
-
-z <- merge(z.old, m.final.lab, by = c('hue', 'value', 'chroma'), all.x = TRUE, sort = FALSE)
-
-str(z)
-
-# looks pretty good, note changes in N chips
-xyplot(L.y ~ L.x, data = z)
-xyplot(A.y ~ A.x, data = z)
-xyplot(B.y ~ B.x, data = z)
-
-# my original estimates were too light
-z[z$hue == 'N', ]
-
-## DE00 old vs new
-library(farver)
-
-d <- vector(mode = 'numeric', length = nrow(z))
-
-for(i in 1:nrow(z)) {
-  d[i] <- compare_colour(
-    from = z[i, c('L.x', 'A.x', 'B.x')], 
-    to = z[i, c('L.y', 'A.y', 'B.y')], 
-    from_space = 'lab', 
-    to_space = 'lab', 
-    white_from = 'D65', 
-    white_to = 'D65', 
-    method = 'cie2000'
-  )
-}
-
-hist(d)
-
-
-# changes with dE00 > 2
-idx <- which(d > 2)
-zz <- z[idx, ]
-zz$dE00 <- d[idx]
-zz <- zz[order(zz$dE00, decreasing = TRUE), ]
-
-head(zz, 50)
-
-table(zz$hue)
-table(zz$value)
-table(zz$chroma)
-
-
-# changes with dE00 > 0.4
-idx <- which(d > 0.4)
-zz <- z[idx, ]
-zz$dE00 <- d[idx]
-zz <- zz[order(zz$dE00, decreasing = TRUE), ]
-
-nrow(zz)
-head(zz, 20)
-
-table(zz$hue)
-table(zz$value)
-table(zz$chroma)
-
-
-
-
-##
-## save to munsell.rda
-##
-munsell <- m.final.lab
-save(munsell, file = '../../../data/munsell.rda', compress = 'xz')
 
 
 

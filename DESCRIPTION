@@ -1,14 +1,15 @@
 Package: aqp
-Version: 2.2-1
+Version: 2.3
 Title: Algorithms for Quantitative Pedology
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@usda.gov", comment = c(ORCID="0009-0008-2780-4785")), 
              person(given="Pierre", family="Roudier", email="roudierp@landcareresearch.co.nz", role = c("aut", "ctb")), 
              person(given="Andrew", family="Brown", email="andrew.g.brown@usda.gov", role = c("aut", "ctb")), 
-             person(given="Stephen", family="Roecker", role = c("aut", "ctb")))
-Author: Dylan Beaudette [aut, cre], Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb]
+             person(given="Stephen", family="Roecker", role = c("aut", "ctb")),
+             person(given = "David", family = "Rossiter", role = c("ctb")))
+Author: Dylan Beaudette [aut, cre], Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb], Stephen Roecker [aut, ctb], David Rossiter [ctb]
 Maintainer: Dylan Beaudette <dylan.beaudette@usda.gov>
 Depends: R (>= 4.1.0)
-Imports: grDevices, graphics, stats, utils, methods, grid, lattice, cluster, stringr, data.table, farver, digest, colorspace, ape
+Imports: grDevices, graphics, stats, utils, methods, grid, lattice, cluster, data.table, farver, digest, colorspace, ape
 Suggests: 
     mvtnorm,
     soilDB,
@@ -39,7 +40,7 @@ URL: https://ncss-tech.github.io/aqp/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/aqp/issues
 Language: en-US
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
