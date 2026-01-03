@@ -42,6 +42,7 @@
 #'   profile IDs are stored in `attr(result, 'removed')`.
 #'
 #' @export
+#' @importFrom stats setNames
 #' @aliases spc2mpspline
 #' @references Bishop, T.F.A., McBratney, A.B., Laslett, G.M. (1999) Modelling
 #'   soil attribute depth functions with equal-area quadratic smoothing splines.
@@ -205,9 +206,9 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             # Create profile ID to index mapping for efficient subsetting
             spl_pids <- profile_id(spc.spl)
             pid_idx <- setNames(seq_along(spl_pids), spl_pids)
-
+            
             # iterate over variables and add results to spc.spl
-            for(v in var_name){
+            for (v in var_name) {
               res.v <- res[[v]]
               current_splined_pids <- profile_id(spc.spl)
               
@@ -232,7 +233,12 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
                   if (p %in% names(pid_idx)) {
                     p_idx <- pid_idx[p]
                     num_hz <- nrow(horizons(spc.spl[p_idx, ]))
-                    if (num_hz > 0) rep(NA, num_hz) else NULL
+                    
+                    if (num_hz > 0) {
+                      rep(NA, num_hz)
+                    } else {
+                      NULL
+                    }
                   } else {
                     NULL
                   }
