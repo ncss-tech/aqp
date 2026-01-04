@@ -1,4 +1,9 @@
 library(aqp)
+library(corrplot)
+library(soilDB)
+library(cluster)
+library(vegan)
+
 
 
 ## idea: information content of soil profile vs. many times shuffled variants
@@ -14,11 +19,40 @@ o <- osd
 # apply shuffling by-profile
 o.d <- shuffle(o, mode = 'data')
 
-# appl
+# apply shuffling by physical horizon
 o.h <- shuffle(o, mode = 'horizon')
 
 # sampling with replacement
 o.h2 <- shuffle(o, mode = 'horizon', replace = TRUE)
+
+
+plotSPC(o[1, ])
+
+# generate unique permutations of a unique sequence
+# s: sequence
+# nrow(perms(s)) == s!
+# inefficient for n > 8
+perms <- function(s) {
+  
+  # sequence length
+  .n <- length(s)
+  
+  # all possible combinations, includes duplicates
+  .g <- do.call('expand.grid', rep(list(s), times = .n))
+  .g <- as.matrix(.g)
+  
+  # keep permutations without duplicates
+  .idx <- which(apply(.g, 1, function(i) {length(unique(i)) == .n}))
+  .g <- .g[.idx, ]
+  
+  # rows are permutations
+  # columns are sequence elements
+  return(.g)
+}
+
+perms(1:4)
+
+
 
 # add method to IDs
 profile_id(o.d) <- sprintf("%s\ndata", profile_id(o.d))
@@ -29,10 +63,9 @@ profile_id(o.h2) <- sprintf("%s\nhz R", profile_id(o.h2))
 g <- combine(o, o.d, o.h, o.h2)
 
 # graphical comparison
-op <- par(mar = c(0, 0, 0.5, 2.5))
+par(mar = c(0, 0, 0.5, 2.5))
 plotSPC(g, name.style = 'center-center', cex.names = 0.66, width = 0.3, cex.id = 0.75)
 
-par(op)
 
 
 ## interpret...
@@ -43,7 +76,7 @@ profileInformationIndex(o.h, vars = 'hzname')
 
 d <- duplicate(o, times = 10)
 
-d <- shuffle(d, mode = 'horizon')
+d <- aqp::shuffle(d, mode = 'horizon')
 
 d <- combine(o, d)
 
@@ -57,41 +90,94 @@ dd <- soilColorSignature(d, color = 'soil_color', method = 'depthSlices', percep
 plotProfileDendrogram(d, cluster::diana(dd))
 
 ## NCSP
-library(soilDB)
-library(cluster)
-library(vegan)
+
+# idea:
+#  permute horizons of S many times (not feasible to perform all permutations)
+)
+#  
 
 
-o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer'))
+o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer', 'mexico'))
 o <- trunc(o, 0, 150)
 
-d <- duplicate(o, times = 25)
-
-# plotSPC(d)
-
-d <- aqp::shuffle(d, mode = 'horizon')
+par(mar = c(0, 0, 0, 2))
+plotSPC(o, name.style = 'center-center', cex.names = 0.9)
 
 
-plotSPC(d, color = 'texture_class', show.legend = FALSE, print.id = FALSE, name = NA, divide.hz = FALSE)
+g <- combine(
+  o,
+  aqp::shuffle(duplicate(o, times = 25), mode = 'horizon')
+)
+
+# ensure .oldID is available for original data
+idx <- which(is.na(g$.oldID))
+g$.oldID[idx] <- profile_id(g)[idx]
+
+par(mar = c(0, 0, 0, 1))
+plotSPC(g)
+
+plotSPC(g, color = 'texture_class', show.legend = FALSE, print.id = FALSE, name = NA, divide.hz = FALSE)
 
 o$pii <- profileInformationIndex(o, vars = c('texture_class'))
-d$pii <- profileInformationIndex(d, vars = c('texture_class'))
+g$pii <- profileInformationIndex(g, vars = c('texture_class'))
 
 
 site(o)[, c('id', 'pii')]
-tapply(d$pii, d$.oldID, mean)
-tapply(d$pii, d$.oldID, sd)
+tapply(g$pii, g$.oldID, mean)
+tapply(g$pii, g$.oldID, sd)
+tapply(g$pii, g$.oldID, mean) / tapply(g$pii, g$.oldID, var)
 
-tapply(d$pii, d$.oldID, mean) / tapply(d$pii, d$.oldID, var)
 
+d <- NCSP(g, vars = c('texture_class', 'value', 'chroma'))
 
-dd <- NCSP(d, vars = 'texture_class')
-
-b <- betadisper(dd, group = d$.oldID, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
+b <- betadisper(d, group = g$.oldID, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
 
 b
 
+plot(b)
 
+par(mar = c(0, 0, 0, 0))
+plotProfileDendrogram(g, cluster::diana(d), scaling.factor = 0.8)
+
+
+# expand dist object to full matrix form of the pair-wise distances 
+m <- as.matrix(d)
+# copy short IDs from Soil Profile Collection to full distance matrix
+dimnames(m) <- list(g$.oldID, g$.oldID)
+
+# invert device foreground / background colors for an artistic effect
+# use colors from The Life Aquatic
+par(bg = 'black', fg = 'white')
+corrplot(
+  m, 
+  col = hcl.colors(n = 25, palette = 'zissou1'), 
+  is.corr = FALSE, 
+  col.lim = c(0, 100), 
+  method = "color", 
+  order = "original",
+  type = "upper", 
+  # tl.pos = "n",
+  # cl.pos = "n",
+  mar = c(0.1, 0, 0, 0.8), tl.cex = 0.45
+) 
+
+
+.p <- profile_id(o)
+
+D <- lapply(.p, function(i) {
+  
+  idx <- grep(i, profile_id(g), fixed = TRUE)
+  
+  # dimnames(m[idx, idx])
+  
+  m.i <- m[idx, idx]
+  v.i <- m.i[upper.tri(m.i, diag = FALSE)]
+  return(v.i)
+})
+
+names(D) <- .p
+
+boxplot(D, las = 1)
 
 
 
