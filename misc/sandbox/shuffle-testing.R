@@ -2,15 +2,13 @@ library(aqp)
 library(corrplot)
 library(soilDB)
 library(cluster)
-library(vegan)
-
-
 
 ## idea: information content of soil profile vs. many times shuffled variants
 ##        * smaller deviations => less information
 ##        * larger deviations => more information
 
 
+# namespace collision with vegan::shuffle()
 
 
 data('osd', package = 'aqp')
@@ -85,19 +83,24 @@ profileInformationIndex(d, vars = 'hzname')
 
 
 ## 
+# 0-distance for method = colorBucket, pam
 dd <- soilColorSignature(d, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
 
-plotProfileDendrogram(d, cluster::diana(dd))
+plotProfileDendrogram(d, cluster::diana(dd), scaling.factor = 0.5, name = NA)
 
 ## NCSP
 
 # idea:
 #  permute horizons of S many times (not feasible to perform all permutations)
-)
+#  compare distribution of D_S ~ information content
+#  values of D depend on entire SPC, 
+#  always scaled 0-1 when using e.g. Gower's D  -> comparisons outside SPC impossible
 #  
+# e.g. using Hanford only, median D ~ 5.3
+#      Hanford + other soils, median D ~ 0.15
 
-
-o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer', 'mexico'))
+o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer', 'mexico', 'antigo'))
+# o <- fetchOSD(c('hanford'))
 o <- trunc(o, 0, 150)
 
 par(mar = c(0, 0, 0, 2))
@@ -128,16 +131,16 @@ tapply(g$pii, g$.oldID, sd)
 tapply(g$pii, g$.oldID, mean) / tapply(g$pii, g$.oldID, var)
 
 
-d <- NCSP(g, vars = c('texture_class', 'value', 'chroma'))
+d <- NCSP(g, vars = c('texture_class', 'value', 'chroma'), rescaleResult = TRUE)
 
-b <- betadisper(d, group = g$.oldID, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
+b <- vegan::betadisper(d, group = g$.oldID, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
 
 b
 
 plot(b)
 
 par(mar = c(0, 0, 0, 0))
-plotProfileDendrogram(g, cluster::diana(d), scaling.factor = 0.8)
+plotProfileDendrogram(g, cluster::diana(d))
 
 
 # expand dist object to full matrix form of the pair-wise distances 
@@ -152,7 +155,7 @@ corrplot(
   m, 
   col = hcl.colors(n = 25, palette = 'zissou1'), 
   is.corr = FALSE, 
-  col.lim = c(0, 100), 
+  col.lim = c(0, 1), 
   method = "color", 
   order = "original",
   type = "upper", 
@@ -177,8 +180,10 @@ D <- lapply(.p, function(i) {
 
 names(D) <- .p
 
-boxplot(D, las = 1)
+dev.off()
 
+boxplot(D, las = 1)
+boxplot(D1, las = 1)
 
 
 
