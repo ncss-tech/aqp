@@ -1,11 +1,11 @@
 library(aqp)
 library(soilDB)
 library(vegan)
-library(sharpshootR)
 library(cluster)
+library(sharpshootR)
 
 
-s <- c('drummer', 'musick', 'pierre', 'lucy', 'cecil', 'miami')
+s <- c('drummer', 'musick', 'pierre', 'cecil', 'miami')
 
 
 osds <- fetchOSD(s)
@@ -27,7 +27,7 @@ x <- subset(x, .flag == TRUE)
 x <- HzDepthLogicSubset(x)
 
 # distance matrix
-d <- NCSP(x, vars=c('clay', 'estimated_ph_h2o', 'cec7', 'estimated_om'), k=0, maxDepth = 120)
+d <- NCSP(x, vars = c('clay', 'estimated_ph_h2o', 'cec7', 'estimated_om'), k = 0, maxDepth = 120)
 
 # divisive hierarchical clustering
 dd <- diana(d)
@@ -53,16 +53,16 @@ text(x = 1:length(dd$order), y = 0, cl[dd$order], cex = 0.66, font = 2)
 
 
 ## map distance matrix to 2D space via principal coordinates
-d.betadisper <- betadisper(d, group=x$taxonname, bias.adjust = TRUE, sqrt.dist = FALSE, type='median')
+d.betadisper <- betadisper(d, group=x$taxonname, bias.adjust = TRUE, sqrt.dist = FALSE, type = 'median')
 
-## fancy plot
-par(mar=c(3,3,3,1), mfcol=c(1,3))
+# fancy plot
+par(mar = c(3,3,3,1), mfcol = c(1,3))
 
-boxplot(d.betadisper, varwidth=TRUE, las=1)
+boxplot(d.betadisper, varwidth = TRUE, las = 1)
 
 plot(
   d.betadisper, hull=FALSE, ellipse=TRUE, conf=0.5, las=1,
-  col=c('Royalblue', 'Orange', 'Darkgreen', 'Firebrick'), 
+  col = c('royalblue', 'orange', 'darkgreen', 'firebrick', 'purple'), 
   main='Ordination of Between-Profile Distances\n50% Probability Ellipse',
   xlab='', ylab=''
 )
@@ -71,8 +71,8 @@ plot(
 SoilTaxonomyDendrogram(osds, width=0.3, name.style = 'center-center', cex.taxon.labels = 1)
 
 
-par(mar=c(3,8,3,1), mfcol=c(1,1))
-plot(TukeyHSD(d.betadisper, conf.level = 0.85), las=1)
+par(mar = c(3, 8, 3, 1), mfcol = c(1, 1))
+plot(TukeyHSD(d.betadisper, conf.level = 0.85), las = 1)
 
 
 

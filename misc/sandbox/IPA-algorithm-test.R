@@ -22,6 +22,8 @@ x$IPA <- profileApply(x, simplify = TRUE, function(i) {
 plotSPC(x, color = 'sand')
 
 o <- order(x$IPA)
+
+par(mar = c(2, 0, 3, 2))
 plotSPC(x, color = 'sand', plot.order = o)
 text(1:length(x), 350, round(x$IPA, 2)[o])
 axis(side = 1, at = 1:length(x), labels = format(x$IPA, digits = 3)[order(x$IPA)], cex.axis = 0.66, las = 1)
