@@ -90,6 +90,8 @@ lapply(z, function(i) {
 
 
 # modified weighted SD, NA have been removed
+# TODO: this may need to be applied to all records
+#       --> how to interpret h bar x? which mean is this?
 lapply(z, function(i) {
   
   .n <- nrow(i)
