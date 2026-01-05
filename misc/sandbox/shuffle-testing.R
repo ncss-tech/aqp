@@ -23,6 +23,9 @@ o.h <- shuffle(o, mode = 'horizon')
 # sampling with replacement
 o.h2 <- shuffle(o, mode = 'horizon', replace = TRUE)
 
+par(mar = c(0, 0, 0, 3))
+plotSPC(o, name.style = 'center-center', cex.names = 1)
+
 
 plotSPC(o[1, ])
 
@@ -103,8 +106,16 @@ o <- fetchOSD(c('hanford', 'cecil', 'menfro', 'drummer', 'mexico', 'antigo'))
 # o <- fetchOSD(c('hanford'))
 o <- trunc(o, 0, 150)
 
-par(mar = c(0, 0, 0, 2))
+o$pii <- profileInformationIndex(o, vars = c('texture_class', 'value', 'chroma'))
+
+# don't forget this trick
+# o[, , .BOTTOM, .LAST]
+
+
+par(mar = c(2.5, 0, 0, 3))
 plotSPC(o, name.style = 'center-center', cex.names = 0.9)
+text(x = 1:length(o), y = 155, labels = o$pii)
+mtext('Profile Information Index (bytes)', side = 1, at = 1, adj = 0, line = 0.5, font = 2)
 
 
 g <- combine(
@@ -121,8 +132,8 @@ plotSPC(g)
 
 plotSPC(g, color = 'texture_class', show.legend = FALSE, print.id = FALSE, name = NA, divide.hz = FALSE)
 
-o$pii <- profileInformationIndex(o, vars = c('texture_class'))
-g$pii <- profileInformationIndex(g, vars = c('texture_class'))
+
+g$pii <- profileInformationIndex(g, vars = c('texture_class', 'value', 'chroma'))
 
 
 site(o)[, c('id', 'pii')]
@@ -140,7 +151,7 @@ b
 plot(b)
 
 par(mar = c(0, 0, 0, 0))
-plotProfileDendrogram(g, cluster::diana(d))
+plotProfileDendrogram(g, cluster::diana(d), name = NA, depth.axis = FALSE, scaling.factor = 0.009, print.id = FALSE, divide.hz = FALSE)
 
 
 # expand dist object to full matrix form of the pair-wise distances 
@@ -182,8 +193,22 @@ names(D) <- .p
 
 dev.off()
 
-boxplot(D, las = 1)
-boxplot(D1, las = 1)
+boxplot(D, las = 1, main = 'Within-Class Distances')
+# boxplot(D1, las = 1)
+
+
+layout(matrix(c(1, 2), byrow = TRUE), heights = c(1.5, 1))
+
+par(mar = c(2, 0, 0, 3), xpd = NA)
+plotSPC(o, name.style = 'center-center', cex.names = 0.85)
+text(x = 1:length(o), y = 155, labels = o$pii)
+mtext('Profile Information Index (bytes)', side = 1, at = 1, adj = 0, line = 0.5, font = 2, cex = 0.75)
+
+par(mar = c(3, 3, 3, 3))
+boxplot(D, las = 1, main = 'Within-Class Distances\nshuffle 25 times', boxwex = 0.5, axes = FALSE)
+axis(side = 2, las = 1, cex = 0.75, line = 0.5, cex.axis = 0.75)
+axis(side = 1, at = 1:6, labels = profile_id(o), cex.axis = 0.75)
+
 
 
 
