@@ -16,7 +16,8 @@
   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
  * `electroStatics_1D()` now accepts vector of charge density `q` or single value (original implementation)
  * `estimateSoilColor()` transformation parameters updated
-
+ * `spc2mpspline()` gains ability to process multiple variables in one call. Requires mpspline2 (>=0.1.9)
+ 
 # aqp 2.2-1 (2025-09-16)
  * CRAN release
  * moving some vignettes to pkgdown articles (https://ncss-tech.github.io/aqp/)
