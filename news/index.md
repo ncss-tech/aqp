@@ -42,6 +42,9 @@
   implementation)
 - [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
   transformation parameters updated
+- [`spc2mpspline()`](https://ncss-tech.github.io/aqp/reference/spc2mpspline-SoilProfileCollection-method.md)
+  gains ability to process multiple variables in one call. Requires
+  mpspline2 (\>=0.1.9)
 
 ## aqp 2.2-1 (2025-09-16)
 

@@ -321,13 +321,13 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-in"><span><span class="va">st</span> <span class="op">&lt;-</span> <span class="va">st</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">ssc</span> <span class="op">&lt;-</span> <span class="fu">texcl_to_ssc</span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>texcl <span class="op">=</span> <span class="va">st</span><span class="op">$</span><span class="va">texcl</span>, clay <span class="op">=</span> <span class="va">ssc</span><span class="op">$</span><span class="va">clay</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      texcl clay</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] "c"   "55"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] "ls"  "6" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] "c"   "55"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] "sc"  "41"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] "sil" "13"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] "sc"  "41"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      texcl  clay</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] "c"    "55"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] "sicl" "33"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] "sl"   "10"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] "sc"   "41"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] "cl"   "33"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] "sicl" "33"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example of texmod_to_fragvoltol</span></span></span>
@@ -394,18 +394,18 @@ it should be subtracted from the sand, and added to the silt content.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">clay</span> <span class="op">~</span> <span class="va">sample</span> <span class="op">+</span> <span class="va">texcl</span>, data <span class="op">=</span> <span class="va">ssc</span>, <span class="va">summary</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample texcl clay.Min. clay.1st Qu. clay.Median clay.Mean clay.3rd Qu.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  FALSE    cl     33.00        33.00       33.00     33.00        33.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   TRUE    cl     27.00        30.75       34.50     33.10        35.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   TRUE    cl     30.00        31.25       33.50     34.00        36.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  FALSE   sil     13.00        13.00       13.00     13.00        13.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   TRUE   sil      2.00         4.25        6.00      9.10        11.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   TRUE   sil      1.00         7.50       11.00     12.30        16.75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  FALSE    sl     10.00        10.00       10.00     10.00        10.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   TRUE    sl      3.00         6.50       10.50     10.10        14.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   TRUE    sl     10.00        11.75       15.00     14.30        16.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   clay.Max.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     33.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     37.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     39.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3     13.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     26.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     25.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5     10.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6     17.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     18.00</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># example of texture_to_texmod()</span></span></span>

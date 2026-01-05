@@ -4,7 +4,6 @@ Generate mass-preserving splines for any numeric attribute in a
 SoilProfileCollection using
 [`mpspline2::mpspline()`](https://rdrr.io/pkg/mpspline2/man/mpspline.html).
 mpspline2 implements the method described in Bishop et al. (1999).
-Currently this function only works with a single `var_name` at a time.
 
 ## Usage
 
@@ -14,7 +13,7 @@ spc2mpspline(
   object,
   var_name = NULL,
   method = c("est_1cm", "est_icm", "est_dcm"),
-  pattern = "R|Cr|Cd|qm",
+  pattern = "R|Cr|Cd|m",
   hzdesgn = NULL,
   ...
 )
@@ -28,8 +27,8 @@ spc2mpspline(
 
 - var_name:
 
-  Column name in `@horizons` slot of `object` containing numeric values
-  to spline
+  Column name(s) in `@horizons` slot of `object` containing numeric
+  values to spline
 
 - method:
 
@@ -43,7 +42,7 @@ spc2mpspline(
 
   Regex pattern to match for bottom of profile (passed to
   [`minDepthOf()`](https://ncss-tech.github.io/aqp/reference/depthOf.md))
-  default: "R\|Cr\|Cd\|qm"; only used if `hzdesgn` is specified
+  default: "R\|Cr\|Cd\|m"; only used if `hzdesgn` is specified
 
 - hzdesgn:
 
@@ -80,8 +79,8 @@ attribute depth functions with equal-area quadratic smoothing splines.
 Geoderma 91(1–2), pp. 27-45.
 [doi:10.1016/S0016-7061(99)00003-8](https://doi.org/10.1016/S0016-7061%2899%2900003-8)
 
-O'Brien, Lauren (2022). mpspline2: Mass-Preserving Spline Functions for
-Soil Data. R package version 0.1.6.
+O'Brien, Lauren (2025). mpspline2: Mass-Preserving Spline Functions for
+Soil Data. R package version 0.1.9.
 <https://cran.r-project.org/package=mpspline2>
 
 ## Author
@@ -91,12 +90,30 @@ Andrew G. Brown
 ## Examples
 
 ``` r
-if (requireNamespace("mpspline2")) {
-  data(sp1)
-  depths(sp1) <- id ~ top + bottom
+data(sp1)
+depths(sp1) <- id ~ top + bottom
+hzdesgnname(sp1) <- "name"
+  
+# run on a single variable
+res <- spc2mpspline(sp1, "prop")
+  
+# plot single-variable result
+plotSPC(res[1:5, ], color = "prop_spline", divide.hz = FALSE)
 
-  res <- spc2mpspline(sp1, "prop")
+# add a second continuous numeric variable for demonstration
+sp1$value2 <- runif(nrow(horizons(sp1)))
+  
+# run on multiple variables
+res2 <- spc2mpspline(sp1, c("prop", "value2"))
+  
+# plot multi-variable result
+plotSPC(res2[1:5, ], color = "value2_spline", divide.hz = FALSE)
 
-  plotSPC(res[1:5,], color = "prop_spline", divide.hz = FALSE)
-}
+  
+# run on multiple variables with custom depth intervals
+res3 <- spc2mpspline(sp1,
+                     c("prop", "value2"),
+                     method = "est_dcm",
+                     d = c(0, 10, 20, 50, 100))
+plotSPC(res3[1:5, ], color = "value2_spline", divide.hz = FALSE)
 ```
