@@ -31,12 +31,12 @@
   gains `scaleTo` argument for scaling profiles to specific soil depth
 - [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md)
   changes ([\#335](https://github.com/ncss-tech/aqp/issues/335)):
-- gains generalized color specification via new arguments `color` and
-  `space`
-- new argument to control development of a perceptual distance matrix:
-  `perceptualDistMat = TRUE`
-- deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning
-  issued until the next major release
+  - gains generalized color specification via new arguments `color` and
+    `space`
+  - new argument to control development of a perceptual distance matrix:
+    `perceptualDistMat = TRUE`
+  - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning
+    issued until the next major release
 - [`electroStatics_1D()`](https://ncss-tech.github.io/aqp/reference/electroStatics_1D.md)
   now accepts vector of charge density `q` or single value (original
   implementation)
@@ -75,8 +75,8 @@ CRAN release: 2025-02-15
   [`stats::cmdscale()`](https://rdrr.io/r/stats/cmdscale.html) instead
   of `MASS:isoMDS()`
 - migrating a few functions from sharpshootR to aqp:
-- [`plotProfileDendrogram()`](https://ncss-tech.github.io/aqp/reference/plotProfileDendrogram.md)
-- [`aggregateColorPlot()`](https://ncss-tech.github.io/aqp/reference/aggregateColorPlot.md)
+  - [`plotProfileDendrogram()`](https://ncss-tech.github.io/aqp/reference/plotProfileDendrogram.md)
+  - [`aggregateColorPlot()`](https://ncss-tech.github.io/aqp/reference/aggregateColorPlot.md)
 - fix for
   [`hz_segment()`](https://ncss-tech.github.io/aqp/reference/hz_segment.md)
   and [`NCSP()`](https://ncss-tech.github.io/aqp/reference/NCSP.md) with

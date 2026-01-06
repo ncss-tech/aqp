@@ -60,12 +60,13 @@
 <li>
 <code><a href="../reference/warpHorizons.html">warpHorizons()</a></code> gains <code>scaleTo</code> argument for scaling profiles to specific soil depth</li>
 <li>
-<code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> changes (<a href="https://github.com/ncss-tech/aqp/issues/335" class="external-link">#335</a>):</li>
-<li>gains generalized color specification via new arguments <code>color</code> and <code>space</code>
+<code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code> changes (<a href="https://github.com/ncss-tech/aqp/issues/335" class="external-link">#335</a>):
+<ul><li>gains generalized color specification via new arguments <code>color</code> and <code>space</code>
 </li>
 <li>new argument to control development of a perceptual distance matrix: <code>perceptualDistMat = TRUE</code>
 </li>
 <li>deprecated arguments <code>r</code>, <code>g</code>, <code>b</code>, <code>RescaleLightnessBy</code>, warning issued until the next major release</li>
+</ul></li>
 <li>
 <code><a href="../reference/electroStatics_1D.html">electroStatics_1D()</a></code> now accepts vector of charge density <code>q</code> or single value (original implementation)</li>
 <li>
@@ -91,9 +92,10 @@
 <li>
 <code>evalGenHz()</code> now uses <code><a href="https://rdrr.io/r/stats/cmdscale.html" class="external-link">stats::cmdscale()</a></code> instead of <code>MASS:isoMDS()</code>
 </li>
-<li>migrating a few functions from sharpshootR to aqp:</li>
-<li><code><a href="../reference/plotProfileDendrogram.html">plotProfileDendrogram()</a></code></li>
+<li>migrating a few functions from sharpshootR to aqp:
+<ul><li><code><a href="../reference/plotProfileDendrogram.html">plotProfileDendrogram()</a></code></li>
 <li><code><a href="../reference/aggregateColorPlot.html">aggregateColorPlot()</a></code></li>
+</ul></li>
 <li>fix for <code><a href="../reference/hz_segment.html">hz_segment()</a></code> and <code><a href="../reference/NCSP.html">NCSP()</a></code> with <em>data.table</em> <code>SoilProfileCollection</code> objects (<a href="https://github.com/ncss-tech/aqp/issues/320" class="external-link">#320</a>)</li>
 <li>fix for <code><a href="../reference/generalize.hz.html">generalize.hz()</a></code> to handle missing depths better and added <code>na.rm</code> argument (<a href="https://github.com/ncss-tech/aqp/issues/321" class="external-link">#321</a>)</li>
 <li>finally dropping plyr from suggests (<a href="https://github.com/ncss-tech/aqp/issues/157" class="external-link">#157</a>)</li>
