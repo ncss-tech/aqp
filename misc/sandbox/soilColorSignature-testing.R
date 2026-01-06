@@ -3,6 +3,9 @@ library(cluster)
 library(ape)
 library(soilDB)
 library(sharpshootR)
+library(MASS)
+library(corrplot)
+library(farver)
 
 s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford', 'cecil', 'sycamore', 'KLAMATH', 'MOGLIA', 'vleck', 'drummer', 'CANEYHEAD', 'musick', 'sierra', 'HAYNER', 'zook', 'argonaut', 'PALAU')
 
@@ -46,6 +49,27 @@ title('colorBucket: Euclidean dist, standardization', line = 0, cex.main = 0.8)
 
 plotProfileDendrogram(s, dd.wt, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, scaling.factor = 0.006, name = NA, rotateToProfileID = TRUE)
 title('colorBucket: Gower dist, L-downweighted', line = 0, cex.main = 0.8)
+
+
+### TODO viz signature color groups
+
+# new function required
+
+# sig <- soilColorSignature(s, color = 'soil_color', method = 'pam', perceptualDistMat = FALSE)
+
+sig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', perceptualDistMat = FALSE)
+
+head(sig)
+.n <- (ncol(sig) - 1) / 3
+
+.colgroups <- lapply(1:.n, function(i) {
+  .idx <- sprintf("%s.%s", c('L', 'A', 'B'), i)
+  .col <- rgb(convert_colour(sig[, .idx], from = 'lab', to = 'rgb', white_from = 'D65', white_to = 'D65'), maxColorValue = 255)
+  return(.col)
+})
+
+colorspace::swatchplot(.colgroups)
+
 
 
 
@@ -99,7 +123,7 @@ plotProfileDendrogram(s, dd, width = 0.33, cex.names = 0.45, shrink = TRUE, name
 ##
 ## nMDS is a better way to view distances
 ##
-library(MASS)
+
 
 d <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
 mds <- sammon(d)
@@ -141,9 +165,85 @@ par(mar = c(0.25, 0.25, 0.25, 0.25))
 plotSPC(s, n = length(s) + 4, y.offset = yoff[pos$order], plot.order = pos$order, relative.pos = pos$relative.pos, width = 0.25, name.style = 'center-center', scaling.factor = 0.8, shrink = TRUE)
 
 
+## corrplot
+d <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
+dd <- diana(d)
+m <- as.matrix(d)
+
+par(bg = 'black', fg = 'white')
+corrplot(
+  m[dd$order, dd$order], 
+  col = hcl.colors(n = 25, palette = 'zissou1'), 
+  is.corr = FALSE, 
+  col.lim = range(m), 
+  method = "color", 
+  order = "original",
+  type = "upper", 
+  # tl.pos = "n",
+  # cl.pos = "n",
+  mar = c(0.1, 0, 0, 0.8), tl.cex = 0.66
+) 
 
 
-############## 
+
+
+
+
+
+############## state soils ############
+
+data("us.state.soils")
+
+
+o <- fetchOSD(us.state.soils$series)
+# <1 second
+dc <- soilColorSignature(o, color = 'soil_color', method = 'depthSlices', perceptualDistMat = FALSE)
+d <- soilColorSignature(o, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
+
+dd <- diana(d)
+
+
+mds <- sammon(d)
+
+par(mar = c(1, 1, 1, 1), xpd = NA)
+plot(mds$points, type = 'n', axes = FALSE)
+abline(h = 0, v = 0, lty = 3)
+text(mds$points[, 1], mds$points[, 2], labels = row.names(mds$points), cex = 0.8, font = 2, xlab = '', ylab = '')
+
+
+m <- as.matrix(d)
+
+par(bg = 'black', fg = 'white')
+corrplot(
+  m[dd$order, dd$order], 
+  col = hcl.colors(n = 25, palette = 'zissou1'), 
+  is.corr = FALSE, 
+  col.lim = range(m), 
+  method = "color", 
+  order = "original",
+  type = "upper", 
+  # tl.pos = "n",
+  # cl.pos = "n",
+  mar = c(0.1, 0, 0, 0.8), tl.cex = 0.45
+) 
+
+
+
+# # stress test
+# o.d <- duplicate(o, times = 10)
+# length(o.d)
+# 
+# # 520 profiles:  3 seconds
+# # 5200 profiles: 74 seconds
+# system.time(
+#   d <- soilColorSignature(o.d, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE)
+# )
+# 
+
+
+
+
+############## old stuff ##############
 
 k <- 3
 pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', pam.k = 3)
