@@ -11,9 +11,9 @@
  * `plotProfileDendrogram()` gets better default arguments for scaling, offset, etc.
  * `warpHorizons()` gains `scaleTo` argument for scaling profiles to specific soil depth
  * `soilColorSignature()` changes (#335): 
-  - gains generalized color specification via new arguments `color` and `space`
-  - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`
-  - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
+   - gains generalized color specification via new arguments `color` and `space`
+   - new argument to control development of a perceptual distance matrix: `perceptualDistMat = TRUE`
+   - deprecated arguments `r`, `g`, `b`, `RescaleLightnessBy`, warning issued until the next major release
  * `electroStatics_1D()` now accepts vector of charge density `q` or single value (original implementation)
  * `estimateSoilColor()` transformation parameters updated
  * `spc2mpspline()` gains ability to process multiple variables in one call. Requires mpspline2 (>=0.1.9)
@@ -32,8 +32,8 @@
  * CRAN release
  * `evalGenHz()` now uses `stats::cmdscale()` instead of `MASS:isoMDS()`
  * migrating a few functions from sharpshootR to aqp:
-  - `plotProfileDendrogram()`
-  - `aggregateColorPlot()`
+   - `plotProfileDendrogram()`
+   - `aggregateColorPlot()`
  * fix for `hz_segment()` and `NCSP()` with _data.table_ `SoilProfileCollection` objects (#320)
  * fix for `generalize.hz()` to handle missing depths better and added `na.rm` argument (#321)
  * finally dropping plyr from suggests (#157)
