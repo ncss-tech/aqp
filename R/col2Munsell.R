@@ -250,6 +250,9 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
     # nothing left to do
   }
   
+  
+  ## TODO: implement cache, we are often converting from a fixed set of possible colors
+  
   # vectorize via for-loop
   n <- nrow(col)
   res <- vector(length = n, mode = 'list')
