@@ -3,7 +3,7 @@ library(aqp)
 h <- read.csv('misc/example-data/bergstrom2019/horizon-data.csv')
 s <- read.csv('misc/example-data/bergstrom2019/site-data.csv')
 
-colnames(h)[1] <- "pedon"
+names(h)[1] <- "pedon"
 h$hzID <- NULL
 s$id <- NULL
 
@@ -21,5 +21,10 @@ groupedProfilePlot(h, groups = 'group', color = 'pH', id.style = 'top', width = 
 
 groupedProfilePlot(h, groups = 'group', color = 'tau_K', id.style = 'top', width = 0.33, name.style = 'center-center', group.name.offset = -15)
 
-groupedProfilePlot(h, groups = 'group', color = 'Sr87_Sr86_ratio', id.style = 'top', width = 0.33, name.style = 'center-center', group.name.offset = -15)
+groupedProfilePlot(h, groups = 'group', color = 'Sr87_Sr86', id.style = 'top', width = 0.33, name.style = 'center-center', group.name.offset = -15)
+
+bergstrom2019 <- h
+
+
+# save
 
