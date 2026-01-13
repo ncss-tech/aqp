@@ -23,7 +23,7 @@ shuffle(x, mode = c("data", "horizon"), replace = FALSE, size = NULL)
 \code{SoilProfileCollection}
 }
 \description{
-This function shuffles the horizon data or physical ordering of horizons within profiles in a \code{SoilProfileCollection} object.
+This function shuffles the horizon data or physical ordering of horizons within profiles of a \code{SoilProfileCollection} object.
 }
 \examples{
 

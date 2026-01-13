@@ -1,10 +1,11 @@
-# aqp 2.3 (2026-01-02)
+# aqp 2.3 (2026-01-13)
  * CRAN release
  * aqp now requires R >= 4.1
  * stringr package removed from imports (#331)
  * updated CIELAB and sRGB color coordinates for Munsell neutral chips, based on direct measurement (#332)
  * added estimated spectra for Munsell neutral chips (#332)
  * new function `mu_confusion_matrix()` (@smroecker)
+ * new function `colorVariation()` for describing color variation in terms of average human color perception
  * new function `shuffle()` for re-ordering horizon data or horizons within a `SoilProfileCollection` object (#328)
  * `.detectColorSpec()` is a new internal function for detecting a color specification
  * `colorContrast()` will now compute contrast data for pair-wise combinations of `m1` when `m2` is not specified (#330)

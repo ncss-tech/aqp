@@ -65,6 +65,7 @@ res <- spc2mpspline(sp1, "prop")
   
 # plot single-variable result
 plotSPC(res[1:5, ], color = "prop_spline", divide.hz = FALSE)
+
 # add a second continuous numeric variable for demonstration
 sp1$value2 <- runif(nrow(horizons(sp1)))
   
