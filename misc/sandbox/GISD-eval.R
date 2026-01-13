@@ -80,7 +80,7 @@ z <- split(h, h$.mark)
 
 
 # weighted means, NA have been removed
-lapply(z, function(i) {
+wm <- lapply(z, function(i) {
   
   Lbar <- weighted.mean(x = i$L, w = i$.thick)
   Abar <- weighted.mean(x = i$A, w = i$.thick)
@@ -92,7 +92,8 @@ lapply(z, function(i) {
 # modified weighted SD, NA have been removed
 # TODO: this may need to be applied to all records
 #       --> how to interpret h bar x? which mean is this?
-lapply(z, function(i) {
+
+ws <- lapply(z, function(i) {
   
   .n <- nrow(i)
   
