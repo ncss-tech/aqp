@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3 (2026-01-02)
+## aqp 2.3 (2026-01-13)
 
 - CRAN release
 - aqp now requires R \>= 4.1
@@ -14,6 +14,10 @@
 - new function
   [`mu_confusion_matrix()`](https://ncss-tech.github.io/aqp/reference/mu_confusion_matrix.md)
   ([@smroecker](https://github.com/smroecker))
+- new function
+  [`colorVariation()`](https://ncss-tech.github.io/aqp/reference/colorVariation.md)
+  for describing color variation in terms of average human color
+  perception
 - new function
   [`shuffle()`](https://ncss-tech.github.io/aqp/reference/shuffle.md)
   for re-ordering horizon data or horizons within a

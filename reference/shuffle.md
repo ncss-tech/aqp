@@ -1,7 +1,7 @@
 # Shuffle Horizons of a SoilProfileCollection
 
 This function shuffles the horizon data or physical ordering of horizons
-within profiles in a `SoilProfileCollection` object.
+within profiles of a `SoilProfileCollection` object.
 
 ## Usage
 

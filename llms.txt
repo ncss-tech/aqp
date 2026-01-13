@@ -299,6 +299,9 @@ citation("aqp")
 - [`colorQuantiles()`](https://ncss-tech.github.io/aqp/reference/colorQuantiles.md)
   : Soil Color Range via Quantiles
 
+- [`colorVariation()`](https://ncss-tech.github.io/aqp/reference/colorVariation.md)
+  : Quantitative Description of Color Variation
+
 - [`c(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/combine-SoilProfileCollection-method.md)
   [`combine(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/combine-SoilProfileCollection-method.md)
   [`combine(`*`<list>`*`)`](https://ncss-tech.github.io/aqp/reference/combine-SoilProfileCollection-method.md)
