@@ -86,6 +86,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `site()`: set or add site-level attributes of an SPC  
   * `quickSPC()`: quickly build an SPC from simple text templates
   * `random_profile()`: generate random SPC from suite of depth functions
+  * `rp()`: convenient wrapper of `random_profile()` for simulating large colections
 
 ### Metadata  
   * `hzdesgnname()`: get/set column containing horizon designations
@@ -110,7 +111,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `subsetHz()`: subset horizons based on logical expressions
   * `[`: `data.frame`-like subsetting of profiles (i-index) and/or horizons (j-index)
   * `[[`: access site or horizon-level columns by name
-  * `k-index expressions`: `.FIRST`, `.LAST`, `.HZID`, `.NHZ`
+  * `k-index expressions`: `.FIRST`, `.LAST`, `.HZID`, `.NHZ`, `.BOTTOM`, `.TOP`
 
 ### Depth
   * `min()`: minimum bottom depth within a SPC
@@ -126,6 +127,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `combine()`, `c()`: combine multiple SPCs into a single SPC
   * `duplicate()`: duplicate profiles within a SPC
   * `perturb()`: randomly adjust horizon thickness or depths to simulate from a template SPC
+  * `shuffle()`: randomly shuffle horizon data or entire horizons
   * `warpHorizons()`: expand / contract horizon thickness
   * `harmonize()`: create new profiles within a SPC based sets of related horizon-level data
   * `hzAbove()`, `hzBelow()`: locate horizons above or below some criteria
@@ -185,6 +187,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   * `plotSPC()`: create sketches of soil profiles from an SPC
   * `explainPlotSPC()`: explain various elements of a soil profile sketch
   * `groupedProfilePlot()`: create grouped sketches of soil profiles
+  * `plotProfileDendrogram()`: "hang" profile sketches from a dendrogram
   * `plotMultipleSPC()`: create sketches from multiple, possibly non-conformal SPCs
   * `addBracket()`: add vertical brackets beside soil profile sketches
   * `addDiagnosticBracket()`: add vertical brackets beside soil profile sketches based on diagnostic features
@@ -210,7 +213,9 @@ Soil morphology, observed properties, and geomorphic context represent a complex
 
 ### Aggregation
   * `colorChart()`: Munsell color book representation of color frequency
+  * `colorVariation()`: describe color variation using dE00 (based on average human color perception)
   * `aggregateColor()`: estimate color proportions within an SPC according within groups of horizons
+  * `aggregateColorPlot()`: graphical explanation of output from `aggregateColor()`
   * `colorQuantiles()`: marginal and L1 quantiles of color in CIELAB coordinates
   
 

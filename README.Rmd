@@ -105,6 +105,7 @@ citation("aqp")
   * [sharpshootR](https://github.com/ncss-tech/sharpshootR)
 
 ## Vignettes 
+  * [aqp Function Overview](https://ncss-tech.github.io/aqp/articles/aqp-overview.html)
   * [Introduction to SoilProfileCollection Objects](https://ncss-tech.github.io/aqp/articles/Introduction-to-SoilProfileCollection-Objects.html)
   * [Numerical Classification of Soil Profiles](https://ncss-tech.github.io/aqp/articles/NCSP.html)
   * [Overlapping Annotation](https://ncss-tech.github.io/aqp/articles/label-placement.html)

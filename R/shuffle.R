@@ -9,7 +9,6 @@
 #' @param size integer, size argument to `base::sample()`
 #'
 #' @returns `SoilProfileCollection`, modified from original
-#' @export
 #' @noRd
 #' 
 .shuffleProfile <- function(i, mode, replace, size) {
