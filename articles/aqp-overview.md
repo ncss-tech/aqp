@@ -109,6 +109,10 @@ data.
   quickly build an SPC from simple text templates
 - [`random_profile()`](https://ncss-tech.github.io/aqp/reference/random_profile.md):
   generate random SPC from suite of depth functions
+- [`rp()`](https://ncss-tech.github.io/aqp/reference/rp.md): convenient
+  wrapper of
+  [`random_profile()`](https://ncss-tech.github.io/aqp/reference/random_profile.md)
+  for simulating large colections
 
 #### Metadata
 
@@ -153,7 +157,8 @@ data.
 - `[`: `data.frame`-like subsetting of profiles (i-index) and/or
   horizons (j-index)
 - `[[`: access site or horizon-level columns by name
-- `k-index expressions`: `.FIRST`, `.LAST`, `.HZID`, `.NHZ`
+- `k-index expressions`: `.FIRST`, `.LAST`, `.HZID`, `.NHZ`, `.BOTTOM`,
+  `.TOP`
 
 #### Depth
 
@@ -186,6 +191,8 @@ data.
 - [`perturb()`](https://ncss-tech.github.io/aqp/reference/perturb.md):
   randomly adjust horizon thickness or depths to simulate from a
   template SPC
+- [`shuffle()`](https://ncss-tech.github.io/aqp/reference/shuffle.md):
+  randomly shuffle horizon data or entire horizons
 - [`warpHorizons()`](https://ncss-tech.github.io/aqp/reference/warpHorizons.md):
   expand / contract horizon thickness
 - [`harmonize()`](https://ncss-tech.github.io/aqp/reference/harmonize-SoilProfileCollection-method.md):
@@ -292,6 +299,8 @@ data.
   explain various elements of a soil profile sketch
 - [`groupedProfilePlot()`](https://ncss-tech.github.io/aqp/reference/groupedProfilePlot.md):
   create grouped sketches of soil profiles
+- [`plotProfileDendrogram()`](https://ncss-tech.github.io/aqp/reference/plotProfileDendrogram.md):
+  “hang” profile sketches from a dendrogram
 - [`plotMultipleSPC()`](https://ncss-tech.github.io/aqp/reference/plotMultipleSPC.md):
   create sketches from multiple, possibly non-conformal SPCs
 - [`addBracket()`](https://ncss-tech.github.io/aqp/reference/addBracket.md):
@@ -340,9 +349,15 @@ data.
 
 - [`colorChart()`](https://ncss-tech.github.io/aqp/reference/colorChart.md):
   Munsell color book representation of color frequency
+- [`colorVariation()`](https://ncss-tech.github.io/aqp/reference/colorVariation.md):
+  describe color variation using dE00 (based on average human color
+  perception)
 - [`aggregateColor()`](https://ncss-tech.github.io/aqp/reference/aggregateColor.md):
   estimate color proportions within an SPC according within groups of
   horizons
+- [`aggregateColorPlot()`](https://ncss-tech.github.io/aqp/reference/aggregateColorPlot.md):
+  graphical explanation of output from
+  [`aggregateColor()`](https://ncss-tech.github.io/aqp/reference/aggregateColor.md)
 - [`colorQuantiles()`](https://ncss-tech.github.io/aqp/reference/colorQuantiles.md):
   marginal and L1 quantiles of color in CIELAB coordinates
 

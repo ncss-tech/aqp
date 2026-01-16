@@ -736,6 +736,15 @@ sp4[, , .FIRST]
 sp4[, , .LAST]
 ```
 
+Additional *k* index keywords include: `.HZID`, `.NHZ`, `.BOTTOM`,
+`.TOP`. These can be chained together to get the “top depth of the first
+horizons” or “horizon ID of the last horizons”:
+
+``` r
+sp4[, , .FIRST, .TOP]
+sp4[, , .LAST, .HZID]
+```
+
 ## Splitting, Duplication, and Selection of Unique Profiles
 
 `SoilProfileCollection` objects are combined by passing a list of
@@ -833,7 +842,7 @@ par(mar = c(0, 2, 0, 1))
 plotSPC(d, color = 'ex_Ca_to_Mg')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-13-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-14-1.png)
 
 ### Selecting Unique Profiles
 
@@ -870,7 +879,7 @@ plotSPC(unique(x.dupes, vars = c('top', 'bottom')),
         width = 0.15)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-14-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-15-1.png)
 
 ``` r
 # "uniqueness" is a function of variables selected to consider
@@ -878,7 +887,7 @@ plotSPC(unique(x.sim, vars = c('top', 'bottom')),
         name.style = 'center-center')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-15-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
 plotSPC(unique(x.sim, vars = c('name')),
@@ -886,7 +895,7 @@ plotSPC(unique(x.sim, vars = c('name')),
         width = 0.15)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-15-2.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-16-2.png)
 
 ## Plotting SoilProfileCollection Objects
 
@@ -935,7 +944,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-16-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-17-1.png)
 
 Make sketches wider:
 
@@ -944,7 +953,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name', width = 0.3)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-17-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-18-1.png)
 
 Move soil surface at 0cm “down” 5cm:
 
@@ -953,7 +962,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name', y.offset = 5)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-18-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-19-1.png)
 
 Move soil surface at 0cm “up” 10cm; useful for sketches of shallow
 profiles:
@@ -963,7 +972,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name', y.offset = -10)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-19-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-20-1.png)
 
 Scale depths by 50%:
 
@@ -972,7 +981,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name', scaling.factor = 0.5)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-20-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-21-1.png)
 
 A graphical explanation of how profiles are re-arranged via `plot.order`
 argument:
@@ -982,7 +991,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name', plot.order = length(sp4):1)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-21-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-22-1.png)
 
 Leave room for an additional 2 profile sketches:
 
@@ -991,7 +1000,7 @@ par(mar = c(4, 3, 2, 2))
 explainPlotSPC(sp4, name = 'name', n = length(sp4) + 2)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-22-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-23-1.png)
 
 #### Small SoilProfileCollections
 
@@ -1022,7 +1031,7 @@ par(mar = c(0, 2, 0, 4), xpd = NA)
 plotSPC(x[1, ], cex.names = 1)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-24-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-25-1.png)
 
 Using 7x6 inch output device, slight adjustments to `width` usually
 required:
@@ -1033,7 +1042,7 @@ par(mar = c(0, 2, 0, 4), xpd = NA)
 plotSPC(x[1:2, ], cex.names = 1, width = 0.25)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-25-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-26-1.png)
 
 Using 8x6 inch output device, slight adjustments to are usually
 required:
@@ -1043,7 +1052,7 @@ par(mar = c(0, 2, 0, 4), xpd = NA)
 plotSPC(x, cex.names = 1, depth.axis = list(line = -0.1), width = 0.3)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-26-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-27-1.png)
 
 ### Horizon Depth Labeling
 
@@ -1063,7 +1072,7 @@ plotSPC(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-27-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-28-1.png)
 
 As of aqp version 1.41, it is possible to “fix” overlapping horizon
 depth labels with the new `fixLabelCollisions` argument. This approach
@@ -1089,7 +1098,7 @@ pos <- jitter(1:length(sp4))
 explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-28-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-29-1.png)
 
 Relative positioning works well when the vector of positions is close to
 the default spacing along an integer sequence, but not when positions
@@ -1101,7 +1110,7 @@ pos <- c(1, 1.2, 3, 4, 5, 5.2, 7, 8, 9, 10)
 explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-29-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-30-1.png)
 
 The
 [`fixOverlap()`](https://ncss-tech.github.io/aqp/reference/fixOverlap.md)
@@ -1120,7 +1129,7 @@ new.pos <- fixOverlap(pos)
 explainPlotSPC(sp4, name = 'name', relative.pos = new.pos)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-30-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-31-1.png)
 
 There are several parameters available for optimizing horizontal
 position in the presence of overlap. See
@@ -1133,7 +1142,7 @@ new.pos <- fixOverlap(pos, thresh = 0.7)
 explainPlotSPC(sp4, name = 'name', relative.pos = new.pos)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-31-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-32-1.png)
 The [SPC plotting ideas
 tutorial](http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.md)
 contains several additional examples.
@@ -1151,7 +1160,7 @@ plotSPC(sp4,
         col.label = 'Clay Content (%)')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-32-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-33-1.png)
 
 Use a different set of colors:
 
@@ -1165,7 +1174,7 @@ plotSPC(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-33-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-34-1.png)
 
 Categorical properties can also be used to make a thematic sketch.
 Colors are interpolated when there are more classes than colors provided
@@ -1181,7 +1190,7 @@ plotSPC(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-34-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-35-1.png)
 
 Try with [generalized horizon
 labels](http://ncss-tech.github.io/AQP/aqp/gen-hz-assignment.md):
@@ -1200,7 +1209,7 @@ plotSPC(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-35-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-36-1.png)
 
 Horizon-level attributes that represent a volume fraction
 (e.g. coarse-fragment percentage) can be added to an existing figure.
@@ -1264,7 +1273,7 @@ plotSPC(sp4)
 addBracket(a, col = 'red', offset = -0.4)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-36-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-37-1.png)
 
 Add labels:
 
@@ -1285,7 +1294,7 @@ addBracket(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-37-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-38-1.png)
 
 It is possible to arrange profile sketches by site-level grouping
 variable:
@@ -1296,7 +1305,7 @@ groupedProfilePlot(sp4, groups = 'group')
 addBracket(a, col = 'red', offset = -0.4)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-38-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-39-1.png)
 
 There need not be brackets for all profiles in a collection:
 
@@ -1307,7 +1316,7 @@ groupedProfilePlot(sp4, groups = 'group')
 addBracket(a.sub, col = 'red', offset = -0.4)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-39-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-40-1.png)
 
 When bottom depths are missing an arrow is used:
 
@@ -1318,7 +1327,7 @@ groupedProfilePlot(sp4, groups = 'group')
 addBracket(a, col = 'red', offset = -0.4)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-40-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-41-1.png)
 
 Manually define bottom depth:
 
@@ -1334,7 +1343,7 @@ addBracket(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-41-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-42-1.png)
 
 Further customization of brackets:
 
@@ -1359,7 +1368,7 @@ addBracket(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-42-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-43-1.png)
 
 #### Notes
 
@@ -1537,7 +1546,7 @@ par(mar = c(0, 0, 3, 0)) # tighten figure margins
 plotSPC(s, color = 'ex_Ca_to_Mg')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-44-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-45-1.png)
 
 Once soil profile data have been sliced, it is simple to extract
 “chunks” of data by depth interval via `[`-subsetting:
@@ -1575,7 +1584,7 @@ rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5, lty = 2)
 plotSPC(clods, add = TRUE, cex.names = 0.6, name = 'name', color = 'ex_Ca_to_Mg', name.style = 'center-center')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-46-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-47-1.png)
 
 ### Truncation: `trunc()`
 
@@ -1596,7 +1605,7 @@ rect(xleft = 0.5, ybottom = 15, xright = length(sp4) + 0.5, ytop = 5, lty = 2)
 plotSPC(sp4.truncated, depth.axis = FALSE, add = TRUE, cex.names = 0.6, name = 'name', color = 'ex_Ca_to_Mg', name.style = 'center-center')
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-47-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-48-1.png)
 
 ### Change of Support
 
@@ -1837,7 +1846,7 @@ plotSPC(d.gsm.pedons, color = 'p1')
 mtext('GSM depths', side = 2, line = -1.5)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-49-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-50-1.png)
 
 Note that re-aligned data may not represent reality (and should
 therefore be used with caution) when the original soil depth is
@@ -1872,7 +1881,7 @@ plotSPC(
 mtext('GSM depths', side = 2, line = -1.5)
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-50-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-51-1.png)
 
 ## Pair-Wise Dissimilarity: `NCSP()`
 
@@ -1940,7 +1949,7 @@ plotProfileDendrogram(
 )
 ```
 
-![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-51-1.png)
+![](Introduction-to-SoilProfileCollection-Objects_files/figure-html/unnamed-chunk-52-1.png)
 
 Some additional examples can be found in:
 

@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3 (2026-01-13)
+## aqp 2.3 (2026-01-16)
 
 - CRAN release
 - aqp now requires R \>= 4.1
