@@ -6,7 +6,7 @@ Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), e
              person(given="Andrew", family="Brown", email="andrew.g.brown@usda.gov", role = c("aut", "ctb")), 
              person(given="Stephen", family="Roecker", role = c("aut", "ctb")),
              person(given = "David", family = "Rossiter", role = c("ctb")))
-Author: Dylan Beaudette [aut, cre], Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb], Stephen Roecker [aut, ctb], David Rossiter [ctb]
+Author: Dylan Beaudette [aut, cre] (ORCID: <https://orcid.org/0009-0008-2780-4785>), Pierre Roudier [aut, ctb], Andrew Brown [aut, ctb], Stephen Roecker [aut, ctb], David Rossiter [ctb]
 Maintainer: Dylan Beaudette <dylan.beaudette@usda.gov>
 Depends: R (>= 4.1.0)
 Imports: grDevices, graphics, stats, utils, methods, grid, lattice, cluster, data.table, farver, digest, colorspace, ape
