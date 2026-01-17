@@ -4,13 +4,25 @@
 \name{names,SoilProfileCollection-method}
 \alias{names,SoilProfileCollection-method}
 \alias{names}
+\alias{.DollarNames.SoilProfileCollection}
 \title{Get names of columns in site and horizons table}
 \usage{
 \S4method{names}{SoilProfileCollection}(x)
+
+\method{.DollarNames}{SoilProfileCollection}(x, pattern)
 }
 \arguments{
 \item{x}{a SoilProfileCollection}
+
+\item{pattern}{A regular expression. Only matching names are returned.}
 }
 \description{
 Get names of columns in site and horizons table of a SoilProfileCollection.
+}
+\details{
+The \code{.DollarNames} SoilProfileCollection method is implemented to support
+auto-completion after the \code{$} operator. There is a custom help handler
+implemented for interactive use in RStudio to integrate help text and data
+viewer functionality with auto-completion. This custom help handler can be
+disabled by setting \code{options(.aqp.rs.rpc.integration=FALSE)}.
 }
