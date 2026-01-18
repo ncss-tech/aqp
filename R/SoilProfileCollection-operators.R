@@ -485,9 +485,13 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection"),
                  })
 
 
-#' Get data from column of horizon or site data in a SoilProfileCollection
+#' @title Get data from column of horizon or site data in a SoilProfileCollection
+#'
 #' @name $
-#' @description Get the data from a column accessed by name \code{x$name}. Column names other than profile ID are not shared between site and horizons.
+#' @description  Get the data from a column accessed by name `x$name`. Column
+#'   names other than profile ID are not shared between site and horizons.
+#'   Accessing the profile ID column (`idname(x)`) with `$` returns the
+#'   horizon-level data with profile ID repeated for each horizon in a profile.
 #'
 #' @param x a SoilProfileCollection
 #' @param name a single column name in site or horizon table
@@ -495,6 +499,7 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection"),
 #' @rdname dollarsign
 #'
 #' @aliases $,SoilProfileCollection-method
+#' @seealso [site()] [horizons()] [idname()] [profile_id()] 
 #' @examples
 #'
 #' data(sp1)
@@ -503,7 +508,7 @@ setReplaceMethod("[[", signature(x = "SoilProfileCollection"),
 #'
 #' # get data from a column by name (prop)
 #' sp1$prop
-#'
+#' 
 setMethod("$", signature(x = "SoilProfileCollection"),
           function(x, name) {
             # get names from site and hz data
