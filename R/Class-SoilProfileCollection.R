@@ -1237,7 +1237,3 @@ setReplaceMethod("depth_units", signature(object = "SoilProfileCollection"),
                    return(object)
                  }
 )
-
-registerS3method(".DollarNames", "SoilProfileCollection", function(x, pattern) {
-  names(x)
-})

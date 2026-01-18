@@ -14,7 +14,10 @@
 \item{name}{a single column name in site or horizon table}
 }
 \description{
-Get the data from a column accessed by name \code{x$name}. Column names other than profile ID are not shared between site and horizons.
+Get the data from a column accessed by name \code{x$name}. Column
+names other than profile ID are not shared between site and horizons.
+Accessing the profile ID column (\code{idname(x)}) with \code{$} returns the
+horizon-level data with profile ID repeated for each horizon in a profile.
 }
 \examples{
 
@@ -25,4 +28,7 @@ depths(sp1) <- id ~ top + bottom
 # get data from a column by name (prop)
 sp1$prop
 
+}
+\seealso{
+\code{\link[=site]{site()}} \code{\link[=horizons]{horizons()}} \code{\link[=idname]{idname()}} \code{\link[=profile_id]{profile_id()}}
 }

@@ -92,6 +92,102 @@ setMethod("names", signature("SoilProfileCollection"),
             return(res)
           })
 
+#' @details
+#' The `.DollarNames` SoilProfileCollection method is implemented to support
+#' auto-completion after the `$` operator. There is a custom help handler
+#' implemented for interactive use in RStudio to integrate help text and data
+#' viewer functionality with auto-completion. This custom help handler can be
+#' disabled by setting `options(.aqp.rs.rpc.integration=FALSE)`.
+#' 
+#' @param pattern A regular expression. Only matching names are returned.
+#' @docType methods
+#' @importFrom utils .DollarNames
+#' @rdname names
+#' @export
+.DollarNames.SoilProfileCollection <- function(x, pattern) {
+  n <- names(x)
+  res <- n[grep(paste0("^", pattern), n)]
+  
+  # when running interactively in RStudio, attach a custom SPC help handler
+  if (interactive() &&
+      getOption(".aqp.rs.rpc.integration", default = TRUE) &&
+      !is.null(.Platform$GUI) && .Platform$GUI == "RStudio") {
+    attr(res, 'helpHandler') <- "aqp:::.aqp.rs.rpc.spc.HelpHandler"
+  }
+  
+  res
+}
+
+#' Custom RStudio Help Handler for SoilProfileCollection objects
+#' 
+#' SoilProfileCollection Custom Help Handler for `$` auto-completion and data
+#' preview in RStudio.
+#' 
+#' Supports handling for the following internal `tools:rstudio` functions:
+#'   - `"completion"` via `.rs.rpc.get_custom_help()`
+#'   - `"url"` via `.rs.rpc.show_custom_help_topic()`
+#'   - `"parameter"` is not implemented
+#'
+#' @param object character. Either `"completion"`, `"parameter"`, or `"url"`.
+#' @param topic character. The help topic (e.g. the column name in `$` auto-completion).
+#' @param source character. The topic source (e.g. the parent object name in `$` auto-completion).
+#' @param ... 
+#' @importFrom utils capture.output str
+#' @returns list or character
+#' @noRd
+.aqp.rs.rpc.spc.HelpHandler <- function(object, topic, source, ...) {
+  if (!exists(".rs.rpc.show_help_topic")) {
+    .rs.rpc.show_help_topic <- function(...) NULL
+  }
+  res <- try({
+    obj <- get(source)
+    
+    switch(
+      tolower(object),
+      # this supports tab auto-completion for SoilProfileCollection $ S4 method
+      "completion" = {
+        # handle [[ vs. $ semantics
+        if (topic != obj@idcol) {
+          val <- obj[[topic]]
+          slt <- ifelse(length(val) == length(obj), "site", "horizons")
+        } else {
+          # obj[[idname(obj)]] returns the site-level ID
+          val <- obj@horizons[[topic]]
+          slt <- "horizons"
+        }
+        
+        out <- list(
+          title = paste0(slt, "(", source, ")"),
+          signature = topic,
+          returns = class(val),
+          description = utils::capture.output(utils::str(val)),
+          details = "",
+          sections = list()
+        )
+      },
+      
+      # this supports "F1 for more information" in help tooltip
+      "url" = {
+        try(.rs.rpc.show_help_topic("$", "aqp", "method"), silent = TRUE)
+        NULL
+      }
+    )
+  }, silent = TRUE)
+  
+  if (inherits(res, 'try-error')) {
+    res <- list(
+      title = source,
+      signature = topic,
+      returns = "",
+      description = "",
+      details = "",
+      sections = ""
+    )
+  }
+  
+  res
+}
+
 # overload min() to give us the min depth within a collection
 #' Get the minimum bottom depth in a SoilProfileCollection
 #' @description Get the shallowest depth of description out of all profiles in a SoilProfileCollection. Data missing one or more of: bottom depth, profile ID, or any optional attribute are omitted using \code{complete.cases}.
