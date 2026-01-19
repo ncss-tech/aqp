@@ -1,5 +1,8 @@
 
 
+## update: see colorVatiation()
+
+
 
 
 
@@ -14,7 +17,10 @@ sort(table(s), decreasing = TRUE)
 
 colorChart(s[[1]], chip.cex = 3, annotate = TRUE)
 
-contrastChart('10YR 4/4', hues = c('10YR', '7.5YR'), thresh = 15)
+colorVariation(s[[1]])
+
+
+contrastChart('10YR 4/4', hues = c('10YR', '7.5YR'), thresh = 10)
 
 
 
