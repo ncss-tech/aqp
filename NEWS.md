@@ -1,3 +1,7 @@
+# aqp 2.3.1 (development)
+ * code-completion and preview for SPC objects in RStudio (@brownag)
+ * mass-preserving spline (c/o mpspline2) vignette
+
 # aqp 2.3 (2026-01-16)
  * CRAN release
  * aqp now requires R >= 4.1

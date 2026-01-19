@@ -26,17 +26,12 @@ replaceHorizons(x) <- cbind(horizons(x), .lab)
 
 # check
 plotSPC(x, color = 'L', hz.distinctness.offset = 'hzd')
+plotSPC(x, color = 'A', hz.distinctness.offset = 'hzd')
+plotSPC(x, color = 'B', hz.distinctness.offset = 'hzd')
 
-# hack to smooth multiple variables
-# future enhancement to spc2mpspline()
-.lambda <- 0.1
-.spcL <- spc2mpspline(x, var_name = 'L', lam = .lambda, method = 'est_1cm')
-.spcA <- spc2mpspline(x, var_name = 'A', lam = .lambda, method = 'est_1cm')
-.spcB <- spc2mpspline(x, var_name = 'B', lam = .lambda, method = 'est_1cm')
-
-m <- .spcL
-m$A_spline <- .spcA$A_spline
-m$B_spline <- .spcB$B_spline
+# 2026-01: can now specify multiple variables
+# must set vlow when there are negative values
+m <- spc2mpspline(x, var_name = c('L', 'A', 'B'), lam = 0.1, method = 'est_1cm', vlow = -1000)
 
 
 # check
@@ -77,5 +72,5 @@ z <- combine(x, m)
 par(mar = c(0, 0, 0, 3))
 plotSPC(z, color = 'soil_color', name = NA, lwd = 0, divide.hz = FALSE, cex.names = 1)
 
-# green hues lost due to truncation of smoothed values at x>=0
+
 

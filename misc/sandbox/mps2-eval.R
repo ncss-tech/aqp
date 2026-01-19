@@ -1,11 +1,16 @@
-# install mpsline2 from CRAN
+
+## TODO: convert this into a vignette
+# https://github.com/ncss-tech/aqp/issues/342
+
+
+# install mpsline2 from GH
 
 library(aqp)
-library(sharpshootR)
 library(mpspline2)
 library(reshape2)
 library(lattice)
 library(tactile)
+library(vegan)
 
 ## thoughts:
 # * variable depths option from EAS 
@@ -20,6 +25,7 @@ x <- list(
   depths = c(25, 33, 100, 150,  175),
   name = c('A', 'Bw', 'Bt1', 'Bt2', 'BC'),
   p1 = c(12, 15, 35, 20, 15),
+  p2 = c(7.2, 7, 6.8, 6.5, 6.5),
   soil_color = c('10YR 3/3', '10YR 4/4', '10YR 4/6', '5G 6/2', '5BG 4/4')
 )
 
@@ -29,24 +35,26 @@ x <- quickSPC(x)
 site(x)$fake_site_attr <- 1:length(x)
 
 # check source data
-par(mar=c(0,0,3,1))
-plotSPC(x, color='p1', col.palette = hcl.colors(10, 'viridis'))
+par(mar = c(0,0,3,1))
+plotSPC(x, color = 'p1')
+plotSPC(x, color = 'p2')
 
 s <- seq(0, 1, by = 0.25)
 m <- lapply(s, function(i) {
-  .spc <- spc2mpspline(x, var_name = 'p1', lam = i, method = 'est_1cm')
+  .spc <- spc2mpspline(x, var_name = c('p1', 'p2'), lam = i, method = 'est_1cm')
   profile_id(.spc) <- sprintf("%s-%s", profile_id(.spc), format(i, digits = 2))
   return(.spc)
 })
 
 z <- combine(m)
 z$p1 <- z$p1_spline
+z$p2 <- z$p2_spline
 
 xx <- combine(z, x)
 
 par(mar = c(0, 0, 3, 2))
 plotSPC(xx, color = 'p1', col.palette = hcl.colors(10, 'viridis'), divide.hz = FALSE, width = 0.35, cex.names = 0.8, name = NA)
-mtext(side = 3, at = 2, line = -1.5, text = 'value of lambda')
+mtext(side = 3, at = 1, line = -1.5, text = 'value of lambda')
 
 # o <- order(xx$p1_rmse)
 # plotSPC(xx, color = 'p1', col.palette = hcl.colors(10, 'viridis'), divide.hz = FALSE, width = 0.35, plot.order = o)
@@ -59,7 +67,7 @@ d$p1diff <- profileApply(d, function(i) {
 })
 
 plotSPC(d, color = 'p1diff', col.palette = hcl.colors(10, 'viridis'), divide.hz = FALSE, width = 0.35, cex.names = 0.8, name = NA)
-mtext(side = 3, at = 2, line = -2, text = 'value of lambda')
+mtext(side = 3, at = 2, line = -1.5, text = 'value of lambda')
 
 
 
@@ -108,25 +116,30 @@ x <- combine(x)
 site(x)$fake_site_attr <- 1:length(x)
 
 # check source data
-par(mar=c(0,0,3,1))
-plotSPC(x, color='p1', col.palette = hcl.colors(10, 'viridis'))
-plotSPC(x, color='p2', col.palette = hcl.colors(10, 'viridis'))
+par(mar = c(0,0,3,1))
+plotSPC(x, color = 'p1')
+plotSPC(x, color = 'p2')
 
 # 1-cm estimates
 # TODO: support mixture of 1cm + new depth intervals in the same resulting SPC via `d` argument
-m <- spc2mpspline(x, var_name = 'p1', lam = 0.1, method = 'est_1cm')
-m2 <- spc2mpspline(x, var_name = 'p1', lam = 0.1, method = 'est_dcm', d = c(0, 5, 15, 30, 60, 100, 200))
+m <- spc2mpspline(x, var_name = c('p1', 'p2'), lam = 0.1, method = 'est_1cm')
+m2 <- spc2mpspline(x, var_name = c('p1', 'p2'), lam = 0.1, method = 'est_dcm', d = c(0, 5, 15, 30, 60, 100, 200))
 
-hzID(m)
-hzidname(m)
+# hzID(m)
+# hzidname(m)
 
 # copy EAS values into original column for later combine()
 m$p1 <- m$p1_spline
+m$p2 <- m$p2_spline
 m2$p1 <- m2$p1_spline
+m2$p2 <- m2$p2_spline
 
 # check: OK
-plotSPC(m, color = 'p1', name = NA, divide.hz = FALSE, col.palette = hcl.colors(10, 'viridis'))
-plotSPC(m2, color = 'p1', name = NA, divide.hz = FALSE, col.palette = hcl.colors(10, 'viridis'))
+plotSPC(m, color = 'p1', name = NA, divide.hz = FALSE)
+plotSPC(m, color = 'p2', name = NA, divide.hz = FALSE)
+
+plotSPC(m2, color = 'p1', name = NA, divide.hz = FALSE)
+plotSPC(m2, color = 'p2', name = NA, divide.hz = FALSE)
 
 
 
@@ -139,7 +152,7 @@ plotMultipleSPC(
   merged.colors = hcl.colors(10, 'viridis'), 
   merged.legend = 'p1',
   bracket.base.depth = 150, 
-  group.labels = c('original', 'mpspline'), 
+  group.labels = c('original', 'mpspline 1cm', 'mpspline'), label.offset = 5,
   args = list(
     list(),
     list(divide.hz = FALSE),
@@ -149,7 +162,7 @@ plotMultipleSPC(
 
 
 # don't forget na.rm = TRUE
-a <- slab(x, id ~ p1, slab.structure = c(0, 5, 15, 30, 60, 100, 200), slab.fun = mean, na.rm = TRUE)
+a <- slab(x, id ~ p1 + p2, slab.structure = c(0, 5, 15, 30, 60, 100, 200), slab.fun = mean, na.rm = TRUE)
 
 
 a <- dcast(a, id + top + bottom ~ variable)
@@ -178,27 +191,10 @@ z <- combine(list(x, m, m2, a))
 z$provenance <- factor(z$provenance, levels = c('original', 'EAS-1cm', 'slab', 'EAS-interval'))
 z$original_id <- factor(z$original_id)
 
-plotSPC(z, color='p1', divide.hz = FALSE, width = 0.25, cex.names = 0.66, max.depth = 150)
+plotSPC(z, color = 'p1', divide.hz = FALSE, width = 0.25, cex.names = 0.66, max.depth = 150)
+plotSPC(z, color = 'p2', divide.hz = FALSE, width = 0.25, cex.names = 0.66, max.depth = 150)
 
 
-
-# # latest version, integrates most of the code from my previous 
-# # m <- mpspline(x, var_name = 'p1', d=c(0, 5, 15, 30, 60, 100, 200), out_style = 'spc')
-# 
-# ## TODO: this can only perform EAS for single horizon-level attribute
-# ## TODO: this needs an additional wrapper as of mpspline2_0.1.3 
-# 
-# # SPC -> MPS -> SPC
-# # m <- mpsplineSPC(x, var='p1', d=c(0, 5, 15, 30, 60, 100, 200))
-# 
-# # check: OK
-# str(m)
-# 
-# # note sorting
-# profile_id(m)
-# 
-# m$id_group <- factor(m$id_group)
-# 
 
 # plot by group
 par(mar=c(0, 0, 3, 1))
@@ -261,22 +257,30 @@ xyplot(top ~ p.q50 | provenance, data=z.agg, ylab='Depth', asp=1.5,
 )
 
 
-# * only using a single property.. need to update EAS code to do more than a single property
 # * truncate comparisons to 110cm
-d <- NCSP(z, vars = 'p1', maxDepth = 100)
+d <- NCSP(z, vars = c('p1', 'p2'), maxDepth = 100)
 
 # interesting
-par(mar = c(0, 0, 0, 3))
+par(mar = c(0, 0, 3, 3))
 plotProfileDendrogram(z, cluster::diana(d), dend.y.scale = 175, scaling.factor = 0.95, y.offset = 2, color = 'p1', divide.hz = FALSE, width = 0.3, max.depth = 125, cex.names = 0.8)
+
+plotProfileDendrogram(z, cluster::diana(d), dend.y.scale = 175, scaling.factor = 0.95, y.offset = 2, color = 'p2', divide.hz = FALSE, width = 0.3, max.depth = 125, cex.names = 0.8)
 
 
 ## TODO: viz via nMDS and betadispersion
+b <- betadisper(d, group = z$provenance, type = 'median', sqrt.dist = TRUE)
+
+plot(b)
+boxplot(b)
+
+par(mar = c(4.5, 7, 3, 1))
+plot(TukeyHSD(b), las = 1,  cex.axis = 0.66)
 
 
 ## what about simple summaries within a fixed depth interval?
 # nearly identical
 
-slab(z, provenance ~ p1, slab.structure = c(0, 50), slab.fun = mean, na.rm = TRUE)
+slab(z, provenance ~ p1 + p2, slab.structure = c(0, 50), slab.fun = mean, na.rm = TRUE)
 
 slab(z, provenance ~ p1, slab.structure = c(0, 50), slab.fun = sum, na.rm = TRUE)
 
