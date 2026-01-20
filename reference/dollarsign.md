@@ -1,7 +1,9 @@
 # Get data from column of horizon or site data in a SoilProfileCollection
 
 Get the data from a column accessed by name `x$name`. Column names other
-than profile ID are not shared between site and horizons.
+than profile ID are not shared between site and horizons. Accessing the
+profile ID column (`idname(x)`) with `$` returns the horizon-level data
+with profile ID repeated for each horizon in a profile.
 
 ## Usage
 
@@ -19,6 +21,13 @@ x$name
 - name:
 
   a single column name in site or horizon table
+
+## See also
+
+[`site()`](https://ncss-tech.github.io/aqp/reference/site.md)
+[`horizons()`](https://ncss-tech.github.io/aqp/reference/horizons.md)
+[`idname()`](https://ncss-tech.github.io/aqp/reference/idname.md)
+[`profile_id()`](https://ncss-tech.github.io/aqp/reference/profile_id.md)
 
 ## Examples
 

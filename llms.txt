@@ -676,6 +676,7 @@ citation("aqp")
   : Transform a SPC (by profile) with a set of expressions
 
 - [`names(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/names.md)
+  [`.DollarNames(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/names.md)
   : Get names of columns in site and horizons table
 
 - [`nrow(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/nrow.md)
