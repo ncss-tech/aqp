@@ -1,4 +1,4 @@
-library(aqp)
+# library(aqp)
 library(cluster)
 library(ape)
 library(soilDB)
@@ -7,7 +7,7 @@ library(MASS)
 library(corrplot)
 library(farver)
 
-s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford', 'cecil', 'sycamore', 'KLAMATH', 'MOGLIA', 'vleck', 'drummer', 'CANEYHEAD', 'musick', 'sierra', 'HAYNER', 'zook', 'argonaut', 'PALAU')
+s.list <- c('amador', 'redding', 'pentz', 'willows', 'pardee', 'yolo', 'hanford', 'cecil', 'sycamore', 'KLAMATH', 'MOGLIA', 'vleck', 'drummer', 'CANEYHEAD', 'musick', 'sierra', 'HAYNER', 'zook', 'argonaut', 'PALAU', 'inks', 'banker')
 
 # get these soil series
 s <- fetchOSD(s.list)

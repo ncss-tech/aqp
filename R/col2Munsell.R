@@ -193,6 +193,10 @@ col2Munsell <- function(col, space = c('sRGB', 'CIELAB'), nClosest = 1) {
   # convert character vector of colors -> sRGB -> CIELAB
   if(inherits(col, 'character')) {
     
+    # empty string should be interpreted as NA
+    empty.idx <- which(col == '')
+    col[empty.idx] <- NA
+    
     # generate index to NA and not-NA
     na.idx <- which(is.na(col))
     not.na.idx <- setdiff(1:length(col), na.idx)
