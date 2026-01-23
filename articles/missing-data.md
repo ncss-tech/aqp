@@ -4,7 +4,7 @@
 library(aqp)
 ```
 
-    ## This is aqp 2.3
+    ## This is aqp 2.3.1
 
 ``` r
 # tighter margins

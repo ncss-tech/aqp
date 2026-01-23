@@ -2,9 +2,16 @@
 
 ## aqp 2.3.1 (development)
 
+- minor bug fix in
+  [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
+  when passed 0-length character
+- bug fix in
+  [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md),
+  NA incorrectly interpreted when `color` argument is supplied hex
+  encoded sRGB
 - code-completion and preview for SPC objects in RStudio
   ([@brownag](https://github.com/brownag))
-- mass-preserving spline (c/o mpspline2) vignette
+- mass-preserving spline (c/o mpspline2) / slab comparison article
 
 ## aqp 2.3 (2026-01-16)
 

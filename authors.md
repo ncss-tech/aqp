@@ -16,7 +16,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/ncss-tech/aqp/blob/v2.3/inst/CITATION)
+[`inst/CITATION`](https://github.com/ncss-tech/aqp/blob/master/inst/CITATION)
 
 Beaudette, D., Roudier, P., Brown, A. (2023). aqp: Algorithms for
 Quantitative Pedology. R package version 2.0.
