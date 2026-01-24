@@ -44,7 +44,7 @@
 }
 
 
-
+## TODO: profile this function, it is much slower than depth slices
 # compute LAB coordinates from clusters of slices
 .pigments.pam <- function(x, k) {
   
@@ -91,8 +91,11 @@
   # convert to dist object, note transpose
   dE00 <- as.dist(t(dE00))
   
-  # use PAM to cluster, note `pamonce = 5` used for optimization
-  cl <- cluster::pam(dE00, k = k, diss = TRUE, pamonce = 5)
+  # partitioning around medoids
+  # optimization notes: 
+  #       * pamonce = 5, 6 will hang on some soils (AMELAR OSD)
+  #       * pamonce = 3 seems more stable
+  cl <- cluster::pam(dE00, k = k, diss = TRUE, pamonce = 3)
   
   # subset medoids
   x.medoids <- x.slices[cl$id.med, c(idname(x), 'L', 'A', 'B')]

@@ -86,6 +86,8 @@ When \code{perceptualDistMat = TRUE} and \code{method} is one of 'depthSlices' o
 Generate a color signature for each soil profile in a collection.
 }
 \details{
+Missing colors (NA) are ignored in the creation of soil color signatures.
+
 Interpreation of color signature.
 
 Choices related to weighting, scaling, and distance metric.
