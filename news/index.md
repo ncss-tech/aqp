@@ -9,6 +9,12 @@
   [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md),
   NA incorrectly interpreted when `color` argument is supplied hex
   encoded sRGB
+- bug fix in
+  [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md),
+  [`cluster::pam()`](https://rdrr.io/pkg/cluster/man/pam.html)
+  optimization would very rarely hang
+  - seems to be a problem with (`pamonce = >=5`) - AMELAR OSD, moist
+    colors
 - code-completion and preview for SPC objects in RStudio
   ([@brownag](https://github.com/brownag))
 - mass-preserving spline (c/o mpspline2) / slab comparison article

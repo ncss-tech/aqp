@@ -46,6 +46,9 @@
 <h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-development">aqp 2.3.1 (development)<a class="anchor" aria-label="anchor" href="#aqp-231-development"></a></h2>
 <ul><li>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</li>
 <li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, NA incorrectly interpreted when <code>color</code> argument is supplied hex encoded sRGB</li>
+<li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code> optimization would very rarely hang
+<ul><li>seems to be a problem with (<code>pamonce = &gt;=5</code>) - AMELAR OSD, moist colors</li>
+</ul></li>
 <li>code-completion and preview for SPC objects in RStudio (<a href="https://github.com/brownag" class="external-link">@brownag</a>)</li>
 <li>mass-preserving spline (c/o mpspline2) / slab comparison article</li>
 </ul></div>

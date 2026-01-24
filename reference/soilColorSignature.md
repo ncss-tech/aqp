@@ -140,6 +140,9 @@ When `perceptualDistMat = TRUE` and `method` is one of 'depthSlices' or
 
 ## Details
 
+Missing colors (NA) are ignored in the creation of soil color
+signatures.
+
 Interpreation of color signature.
 
 Choices related to weighting, scaling, and distance metric.
