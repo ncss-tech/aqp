@@ -316,6 +316,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, chip
     x.at.list <- rep(x.at.list, times = n.groups)
     x.limits.list <- rep(x.limits.list, times = n.groups)
     
+    # TODO: this will issue a warning if colors are only N hues
     pp <- lattice::xyplot(
       value ~ chroma | hue + .groups, 
       data = tab,
