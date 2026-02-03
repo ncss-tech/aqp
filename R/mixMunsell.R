@@ -1,7 +1,8 @@
 
 ## this will replace soilDB::estimateColorMixture() as an alternative / fallback 
-## method for mixMunsell() when reference spectra are missing
 
+# method for mixMunsell() when reference spectra are missing
+# NA not allowed in chips, w
 .estimateColorMixture <- function(chips, w) {
   
   # convert to CIELAB
@@ -12,22 +13,12 @@
   .A <- weighted.mean(.lab[['A']], w = w, na.rm = TRUE)
   .B <- weighted.mean(.lab[['B']], w = w, na.rm = TRUE)
   
-  # LAB -> sRGB
-  mixed.color <- data.frame(
-    convertColor(
-      color = cbind(.L, .A, .B), 
-      from = 'Lab', 
-      to = 'sRGB', 
-      from.ref.white = 'D65',
-      to.ref.white = 'D65')
-  )
-  names(mixed.color) <- c('r', 'g', 'b')
-  
   # back to Munsell
-  m <- col2Munsell(mixed.color[, c('r', 'g', 'b')], space = 'sRGB')
+  m <- col2Munsell(cbind(.L, .A, .B), space = 'CIELAB')
   
   # pack into expected structure
   # scaled distance is only for spectral distance evaluated against the entire library
+  #  -> only relevant when combining with 'reference' methods mixing
   res <- data.frame(
     munsell = sprintf('%s %s/%s', m$hue, m$value, m$chroma),
     distance = m$sigma,
