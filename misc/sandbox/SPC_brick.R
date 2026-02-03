@@ -24,7 +24,7 @@ m[, 1] == s[1, ][[var]]
 
 par(mar = c(1, 1, 3, 1))
 
-.cols <- hcl.colors(n = 12)
+.cols <- hcl.colors(n = 12, palette = 'zissou1')
 
 image(
   z = t(m), 
