@@ -1,4 +1,5 @@
 # aqp 2.3.1 (development)
+ * new function `validateMunsell()` for checking Munsell color notation (#339)
  * minor bug fix in `col2Munsell()` when passed 0-length character
  * bug fix in `soilColorSignature()`, NA incorrectly interpreted when `color` argument is supplied hex encoded sRGB
  * bug fix in `soilColorSignature()`, `cluster::pam()` optimization would very rarely hang
