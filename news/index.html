@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-development">aqp 2.3.1 (development)<a class="anchor" aria-label="anchor" href="#aqp-231-development"></a></h2>
-<ul><li>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</li>
+<ul><li>new function <code><a href="../reference/validateMunsell.html">validateMunsell()</a></code> for checking Munsell color notation (<a href="https://github.com/ncss-tech/aqp/issues/339" class="external-link">#339</a>)</li>
+<li>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</li>
 <li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, NA incorrectly interpreted when <code>color</code> argument is supplied hex encoded sRGB</li>
 <li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code> optimization would very rarely hang
 <ul><li>seems to be a problem with (<code>pamonce = &gt;=5</code>) - AMELAR OSD, moist colors</li>
@@ -474,7 +475,7 @@
 </ul></li>
 <li>new function <code>bootstrapSoilTexture</code> for simulating realistic sand/silt/clay compositions</li>
 <li>
-<code>combine</code> replaces/expands <code><a href="https://rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">base::union</a></code>
+<code>combine</code> replaces/expands <code><a href="https://rdrr.io/pkg/data.table/man/setops.html" class="external-link">aqp::union</a></code> due to conflicts with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">base::union</a></code>
 </li>
 <li>
 <code>split</code> receives some upgrades to the S4 definition to increase parity with <code>split.default</code>
@@ -506,7 +507,7 @@
 <code>depths&lt;-</code> has been optimized and minimally validates input data</li>
 <li>default horizon ID (<code>hzID</code>) is now a <code>character</code> data type</li>
 <li>
-<code><a href="https://rdatatable.gitlab.io/data.table/reference/setops.html" class="external-link">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
+<code><a href="https://rdrr.io/pkg/data.table/man/setops.html" class="external-link">aqp::union</a></code> uses <code>depths&lt;-</code> internally; explicitly enforcing profile ID + top depth order in horizon data is safer but results in different ordering if <code>union</code>-ing IDs that “intermingle” (need to be re-sorted).</li>
 <li>new experimental method is <code>permute_profile</code>; similar to <code>sim</code> but for boundaries. The interface to this function is likely to change/be expanded.</li>
 <li>added <code>segment</code> c/o <a href="https://github.com/smroecker" class="external-link">@smroecker</a></li>
 <li>fix for unit-length and zero-length legends in <code>plotSPC</code>

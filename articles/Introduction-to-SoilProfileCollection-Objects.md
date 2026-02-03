@@ -1819,7 +1819,7 @@ A simple graphical comparison of the original and re-aligned soil
 profile data, after converting
 [`slab()`](https://ncss-tech.github.io/aqp/reference/slab.md) result
 from long -\> wide format with {data.table}
-[`dcast()`](https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html):
+[`dcast()`](https://rdrr.io/pkg/data.table/man/dcast.data.table.html):
 
 ``` r
 # reshape to wide format

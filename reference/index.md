@@ -771,6 +771,9 @@
 - [`validSpatialData(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/validSpatialData.md)
   : Check for valid spatial reference of profiles
 
+- [`validateMunsell()`](https://ncss-tech.github.io/aqp/reference/validateMunsell.md)
+  : Validate Standard Munsell Notation
+
 - [`warpHorizons()`](https://ncss-tech.github.io/aqp/reference/warpHorizons.md)
   : Inflate / Deflate Horizon Thickness
 

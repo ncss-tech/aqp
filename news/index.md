@@ -2,6 +2,10 @@
 
 ## aqp 2.3.1 (development)
 
+- new function
+  [`validateMunsell()`](https://ncss-tech.github.io/aqp/reference/validateMunsell.md)
+  for checking Munsell color notation
+  ([\#339](https://github.com/ncss-tech/aqp/issues/339))
 - minor bug fix in
   [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   when passed 0-length character
@@ -660,9 +664,8 @@ CRAN release: 2020-10-19
 - new function `bootstrapSoilTexture` for simulating realistic
   sand/silt/clay compositions
 - `combine` replaces/expands
-  [`aqp::union`](https://rdatatable.gitlab.io/data.table/reference/setops.html)
-  due to conflicts with
-  [`base::union`](https://rdrr.io/r/base/sets.html)
+  [`aqp::union`](https://rdrr.io/pkg/data.table/man/setops.html) due to
+  conflicts with [`base::union`](https://rdrr.io/r/base/sets.html)
 - `split` receives some upgrades to the S4 definition to increase parity
   with `split.default`
 - `filter` is now an alias for new method `subset`, which mirrors
@@ -696,10 +699,10 @@ CRAN release: 2020-10-19
   (<https://github.com/ncss-tech/aqp/pull/155>)
 - `depths<-` has been optimized and minimally validates input data
 - default horizon ID (`hzID`) is now a `character` data type
-- [`aqp::union`](https://rdatatable.gitlab.io/data.table/reference/setops.html)
-  uses `depths<-` internally; explicitly enforcing profile ID + top
-  depth order in horizon data is safer but results in different ordering
-  if `union`-ing IDs that “intermingle” (need to be re-sorted).
+- [`aqp::union`](https://rdrr.io/pkg/data.table/man/setops.html) uses
+  `depths<-` internally; explicitly enforcing profile ID + top depth
+  order in horizon data is safer but results in different ordering if
+  `union`-ing IDs that “intermingle” (need to be re-sorted).
 - new experimental method is `permute_profile`; similar to `sim` but for
   boundaries. The interface to this function is likely to change/be
   expanded.
