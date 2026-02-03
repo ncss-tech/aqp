@@ -92,6 +92,37 @@ title('PAM: perceptual dist', line = 0, cex.main = 0.8)
 
 
 
+## depth slices:
+## * original depths
+## * profiles warped to 100cm "soil depth"
+
+## --> interesting, there is almost no difference in the resulting distances ~ hierarchical clustering
+
+d <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE, prob = c(0.1, 0.25, 0.5, 0.75, 0.9))
+dd.slices <- diana(d)
+
+w <- combine(
+  profileApply(s, warpHorizons, scaleTo = 150)
+)
+
+d <- soilColorSignature(w, color = 'soil_color', method = 'depthSlices', perceptualDistMat = TRUE, prob = c(0.1, 0.25, 0.5, 0.75, 0.9))
+dd.warp <- diana(d)
+
+
+par(mar = c(0, 0, 1, 1), mfrow = c(2, 1))
+
+plotProfileDendrogram(s, dd.slices, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, name = NA, rotateToProfileID = TRUE)
+title('depthSlices: perceptual dist', line = 0, cex.main = 0.8)
+
+plotProfileDendrogram(w, dd.warp, width = 0.33, cex.names = 0.45, shrink = TRUE, name.style = 'center-center', max.depth = 200, name = NA, rotateToProfileID = TRUE)
+title('depthSlices(warped): perceptual dist', line = 0, cex.main = 0.8)
+
+
+
+## expand into n-tiles via interpolation of colors over depth
+##
+##
+
 
 
 pig <- soilColorSignature(s, color = 'soil_color', method = 'depthSlices')

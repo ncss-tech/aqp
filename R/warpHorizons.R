@@ -148,7 +148,9 @@
 warpHorizons <- function(x, fact = NULL, scaleTo = NULL, soilDepthFun = estimateSoilDepth, updateProfileID = TRUE, suffix = '-w') {
   
   ## TODO: 
-  ## * vectorize over profiles, and make more efficient
+  ## * vectorize over profiles (internal function via profileApply)
+  ## * move argument checking to main function
+  ## * make more efficient
   
   # extract parts and pieces of the SPC
   .h <- horizons(x)
