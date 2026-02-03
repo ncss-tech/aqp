@@ -51,7 +51,9 @@ validateMunsell <- function(m, vRange = c(1, 12), cRange = c(0, 50)) {
   # split into [H, V, C] expecting standard notation
   #  * non-standard hues will be split
   #  * Neutral chips, NA chroma converted to 0 chroma
-  .p <- parseMunsell(m, convertColors = FALSE)
+  .p <- suppressWarnings(
+    parseMunsell(m, convertColors = FALSE)
+  )
   
   ## TODO: maybe consider non-standard hues
   
