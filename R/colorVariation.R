@@ -37,14 +37,12 @@ colorVariation <- function(m, method = c('frequency', 'centroid', 'reference'), 
   
   method <- match.arg(method)
   
-  # remove NA
-  m <- m[which(!is.na(m))]
-  
-  # remove 'NA' encoded into Munsell notation
-  m <- m[grep('NA', m, invert = TRUE)]
-  
-  # TODO: remove bogus Munsell notation
-  # https://github.com/ncss-tech/aqp/issues/339
+  # filter Munsell colors:
+  #  * NA in vector, or any position of hue value/chroma
+  #  * mis-specified
+  #  * non-standard notation
+  idx <- which(validateMunsell(m))
+  m <- m[idx]
   
   # trap all NA
   if(length(m) < 1) {
