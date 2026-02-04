@@ -1,6 +1,8 @@
 # aqp 2.3.1 (development)
+ * new function `launderMunsell()` for fixing encoding of neutral colors
  * new function `validateMunsell()` for checking Munsell color notation (#339)
  * minor bug fix in `col2Munsell()` when passed 0-length character
+ * bug fix in `colorChart()` when using groups and neutral colors
  * bug fix in `soilColorSignature()`, NA incorrectly interpreted when `color` argument is supplied hex encoded sRGB
  * bug fix in `soilColorSignature()`, `cluster::pam()` optimization would very rarely hang
    - seems to be a problem with (`pamonce = >=5`) - AMELAR OSD, moist colors
