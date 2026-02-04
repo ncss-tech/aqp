@@ -9,6 +9,7 @@ colorChart(
   g = factor("All"),
   size = TRUE,
   annotate = FALSE,
+  launderColors = TRUE,
   chip.cex = 3,
   chip.cex.min = 0.1,
   chip.cex.max = 1.5,
@@ -26,6 +27,8 @@ colorChart(
 \item{size}{logical, encode group-wise frequency with chip size}
 
 \item{annotate}{logical, annotate color chip frequency}
+
+\item{launderColors}{logical, fix common errors with encoding neutral colors, see \code{\link[=launderMunsell]{launderMunsell()}}}
 
 \item{chip.cex}{scaling factor applied to each color chip}
 
@@ -94,15 +97,26 @@ colorChart(s[[1]], chip.cex = 4)
 # increase the possible range of color chip sizes
 colorChart(s[[1]], chip.cex = 4, chip.cex.min = 0.01, chip.cex.max = 2)
 
-# slightly funky support for neutral hues
+# demonstrate support for neutral chips
 N <- sprintf('N \%s/', 2:8)
 cols <- c(rep(N, times = 5), ric.big)
 
-# note special panel used to show neutral hues
+# note special panel used to show neutral chips
 colorChart(cols, size = FALSE, annotate = TRUE)
 
 # filter proportions below given threshold
 colorChart(cols, size = FALSE, annotate = TRUE, threshold = 0.01,
            chip.cex = 4, annotate.type = 'percentage')
+           
+# extreme values
+colorChart(c('N 8/', '10YR 4/12', '10YR 3/1', '10YR 10/4'))
+
+# unusual notation, 10YR 4/0 --> effectively N 4/
+colorChart(c('N 8/', 'N 4/', '10YR 4/0', '5G 6/6', '5Y 10/4'))
+
+# demonstrate groups
+m <- c('10YR 4/4', 'N 2/', 'N 3/', '5Y 6/6', '5P 4/4')
+g <- factor(c(1, 1, 2, 2, 2))
+colorChart(m, g)
 \dontshow{\}) # examplesIf}
 }
