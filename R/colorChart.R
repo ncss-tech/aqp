@@ -291,6 +291,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
   pp <- lattice::xyplot(
     value ~ chroma | hue + .groups, 
     data = tab,
+    drop = TRUE, 
     as.table = TRUE,
     subscripts = TRUE, 
     # this works until we attempt to use neutral hues
@@ -298,8 +299,8 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
     ylim = y.lim,
     # simple version when no neutral hues
     scales = list(
-      alternating = 3, 
-      y = list(rot = 0)
+      x = list(alternating = 1), 
+      y = list(rot = 0, alternating = 3)
     ), 
     main = '', 
     xlab = 'Chroma', 
@@ -325,8 +326,10 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
     #
     # side-effect: unused levels must be removed prior to calling colorChart()
     #
-    # TODO keep track of panels with data, then assigning scales / limits accordingly
-    # interaction(tab$hue, tab$.groups, drop = TRUE)
+    # solution:    keep track of panels with data, then assigning scales / limits accordingly
+    
+    # (hue x group) combinations before adding fake obs
+    int.b <- levels(interaction(tab$hue, tab$.groups, drop = TRUE))
     
     ## HACK: add a single bogus point for every hue x group combination
     #        this ensures that limits are correctly established
@@ -351,6 +354,9 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
     
     ## end HACK
     
+    # (hue x group) combinations after adding fake obs
+    int.a <- levels(interaction(tab$hue, tab$.groups))
+    
     
     # standards x-limits
     x.at <- seq(x.lim[1] + 0.5, x.lim[2] - 0.5, by = 1)
@@ -368,10 +374,17 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
       lapply(1:(length(ll)-1), FUN = function(i) {x.lim})
     )
     
-    # replicate to cover all columns * rows
+    
+    # replicate scales to cover all columns * rows
     n.groups <- length(levels(tab$.groups))
     x.at.list <- rep(x.at.list, times = n.groups)
     x.limits.list <- rep(x.limits.list, times = n.groups)
+    
+    # index just those panels (hue x group) with no data (before adding fake obs)
+    nd.idx <- which(is.na(match(int.a, int.b, nomatch = NA)))
+    
+    # suppress scales in these panels
+    x.at.list[nd.idx] <- list('')
     
     pp <- lattice::xyplot(
       value ~ chroma | hue + .groups, 
@@ -409,9 +422,6 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
     sub.txt <- sprintf('chip labels represent %ss', annotate.type)
     pp <- update(pp, sub = list(sub.txt, font = 1))
   }
-  
-  
-  
   
   return(pp)  
 }
