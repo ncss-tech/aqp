@@ -454,6 +454,9 @@
 - [`jacobs2000`](https://ncss-tech.github.io/aqp/reference/jacobs2000.md)
   : Soil Morphologic Data from Jacobs et al. 2002.
 
+- [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
+  : Fix Common Errors in Munsell Notation
+
 - [`length(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/length.md)
   : Get the number of profiles in a SoilProfileCollection
 

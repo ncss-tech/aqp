@@ -3,12 +3,18 @@
 ## aqp 2.3.1 (development)
 
 - new function
+  [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
+  for fixing encoding of neutral colors
+- new function
   [`validateMunsell()`](https://ncss-tech.github.io/aqp/reference/validateMunsell.md)
   for checking Munsell color notation
   ([\#339](https://github.com/ncss-tech/aqp/issues/339))
 - minor bug fix in
   [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   when passed 0-length character
+- bug fix in
+  [`colorChart()`](https://ncss-tech.github.io/aqp/reference/colorChart.md)
+  when using groups and neutral colors
 - bug fix in
   [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md),
   NA incorrectly interpreted when `color` argument is supplied hex
