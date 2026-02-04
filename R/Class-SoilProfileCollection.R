@@ -1128,13 +1128,28 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
   if (depths) {
     hzd <- horizonDepths(object)
   }
-  idn <- c(idname(object),
+  idn <- c(
+    idname(object),
     hzidname(object),
     hzd,
     hzdesgnname(object),
     GHL(object),
-    hztexclname(object))
+    hztexclname(object)
+  )
   idn[!is.na(idn) & nchar(idn) > 0]
+}
+
+.siteMetadataNames <- function(object, idname = TRUE, ...) {
+  md <- aqp::metadata(object)
+  if (isTRUE(idname)) {
+    mdn <- idname(object)
+  } else {
+    mdn <- NULL
+  }
+  if (!is.null(md$coordinates)) {
+    mdn <- c(mdn, md$coordinates)
+  }
+  mdn
 }
 
 setGeneric("hzMetadata", function(object, ...)

@@ -18,12 +18,13 @@
 #' @export
 reduceSPC <- function(p, column_names = NULL) {
   
+  mn <- .siteMetadataNames(p, idname = FALSE)
   nn <- .hzMetadataNames(p, depths = TRUE)
   ecn <- column_names[!column_names %in% nn]
   sn <- siteNames(p)
   hn <- horizonNames(p)
   
-  stn <- sn[sn %in% ecn]
+  stn <- sn[sn %in% c(mn, ecn)]
   hzn <- c(nn, hn[hn %in% ecn])
   msn <- ecn[!(ecn %in% stn | ecn %in% hzn)]
   

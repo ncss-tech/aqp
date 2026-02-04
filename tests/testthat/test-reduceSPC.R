@@ -2,6 +2,11 @@ test_that("reduceSPC() works", {
   data(sp4)
   depths(sp4) <- id ~ top + bottom
   
+  sp4$x <- 1:length(sp4)
+  sp4$y <- 1:length(sp4)
+  
+  initSpatial(sp4, crs = "EPSG:4326") <- ~ x + y
+  
   sp4$texcl <- ssc_to_texcl(sp4$sand, sp4$clay)
   
   hzdesgnname(sp4) <- "name"
@@ -13,6 +18,8 @@ test_that("reduceSPC() works", {
   
   expect_true(
     all(horizonNames(x) %in% c("id", "top", "bottom", "hzID", "name", "texcl", "CF")) &&
-    all(siteNames(x) %in% c("id", "newsite"))
+    all(siteNames(x) %in% c("id", "x", "y", "newsite"))
   )
+  expect_equal(metadata(sp4)$coordinates, c("x", "y"))
+  expect_equal(metadata(sp4)$crs, "EPSG:4326")
 })
