@@ -321,6 +321,12 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
     # 
     #        see:
     #        https://stackoverflow.com/questions/11161739/how-to-specify-different-ylim-values-for-each-panel-in-xyplot
+    #
+    #
+    # side-effect: unused levels must be removed prior to calling colorChart()
+    #
+    # TODO keep track of panels with data, then assigning scales / limits accordingly
+    # interaction(tab$hue, tab$.groups, drop = TRUE)
     
     ## HACK: add a single bogus point for every hue x group combination
     #        this ensures that limits are correctly established
