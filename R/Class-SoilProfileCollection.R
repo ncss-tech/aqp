@@ -1139,7 +1139,7 @@ setMethod("horizonNames", signature(object = "SoilProfileCollection"),
   idn[!is.na(idn) & nchar(idn) > 0]
 }
 
- .siteMetadataNames <- function(object, idname = TRUE, ...) {
+.siteMetadataNames <- function(object, idname = TRUE, ...) {
   md <- aqp::metadata(object)
   if (isTRUE(idname)) {
     mdn <- idname(object)
