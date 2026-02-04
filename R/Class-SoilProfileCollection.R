@@ -59,6 +59,9 @@ setClass(
 # new: SpatialPoints(data.frame(x = 0, y = 0))[-1,]
 # new new: NULL
 
+setGeneric('SoilProfileCollection', function(...)
+  standardGeneric('SoilProfileCollection'))
+
 #' Constructor for the SoilProfileCollection object
 #'
 #' @param idcol character. Profile ID Column Name
@@ -163,7 +166,23 @@ setClass(
 #' profile_id(sp1) <- p
 #' profile_id(sp1)
 #'
-"SoilProfileCollection" <-
+SoilProfileCollection <- 
+  function(...) {
+    UseMethod("SoilProfileCollection")
+  }
+
+#' @export
+#' @rdname SoilProfileCollection-class
+SoilProfileCollection.default <- 
+  function(...) {
+    if (length(list(...)) == 0) {
+      SoilProfileCollection("id")
+    }
+  }
+
+#' @export
+#' @rdname SoilProfileCollection-class
+SoilProfileCollection.character <-
   function(idcol = 'id',
            hzidcol = 'hzID',
            depthcols = c('top', 'bottom'),
@@ -182,7 +201,8 @@ setClass(
            site = data.frame(id = character(0), stringsAsFactors = FALSE),
            # sp = NULL, 
            diagnostic = data.frame(stringsAsFactors = FALSE),
-           restrictions = data.frame(stringsAsFactors = FALSE)) {
+           restrictions = data.frame(stringsAsFactors = FALSE),
+           ...) {
 
     # retrieve highest-level data.frame subclass of horizon data
     hzclass <- class(horizons)[1]
@@ -204,16 +224,16 @@ setClass(
                   new.metadata[!names(new.metadata) %in% names(metadata)])
 
     # add aqp_group_by if not defined
-    if (length(metadata$aqp_group_by) == 0)
+    if (length(metadata$aqp_group_by) == 0) 
       metadata$aqp_group_by <- ""
-
+    
     # "allow" NULL for the optional slots
-    if(length(metadata$aqp_hzdesgn) == 0)
+    if (length(metadata$aqp_hzdesgn) == 0)
       metadata$aqp_hzdesgn <- ""
-
-    if(length(metadata$aqp_hztexcl) == 0)
+    
+    if (length(metadata$aqp_hztexcl) == 0)
       metadata$aqp_hztexcl <- ""
-
+    
     # create object
     new(
       "SoilProfileCollection",
@@ -229,6 +249,86 @@ setClass(
     )
   }
 
+#' @export
+#' @rdname SoilProfileCollection-class
+SoilProfileCollection.data.frame <-
+  function(
+    horizons = data.frame(),
+    site = data.frame(),
+    diagnostic = data.frame(),
+    restrictions = data.frame(),
+    metadata = list(),
+    idcol = NULL,
+    depthcols = c("top", "bottom"),
+    hzidcol = NULL,
+    coordinates = NULL,
+    crs = NULL,
+    ...
+  ) {
+    
+    if (is.null(idcol) &&
+        !is.null(site) && 
+        inherits(site, 'data.frame')) {
+      idx <- match(colnames(horizons), colnames(site))
+      noi <- na.omit(idx)
+      lnai <- length(noi)
+      if (lnai == 0) {
+        stop("ID column name (idcol) must be specified when site data are empty")
+      } else if (lnai == 1) {
+        idcol <- colnames(site)[noi]
+      } else {
+        stop("only the ID column name (idcol) can be shared between site and horizons")
+      }
+    } else {
+      if (!idcol %in% colnames(horizons) &&
+          !idcol %in% colnames(site)) {
+        stop("ID column name (idcol) must be present in both site and horizons")
+      }
+    }
+    
+    if (!all(depthcols %in% colnames(horizons))) {
+      stop("top and bottom depth columns (depthcols) not found in horizons")
+    }
+    
+    if (inherits(horizons, 'sf')) {
+      horizons <- as.data.frame(horizons)
+    }
+    
+    depths(horizons) <- c(idcol, depthcols)
+    
+    if (length(site) >= 1 &&
+        inherits(site, 'data.frame') &&
+        nrow(site) > 0) {
+      site(horizons) <- site
+    }
+    
+    if (length(diagnostic_hz) >= 1 &&
+        inherits(diagnostic_hz, 'data.frame') &&
+        nrow(diagnostic_hz) > 0) {
+      diagnostic_hz(horizons) <- diagnostic_hz
+    }
+    
+    if (length(restrictions) >= 1 &&
+        inherits(restrictions) &&
+        nrow(site) > 0) {
+      restrictions(horizons) <- restrictions
+    }
+    
+    if (length(metadata) >= 1 &&
+        inherits(metadata, 'list')) {
+      m <- metadata(horizons)
+      m[names(metadata)] <- metadata
+      metadata(horizons) <- m
+    }
+    
+    if (!is.null(coordinates) &&
+        all(coordinates %in% colnames(site))) {
+      initSpatial(horizons, crs) <- coordinates
+    }
+    
+    horizons
+  }
+    
 ## show
 #' SoilProfileCollection show method
 #' @name show

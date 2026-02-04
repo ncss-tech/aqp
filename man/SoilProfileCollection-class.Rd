@@ -4,9 +4,16 @@
 \name{SoilProfileCollection}
 \alias{SoilProfileCollection}
 \alias{SoilProfileCollection-class}
+\alias{SoilProfileCollection.default}
+\alias{SoilProfileCollection.character}
+\alias{SoilProfileCollection.data.frame}
 \title{An S4 object representation of a group of soil profiles.}
 \usage{
-SoilProfileCollection(
+SoilProfileCollection(...)
+
+\method{SoilProfileCollection}{default}(...)
+
+\method{SoilProfileCollection}{character}(
   idcol = "id",
   hzidcol = "hzID",
   depthcols = c("top", "bottom"),
@@ -16,7 +23,22 @@ SoilProfileCollection(
     = numeric(0), stringsAsFactors = FALSE),
   site = data.frame(id = character(0), stringsAsFactors = FALSE),
   diagnostic = data.frame(stringsAsFactors = FALSE),
-  restrictions = data.frame(stringsAsFactors = FALSE)
+  restrictions = data.frame(stringsAsFactors = FALSE),
+  ...
+)
+
+\method{SoilProfileCollection}{data.frame}(
+  horizons = data.frame(),
+  site = data.frame(),
+  diagnostic = data.frame(),
+  restrictions = data.frame(),
+  metadata = list(),
+  idcol = NULL,
+  depthcols = c("top", "bottom"),
+  hzidcol = NULL,
+  coordinates = NULL,
+  crs = NULL,
+  ...
 )
 }
 \arguments{
