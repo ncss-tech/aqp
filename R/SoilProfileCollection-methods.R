@@ -562,8 +562,7 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
   if (n == 0) {
     return(x[0, ])
   }
-  template <- as.data.frame(x[1, , drop = FALSE])
-  template[seq_len(n), ] <- NA
+  template <- x[rep(NA_integer_, n), , drop = FALSE]
   rownames(template) <- NULL
   .as.data.frame.aqp(template, as.class)
 }
