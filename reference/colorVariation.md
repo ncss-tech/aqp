@@ -8,7 +8,11 @@ map closely to color differences as perceived by "average human vision".
 ## Usage
 
 ``` r
-colorVariation(m, method = c("frequency", "centroid", "reference"), ref = NULL)
+colorVariation(
+  m,
+  method = c("frequency", "centroid", "reference", "L1"),
+  ref = NULL
+)
 ```
 
 ## Arguments
@@ -36,10 +40,14 @@ numeric dE00 summary of color variation
 
 dE00 values are computed according to `method`:
 
-- 'frequency': relative to most frequency color in `m`
+- 'frequency': relative to most frequent color in `m`
 
 - 'centroid': relative to centroid (CIELAB coordinates) of colors
   specified in `m`
+
+- 'L1': relative to L1-median (geometric median) CIELAB coordinates of
+  colors specified in `m`, via
+  [`Gmedian::Gmedian()`](https://rdrr.io/pkg/Gmedian/man/Gmedian.html)
 
 - 'reference': relative to color specified in `ref`
 
