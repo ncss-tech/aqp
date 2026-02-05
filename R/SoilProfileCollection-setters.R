@@ -320,8 +320,8 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
       si.names <- siteNames(object)
       
       # short circuit: ensure that site(x)$colname <- NULL works
-      if (all(new.cols %in% si.names) &
-               idn %in% new.cols & 
+      if (all(new.cols %in% si.names) &&
+               idn %in% new.cols && 
                 nrow(value) == length(object)) {
         
           if (!all(value[[idn]] %in% pid)) {
@@ -339,6 +339,7 @@ setReplaceMethod("site", signature(object = "SoilProfileCollection"),
       #   (only one new column, in existing site order)
       difcols <- setdiff(new.cols, si.names)
       if (length(difcols) == 1 &&
+          idn %in% new.cols && 
           all(value[[idn]] == pid)) {
         object@site[[difcols]] <- value[[difcols]]
         return(object)
