@@ -4,7 +4,11 @@
 \alias{colorVariation}
 \title{Quantitative Description of Color Variation}
 \usage{
-colorVariation(m, method = c("frequency", "centroid", "reference"), ref = NULL)
+colorVariation(
+  m,
+  method = c("frequency", "centroid", "reference", "L1"),
+  ref = NULL
+)
 }
 \arguments{
 \item{m}{character vector of colors, described using the Munsell system e.g. \code{c('10YR 3/3', '5YR 4/6')}}
@@ -22,8 +26,9 @@ This function computes several measures of "color variation", typically associat
 \details{
 dE00 values are computed according to \code{method}:
 \itemize{
-\item 'frequency': relative to most frequency color in \code{m}
+\item 'frequency': relative to most frequent color in \code{m}
 \item 'centroid': relative to centroid (CIELAB coordinates) of colors specified in \code{m}
+\item 'L1': relative to L1-median (geometric median) CIELAB coordinates of colors specified in \code{m}, via \code{Gmedian::Gmedian()}
 \item 'reference': relative to color specified in \code{ref}
 }
 }

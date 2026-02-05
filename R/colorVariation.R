@@ -16,8 +16,9 @@
 #' @details
 #' dE00 values are computed according to `method`:
 #' 
-#'   * 'frequency': relative to most frequency color in `m`
+#'   * 'frequency': relative to most frequent color in `m`
 #'   * 'centroid': relative to centroid (CIELAB coordinates) of colors specified in `m`
+#'   * 'L1': relative to L1-median (geometric median) CIELAB coordinates of colors specified in `m`, via `Gmedian::Gmedian()`
 #'   * 'reference': relative to color specified in `ref`
 #'   
 #'
@@ -33,9 +34,16 @@
 #' m <- c('10YR 3/3', '10YR 4/4', '10YR 4/4', '5GY 6/8')
 #' colorVariation(m)
 #' 
-colorVariation <- function(m, method = c('frequency', 'centroid', 'reference'), ref = NULL) {
+colorVariation <- function(m, method = c('frequency', 'centroid', 'reference', 'L1'), ref = NULL) {
   
   method <- match.arg(method)
+  
+  # dep check
+  if(method == 'L1') {
+    if(!requireNamespace('Gmedian')) {
+      stop('package `Gmedian` is required', call. = FALSE)
+    }
+  }
   
   # filter Munsell colors:
   #  * NA in vector, or any position of hue value/chroma
@@ -79,7 +87,7 @@ colorVariation <- function(m, method = c('frequency', 'centroid', 'reference'), 
   }
   
   
-  # D(colors, color-centroid)
+  # D(colors, wt. color-centroid)
   if(method == 'centroid') {
     
     # centroid is wt. mean in CIELAB space
@@ -105,6 +113,33 @@ colorVariation <- function(m, method = c('frequency', 'centroid', 'reference'), 
     }
     
     attr(res, 'centroid') <- m.centroid
+    
+  }
+  
+  # D(colors, L1 median)
+  if(method == 'L1') {
+    
+    # 
+    lab <- parseMunsell(m, returnLAB = TRUE)
+    
+    lab.centroid <- Gmedian::Gmedian(lab)
+    
+    # convert back to Munsell notation for colorContrast()
+    m.centroid <- col2Munsell(lab.centroid, space = 'CIELAB')
+    m.centroid <- sprintf("%s %s/%s", m.centroid$hue, m.centroid$value, m.centroid$chroma)
+    
+    # color contrast vs. centroid
+    cc <- colorContrast(m1 = wt.m, m2 = rep(m.centroid, times = length(wt)))
+    
+    if(length(wt) < 3) {
+      # unweighted
+      res <- mean(cc$dE00, na.rm = TRUE)
+    } else {
+      # weighted
+      res <- weighted.mean(cc$dE00, w = wt)
+    }
+    
+    attr(res, 'L1') <- m.centroid
     
   }
   
