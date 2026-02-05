@@ -572,8 +572,8 @@ plotSPC <- function(
     # keep track of original profile bottom depths
     .pb0 <- x[, , .LAST, .BOTTOM]
     
-    # truncate
-    x <- trunc(x, 0, max.depth)
+    # truncate, keeping degenerate profiles
+    x <- trunc(x, 0, max.depth, drop = FALSE)
     
     # truncated bottom depths
     .pb1 <- x[, , .LAST, .BOTTOM]

@@ -1,5 +1,10 @@
 context("plotSPC")
 
+
+## TODO:
+# * handling of degenerate profiles
+
+
 data(sp1)
 # convert colors from Munsell to hex-encoded RGB
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
