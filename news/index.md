@@ -12,6 +12,8 @@
 - minor bug fix in
   [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   when passed 0-length character
+- bug fix in `plotSPC(x, max.depth = 100)` when `x` contains degenerate
+  profiles (no horizons)
 - bug fix in
   [`colorChart()`](https://ncss-tech.github.io/aqp/reference/colorChart.md)
   when using groups and neutral colors

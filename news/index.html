@@ -47,6 +47,7 @@
 <ul><li>new function <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> for fixing encoding of neutral colors</li>
 <li>new function <code><a href="../reference/validateMunsell.html">validateMunsell()</a></code> for checking Munsell color notation (<a href="https://github.com/ncss-tech/aqp/issues/339" class="external-link">#339</a>)</li>
 <li>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</li>
+<li>bug fix in <code>plotSPC(x, max.depth = 100)</code> when <code>x</code> contains degenerate profiles (no horizons)</li>
 <li>bug fix in <code><a href="../reference/colorChart.html">colorChart()</a></code> when using groups and neutral colors</li>
 <li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, NA incorrectly interpreted when <code>color</code> argument is supplied hex encoded sRGB</li>
 <li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code> optimization would very rarely hang
