@@ -557,6 +557,17 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
   x
 })
 
+# produces an "all NA" data.frame with n rows, based on schema of x
+.create_placeholder_df <- function(x, n, as.class = "data.frame") {
+  if (n == 0) {
+    return(x[0, ])
+  }
+  template <- as.data.frame(x[1, , drop = FALSE])
+  template[seq_len(n), ] <- NA
+  rownames(template) <- NULL
+  .as.data.frame.aqp(template, as.class)
+}
+
 #' @description  used to implement "drop=FALSE" for various methods that remove horizons from SoilProfileCollection object
 #' @noRd
 .insert_dropped_horizons <- function(object = SoilProfileCollection(), 
@@ -572,22 +583,23 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
   newid <- sites[[pid]][which(sites[[pid]] %in% i.idx2)]
   
   # create ID-only empty data using original data as templates
-  h.empty <- horizons[0, , drop = FALSE][seq_along(i.idx2), , drop = FALSE]
-  h.empty[[pid]] <- newid
-  s.empty <- sites[0, , drop = FALSE][seq_along(i.idx2), , drop = FALSE]
-  s.empty[[pid]] <- newid
-  
-  # reorder to original id (+ top depth for horizons)
-  horizons <- rbind(horizons, h.empty)
-  horizons <- horizons[order(horizons[[pid]], horizons[[depths[1]]]),]
-  
-  sites <- sites[which(!sites[[pid]] %in% h.empty[[pid]]), , drop = FALSE]
-  sites <- rbind(sites, s.empty)
-  sites <- sites[order(sites[[pid]]), , drop = FALSE]
+  if (length(newid) > 0) {
+    h.empty <- .create_placeholder_df(horizons, length(newid), aqp_df_class(object))
+    h.empty[[pid]] <- newid
+    s.empty <- .create_placeholder_df(sites, length(newid), aqp_df_class(object))
+    s.empty[[pid]] <- newid
+    # reorder to original id (+ top depth for horizons)
+    horizons <- data.table::rbindlist(list(horizons, h.empty))
+    horizons <- horizons[order(horizons[[pid]], horizons[[depths[1]]]), ]
+    
+    sites <- sites[which(!sites[[pid]] %in% h.empty[[pid]]), , drop = FALSE]
+    sites <- data.table::rbindlist(list(sites, s.empty))
+    sites <- sites[order(sites[[pid]]), , drop = FALSE]
+  }
   
   if (inherits(object, 'SoilProfileCollection') && SPC) {
-    object@site <- sites
-    replaceHorizons(object) <- horizons
+    object@site <- .as.data.frame.aqp(sites, aqp_df_class(object))
+    replaceHorizons(object) <- .as.data.frame.aqp(horizons, aqp_df_class(object))
     return(object)
   } else {
     return(list(

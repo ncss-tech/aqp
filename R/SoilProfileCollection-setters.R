@@ -128,13 +128,13 @@ setReplaceMethod("depths", "data.frame",
   # add other columns
   if (ncol(hz) > 0) {
     hz$.dummyVar <- ""[nrow(hz)]
-    nuhz <- cbind(nuhz, hz[0, !colnames(hz) %in% colnames(nuhz), drop = FALSE][iid,])
+    nuhz <- cbind(nuhz, .create_placeholder_df(hz[, !colnames(hz) %in% colnames(nuhz), drop = FALSE], length(iid)))
     nuhz$.dummyVar <- NULL
   }
   
   if (ncol(st) > 0) {
     st$.dummyVar <- ""[nrow(st)]
-    nust <- cbind(nust, st[0, !colnames(st) %in% colnames(nust), drop = FALSE][iid,])
+    nust <- cbind(nust, .create_placeholder_df(st[, !colnames(st) %in% colnames(nust), drop = FALSE], length(iid)))
     nust$.dummyVar <- NULL
   }
     
