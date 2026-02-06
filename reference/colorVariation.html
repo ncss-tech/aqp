@@ -74,7 +74,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>numeric dE00 summary of color variation</p>
+    <p>numeric, dE00 summary of color variation along with group centroid for <code>method = c('frequency', 'centroid', 'L1')</code></p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -82,16 +82,36 @@
 <li><p>'centroid': relative to centroid (CIELAB coordinates) of colors specified in <code>m</code></p></li>
 <li><p>'L1': relative to L1-median (geometric median) CIELAB coordinates of colors specified in <code>m</code>, via <code><a href="https://rdrr.io/pkg/Gmedian/man/Gmedian.html" class="external-link">Gmedian::Gmedian()</a></code></p></li>
 <li><p>'reference': relative to color specified in <code>ref</code></p></li>
-</ul></div>
+</ul><p>The <code>L1</code> method is more robust to outliers in <code>m</code> as combined pedon <code>centroid</code> method.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># some brownish colors with a wild outlier</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'10YR 3/3'</span>, <span class="st">'10YR 4/4'</span>, <span class="st">'10YR 4/4'</span>, <span class="st">'5GY 6/8'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">colorVariation</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># useful when there may be a lot of duplicates</span></span></span>
+<span class="r-in"><span><span class="fu">colorVariation</span><span class="op">(</span><span class="va">m</span>, method <span class="op">=</span> <span class="st">'frequency'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10.06968</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"most frequent")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "10YR 4/4"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># statistical "centroid" of colors, not robust to outliers</span></span></span>
+<span class="r-in"><span><span class="co"># result may not match any color in `m`</span></span></span>
+<span class="r-in"><span><span class="fu">colorVariation</span><span class="op">(</span><span class="va">m</span>, method <span class="op">=</span> <span class="st">'centroid'</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 12.92885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"centroid")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "5Y 4/4"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># deviation from a known reference</span></span></span>
+<span class="r-in"><span><span class="fu">colorVariation</span><span class="op">(</span><span class="va">m</span>, method <span class="op">=</span> <span class="st">'reference'</span>, ref <span class="op">=</span> <span class="st">'10YR 2/1'</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 24.34378</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># L1-median (requires Gmedian package) like 'centroid'</span></span></span>
+<span class="r-in"><span><span class="co"># more robust to outliers</span></span></span>
+<span class="r-in"><span><span class="co"># result will usually be very closer to a color in `m`</span></span></span>
+<span class="r-in"><span><span class="co"># colorVariation(m, method = 'L1')</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

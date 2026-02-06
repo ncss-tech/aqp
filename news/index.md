@@ -9,11 +9,14 @@
   [`validateMunsell()`](https://ncss-tech.github.io/aqp/reference/validateMunsell.md)
   for checking Munsell color notation
   ([\#339](https://github.com/ncss-tech/aqp/issues/339))
+- [`colorVariation()`](https://ncss-tech.github.io/aqp/reference/colorVariation.md)
+  gains new method ‘L1’ for comparing colors to L1-median (requires
+  Gmedian package)
 - minor bug fix in
   [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   when passed 0-length character
-- bug fix in `plotSPC(x, max.depth = 100)` when `x` contains degenerate
-  profiles (no horizons)
+- bug fix in `plotSPC(x, max.depth != NULL)` when `x` contains
+  degenerate profiles (no horizons)
 - bug fix in
   [`colorChart()`](https://ncss-tech.github.io/aqp/reference/colorChart.md)
   when using groups and neutral colors
@@ -29,7 +32,9 @@
     colors
 - code-completion and preview for SPC objects in RStudio
   ([@brownag](https://github.com/brownag))
-- mass-preserving spline (c/o mpspline2) / slab comparison article
+- mass-preserving spline (c/o mpspline2) /
+  [`slab()`](https://ncss-tech.github.io/aqp/reference/slab.md)
+  comparison article
 
 ## aqp 2.3 (2026-01-16)
 
