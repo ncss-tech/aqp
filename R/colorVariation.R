@@ -4,9 +4,6 @@
 
 ## TODO: allow various specifications for color
 
-## TODO: add method = 'L1 median'
-##       --> requires updates to colorQuantiles() to accept Munsell notation
-
 
 #' @title Quantitative Description of Color Variation
 #' 
@@ -20,19 +17,36 @@
 #'   * 'centroid': relative to centroid (CIELAB coordinates) of colors specified in `m`
 #'   * 'L1': relative to L1-median (geometric median) CIELAB coordinates of colors specified in `m`, via `Gmedian::Gmedian()`
 #'   * 'reference': relative to color specified in `ref`
-#'   
+#' 
+#' 
+#' The `L1` method is more robust to outliers in `m` as combined pedon `centroid` method.
 #'
 #' @param m character vector of colors, described using the Munsell system e.g. `c('10YR 3/3', '5YR 4/6')`
 #' @param method character, one of `c('frequency', 'centroid', 'reference')`, see Details
 #' @param ref character, a reference color specified in the Munsell system when `method = 'reference'`
 #'
-#' @returns numeric dE00 summary of color variation
+#' @returns numeric, dE00 summary of color variation along with group centroid for `method = c('frequency', 'centroid', 'L1')`
 #' @export
 #'
 #' @examples
 #' 
+#' # some brownish colors with a wild outlier
 #' m <- c('10YR 3/3', '10YR 4/4', '10YR 4/4', '5GY 6/8')
-#' colorVariation(m)
+#' 
+#' # useful when there may be a lot of duplicates
+#' colorVariation(m, method = 'frequency')
+#' 
+#' # statistical "centroid" of colors, not robust to outliers
+#' # result may not match any color in `m`
+#' colorVariation(m, method = 'centroid')
+#' 
+#' # deviation from a known reference
+#' colorVariation(m, method = 'reference', ref = '10YR 2/1')
+#' 
+#' # L1-median (requires Gmedian package) like 'centroid'
+#' # more robust to outliers
+#' # result will usually be very closer to a color in `m`
+#' # colorVariation(m, method = 'L1')
 #' 
 colorVariation <- function(m, method = c('frequency', 'centroid', 'reference', 'L1'), ref = NULL) {
   
@@ -119,7 +133,7 @@ colorVariation <- function(m, method = c('frequency', 'centroid', 'reference', '
   # D(colors, L1 median)
   if(method == 'L1') {
     
-    # 
+    # use all colors, not unique colors with weights
     lab <- parseMunsell(m, returnLAB = TRUE)
     
     lab.centroid <- Gmedian::Gmedian(lab)

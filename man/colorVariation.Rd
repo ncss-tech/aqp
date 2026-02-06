@@ -18,7 +18,7 @@ colorVariation(
 \item{ref}{character, a reference color specified in the Munsell system when \code{method = 'reference'}}
 }
 \value{
-numeric dE00 summary of color variation
+numeric, dE00 summary of color variation along with group centroid for \code{method = c('frequency', 'centroid', 'L1')}
 }
 \description{
 This function computes several measures of "color variation", typically associated with soil colors described in the Munsell system, using the CIE2000 dE (dE00) color contrast metric. The resulting dE00 summaries map closely to color differences as perceived by "average human vision".
@@ -31,10 +31,27 @@ dE00 values are computed according to \code{method}:
 \item 'L1': relative to L1-median (geometric median) CIELAB coordinates of colors specified in \code{m}, via \code{Gmedian::Gmedian()}
 \item 'reference': relative to color specified in \code{ref}
 }
+
+The \code{L1} method is more robust to outliers in \code{m} as combined pedon \code{centroid} method.
 }
 \examples{
 
+# some brownish colors with a wild outlier
 m <- c('10YR 3/3', '10YR 4/4', '10YR 4/4', '5GY 6/8')
-colorVariation(m)
+
+# useful when there may be a lot of duplicates
+colorVariation(m, method = 'frequency')
+
+# statistical "centroid" of colors, not robust to outliers
+# result may not match any color in `m`
+colorVariation(m, method = 'centroid')
+
+# deviation from a known reference
+colorVariation(m, method = 'reference', ref = '10YR 2/1')
+
+# L1-median (requires Gmedian package) like 'centroid'
+# more robust to outliers
+# result will usually be very closer to a color in `m`
+# colorVariation(m, method = 'L1')
 
 }

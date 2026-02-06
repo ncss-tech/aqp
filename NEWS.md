@@ -1,14 +1,15 @@
 # aqp 2.3.1 (development)
  * new function `launderMunsell()` for fixing encoding of neutral colors
  * new function `validateMunsell()` for checking Munsell color notation (#339)
+ * `colorVariation()` gains new method 'L1' for comparing colors to L1-median (requires Gmedian package)
  * minor bug fix in `col2Munsell()` when passed 0-length character
- * bug fix in `plotSPC(x, max.depth = 100)` when `x` contains degenerate profiles (no horizons)
+ * bug fix in `plotSPC(x, max.depth != NULL)` when `x` contains degenerate profiles (no horizons)
  * bug fix in `colorChart()` when using groups and neutral colors
  * bug fix in `soilColorSignature()`, NA incorrectly interpreted when `color` argument is supplied hex encoded sRGB
  * bug fix in `soilColorSignature()`, `cluster::pam()` optimization would very rarely hang
    - seems to be a problem with (`pamonce = >=5`) - AMELAR OSD, moist colors
  * code-completion and preview for SPC objects in RStudio (@brownag)
- * mass-preserving spline (c/o mpspline2) / slab comparison article
+ * mass-preserving spline (c/o mpspline2) / `slab()` comparison article
 
 # aqp 2.3 (2026-01-16)
  * CRAN release
