@@ -5,33 +5,46 @@
 - new function
   [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
   for fixing encoding of neutral colors
+
 - new function
   [`validateMunsell()`](https://ncss-tech.github.io/aqp/reference/validateMunsell.md)
   for checking Munsell color notation
   ([\#339](https://github.com/ncss-tech/aqp/issues/339))
+
 - [`colorVariation()`](https://ncss-tech.github.io/aqp/reference/colorVariation.md)
   gains new method ‘L1’ for comparing colors to L1-median (requires
   Gmedian package)
+
+- [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
+  model update, now more accurate
+
 - minor bug fix in
   [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   when passed 0-length character
+
 - bug fix in `plotSPC(x, max.depth != NULL)` when `x` contains
   degenerate profiles (no horizons)
+
 - bug fix in
   [`colorChart()`](https://ncss-tech.github.io/aqp/reference/colorChart.md)
   when using groups and neutral colors
+
 - bug fix in
   [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md),
   NA incorrectly interpreted when `color` argument is supplied hex
   encoded sRGB
+
 - bug fix in
   [`soilColorSignature()`](https://ncss-tech.github.io/aqp/reference/soilColorSignature.md),
   [`cluster::pam()`](https://rdrr.io/pkg/cluster/man/pam.html)
   optimization would very rarely hang
+
   - seems to be a problem with (`pamonce = >=5`) - AMELAR OSD, moist
     colors
+
 - code-completion and preview for SPC objects in RStudio
   ([@brownag](https://github.com/brownag))
+
 - mass-preserving spline (c/o mpspline2) /
   [`slab()`](https://ncss-tech.github.io/aqp/reference/slab.md)
   comparison article

@@ -171,6 +171,6 @@ previewColors(parseMunsell(cols))
 
 
 # what does a dE00 threshold look like on 3 pages of hue?
-contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 20)
+contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 10)
 
 ```

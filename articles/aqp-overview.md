@@ -324,7 +324,7 @@ data.
 - [`munsell2rgb()`](https://ncss-tech.github.io/aqp/reference/munsell2rgb.md):
   convert Munsell notation to sRGB or CIELAB color coordinates
 - [`parseMunsell()`](https://ncss-tech.github.io/aqp/reference/parseMunsell.md):
-  parse and optionally convert a munsell color
+  parse and optionally convert Munsell color notation
 - [`spec2Munsell()`](https://ncss-tech.github.io/aqp/reference/spec2Munsell.md):
   estimate the closest Munsell color given reflectance spectra in the
   visible range
@@ -363,6 +363,11 @@ data.
 
 #### Utility
 
+- [`validateMunsell()`](https://ncss-tech.github.io/aqp/reference/validateMunsell.md):
+  test for errors in Munsell notation that prevent correct
+  interpretation
+- [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md):
+  correct minor errors in Munsell notation
 - [`huePosition()`](https://ncss-tech.github.io/aqp/reference/huePosition.md):
   generate an ordered factor of the standard Munsell hues
 - [`huePositionCircle()`](https://ncss-tech.github.io/aqp/reference/huePositionCircle.md):

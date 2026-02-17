@@ -44,19 +44,20 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-development">aqp 2.3.1 (development)<a class="anchor" aria-label="anchor" href="#aqp-231-development"></a></h2>
-<ul><li>new function <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> for fixing encoding of neutral colors</li>
-<li>new function <code><a href="../reference/validateMunsell.html">validateMunsell()</a></code> for checking Munsell color notation (<a href="https://github.com/ncss-tech/aqp/issues/339" class="external-link">#339</a>)</li>
+<ul><li><p>new function <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> for fixing encoding of neutral colors</p></li>
+<li><p>new function <code><a href="../reference/validateMunsell.html">validateMunsell()</a></code> for checking Munsell color notation (<a href="https://github.com/ncss-tech/aqp/issues/339" class="external-link">#339</a>)</p></li>
+<li><p><code><a href="../reference/colorVariation.html">colorVariation()</a></code> gains new method ‘L1’ for comparing colors to L1-median (requires Gmedian package)</p></li>
+<li><p><code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code> model update, now more accurate</p></li>
+<li><p>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</p></li>
+<li><p>bug fix in <code>plotSPC(x, max.depth != NULL)</code> when <code>x</code> contains degenerate profiles (no horizons)</p></li>
+<li><p>bug fix in <code><a href="../reference/colorChart.html">colorChart()</a></code> when using groups and neutral colors</p></li>
+<li><p>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, NA incorrectly interpreted when <code>color</code> argument is supplied hex encoded sRGB</p></li>
 <li>
-<code><a href="../reference/colorVariation.html">colorVariation()</a></code> gains new method ‘L1’ for comparing colors to L1-median (requires Gmedian package)</li>
-<li>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</li>
-<li>bug fix in <code>plotSPC(x, max.depth != NULL)</code> when <code>x</code> contains degenerate profiles (no horizons)</li>
-<li>bug fix in <code><a href="../reference/colorChart.html">colorChart()</a></code> when using groups and neutral colors</li>
-<li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, NA incorrectly interpreted when <code>color</code> argument is supplied hex encoded sRGB</li>
-<li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code> optimization would very rarely hang
+<p>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code> optimization would very rarely hang</p>
 <ul><li>seems to be a problem with (<code>pamonce = &gt;=5</code>) - AMELAR OSD, moist colors</li>
 </ul></li>
-<li>code-completion and preview for SPC objects in RStudio (<a href="https://github.com/brownag" class="external-link">@brownag</a>)</li>
-<li>mass-preserving spline (c/o mpspline2) / <code><a href="../reference/slab.html">slab()</a></code> comparison article</li>
+<li><p>code-completion and preview for SPC objects in RStudio (<a href="https://github.com/brownag" class="external-link">@brownag</a>)</p></li>
+<li><p>mass-preserving spline (c/o mpspline2) / <code><a href="../reference/slab.html">slab()</a></code> comparison article</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3" id="aqp-23-2026-01-16">aqp 2.3 (2026-01-16)<a class="anchor" aria-label="anchor" href="#aqp-23-2026-01-16"></a></h2><p class="text-muted">CRAN release: 2026-01-17</p>
