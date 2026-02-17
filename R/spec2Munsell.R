@@ -64,7 +64,7 @@ spec2Munsell <- function(x, res = 10, convert = TRUE, SO = c('CIE1931', 'CIE1964
   # spline interpolator: reflectance ~ wavelength
   .sf <- splinefun(.wl, x)
   
-  ## TODO: interpolate spectral.refernce to match resolution of x
+  ## TODO: interpolate spectral.reference to match resolution of x
   
   # spectral reference is 5nm resolution
   # interpolate to 5nm res
