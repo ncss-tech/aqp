@@ -71,11 +71,9 @@
 
     
     
-<p>Soil color is most often described using the <a href="https://en.wikipedia.org/wiki/Munsell_color_system" class="external-link">Munsell color
-system</a>. The <code>aqp</code> package provides several functions for
-converting to and from Munsell color notation, into other
-representations suitable for on-screen display (<a href="https://en.wikipedia.org/wiki/SRGB" class="external-link">sRGB</a>) or numerical
-analysis (<a href="https://en.wikipedia.org/wiki/CIELAB_color_space" class="external-link">CIELAB</a>).</p>
+<p>The <code>aqp</code> package provides several functions for working
+with colors specified in the <a href="https://en.wikipedia.org/wiki/Munsell_color_system" class="external-link">Munsell color
+system</a>.</p>
 <div class="section level2">
 <h2 id="color-conversion-functions">Color Conversion Functions<a class="anchor" aria-label="anchor" href="#color-conversion-functions"></a>
 </h2>
@@ -92,10 +90,12 @@ For example, converting <code>10YR 4/6</code> with either function can
 return:</p>
 <ul>
 <li>hex-notation of a color: <code>#805921FF</code>, or</li>
-<li>sRGB color coordinates: <code>0.5002233 0.3489249 0.1287694</code>,
-or</li>
-<li>CIELAB color coordinates:
-<code>40.95021 10.31088 37.49513</code>.</li>
+<li>
+<a href="https://en.wikipedia.org/wiki/SRGB" class="external-link">sRGB</a> color
+coordinates: <code>0.5002233 0.3489249 0.1287694</code>, or</li>
+<li>
+<a href="https://en.wikipedia.org/wiki/CIELAB_color_space" class="external-link">CIELAB</a> color
+coordinates: <code>40.95021 10.31088 37.49513</code>.</li>
 </ul>
 <p>Selection of the closest <code>n</code> Munsell color “chips”, given
 sRGB or CIELAB colorspace coordinates is performed with the

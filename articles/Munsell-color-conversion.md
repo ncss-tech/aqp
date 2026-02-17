@@ -1,11 +1,8 @@
 # Munsell Color Conversion
 
-Soil color is most often described using the [Munsell color
-system](https://en.wikipedia.org/wiki/Munsell_color_system). The `aqp`
-package provides several functions for converting to and from Munsell
-color notation, into other representations suitable for on-screen
-display ([sRGB](https://en.wikipedia.org/wiki/SRGB)) or numerical
-analysis ([CIELAB](https://en.wikipedia.org/wiki/CIELAB_color_space)).
+The `aqp` package provides several functions for working with colors
+specified in the [Munsell color
+system](https://en.wikipedia.org/wiki/Munsell_color_system).
 
 ## Color Conversion Functions
 
@@ -25,8 +22,10 @@ is a wrapper to
 For example, converting `10YR 4/6` with either function can return:
 
 - hex-notation of a color: `#805921FF`, or
-- sRGB color coordinates: `0.5002233 0.3489249 0.1287694`, or
-- CIELAB color coordinates: `40.95021 10.31088 37.49513`.
+- [sRGB](https://en.wikipedia.org/wiki/SRGB) color coordinates:
+  `0.5002233 0.3489249 0.1287694`, or
+- [CIELAB](https://en.wikipedia.org/wiki/CIELAB_color_space) color
+  coordinates: `40.95021 10.31088 37.49513`.
 
 Selection of the closest `n` Munsell color “chips”, given sRGB or CIELAB
 colorspace coordinates is performed with the
