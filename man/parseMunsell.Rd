@@ -21,6 +21,9 @@ a \code{data.frame} object
 \description{
 Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by \code{\link[=munsell2rgb]{munsell2rgb()}}.
 }
+\note{
+This function should be able to parse and convert 100k Munsell colors in 0.5 seconds (single-threaded, 2.5GHz i7).
+}
 \examples{
 
 # just sRGB

@@ -1,8 +1,12 @@
 
-## TODO: optionally return wt. mean dH, dV, dC | most frequent contrast class
-##       metric = c('dE00', 'dV', 'dH, 'dC', 'CC')
+## TODO: 
+##       * optionally return wt. mean dH, dV, dC | most frequent contrast class
+##         metric = c('dE00', 'dV', 'dH, 'dC', 'CC')
+##
+##       * allow various specifications for color
+##
+##       * unify with colorQuantiles()
 
-## TODO: allow various specifications for color
 
 
 #' @title Quantitative Description of Color Variation
@@ -174,7 +178,7 @@ colorVariation <- function(m, method = c('frequency', 'centroid', 'reference', '
   }
   
   
-  # ## TODO: return to this someday
+  # ## TODO: return to this someday -- far more expensive to compute
   # # wt. mean of D(colors)
   # if(method == 'pairs') {
   #   

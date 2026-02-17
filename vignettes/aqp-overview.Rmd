@@ -200,7 +200,7 @@ Soil morphology, observed properties, and geomorphic context represent a complex
 ### Color Conversion
   * `col2Munsell()`: convert various color notations to Munsell notation
   * `munsell2rgb()`: convert Munsell notation to sRGB or CIELAB color coordinates
-  * `parseMunsell()`: parse and optionally convert a munsell color
+  * `parseMunsell()`: parse and optionally convert Munsell color notation
   * `spec2Munsell()`: estimate the closest Munsell color given reflectance spectra in the visible range 
   * `getClosestMunsellChip()`: estimate a reasonably close Munsell color given non-standard notation 
   * `estimateSoilColor()`: estimate moist soil color from dry soil color (and vice versa) 
@@ -220,6 +220,8 @@ Soil morphology, observed properties, and geomorphic context represent a complex
   
 
 ### Utility
+  * `validateMunsell()`: test for errors in Munsell notation that prevent correct interpretation
+  * `launderMunsell()`: correct minor errors in Munsell notation
   * `huePosition()`: generate an ordered factor of the standard Munsell hues
   * `huePositionCircle()`: graphical representation of the standard Munsell hues, with optional simulation of common color vision deficiency
   * `simulateColor()`: simulate a range of Munsell colors given measures of central tendency and spread

@@ -42,8 +42,19 @@ data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 
 estimateSoilColor(hue = '10YR', value = 3, chroma = 3, sourceMoistureState = 'moist')
 
-# note that estimation is not symmetric
-estimateSoilColor(hue = '10YR', value = 5, chroma = 3, sourceMoistureState = 'dry')
+# estimation is not always symmetric
+estimateSoilColor(hue = '10YR', value = 4, chroma = 3, sourceMoistureState = 'dry')
+
+# more examples
+estimateSoilColor(hue = '2.5Y', value = 8, chroma = 2, sourceMoistureState = 'dry')
+estimateSoilColor(hue = '2.5YR', value = 3, chroma = 4, sourceMoistureState = 'moist')
+
+estimateSoilColor(hue = 'N', value = 2, chroma = 0, sourceMoistureState = 'moist')
+
+estimateSoilColor(hue = '7.5YR', value = 2, chroma = 2, sourceMoistureState = 'moist')
+
+# resulting hue is not always the same
+estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry')
 
 }
 \author{

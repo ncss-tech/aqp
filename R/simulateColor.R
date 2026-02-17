@@ -1,4 +1,8 @@
 
+
+## TODO: allow standard Munsell notation vs. split into HVC
+## TODO: allow CIELAB specification
+
 ## simulate via multivariate normal distribution
 # n: number of simulations (typically horizons)
 # parameters: list of parameters
@@ -227,7 +231,7 @@
 #' previewColors(parseMunsell(cols))
 #' 
 #' # what does a dE00 threshold look like on 3 pages of hue?
-#' contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 20)
+#' contrastChart('7.5YR 3/3', hues = c('10YR', '7.5YR', '5YR'), thresh = 10)
 #'
 simulateColor <- function(method = c('dE00', 'proportions', 'mvnorm'), n, parameters, SPC = NULL) {
   

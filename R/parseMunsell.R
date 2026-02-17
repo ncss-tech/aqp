@@ -63,6 +63,8 @@
 #' 
 #' @description Split Munsell color notation into "hue", "value", and "chroma", with optional conversion to sRGB hex notation, sRGB coordinates, and CIELAB coordinates. Conversion is performed by [munsell2rgb()].
 #'
+#' @note This function should be able to parse and convert 100k Munsell colors in 0.5 seconds (single-threaded, 2.5GHz i7).
+#'
 #' @param munsellColor character vector of Munsell colors (e.g. `c('10YR 3/4', '5YR 4/6')`)
 #' @param convertColors logical, convert colors to sRGB hex notation, sRGB coordinates, CIELAB coordinates
 #' @param delim optional, specify the type of delimiter used between value and chroma parts of the Munsell code. By default ":", ",:, "'", and "/" are supported.

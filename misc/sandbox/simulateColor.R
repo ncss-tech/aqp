@@ -34,6 +34,12 @@ colorChart(m[[1]])
 # may include a few hues outside original range
 table(.hvc$hue)
 
+# compare color variation before / after
+# good, very close
+colorVariation(sprintf("%s %s/%s", .hvc$hue, .hvc$value, .hvc$chroma), method = 'centroid')
+
+colorVariation(m[[1]], method = 'centroid')
+
 
 # by genhz
 h <- horizons(loafercreek)
@@ -200,6 +206,11 @@ plotColorQuantiles(colorQuantiles(parseMunsell(cols$A)))
 plotColorQuantiles(colorQuantiles(parseMunsell(cols$Bt1)))
 plotColorQuantiles(colorQuantiles(parseMunsell(cols$Bt3)))
 plotColorQuantiles(colorQuantiles(parseMunsell(cols$Cr)))
+
+
+# color variability relative to centroid
+lapply(cols, colorVariation, method = 'L1')
+
 
 
 # seed profile

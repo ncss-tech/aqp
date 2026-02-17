@@ -8,10 +8,13 @@
 }
 
 
-## TODO: allow Munsell, CIELAB, sRGB, etc.
-## TODO: quantiles should be weighted by thickness, can we do this via dice()?
-## TODO: finish documentation + links
-## TODO: consider a third output: chip with pair-wise min(dE00) within distance matrix
+## TODO: 
+##       * allow Munsell, CIELAB, sRGB, etc.
+##       * quantiles should be weighted by thickness, can we do this via dice()?
+##       * finish documentation + links
+##       * consider a third output: chip with pair-wise min(dE00) within distance matrix
+##       * unify with colorVariation()
+
 
 #' @title Soil Color Range via Quantiles
 #'
