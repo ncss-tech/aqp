@@ -5,6 +5,7 @@
 ##      * stratified model by major hz types
 ##      * information about expected prediction error
 ##      * add `sameHue` argument to enforce no change in hue
+##      * add method = 'OLS'
 
 
 #' @title Estimate dry soil colors from moist soil colors and vice versa.
