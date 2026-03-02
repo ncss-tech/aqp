@@ -48,7 +48,8 @@
 <li><p>new function <code><a href="../reference/validateMunsell.html">validateMunsell()</a></code> for checking Munsell color notation (<a href="https://github.com/ncss-tech/aqp/issues/339" class="external-link">#339</a>)</p></li>
 <li><p><code><a href="../reference/colorVariation.html">colorVariation()</a></code> gains new method ‘L1’ for comparing colors to L1-median (requires Gmedian package)</p></li>
 <li><p><code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code> model update, now more accurate</p></li>
-<li><p>minor bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</p></li>
+<li><p>new argument to <code><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC()</a></code> -&gt; <code>offset.id</code> used to manually adjust vertical offset to all profile IDs (c/o Daniel Saurette)</p></li>
+<li><p>bug fix in <code><a href="../reference/col2Munsell.html">col2Munsell()</a></code> when passed 0-length character</p></li>
 <li><p>bug fix in <code>plotSPC(x, max.depth != NULL)</code> when <code>x</code> contains degenerate profiles (no horizons)</p></li>
 <li><p>bug fix in <code><a href="../reference/colorChart.html">colorChart()</a></code> when using groups and neutral colors</p></li>
 <li><p>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, NA incorrectly interpreted when <code>color</code> argument is supplied hex encoded sRGB</p></li>

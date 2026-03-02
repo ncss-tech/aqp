@@ -18,7 +18,12 @@
 - [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
   model update, now more accurate
 
-- minor bug fix in
+- new argument to
+  [`plotSPC()`](https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.md)
+  -\> `offset.id` used to manually adjust vertical offset to all profile
+  IDs (c/o Daniel Saurette)
+
+- bug fix in
   [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   when passed 0-length character
 

@@ -39,6 +39,7 @@ plotSPC(
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
   srt.id = 0,
+  offset.id = 0,
   print.id = TRUE,
   id.style = "auto",
   plot.order = 1:length(x),
@@ -174,6 +175,10 @@ plot(x, y, ...)
 - srt.id:
 
   rotation applied to `label`, only when `id.style = 'top'`
+
+- offset.id:
+
+  vertical offset applied to `label`, only when `id.style = 'top'`
 
 - print.id:
 
