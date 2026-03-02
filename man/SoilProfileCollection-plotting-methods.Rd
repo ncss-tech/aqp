@@ -27,6 +27,7 @@ plotSPC(
   cex.id = cex.names + (0.2 * cex.names),
   font.id = 2,
   srt.id = 0,
+  offset.id = 0,
   print.id = TRUE,
   id.style = "auto",
   plot.order = 1:length(x),
@@ -109,6 +110,8 @@ See examples.
 \item{font.id}{font style applied to \code{label}, default is 2 (bold)}
 
 \item{srt.id}{rotation applied to \code{label}, only when \code{id.style = 'top'}}
+
+\item{offset.id}{vertical offset applied to \code{label}, only when \code{id.style = 'top'}}
 
 \item{print.id}{logical, print \code{label} above/beside each profile? (\code{TRUE})}
 

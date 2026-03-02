@@ -53,6 +53,8 @@
 #' @param font.id font style applied to `label`, default is 2 (bold)
 #' 
 #' @param srt.id rotation applied to `label`, only when `id.style = 'top'`
+#' 
+#' @param offset.id vertical offset applied to `label`, only when `id.style = 'top'`
 #'
 #' @param print.id logical, print `label` above/beside each profile? (`TRUE`)
 #'
@@ -372,6 +374,7 @@ plotSPC <- function(
     cex.id = cex.names + (0.2 * cex.names),
     font.id = 2,
     srt.id = 0, 
+    offset.id = 0, 
     print.id = TRUE,
     id.style = 'auto',
     plot.order = 1:length(x),
@@ -1574,7 +1577,7 @@ plotSPC <- function(
       
       # add the text: according to style
       if(id.style == 'top') {
-        text(x = x0, y = y.offset[i], id.text, pos = 3, font = font.id, cex = cex.id, srt = srt.id)
+        text(x = x0, y = y.offset[i], id.text, pos = 3, font = font.id, cex = cex.id, srt = srt.id, offset = offset.id)
       }
       
       if(id.style == 'side') {

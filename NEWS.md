@@ -3,7 +3,8 @@
  * new function `validateMunsell()` for checking Munsell color notation (#339)
  * `colorVariation()` gains new method 'L1' for comparing colors to L1-median (requires Gmedian package)
  * `estimateSoilColor()` model update, now more accurate
- * minor bug fix in `col2Munsell()` when passed 0-length character
+ * new argument to `plotSPC()` -> `offset.id` used to manually adjust vertical offset to all profile IDs (c/o Daniel Saurette)
+ * bug fix in `col2Munsell()` when passed 0-length character
  * bug fix in `plotSPC(x, max.depth != NULL)` when `x` contains degenerate profiles (no horizons)
  * bug fix in `colorChart()` when using groups and neutral colors
  * bug fix in `soilColorSignature()`, NA incorrectly interpreted when `color` argument is supplied hex encoded sRGB
