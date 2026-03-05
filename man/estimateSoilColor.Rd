@@ -75,7 +75,8 @@ estimateSoilColor(hue = '7.5YR', value = 2, chroma = 2, sourceMoistureState = 'm
 estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry')
 
 # return estimated CIELAB coordinates
-estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry', returnMunsell = FALSE)
+estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry',
+ returnMunsell = FALSE)
 
 }
 \references{

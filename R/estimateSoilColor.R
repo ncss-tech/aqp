@@ -71,7 +71,8 @@
 #' estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry')
 #' 
 #' # return estimated CIELAB coordinates
-#' estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry', returnMunsell = FALSE)
+#' estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry',
+#'  returnMunsell = FALSE)
 #' 
 estimateSoilColor <- function(hue, value, chroma, method = c('procrustes', 'ols'), sourceMoistureState = c('dry', 'moist'), returnMunsell = TRUE) {
   
