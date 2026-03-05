@@ -30,14 +30,13 @@ estimateSoilColor(
 \code{data.frame} of estimated colors in Munsell notation. The \code{sigma} column contains CIE2000 color contrast metric values describing the perceptual distance between estimated color in CIELAB coordinates and closest Munsell chip.
 }
 \description{
-All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons).
-"
+All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons). Estimates are only valid for mineral soil material, having Munsell values < 10.
+
+Available Methods:
 \itemize{
 \item "procrustes": soil colors are converted using scale, rotation, and translation parameters in CIELAB color space
 \item "ols": soil colors are converted using 3 multiple linear regression models (CIELAB coordinates)
 }
-
-Estimates for colors having a (dry or moist) Munsell value >= 10 are not likely correct.
 
 This is still a work in progress.
 }
@@ -52,6 +51,8 @@ For both methods, estimation proceeds as:
 Estimation of dry from moist soil color state is not guaranteed to be symmetric with estimation of moist from dry.
 
 Scaling, rotation, and translation parameters for shifting between dry <--> moist CIELAB coordinates were determined using \code{vegan::procrustes()}. Multiple linear regression models were fit using \code{rms::ols()}.
+
+Estimation error for both methods, converting from either moisture states is, approximately 5 (CIE dE 2000).
 }
 \examples{
 

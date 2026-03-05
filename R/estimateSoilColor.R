@@ -3,18 +3,16 @@
 ## TODO:
 ##      * accept colors in any format via aqp:::.detectColorSpec()
 ##      * stratified model by major hz types
-##      * information about expected prediction error
 ##      * add `sameHue` argument to enforce no change in hue
 
 
 #' @title Estimate dry soil colors from moist soil colors and vice versa.
 #' 
-#' @description All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons).
-#' "
+#' @description All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons). Estimates are only valid for mineral soil material, having Munsell values < 10.
+#' 
+#' Available Methods:
 #'  * "procrustes": soil colors are converted using scale, rotation, and translation parameters in CIELAB color space
 #'  * "ols": soil colors are converted using 3 multiple linear regression models (CIELAB coordinates)
-#' 
-#' Estimates for colors having a (dry or moist) Munsell value >= 10 are not likely correct.
 #' 
 #' This is still a work in progress.
 #' 
@@ -29,6 +27,7 @@
 #' 
 #' Scaling, rotation, and translation parameters for shifting between dry <--> moist CIELAB coordinates were determined using `vegan::procrustes()`. Multiple linear regression models were fit using `rms::ols()`.
 #' 
+#' Estimation error for both methods, converting from either moisture states is, approximately 5 (CIE dE 2000).
 
 #' 
 #' @author D.E. Beaudette
