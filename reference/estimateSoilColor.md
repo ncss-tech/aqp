@@ -135,7 +135,8 @@ estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry'
 #> 1 2.5G     4      5 3.887497
 
 # return estimated CIELAB coordinates
-estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry', returnMunsell = FALSE)
+estimateSoilColor(hue = '5G', value = 6, chroma = 6, sourceMoistureState = 'dry',
+ returnMunsell = FALSE)
 #>          L         A        B
 #> 1 44.97181 -24.41767 12.80506
 ```
