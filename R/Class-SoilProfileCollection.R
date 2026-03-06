@@ -176,77 +176,8 @@ SoilProfileCollection <-
 SoilProfileCollection.default <- 
   function(...) {
     if (length(list(...)) == 0) {
-      SoilProfileCollection("id")
+      .SoilProfileCollection("id")
     }
-  }
-
-#' @export
-#' @rdname SoilProfileCollection-class
-SoilProfileCollection.character <-
-  function(idcol = 'id',
-           hzidcol = 'hzID',
-           depthcols = c('top', 'bottom'),
-           metadata = list(aqp_df_class = "data.frame",
-                           aqp_group_by = "",
-                           aqp_hzdesgn = "",
-                           aqp_hztexcl = "",
-                           stringsAsFactors = FALSE),
-           horizons = data.frame(
-             id  = character(0),
-             hzID = character(0),
-             top = numeric(0),
-             bottom = numeric(0),
-             stringsAsFactors = FALSE
-           ),
-           site = data.frame(id = character(0), stringsAsFactors = FALSE),
-           # sp = NULL, 
-           diagnostic = data.frame(stringsAsFactors = FALSE),
-           restrictions = data.frame(stringsAsFactors = FALSE),
-           ...) {
-
-    # retrieve highest-level data.frame subclass of horizon data
-    hzclass <- class(horizons)[1]
-
-    new.metadata <- metadata
-
-    # set metadata (default: data.frame, centimeters)
-    metadata <- list(
-      aqp_df_class = hzclass,
-      aqp_group_by = "",
-      aqp_hzdesgn = "",
-      aqp_hztexcl = "",
-      depth_units = 'cm',
-      stringsAsFactors = FALSE
-    )
-
-    # add any custom metadata
-    metadata <- c(metadata,
-                  new.metadata[!names(new.metadata) %in% names(metadata)])
-
-    # add aqp_group_by if not defined
-    if (length(metadata$aqp_group_by) == 0) 
-      metadata$aqp_group_by <- ""
-    
-    # "allow" NULL for the optional slots
-    if (length(metadata$aqp_hzdesgn) == 0)
-      metadata$aqp_hzdesgn <- ""
-    
-    if (length(metadata$aqp_hztexcl) == 0)
-      metadata$aqp_hztexcl <- ""
-    
-    # create object
-    new(
-      "SoilProfileCollection",
-      idcol = idcol,
-      hzidcol = hzidcol,
-      depthcols = depthcols,
-      metadata = metadata,
-      horizons = .as.data.frame.aqp(horizons, hzclass),
-      site = .as.data.frame.aqp(site, hzclass),
-      # sp = sp,
-      diagnostic = .as.data.frame.aqp(diagnostic, hzclass),
-      restrictions = .as.data.frame.aqp(restrictions, hzclass)
-    )
   }
 
 #' @export
@@ -328,7 +259,72 @@ SoilProfileCollection.data.frame <-
     
     horizons
   }
+
+.SoilProfileCollection <-
+  function(idcol = 'id',
+           hzidcol = 'hzID',
+           depthcols = c('top', 'bottom'),
+           metadata = list(aqp_df_class = "data.frame",
+                           aqp_group_by = "",
+                           aqp_hzdesgn = "",
+                           aqp_hztexcl = "",
+                           stringsAsFactors = FALSE),
+           horizons = data.frame(
+             id  = character(0),
+             hzID = character(0),
+             top = numeric(0),
+             bottom = numeric(0),
+             stringsAsFactors = FALSE
+           ),
+           site = data.frame(id = character(0), stringsAsFactors = FALSE),
+           diagnostic = data.frame(stringsAsFactors = FALSE),
+           restrictions = data.frame(stringsAsFactors = FALSE),
+           ...) {
     
+    # retrieve highest-level data.frame subclass of horizon data
+    hzclass <- class(horizons)[1]
+    
+    new.metadata <- metadata
+    
+    # set metadata (default: data.frame, centimeters)
+    metadata <- list(
+      aqp_df_class = hzclass,
+      aqp_group_by = "",
+      aqp_hzdesgn = "",
+      aqp_hztexcl = "",
+      depth_units = 'cm',
+      stringsAsFactors = FALSE
+    )
+    
+    # add any custom metadata
+    metadata <- c(metadata,
+                  new.metadata[!names(new.metadata) %in% names(metadata)])
+    
+    # add aqp_group_by if not defined
+    if (length(metadata$aqp_group_by) == 0) 
+      metadata$aqp_group_by <- ""
+    
+    # "allow" NULL for the optional slots
+    if (length(metadata$aqp_hzdesgn) == 0)
+      metadata$aqp_hzdesgn <- ""
+    
+    if (length(metadata$aqp_hztexcl) == 0)
+      metadata$aqp_hztexcl <- ""
+    
+    # create object
+    new(
+      "SoilProfileCollection",
+      idcol = idcol,
+      hzidcol = hzidcol,
+      depthcols = depthcols,
+      metadata = metadata,
+      horizons = .as.data.frame.aqp(horizons, hzclass),
+      site = .as.data.frame.aqp(site, hzclass),
+      # sp = sp,
+      diagnostic = .as.data.frame.aqp(diagnostic, hzclass),
+      restrictions = .as.data.frame.aqp(restrictions, hzclass)
+    )
+  }
 ## show
 #' SoilProfileCollection show method
 #' @name show
