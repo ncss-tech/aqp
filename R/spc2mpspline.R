@@ -154,7 +154,7 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             # Single variable returns list with profile IDs as names
             # Multiple variables returns list with variable names as top level
             if (length(var_name) == 1 && inherits(res[[1]], "list") &&
-                "id" %in% names(res[[1]])) {
+                idname(spc.sub) %in% names(res[[1]])) {
               # Single variable case: convert to multi-variable structure
               res <- list(res)
               names(res) <- var_name
