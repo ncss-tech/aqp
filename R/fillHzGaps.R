@@ -184,7 +184,8 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
    
   if (nrow(res) != nrow(x)) { 
     # ID + top depth sort
-    res <- res[order(res[[idn]], res[[htb[1]]]), ]
+    idx <- order(res[[idn]], res[[htb[1]]])
+    res <- res[idx, ]
   
     # re-calculate unique hzID (note: AFTER reorder)
     if (is.null(res$hzID) || !is.numeric(as.numeric(res$hzID))) {
