@@ -103,8 +103,8 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             hzbot <- horizonDepths(object)[2]
             
             # glom to "available interval" in each profile
-            spc.sub <- glom(object, object[[hztop]][object[, 1, .HZID]], 
-                                    object[[hzbot]][object[, , .LAST, .HZID]])
+            spc.sub <- glom(object, object[, , .FIRST, .TOP], 
+                                    object[, , .LAST, .BOTTOM])
             
             # remove any horizons that have 0 or NA thickness (no mass)
             .sameTopBottom <- NULL
@@ -114,13 +114,13 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             spc.sub$.sameTopBottom <- spc.sub$.sameTopBottom | is.na(spc.sub$.sameTopBottom)
             spc.sub <- subsetHz(spc.sub, !.sameTopBottom)
             
-            spc.sub$.mindepth_orig <- spc.sub[, 1][[hztop]]
+            spc.sub$.mindepth_orig <- spc.sub[, , .FIRST, .TOP]
             
             # handle any gaps at the surface (e.g. truncated data)
             spc.sub <- fillHzGaps(spc.sub, to_top = 0, to_bottom = NULL)
             
             # calculate the top depth and bottom depth for each profile
-            spc.sub$.mindepth <- spc.sub[, 1][[hztop]]
+            spc.sub$.mindepth <- spc.sub[, , .FIRST, .TOP]
 
             # optionally constrained by some pattern matching
             if (!missing(hzdesgn) && !is.null(hzdesgn)) {
@@ -135,7 +135,7 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
             }
             
             # either the bottom depth of last horizon or the matched pattern top depth
-            spc.sub$.maxdepth <- pmin(hzpatdep, spc.sub[, , .LAST][[hzbot]], na.rm = TRUE)
+            spc.sub$.maxdepth <- pmin(hzpatdep, spc.sub[, , .LAST, .BOTTOM], na.rm = TRUE)
             
             # truncate using vectors of top and bottom
             spc.sub <- trunc(spc.sub, spc.sub$.mindepth, spc.sub$.maxdepth)
