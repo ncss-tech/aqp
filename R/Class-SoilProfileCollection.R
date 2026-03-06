@@ -64,14 +64,17 @@ setGeneric('SoilProfileCollection', function(...)
 
 #' Constructor for the SoilProfileCollection object
 #'
-#' @param idcol character. Profile ID Column Name
-#' @param hzidcol character. Horizon ID Column Name
-#' @param depthcols character. length 2 Top and Bottom Depth Column Names
-#' @param metadata list. metadata including data.frame class in use and depth units
 #' @param horizons data.frame. An object inheriting from data.frame containing Horizon data.
 #' @param site data.frame. An object inheriting from data.frame containing Site data.
 #' @param diagnostic data.frame. An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}
 #' @param restrictions data.frame. An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}
+#' @param metadata list. Metadata including data.frame class in use and depth units
+#' @param idcol character. Profile ID Column Name
+#' @param hzidcol character. Horizon ID Column Name
+#' @param depthcols character. length 2 Top and Bottom Depth Column Names
+#' @param coordinates character. Column name(s) containing spatial coordinates, e.g. `c("longitude", "latitude")`. Sets appropriate `metadata` entry.
+#' @param crs character. Coordinate Reference System for `coordinates`. Sets appropriate `metadata` entry.
+#' @param ... Additional arguments (not used).
 #'
 #' @description In general, one should use \code{depths()} to initiate a SoilProfileCollection object from data. However, sometimes there are instances where either an empty, or very specific, object is needed. If that is the case, the general constructor \code{SoilProfileCollection} is available.
 #'
