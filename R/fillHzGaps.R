@@ -107,7 +107,6 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   ## 
   ## NOTE: do not short-circuit, a single profile, single-horizon may still need filling depending on the top/bottom depth and other params
   
-  
   # https://github.com/ncss-tech/aqp/issues/296
   # do not attempt to fill gaps when there are perfectly overlapping horizons
   # likely an intentional data modeling decision
@@ -118,7 +117,6 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   bad.idx <- setdiff(bad.idx, which(.ov))
   
   # create template data.frame
-  # NOTE: bad.idx could be 0-length, and implicitly h[0, ]
   hz.template <- h[bad.idx, ]
 
   if (nrow(hz.template) > 0) {
@@ -131,7 +129,7 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   }
 
   # fill from shallowest top depth to X cm
-  surface.template <- hz.template[0,]
+  surface.template <- hz.template[0, ]
   
   if (!is.null(to_top) && is.numeric(to_top)) {
     .FIRST <- NULL
@@ -147,7 +145,7 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   }
   
   # fill from deepest bottom depth to X cm
-  bottom.template <- hz.template[0,]
+  bottom.template <- hz.template[0, ]
   
   if (!is.null(to_bottom) && is.numeric(to_bottom)) {
     .LAST <- NULL
@@ -183,21 +181,25 @@ fillHzGaps <- function(x, flag = TRUE, to_top = 0, to_bottom = max(x)) {
   if (nrow(bottom.template) > 0) {
     res <- rbind(res, bottom.template)
   }
+   
+  if (nrow(res) != nrow(x)) { 
+    # ID + top depth sort
+    idx <- order(res[[idn]], res[[htb[1]]])
+    res <- res[idx, ]
   
-  # ID + top depth sort
-  res <- res[order(res[[idn]], res[[htb[1]]]),]
-
-  # re-calculate unique hzID (note: AFTER reorder)
-  if (is.null(res$hzID) || !is.numeric(as.numeric(res$hzID))) {
-   res$hzID <- as.character(1:nrow(res))
-  } else {
-   nahz <- is.na(res$hzID)
-   res$hzID[nahz] <- max(as.numeric(res$hzID), na.rm = TRUE) + seq_len(sum(nahz))
+    # re-calculate unique hzID (note: AFTER reorder)
+    if (is.null(res$hzID) || !is.numeric(as.numeric(res$hzID))) {
+     res$hzID <- as.character(1:nrow(res))
+    } else {
+     nahz <- is.na(res$hzID)
+     res$hzID[nahz] <- max(as.numeric(res$hzID), na.rm = TRUE) + seq_len(sum(nahz))
+    }
+    # replace horizons (use df class in object x)
+    replaceHorizons(x) <- .as.data.frame.aqp(res, aqp_df_class(x))
+  } else if (flag) {
+    horizons(x)$.filledGap <- FALSE
   }
   
-  # replace horizons (use df class in object x)
-  replaceHorizons(x) <- .as.data.frame.aqp(res, aqp_df_class(x))
-
   # use the auto-calculated hzID (in case user had e.g. phiid, chiid set)
   hzidname(x) <- "hzID"
 
