@@ -102,13 +102,13 @@ plotSPC(h3, color = "foo")
 plotSPC(h3, color = "bar")
 
 head(horizons(h3))
-#>           id top bottom         foo        bar hzID
-#> 1 10_method1   0      5  -9.5710846  -8.236563    1
-#> 2 10_method1   5     17 -13.0002215 -12.529936    2
-#> 3 10_method1  17     42 -37.4383521 -16.212687    3
-#> 4 10_method2   0      5  -0.4143119  -6.649469    4
-#> 5 10_method2   5     17  16.3246848  -2.944697    5
-#> 6 10_method2  17     42  17.0549953   5.392810    6
+#>           id top bottom          foo       bar hzID
+#> 1 10_method1   0      6   1.80869356 10.812217    1
+#> 2 10_method1   6     16   6.13055090 14.675140    2
+#> 3 10_method1  16     38  -1.81264065 13.078716    3
+#> 4 10_method2   0      6 -11.99516787  3.681007    4
+#> 5 10_method2   6     16   1.26609006  2.708745    5
+#> 6 10_method2  16     38   0.07671192  7.921289    6
 
 # a slight modification, "method 1" onlyused for "foo" and "method 3" for "bar"
 h3 <- harmonize(spc, x.names = list(foo = c(method1 = "p1", method2 = "p2"),

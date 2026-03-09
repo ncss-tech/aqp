@@ -213,16 +213,16 @@ quantile(sp1$bound_sd)
 perturb(p, boundary.attr = "bound_sd", n = 10)
 #> SoilProfileCollection with 10 profiles and 50 horizons
 #> profile ID: id  |  horizon ID: hzID 
-#> Depth range: 64 - 70 cm
+#> Depth range: 64 - 69 cm
 #> 
 #> ----- Horizons (6 / 50 rows  |  10 / 20 columns) -----
 #>       id hzID top bottom group bound_distinct bound_topography name texture
 #>  P003-01    1   0      2     2              C                W Oa/A      SL
-#>  P003-01    2   2     15     2              G                S   AB     SCL
-#>  P003-01    3  15     34     2              G                S   BA     SCL
-#>  P003-01    4  34     54     2              C                S  Bt1  GRVSCL
-#>  P003-01    5  54     67     2              G                S  Bt2    GRVC
-#>  P003-02    6   0      2     2              C                W Oa/A      SL
+#>  P003-01    2   2     14     2              G                S   AB     SCL
+#>  P003-01    3  14     33     2              G                S   BA     SCL
+#>  P003-01    4  33     53     2              C                S  Bt1  GRVSCL
+#>  P003-01    5  53     69     2              G                S  Bt2    GRVC
+#>  P003-02    6   0      3     2              C                W Oa/A      SL
 #>  prop
 #>    14
 #>    18
@@ -252,16 +252,16 @@ ids <- sprintf("%s-%03d", profile_id(p), 1:10)
 perturb(p, boundary.attr = "bound_sd", id = ids)
 #> SoilProfileCollection with 10 profiles and 50 horizons
 #> profile ID: id  |  horizon ID: hzID 
-#> Depth range: 65 - 69 cm
+#> Depth range: 65 - 70 cm
 #> 
 #> ----- Horizons (6 / 50 rows  |  10 / 20 columns) -----
 #>        id hzID top bottom group bound_distinct bound_topography name texture
 #>  P003-001    1   0      2     2              C                W Oa/A      SL
-#>  P003-001    2   2     14     2              G                S   AB     SCL
-#>  P003-001    3  14     36     2              G                S   BA     SCL
+#>  P003-001    2   2     12     2              G                S   AB     SCL
+#>  P003-001    3  12     36     2              G                S   BA     SCL
 #>  P003-001    4  36     52     2              C                S  Bt1  GRVSCL
-#>  P003-001    5  52     68     2              G                S  Bt2    GRVC
-#>  P003-002    6   0      3     2              C                W Oa/A      SL
+#>  P003-001    5  52     69     2              G                S  Bt2    GRVC
+#>  P003-002    6   0      1     2              C                W Oa/A      SL
 #>  prop
 #>    14
 #>    18

@@ -316,12 +316,12 @@ st <- st[idx, ]
 ssc <- texcl_to_ssc(texcl = st$texcl)
 head(cbind(texcl = st$texcl, clay = ssc$clay))
 #>      texcl  clay
-#> [1,] "c"    "55"
-#> [2,] "sicl" "33"
-#> [3,] "sl"   "10"
-#> [4,] "sc"   "41"
-#> [5,] "cl"   "33"
-#> [6,] "sicl" "33"
+#> [1,] "sil"  "13"
+#> [2,] "sc"   "41"
+#> [3,] "c"    "55"
+#> [4,] "sicl" "33"
+#> [5,] "l"    "18"
+#> [6,] "c"    "55"
 
 
 # example of texmod_to_fragvoltol
@@ -388,18 +388,18 @@ ssc  <- rbind(ssc1, ssc2)
 aggregate(clay ~ sample + texcl, data = ssc, summary)
 #>   sample texcl clay.Min. clay.1st Qu. clay.Median clay.Mean clay.3rd Qu.
 #> 1  FALSE    cl     33.00        33.00       33.00     33.00        33.00
-#> 2   TRUE    cl     30.00        31.25       33.50     34.00        36.50
+#> 2   TRUE    cl     27.00        31.00       34.00     33.00        35.75
 #> 3  FALSE   sil     13.00        13.00       13.00     13.00        13.00
-#> 4   TRUE   sil      1.00         7.50       11.00     12.30        16.75
+#> 4   TRUE   sil      1.00         2.50       14.00     11.80        19.00
 #> 5  FALSE    sl     10.00        10.00       10.00     10.00        10.00
-#> 6   TRUE    sl     10.00        11.75       15.00     14.30        16.50
+#> 6   TRUE    sl      0.00         3.00        4.50      6.00         5.75
 #>   clay.Max.
 #> 1     33.00
-#> 2     39.00
+#> 2     37.00
 #> 3     13.00
-#> 4     25.00
+#> 4     23.00
 #> 5     10.00
-#> 6     18.00
+#> 6     19.00
 # }
 # \donttest{
 # example of texture_to_texmod()

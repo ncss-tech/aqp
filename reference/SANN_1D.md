@@ -117,15 +117,15 @@ x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 # easy
 z <- fixOverlap(x, thresh = 0.2, trace = TRUE)
-#> 5 iterations
+#> 2 iterations
 
 # harder
 z <- fixOverlap(x, thresh = 0.6, trace = TRUE)
-#> 9 iterations
+#> 20 iterations
 
 # much harder
 z <- fixOverlap(x, thresh = 0.9, trace = TRUE)
-#> 136 iterations
+#> 88 iterations
 
 
 # interpret `trace` output

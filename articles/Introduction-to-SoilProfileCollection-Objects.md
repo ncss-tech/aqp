@@ -738,7 +738,7 @@ sp4[, , .LAST]
 
 Additional *k* index keywords include: `.HZID`, `.NHZ`, `.BOTTOM`,
 `.TOP`. These can be chained together to get the “top depth of the first
-horizons” or “horizon ID of the last horizons”:
+horizons” or “row-index (horizon data) of the last horizons”:
 
 ``` r
 sp4[, , .FIRST, .TOP]

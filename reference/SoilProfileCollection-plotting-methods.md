@@ -650,7 +650,7 @@ plotSPC(x,
 # align / adjust relative x positions
 set.seed(111)
 pos <- alignTransect(xoff, x.min = 1, x.max = length(x), thresh = 0.65)
-#> 111 iterations
+#> 136 iterations
 
 # y-offset is automatically re-ordered according to
 # plot.order
