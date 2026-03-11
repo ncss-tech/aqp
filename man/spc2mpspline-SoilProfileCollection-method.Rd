@@ -55,7 +55,7 @@ filtered and truncated to create a container for the results from
 \code{mpspline2::mpspline()}.
 }
 \examples{
-\dontshow{if (requireNamespace("mpspline2")) withAutoprint(\{ # examplesIf}
+\dontshow{if (requireNamespace("mpspline2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 hzdesgnname(sp1) <- "name"

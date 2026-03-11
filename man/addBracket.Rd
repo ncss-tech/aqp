@@ -30,13 +30,13 @@ addBracket(
 
 \item{tick.length}{numeric, length of bracket "tick" mark}
 
-\item{arrow.length}{numeric, length of arrowhead (see \code{\link[=arrows]{arrows()}})}
+\item{arrow.length}{numeric, length of arrowhead (see \code{arrows()})}
 
 \item{offset}{numeric, left-hand offset from each profile}
 
 \item{missing.bottom.depth}{numeric, distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)}
 
-\item{...}{further arguments passed on to \code{\link[=segments]{segments()}} or \code{\link[=arrows]{arrows()}}}
+\item{...}{further arguments passed on to \code{segments()} or \code{arrows()}}
 }
 \description{
 Add depth brackets to soil profile sketches.
@@ -114,7 +114,7 @@ par(op)
 
 }
 \seealso{
-\code{\link[=addDiagnosticBracket]{addDiagnosticBracket()}}, \code{\link[=plotSPC}]{plotSPC}()}}
+\code{\link[=addDiagnosticBracket]{addDiagnosticBracket()}}, \code{\link[=plotSPC]{plotSPC()}}
 }
 \author{
 D.E. Beaudette
