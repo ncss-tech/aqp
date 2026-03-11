@@ -840,12 +840,13 @@ Add labels:
 par(mar = c(0, 0, 0, 0))
 plotSPC(sp4, name = 'name')
 
-# addBracket() looks for a column `label`; add a ID for each bracket
+# label
 a$label <- site(sp4)$id
 
-# note that depth brackets "knows which profiles to use" via profile ID
+# note that depth brackets "know which profiles to use" via profile ID
 addBracket(
   a,
+  labcol = 'label',
   col = 'red',
   label.cex = 0.75,
   missing.bottom.depth = 25,
@@ -908,6 +909,7 @@ a$label <- a$kind
 # add restrictions using vertical bars
 addBracket(
   a,
+  labcol = 'label',
   col = 'red',
   label.cex = 0.75,
   tick.length = 0,

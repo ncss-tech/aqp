@@ -81,12 +81,12 @@ plotSPC(
 
 # highlight selected horizons above and below with brackets
 addBracket(
-  depths(s, hzID = FALSE)[a, ], 
+  depths(s, hzID = FALSE)[a, ], agg = TRUE,
   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
 )
 
 addBracket(
-  depths(s, hzID = FALSE)[b, ], 
+  depths(s, hzID = FALSE)[b, ], agg = TRUE,
   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
 )
 
@@ -108,12 +108,12 @@ plotSPC(
 )
 
 addBracket(
-  depths(s, hzID = FALSE)[a, ], 
+  depths(s, hzID = FALSE)[a, ], agg = TRUE,
   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
 )
 
 addBracket(
-  depths(s, hzID = FALSE)[b, ], 
+  depths(s, hzID = FALSE)[b, ], agg = TRUE,
   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
 )
 
@@ -133,12 +133,12 @@ plotSPC(
 )
 
 addBracket(
-  depths(s, hzID = FALSE)[a, ], 
+  depths(s, hzID = FALSE)[a, ], agg = TRUE,
   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
 )
 
 addBracket(
-  depths(s, hzID = FALSE)[b, ],
+  depths(s, hzID = FALSE)[b, ], agg = TRUE,
   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
 )
 

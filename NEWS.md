@@ -20,6 +20,10 @@
    - new default: `offset = NULL` selects all horizons above or below reference horizons
    - new argument `single` for lumping multiple reference horizons into a contiguous composite
    - new examples with graphical explanation
+   
+ * major changes to `addBracket()`:
+   - when not specified, horizon depth names taken from last call to `plotSPC()
+   - new arguments: `labcol` (label column), `agg` (aggregate multiple brackets / profile), `hzDepths` (override bracket top and bottom depth column names)
  
  * code-completion and preview for SPC objects in RStudio (@brownag)
  

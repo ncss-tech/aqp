@@ -69,13 +69,9 @@ test_that("interpret multiple reference horizons as a single span", {
   
   s <- quickSPC(x)
 
-  # multiple matches
-  .ex <- grepl('B', s$name)
-  s$e <- .ex
-  
   # interpret multiple reference hz as a single reference hz
-  a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE, single = TRUE)
-  b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE, single = TRUE)
+  a <- hzAbove(s, grepl('B', name), SPC = FALSE, simplify = TRUE, single = TRUE)
+  b <- hzBelow(s, grepl('B', name), SPC = FALSE, simplify = TRUE, single = TRUE)
   
   # hand-verified
   expect_equal(a, c(1L, 5L, 6L, 7L, 11L, 17L, 18L))
