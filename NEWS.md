@@ -15,7 +15,12 @@
  * bug fix in `soilColorSignature()`, NA incorrectly interpreted when `color` argument is supplied hex encoded sRGB
  * bug fix in `soilColorSignature()`, `cluster::pam()` optimization would very rarely hang
    - seems to be a problem with (`pamonce = >=5`) - AMELAR OSD, moist colors
-   
+
+ * major changes to `hzAbove()` and `hzBelow()`:
+   - new default: `offset = NULL` selects all horizons above or below reference horizons
+   - new argument `single` for lumping multiple reference horizons into a contiguous composite
+   - mew examples
+ 
  * code-completion and preview for SPC objects in RStudio (@brownag)
  
  MAYBE

@@ -40,17 +40,17 @@ test_that("hzOffset works", {
   expect_equal(length(hzOffset(h[1,], first, offset = 1)), 1)
 })
 
-test_that("hzAbove/hzBelow works", {
+test_that("basic functionality of hzAbove() / hzBelow()", {
   
   data(sp4)
   depths(sp4) <- id ~ top + bottom
   
-  # horizons above any horizon with extractable Ca to Mg ratio less than 1:10
-  x <- hzAbove(sp4, ex_Ca_to_Mg < 0.1)
-  expect_equal(as.integer(hzID(x)), c(2, 3, 12, 25, 26))
+  # all horizons indices above horizons with ex-Ca:Mg ratio less than 1:10
+  x <- hzAbove(sp4, ex_Ca_to_Mg < 0.1, SPC = FALSE, simplify = TRUE)
+  expect_equal(x, c(1L, 2L, 3L, 10L, 11L, 12L, 23L, 24L, 25L, 26L))
   
-  # horizons below any horizon with extractable Ca to Mg ratio less than 1:10
-  x <- hzBelow(sp4, ex_Ca_to_Mg < 0.1)
-  expect_equal(as.integer(hzID(x)), c(4, 27))
+  # all horizon indices below any horizon with ex-Ca:Mg ratio less than 1:10
+  x <- hzBelow(sp4, ex_Ca_to_Mg < 0.1, SPC = FALSE, simplify = TRUE)
+  expect_equal(x, c(4L, 27L))
   
 })
