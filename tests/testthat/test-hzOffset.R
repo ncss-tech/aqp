@@ -54,3 +54,35 @@ test_that("basic functionality of hzAbove() / hzBelow()", {
   expect_equal(x, c(4L, 27L))
   
 })
+
+
+test_that("interpret multiple reference horizons as a single span", {
+  
+  # example data
+  x <- c(
+    'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+    'P2:Ap|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+    'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+    'P4:AA|EEE|BhsBhsBhsBhs|BwBw|CCCCC',
+    'P5:AAAA|ACACACACAC|CCCCCCCCCCC|CdCdCd'
+  )
+  
+  s <- quickSPC(x)
+
+  # multiple matches
+  .ex <- grepl('B', s$name)
+  s$e <- .ex
+  
+  # interpret multiple reference hz as a single reference hz
+  a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE, single = TRUE)
+  b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE, single = TRUE)
+  
+  # hand-verified
+  expect_equal(a, c(1L, 5L, 6L, 7L, 11L, 17L, 18L))
+  expect_equal(b, c(3L, 4L, 10L, 15L, 16L, 21L))
+    
+})
+
+
+
+

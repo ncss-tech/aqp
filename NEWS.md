@@ -19,7 +19,7 @@
  * major changes to `hzAbove()` and `hzBelow()`:
    - new default: `offset = NULL` selects all horizons above or below reference horizons
    - new argument `single` for lumping multiple reference horizons into a contiguous composite
-   - mew examples
+   - new examples with graphical explanation
  
  * code-completion and preview for SPC objects in RStudio (@brownag)
  
