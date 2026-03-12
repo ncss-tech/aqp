@@ -62,13 +62,36 @@
 #' .ex <- grepl('Bt3|Bw', s$name)
 #' s$e <- .ex
 #' 
+#' # default: select all horizons above or below
 #' a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE)
 #' b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE)
 #' 
 #' op <- par(no.readonly = TRUE)
 #' par(mar = c(0, 0, 3, 0))
 #' plotSPC(
-#'   s, color = 'e', col.label = 'expression', col.palette = c('grey', 'royalblue'), 
+#'   s, color = 'e', col.label = 'reference', col.palette = c('grey', 'royalblue'), 
+#'   name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75
+#' )
+#' 
+#' # highlight selected horizons above and below with brackets
+#' addBracket(
+#'   depths(s, hzID = FALSE)[a, ], agg = TRUE,
+#'   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[b, ], agg = TRUE,
+#'   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
+#' )
+#' 
+#' 
+#' # select only 1st horizon above / below
+#' a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE, offset = 1)
+#' b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE, offset = 1)
+#' 
+#' plotSPC(
+#'   s, color = 'e', col.label = 'reference', col.palette = c('grey', 'royalblue'), 
 #'   name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
 #'   name.style = 'center-center', cex.names = 0.75
 #' )
@@ -95,7 +118,7 @@
 #' 
 #' par(mfcol = c(1, 2))
 #' plotSPC(
-#'   s,  col.label = 'expression', color = 'e', 
+#'   s,  col.label = 'reference', color = 'e', 
 #'   col.palette = c('grey', 'royalblue'), 
 #'   name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
 #'   name.style = 'center-center', cex.names = 0.75
@@ -120,7 +143,7 @@
 #' 
 #' 
 #' plotSPC(
-#'   s, col.label = 'expression', color = 'e', 
+#'   s, col.label = 'reference', color = 'e', 
 #'   col.palette = c('grey', 'royalblue'), name = 'name', 
 #'   hz.depths = TRUE, depth.axis = FALSE, 
 #'   name.style = 'center-center', cex.names = 0.75
@@ -141,7 +164,7 @@
 #' 
 #' # demonstrate SPC = TRUE, single = TRUE
 #' plotSPC(
-#'   s, col.label = 'expression', color = 'e', 
+#'   s, col.label = 'reference', color = 'e', 
 #'   col.palette = c('grey', 'royalblue'), name = 'name', 
 #'   hz.depths = TRUE, depth.axis = FALSE, 
 #'   name.style = 'center-center', cex.names = 0.75, max.depth = 250
