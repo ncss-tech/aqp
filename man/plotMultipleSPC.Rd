@@ -58,7 +58,7 @@ See examples below for usage.
 For thematic sketches, use the \code{merged.legend} argument instead of \code{color} argument to \code{plotSPC}
 }
 \examples{
-\dontshow{if (requireNamespace("scales", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("scales", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 
 ##
 ## Simple Example
