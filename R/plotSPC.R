@@ -795,6 +795,7 @@ plotSPC <- function(
               'x0' = relative.pos + x.idx.offset,
               'pIDs' = pIDs[plot.order],
               'idname' = idname(x),
+              'horizonDepths' = horizonDepths(x),
               'y.offset' = y.offset,
               'scaling.factor' = scaling.factor,
               'max.depth' = max.depth,
