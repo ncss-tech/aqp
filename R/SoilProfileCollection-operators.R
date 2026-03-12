@@ -300,7 +300,7 @@ setMethod("[", signature(x = "SoilProfileCollection"),
                            rownames(h) <- NULL
                              
                            # rebuild SPC object from slots
-                           res <-  SoilProfileCollection(
+                           res <-  .SoilProfileCollection(
                              idcol = idn,
                              hzidcol = hzidname(x),
                              depthcols = hzd,
