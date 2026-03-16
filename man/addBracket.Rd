@@ -6,6 +6,9 @@
 \usage{
 addBracket(
   x,
+  labcol = NULL,
+  agg = FALSE,
+  hzDepths = NULL,
   label.cex = 0.75,
   tick.length = 0.05,
   arrow.length = 0.05,
@@ -15,104 +18,103 @@ addBracket(
 )
 }
 \arguments{
-\item{x}{\code{data.frame} object containing \code{idname(x)}, \code{top}, \code{bottom}, and optionally \code{label} columns}
+\item{x}{\code{data.frame} containing at least: \code{idname(x)} (profile ID) and \code{horizonDepths(x)} (horizon top and bottom depths)}
 
-\item{label.cex}{scaling factor for label font}
+\item{labcol}{character, optional name of a column in \code{x} used for labeling}
 
-\item{tick.length}{length of bracket "tick" mark}
+\item{agg}{logical, aggregate multiple brackets per profile into a single depth range?}
 
-\item{arrow.length}{length of arrowhead}
+\item{hzDepths}{character vector of length 2, optional column names in \code{x} that define bracket top and bottom depths. When \code{NULL}, use horizon top/bottom column names from the \code{SoilProfileCollection} object used by the last call to \code{plotSPC()}.}
 
-\item{offset}{left-hand offset from each profile}
+\item{label.cex}{numeric, scaling factor for label font}
 
-\item{missing.bottom.depth}{distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)}
+\item{tick.length}{numeric, length of bracket "tick" mark}
 
-\item{...}{further arguments passed on to \code{segments} or \code{arrows}}
+\item{arrow.length}{numeric, length of arrowhead (see \code{arrows()})}
+
+\item{offset}{numeric, left-hand offset from each profile}
+
+\item{missing.bottom.depth}{numeric, distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)}
+
+\item{...}{further arguments passed on to \code{segments()} or \code{arrows()}}
 }
 \description{
 Add depth brackets to soil profile sketches.
 }
 \details{
-\code{x} may contain multiple records per profile. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
+When \code{x} contains multiple records per profile a bracket will be created for each record. Setting \code{agg = TRUE} will first aggregate all records per profile, then add a single bracket spanning the depth range of those records. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
 }
 \note{
-This is a \code{low-level} plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+This is a \code{low-level} plotting function: you must first plot a \code{SoilProfileCollection} object before using this function. Details about the last plotted \code{SoilProfileCollection} are available using \code{get('last_spc_plot', envir = aqp.env)}.
 }
 \examples{
 
-# sample data
-data(sp1)
+# example data
+x <- c(
+  'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+  'P2:Ap|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+  'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+  'P4:AA|EEE|BhsBhsBhsBhs|BwBw|CCCCC',
+  'P5:AAAA|ACACACACAC|CCCCCCC|CdCdCd'
+)
 
-# add color vector
-sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))
+s <- quickSPC(x)
 
-# promote to SoilProfileCollection
-depths(sp1) <- id ~ top + bottom
+# change horizon depth names
+# ensure that plotSPC() -> addBracket() can find them
+horizonDepths(s) <- c('tt', 'bb')
 
-# plot profiles
-par(mar = c(0, 0, 0, 1))
-plotSPC(sp1, width = 0.3)
+# expression defines a single reference horizon in most profiles
+.ex <- grepl('Bt3|Bw', s$name)
+# encode for thematic profile sketches
+s$e <- factor(as.character(.ex), levels = c('FALSE', 'TRUE'), labels = c('Horizons', 'Reference'))
 
-# extract min--max depths associated with all A horizons
-# result is a single-row data.frame / profile
-combinedBracket <- function(i) {
-  h <- horizons(i)
-  idn <- idname(i)
-  this.id <- h[[idn]][1]
-  
-  idx <- grep('^A', h$name)
-  
-  res <- data.frame(
-    id = this.id,
-    top = min(h$top[idx]), 
-    bottom = max(h$bottom[idx], na.rm=TRUE)
-  )
-  names(res)[1] <- idn
-  
-  return(res)
-}
+# get horizon row indices to horizons above reference
+a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE)
 
-# return matching horizon top / bottom depths for A or C horizons
-# result is a 0 or more row data.frame / profile
-individualBrackets <- function(i) {
-  h <- horizons(i)
-  idn <- idname(i)
-  this.id <- h[[idn]][1]
-  
-  idx <- grep('^A|^C', h$name)
-  
-  res <- data.frame(
-    id = this.id,
-    top = h$top[idx], 
-    bottom = h$bottom[idx]
-  )
-  names(res)[1] <- idn
-  
-  return(res)
-}
+# create bracket data.frame
+b <- depths(s, hzID = FALSE)[a, ]
 
-# combined brackets
-b1 <- profileApply(sp1, combinedBracket, frameify = TRUE)
+# add labels
+b$label <- c('S')
 
-# individual brackets
-b2 <- profileApply(sp1, individualBrackets, frameify = TRUE)
+op <- par(no.readonly = TRUE)
+par(mar = c(0, 0, 3, 2), mfcol = c(1, 2))
 
-# plot in reverse order
-plotSPC(sp1, plot.order = rev(1:length(sp1)), width = 0.25)
+# sketches
+plotSPC(
+  s, color = 'e', col.label = 'Original', col.palette = c('grey', 'royalblue'), 
+  name = 'name', name.style = 'center-center', cex.names = 0.75,
+  max.depth = 180
+)
 
-# note that plotting order is derived from the call to `plotSPC(sp1)`
-addBracket(b1, col='red', offset = -0.35)
+# plot individual brackets, no labels
+addBracket(
+  b, 
+  agg = FALSE, labcol = 'label',
+  offset = -0.35, col = 'black', tick.length = 0.04, lwd = 1
+)
 
-# plot in reverse order
-plotSPC(sp1, plot.order = rev(1:length(sp1)), width = 0.25)
+# sketches
+plotSPC(
+  s, color = 'e', col.label = 'Aggregate', col.palette = c('grey', 'royalblue'), 
+  name = 'name', name.style = 'center-center', cex.names = 0.75,
+  max.depth = 180
+)
 
-# note that plotting order is derived from the call to `plotSPC(sp1)`
-addBracket(b2, col='red', offset = -0.35)
+# aggregate multiple brackets into single depth span
+# include first label from each group
+addBracket(
+  b, 
+  agg = TRUE, labcol = 'label',
+  offset = -0.35, col = 'firebrick', tick.length = 0.04, lwd = 2
+) 
 
+par(op)
 
 }
 \seealso{
-\code{\link{addDiagnosticBracket}, \link{plotSPC}}
+\code{\link[=addDiagnosticBracket]{addDiagnosticBracket()}}, \code{\link[=plotSPC]{plotSPC()}}
 }
 \author{
 D.E. Beaudette

@@ -16,7 +16,7 @@ addDiagnosticBracket(
 \arguments{
 \item{s}{\code{SoilProfileCollection} object}
 
-\item{kind}{filter applied to \code{feature} column of diagnostic horizons registered within \code{s}}
+\item{kind}{character, filter applied to \code{feature} column of diagnostic horizons registered within \code{s}}
 
 \item{feature}{column name containing feature kind}
 
@@ -24,7 +24,7 @@ addDiagnosticBracket(
 
 \item{bottom}{column name containing feature top depth}
 
-\item{...}{additional arguments passed to \code{addBracket}}
+\item{...}{additional arguments passed to \code{\link[=addBracket]{addBracket()}}}
 }
 \description{
 Annotate diagnostic features within a sketch of soil profiles.
@@ -34,6 +34,45 @@ Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC
 }
 \note{
 This is a \code{low-level} plotting function: you must first plot a \code{SoilProfileCollection} object before using this function.
+}
+\examples{
+
+ # example data
+x <- c(
+  'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+  'P2:Ap|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+  'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+  'P4:AA|EEE|BhsBhsBhsBhs|BwBw|CCCCC',
+  'P5:AAAA|ACACACACAC|CCCCCCCCCCC|CdCdCd'
+)
+
+s <- quickSPC(x)
+
+diagnostic_hz(s) <- data.frame(
+  id = c('P1', 'P4'),
+  t = c(12, 25), 
+  b = c(70, 100),
+  kind = c('Best', 'Best')
+)
+
+op <- par(no.readonly = TRUE)
+par(mar = c(0, 0, 3, 2))
+
+# sketches
+plotSPC(
+  s, name = 'name', name.style = 'center-center', cex.names = 0.75, max.depth = 210
+)
+
+# note that custom top/bottom depths must be supplied
+addDiagnosticBracket(
+  s, feature = 'kind', kind = 'Best', top = 't', bottom = 'b',
+  labcol = 'kind',
+  offset = -0.35, col = 'firebrick', tick.length = 0.04, lwd = 2
+)
+
+par(op)
+
+
 }
 \seealso{
 \code{\link[=addBracket]{addBracket()}}, \code{\link[=plotSPC]{plotSPC()}}

@@ -40,17 +40,45 @@ test_that("hzOffset works", {
   expect_equal(length(hzOffset(h[1,], first, offset = 1)), 1)
 })
 
-test_that("hzAbove/hzBelow works", {
+test_that("basic functionality of hzAbove() / hzBelow()", {
   
   data(sp4)
   depths(sp4) <- id ~ top + bottom
   
-  # horizons above any horizon with extractable Ca to Mg ratio less than 1:10
-  x <- hzAbove(sp4, ex_Ca_to_Mg < 0.1)
-  expect_equal(as.integer(hzID(x)), c(2, 3, 12, 25, 26))
+  # all horizons indices above horizons with ex-Ca:Mg ratio less than 1:10
+  x <- hzAbove(sp4, ex_Ca_to_Mg < 0.1, SPC = FALSE, simplify = TRUE)
+  expect_equal(x, c(1L, 2L, 3L, 10L, 11L, 12L, 23L, 24L, 25L, 26L))
   
-  # horizons below any horizon with extractable Ca to Mg ratio less than 1:10
-  x <- hzBelow(sp4, ex_Ca_to_Mg < 0.1)
-  expect_equal(as.integer(hzID(x)), c(4, 27))
+  # all horizon indices below any horizon with ex-Ca:Mg ratio less than 1:10
+  x <- hzBelow(sp4, ex_Ca_to_Mg < 0.1, SPC = FALSE, simplify = TRUE)
+  expect_equal(x, c(4L, 27L))
   
 })
+
+
+test_that("interpret multiple reference horizons as a single span", {
+  
+  # example data
+  x <- c(
+    'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+    'P2:Ap|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+    'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+    'P4:AA|EEE|BhsBhsBhsBhs|BwBw|CCCCC',
+    'P5:AAAA|ACACACACAC|CCCCCCCCCCC|CdCdCd'
+  )
+  
+  s <- quickSPC(x)
+
+  # interpret multiple reference hz as a single reference hz
+  a <- hzAbove(s, grepl('B', name), SPC = FALSE, simplify = TRUE, single = TRUE)
+  b <- hzBelow(s, grepl('B', name), SPC = FALSE, simplify = TRUE, single = TRUE)
+  
+  # hand-verified
+  expect_equal(a, c(1L, 5L, 6L, 7L, 11L, 17L, 18L))
+  expect_equal(b, c(3L, 4L, 10L, 15L, 16L, 21L))
+    
+})
+
+
+
+

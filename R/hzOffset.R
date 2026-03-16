@@ -6,32 +6,193 @@
 # I think we could also probably do things like hz_adjacent(), hz_between/within(). Also we could make it more convenient to prepare the vectors of target horizon IDs. 
 
 
-#' Horizons Above or Below 
-#'
-#' @param x A SoilProfileCollection
-#' @param ... Comma-separated set of R expressions that evaluate as `TRUE` or `FALSE` in context of horizon data frame. Length for individual expressions matches number of horizons, in \code{x}.
-#' @param hzid A vector of target horizon IDs. These are calculated from `...` for `horizon_*()` methods
-#' @param offset Integer offset in terms of SoilProfileCollection `[,j]` (horizon/slice) index
-#' @param SPC Return a SoilProfileCollection? Default `TRUE` for `horizon_*` methods.
-#' @param simplify If `TRUE` return a vector (all elements combined), or a list (1 element per profile). If `SPC` is `TRUE` then `simplify` is `TRUE`.
-#' @return A SoilProfileCollection (when `SPC = TRUE`) or a vector of horizon row indices (when `SPC = FALSE` and `simplify = TRUE`) or a list (when `SPC = FALSE` and `simplify = FALSE`))
+
+#' @title Select Horizons Above or Below a Reference Horizon
 #' 
-#' @details To minimize likelihood of issues with non-standard evaluation context, especially when using `hzAbove()`/`hzBelow()` inside another function, all expressions used in `...` should be in terms of variables that are in the horizon data frame.
+#' @description
+#' These functions return "selected" horizons offset from "reference" horizon defined by logical expressions which include horizon data elements. Typically, `hzAbove()` and `hzBelow()` are used as a simpler interface to `hzOffset()`. Selected horizons can be returned as a complete `SoilProfileCollection` (`SPC = TRUE`), a list of horizon data row indices (`SPC = FALSE, simplify = FALSE`), or as a numeric vector of horizon data row indices (`SPC = FALSE, simplify = TRUE`).
+#' 
+#' @details Expressions that match multiple reference horizons will result in the inclusion of these reference horizons in the selected horizons. Interpreting multiple reference horizons as a single horizon (`single = TRUE`), defined by min(top) - max(bottom), will ensure that only selected horizons are returned.
+#' 
+#' The `offset` argument controls which "horizons above" or "horizons below" reference horizon(s) are selected, using the `SoilProfileCollection` `[, j]` (horizon/slice) notation. Possible values and their interpretation are as follows:
+#' 
+#'  * `offset = NULL`: select all horizons above or below reference horizon(s)
+#'  * `offset = 1`: select the first horizon above or below reference horizon(s)
+#'  * `offset = 1:2`: select the first and second horizons above or below reference horizon(s)
+#'  * `offset = 1:10`: safely select the 1st -> 10th horizons, even if there are fewer, above or below reference horizon(s)
+#' 
+#' @param x `SoilProfileCollection`
+#' 
+#' @param ... comma-separated set of logical expressions, in context of horizon data, length for each expression must match number of horizons in `x`
+#' 
+#' @param hzidx integer vector of target horizon row indices, typically calculated by `hzAbove()` and `hzBelow()`
+#' 
+#' @param offset integer vector or NULL, when specified this is the `[, j]` (horizon/slice) index definining the horizons above or below a reference horizon that should be returned. see details
+#' 
+#' @param SPC logical, return a `SoilProfileCollection` subset to selected horizons
+#' 
+#' @param simplify logical, flatten list of horizon row indices into a numeric vector
+#' 
+#' @param single logical, interpret multiple matching reference horizons as a single horizon, defined by max(top) - min(bottom)
+#' 
+#' @return One of:
+#'  * `SoilProfileCollection`: when `SPC = TRUE`
+#'  * list of horizon row indices when `SPC = FALSE` and `simplify = FALSE`
+#'  * vector of horizon row indices: when `SPC = FALSE` and `simplify = TRUE`
+#' 
+#' The return value will not include data from profiles which have no matching reference horizons.
+#' 
 #' @export
 #' @rdname hzOffset
+#' 
 #' @examples
-#' data(sp4)
-#' depths(sp4) <- id ~ top + bottom
 #' 
-#' # get the horizon above the last horizon (j-index of bottom horizon minus 1)
-#' hzAbove(sp4, hzID(sp4) %in% getLastHorizonID(sp4))
+#' # example data
+#' x <- c(
+#'   'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',
+#'   'P2:Ap|AA|E|BhsBhs|Bw1Bw1|CCCCC',
+#'   'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR',
+#'   'P4:AA|EEE|BhsBhsBhsBhs|BwBw|CCCCC',
+#'   'P5:AAAA|ACACACACAC|CCCCCCCCCCC|CdCdCd'
+#' )
 #' 
-#' # get horizons below the last horizon (none; j-index of bottom horizon plus 1)
-#' hzBelow(sp4, hzID(sp4) %in% getLastHorizonID(sp4))
+#' s <- quickSPC(x)
 #' 
-hzAbove <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
+#' # single match for most profiles
+#' .ex <- grepl('Bt3|Bw', s$name)
+#' s$e <- .ex
+#' 
+#' # default: select all horizons above or below
+#' a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE)
+#' b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE)
+#' 
+#' op <- par(no.readonly = TRUE)
+#' par(mar = c(0, 0, 3, 0))
+#' plotSPC(
+#'   s, color = 'e', col.label = 'reference', col.palette = c('grey', 'royalblue'), 
+#'   name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75
+#' )
+#' 
+#' # highlight selected horizons above and below with brackets
+#' addBracket(
+#'   depths(s, hzID = FALSE)[a, ], agg = TRUE,
+#'   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[b, ], agg = TRUE,
+#'   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
+#' )
+#' 
+#' 
+#' # select only 1st horizon above / below
+#' a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE, offset = 1)
+#' b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE, offset = 1)
+#' 
+#' plotSPC(
+#'   s, color = 'e', col.label = 'reference', col.palette = c('grey', 'royalblue'), 
+#'   name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75
+#' )
+#' 
+#' # highlight selected horizons above and below with brackets
+#' addBracket(
+#'   depths(s, hzID = FALSE)[a, ], agg = TRUE,
+#'   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[b, ], agg = TRUE,
+#'   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
+#' )
+#' 
+#' 
+#' # multiple matches
+#' .ex <- grepl('B', s$name)
+#' s$e <- .ex
+#' 
+#' # default
+#' a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE)
+#' b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE)
+#' 
+#' par(mfcol = c(1, 2))
+#' plotSPC(
+#'   s,  col.label = 'reference', color = 'e', 
+#'   col.palette = c('grey', 'royalblue'), 
+#'   name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[a, ], agg = TRUE,
+#'   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[b, ], agg = TRUE,
+#'   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
+#' )
+#' 
+#' mtext('single = FALSE',  side = 1, line = -1.5, at = 0, adj = -0.5)
+#' 
+#' 
+#' # interpret multiple reference hz as a single reference hz
+#' a <- hzAbove(s, .ex, SPC = FALSE, simplify = TRUE, single = TRUE)
+#' b <- hzBelow(s, .ex, SPC = FALSE, simplify = TRUE, single = TRUE)
+#' 
+#' 
+#' plotSPC(
+#'   s, col.label = 'reference', color = 'e', 
+#'   col.palette = c('grey', 'royalblue'), name = 'name', 
+#'   hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[a, ], agg = TRUE,
+#'   offset = -0.3, col = 'darkgreen', tick.length = 0, lwd = 3
+#' )
+#' 
+#' addBracket(
+#'   depths(s, hzID = FALSE)[b, ], agg = TRUE,
+#'   offset = -0.35, col = 'firebrick', tick.length = 0, lwd = 3
+#' )
+#' 
+#' mtext('single = TRUE',  side = 1, line = -1.5, at = 0, adj = -0.5)
+#' 
+#' 
+#' # demonstrate SPC = TRUE, single = TRUE
+#' plotSPC(
+#'   s, col.label = 'reference', color = 'e', 
+#'   col.palette = c('grey', 'royalblue'), name = 'name', 
+#'   hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75, max.depth = 250
+#' )
+#' 
+#' a <- hzAbove(s, .ex, SPC = TRUE, single = TRUE)
+#' 
+#' plotSPC(
+#'   a, name = 'name', hz.depths = TRUE, depth.axis = FALSE, 
+#'   name.style = 'center-center', cex.names = 0.75, max.depth = 250
+#' )
+#' title('selected profiles/horizons')
+#' 
+#' par(op)
+
+
+#' 
+hzAbove <- function(x, ..., offset = NULL, SPC = TRUE, simplify = SPC, single = FALSE) {
+  .NHZ <- NULL
+  
   # "above" is a negative offset in j index
   
+  # missing offset indicates "all horizons above target"
+  if(is.null(offset)) {
+    # use max number of horizons within x
+    offset <- seq(from = 1, to = max(x[, , , .NHZ]))
+  }
+  
   # capture expression(s) at function
   .dots <- substitute(list(...))
   .dots <- .dots[2:length(.dots)]
@@ -49,18 +210,43 @@ hzAbove <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
   
   if (!is.logical(subcrit)) {
     badxpr <- paste0("'",paste0(.dots[sapply(.dots, function(x) !is.logical(x))],
-                                collapse=",'"),"'")
+                                collapse = ",'"),"'")
     stop(sprintf("%s is not logical", badxpr), call. = FALSE)
   }
   
-  hzOffset(x, hzid = which(subcrit), offset = -offset, SPC = SPC, simplify = simplify)
+  # interpret multiple matches as a single reference horizon
+  # offsets are applied relative to top-most reference hz
+  if(single) {
+    .idx <- which(subcrit)
+    
+    .d <- depths(x, hzID = FALSE)[.idx, ]
+    .d$idx <- .idx
+    
+    # for each profile
+    # find the horizon row index of top-most reference hz
+    .topmost <- sapply(split(.d, .d[[1]]), function(i) {
+      i$idx[which.min(i[[2]])]
+    })
+  } else {
+    .topmost <- which(subcrit)
+  }
+  
+  hzOffset(x, hzidx = .topmost, offset = -offset, SPC = SPC, simplify = simplify)
 }
 
 #' @export
 #' @rdname hzOffset
-hzBelow <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
+hzBelow <- function(x, ..., offset = NULL, SPC = TRUE, simplify = SPC, single = FALSE) {
+  .NHZ <- NULL
+  
   # "below" is a positive offset in j index
   
+  # missing offset indicates "all horizons below target"
+  if(is.null(offset)) {
+    # use max number of horizons within x
+    offset <- seq(from = 1, to = max(x[, , , .NHZ]))
+  }
+  
   # capture expression(s) at function
   .dots <- substitute(list(...))
   .dots <- .dots[2:length(.dots)]
@@ -82,12 +268,29 @@ hzBelow <- function(x, ..., offset = 1, SPC = TRUE, simplify = SPC) {
     stop(sprintf("%s is not logical", badxpr), call. = FALSE)
   }
   
-  hzOffset(x, hzid = which(subcrit), offset = offset, SPC = SPC, simplify = simplify)
+  # interpret multiple matches as a single reference horizon
+  # offsets are applied relative to deepest reference hz
+  if(single) {
+    .idx <- which(subcrit)
+    
+    .d <- depths(x, hzID = FALSE)[.idx, ]
+    .d$idx <- .idx
+    
+    # for each profile
+    # find the horizon row index of deepest reference hz
+    .deepest <- sapply(split(.d, .d[[1]]), function(i) {
+      i$idx[which.max(i[[3]])]
+    })  
+  } else {
+    .deepest <- which(subcrit)
+  }
+  
+  hzOffset(x, hzidx = .deepest, offset = offset, SPC = SPC, simplify = simplify)
 }
 
 #' @export
 #' @rdname hzOffset
-hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
+hzOffset <- function(x, hzidx, offset, SPC = FALSE, simplify = TRUE) {
   # define SPC k-keywords as local vars for R CMD CHECK
   .LAST <- NULL; .HZID <- NULL
   
@@ -102,7 +305,7 @@ hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
   # determine intersection between each profile horizon index and the target ID + offset
   idx <- lapply(seq_along(hzidf), function(i) {
     haystack <- unique(do.call('c', lapply(offset, function(o) {
-      o + hzid[hzid >= hzidf[i] & hzid <= hzidl[i]]
+      o + hzidx[hzidx >= hzidf[i] & hzidx <= hzidl[i]]
     })))
     intersect(x = seq(hzidf[i], hzidl[i]), y = haystack)
   })
@@ -111,11 +314,18 @@ hzOffset <- function(x, hzid, offset, SPC = FALSE, simplify = TRUE) {
     idx <- do.call('c', idx)
   }
   
-  if (!SPC) return(idx)
+  if (!SPC) {
+    return(idx)
+  }
+  
+  # assemble reduced SPC here
+  # profiles with no matching reference horizon are left out
+  
   # TODO: subset NSE needs var in the SPC / "needs" rlang here
   .hzldx <- NULL
   x$.hzldx <- seq_len(nrow(x)) %in% idx
   res <- subsetHz(x, .hzldx) 
   res$.hzldx <- NULL
-  res
+  
+  return(res)
 }

@@ -88,8 +88,11 @@ setMethod("spc2mpspline", signature(object = "SoilProfileCollection"),
                    hzdesgn = NULL,
                    ...) {
             .NHZ <- NULL
+            .FIRST <- NULL
             .LAST <- NULL 
             .HZID <- NULL
+            .TOP <- NULL
+            .BOTTOM <- NULL
             
             if (!requireNamespace('mpspline2'))
               stop("package `mpspline2` is required", call. = FALSE)
