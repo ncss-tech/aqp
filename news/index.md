@@ -40,6 +40,22 @@
   optimization would very rarely hang
   - seems to be a problem with (`pamonce = >=5`) - AMELAR OSD, moist
     colors
+- major changes to
+  [`hzAbove()`](https://ncss-tech.github.io/aqp/reference/hzOffset.md)
+  and
+  [`hzBelow()`](https://ncss-tech.github.io/aqp/reference/hzOffset.md):
+  - new default: `offset = NULL` selects all horizons above or below
+    reference horizons
+  - new argument `single` for lumping multiple reference horizons into a
+    contiguous composite
+  - new examples with graphical explanation
+- major changes to
+  [`addBracket()`](https://ncss-tech.github.io/aqp/reference/addBracket.md):
+  - when not specified, horizon depth names taken from last call to
+    \`plotSPC()
+  - new arguments: `labcol` (label column), `agg` (aggregate multiple
+    brackets / profile), `hzDepths` (override bracket top and bottom
+    depth column names)
 - code-completion and preview for SPC objects in RStudio
   ([@brownag](https://github.com/brownag))
 

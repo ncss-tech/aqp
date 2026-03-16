@@ -1144,12 +1144,13 @@ function. See ?depthOf for more details.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp4</span>, name <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># addBracket() looks for a column `label`; add a ID for each bracket</span></span>
+<span><span class="co"># label</span></span>
 <span><span class="va">a</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/site.html">site</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span><span class="op">$</span><span class="va">id</span></span>
 <span></span>
-<span><span class="co"># note that depth brackets "knows which profiles to use" via profile ID</span></span>
+<span><span class="co"># note that depth brackets "know which profiles to use" via profile ID</span></span>
 <span><span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span></span>
 <span>  <span class="va">a</span>,</span>
+<span>  labcol <span class="op">=</span> <span class="st">'label'</span>,</span>
 <span>  col <span class="op">=</span> <span class="st">'red'</span>,</span>
 <span>  label.cex <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>  missing.bottom.depth <span class="op">=</span> <span class="fl">25</span>,</span>
@@ -1203,6 +1204,7 @@ variable:</p>
 <span><span class="co"># add restrictions using vertical bars</span></span>
 <span><span class="fu"><a href="../reference/addBracket.html">addBracket</a></span><span class="op">(</span></span>
 <span>  <span class="va">a</span>,</span>
+<span>  labcol <span class="op">=</span> <span class="st">'label'</span>,</span>
 <span>  col <span class="op">=</span> <span class="st">'red'</span>,</span>
 <span>  label.cex <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>  tick.length <span class="op">=</span> <span class="fl">0</span>,</span>

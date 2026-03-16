@@ -57,17 +57,17 @@ explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(1:10))
 
 # attempt to adjust using defaults
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos))
-#> 6 iterations
+#> 22 iterations
 
 
 # attempt to adjust and tinker with defaults
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, adj = 0.2))
-#> 62 iterations
+#> 34 iterations
 
 
 # enforce larger space between
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, thresh = 0.7))
-#> 112 iterations
+#> 85 iterations
 
 
 # more complex adjustments required
@@ -77,24 +77,24 @@ pos <- c(1, 2, 3, 3.3, 5, 5.1, 5.5, 8, 9, 10)
 explainPlotSPC(sp4, name = 'name', relative.pos = pos)
 
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos))
-#> 55 iterations
+#> 50 iterations
 
 
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, 
 thresh = 0.7))
-#> 143 iterations
+#> 20 iterations
 
 
 explainPlotSPC(sp4, name = 'name', relative.pos = fixOverlap(pos, 
 thresh = 0.7, adj = 0.2))
-#> 147 iterations
+#> 44 iterations
 
 
 # SANN: solution requires many iterations, and will not always converge
 explainPlotSPC(sp4, name = 'name', 
 relative.pos = fixOverlap(pos, thresh = 0.85, adj = 0.2)
 )
-#> 761 iterations
+#> 336 iterations
 
 
 # electrostatics: solution requires larger charge (q)

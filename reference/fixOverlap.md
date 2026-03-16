@@ -54,8 +54,8 @@ s <- c(1, 2, 2.3, 4, 5, 5, 7)
 
 # simulated annealing, solution is non-deterministic
 fixOverlap(s, thresh = 0.6, method = 'S')
-#> 3 iterations
-#> [1] 0.8656108 1.6083830 2.6161403 3.9526008 4.6104410 5.2521673 7.0343279
+#> 37 iterations
+#> [1] 1.044590 1.931166 2.622084 3.499425 4.453864 5.275159 6.979491
 #> attr(,"converged")
 #> [1] TRUE
 

@@ -65,6 +65,15 @@
 <li>bug fix in <code><a href="../reference/soilColorSignature.html">soilColorSignature()</a></code>, <code><a href="https://rdrr.io/pkg/cluster/man/pam.html" class="external-link">cluster::pam()</a></code> optimization would very rarely hang
 <ul><li>seems to be a problem with (<code>pamonce = &gt;=5</code>) - AMELAR OSD, moist colors</li>
 </ul></li>
+<li>major changes to <code><a href="../reference/hzOffset.html">hzAbove()</a></code> and <code><a href="../reference/hzOffset.html">hzBelow()</a></code>:
+<ul><li>new default: <code>offset = NULL</code> selects all horizons above or below reference horizons</li>
+<li>new argument <code>single</code> for lumping multiple reference horizons into a contiguous composite</li>
+<li>new examples with graphical explanation</li>
+</ul></li>
+<li>major changes to <code><a href="../reference/addBracket.html">addBracket()</a></code>:
+<ul><li>when not specified, horizon depth names taken from last call to `plotSPC()</li>
+<li>new arguments: <code>labcol</code> (label column), <code>agg</code> (aggregate multiple brackets / profile), <code>hzDepths</code> (override bracket top and bottom depth column names)</li>
+</ul></li>
 <li>code-completion and preview for SPC objects in RStudio (<a href="https://github.com/brownag" class="external-link">@brownag</a>)</li>
 </ul><p>MAYBE * <code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code> vignette or addition to existing vignette * mass-preserving spline (c/o mpspline2) / <code><a href="../reference/slab.html">slab()</a></code> comparison article</p>
 </div>

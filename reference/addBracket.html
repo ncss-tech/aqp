@@ -51,6 +51,9 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addBracket</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
+<span>  labcol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  agg <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hzDepths <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label.cex <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>  tick.length <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  arrow.length <span class="op">=</span> <span class="fl">0.05</span>,</span>
@@ -65,44 +68,56 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p><code>data.frame</code> object containing <code>idname(x)</code>, <code>top</code>, <code>bottom</code>, and optionally <code>label</code> columns</p></dd>
+<dd><p><code>data.frame</code> containing at least: <code>idname(x)</code> (profile ID) and <code>horizonDepths(x)</code> (horizon top and bottom depths)</p></dd>
+
+
+<dt id="arg-labcol">labcol<a class="anchor" aria-label="anchor" href="#arg-labcol"></a></dt>
+<dd><p>character, optional name of a column in <code>x</code> used for labeling</p></dd>
+
+
+<dt id="arg-agg">agg<a class="anchor" aria-label="anchor" href="#arg-agg"></a></dt>
+<dd><p>logical, aggregate multiple brackets per profile into a single depth range?</p></dd>
+
+
+<dt id="arg-hzdepths">hzDepths<a class="anchor" aria-label="anchor" href="#arg-hzdepths"></a></dt>
+<dd><p>character vector of length 2, optional column names in <code>x</code> that define bracket top and bottom depths. When <code>NULL</code>, use horizon top/bottom column names from the <code>SoilProfileCollection</code> object used by the last call to <code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code>.</p></dd>
 
 
 <dt id="arg-label-cex">label.cex<a class="anchor" aria-label="anchor" href="#arg-label-cex"></a></dt>
-<dd><p>scaling factor for label font</p></dd>
+<dd><p>numeric, scaling factor for label font</p></dd>
 
 
 <dt id="arg-tick-length">tick.length<a class="anchor" aria-label="anchor" href="#arg-tick-length"></a></dt>
-<dd><p>length of bracket "tick" mark</p></dd>
+<dd><p>numeric, length of bracket "tick" mark</p></dd>
 
 
 <dt id="arg-arrow-length">arrow.length<a class="anchor" aria-label="anchor" href="#arg-arrow-length"></a></dt>
-<dd><p>length of arrowhead</p></dd>
+<dd><p>numeric, length of arrowhead (see <code><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows()</a></code>)</p></dd>
 
 
 <dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
-<dd><p>left-hand offset from each profile</p></dd>
+<dd><p>numeric, left-hand offset from each profile</p></dd>
 
 
 <dt id="arg-missing-bottom-depth">missing.bottom.depth<a class="anchor" aria-label="anchor" href="#arg-missing-bottom-depth"></a></dt>
-<dd><p>distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)</p></dd>
+<dd><p>numeric, distance (in depth units) to extend brackets that are missing a lower depth (defaults to max depth of collection)</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments passed on to <code>segments</code> or <code>arrows</code></p></dd>
+<dd><p>further arguments passed on to <code><a href="https://rdrr.io/r/graphics/segments.html" class="external-link">segments()</a></code> or <code><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>x</code> may contain multiple records per profile. Additional examples can be found in <a href="http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html" class="external-link">this tutorial</a>.</p>
+    <p>When <code>x</code> contains multiple records per profile a bracket will be created for each record. Setting <code>agg = TRUE</code> will first aggregate all records per profile, then add a single bracket spanning the depth range of those records. Additional examples can be found in <a href="http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html" class="external-link">this tutorial</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>This is a <code>low-level</code> plotting function: you must first plot a <code>SoilProfileCollection</code> object before using this function.</p>
+    <p>This is a <code>low-level</code> plotting function: you must first plot a <code>SoilProfileCollection</code> object before using this function. Details about the last plotted <code>SoilProfileCollection</code> are available using <code>get('last_spc_plot', envir = aqp.env)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="addDiagnosticBracket.html">addDiagnosticBracket</a>, <a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></code></p></div>
+    <div class="dont-index"><p><code><a href="addDiagnosticBracket.html">addDiagnosticBracket()</a></code>, <code><a href="SoilProfileCollection-plotting-methods.html">plotSPC()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -112,78 +127,74 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># sample data</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># example data</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P2:Ap|AA|E|BhsBhs|Bw1Bw1|CCCCC'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P3:A|Bt1Bt1Bt1|Bt2Bt2Bt2|Bt3|Cr|RRRRR'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P4:AA|EEE|BhsBhsBhsBhs|BwBw|CCCCC'</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'P5:AAAA|ACACACACAC|CCCCCCC|CdCdCd'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># add color vector</span></span></span>
-<span class="r-in"><span><span class="va">sp1</span><span class="op">$</span><span class="va">soil_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="fu"><a href="munsell2rgb.html">munsell2rgb</a></span><span class="op">(</span><span class="va">hue</span>, <span class="va">value</span>, <span class="va">chroma</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="quickSPC.html">quickSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># promote to SoilProfileCollection</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">id</span> <span class="op">~</span> <span class="va">top</span> <span class="op">+</span> <span class="va">bottom</span></span></span>
+<span class="r-in"><span><span class="co"># change horizon depth names</span></span></span>
+<span class="r-in"><span><span class="co"># ensure that plotSPC() -&gt; addBracket() can find them</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="horizonDepths.html">horizonDepths</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'tt'</span>, <span class="st">'bb'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot profiles</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp1</span>, width <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># expression defines a single reference horizon in most profiles</span></span></span>
+<span class="r-in"><span><span class="va">.ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">'Bt3|Bw'</span>, <span class="va">s</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># encode for thematic profile sketches</span></span></span>
+<span class="r-in"><span><span class="va">s</span><span class="op">$</span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">.ex</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'FALSE'</span>, <span class="st">'TRUE'</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'Horizons'</span>, <span class="st">'Reference'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get horizon row indices to horizons above reference</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="hzOffset.html">hzAbove</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">.ex</span>, SPC <span class="op">=</span> <span class="cn">FALSE</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(.dots[[i]], .data, parent.frame(n = 2)):</span> object '.ex' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create bracket data.frame</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="depths.html">depths</a></span><span class="op">(</span><span class="va">s</span>, hzID <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span><span class="va">a</span>, <span class="op">]</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'a' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># add labels</span></span></span>
+<span class="r-in"><span><span class="va">b</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'S'</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'b' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>no.readonly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, mfcol <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sketches</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">s</span>, color <span class="op">=</span> <span class="st">'e'</span>, col.label <span class="op">=</span> <span class="st">'Original'</span>, col.palette <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'grey'</span>, <span class="st">'royalblue'</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">'name'</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">0.75</span>,</span></span>
+<span class="r-in"><span>  max.depth <span class="op">=</span> <span class="fl">180</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot individual brackets, no labels</span></span></span>
+<span class="r-in"><span><span class="fu">addBracket</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">b</span>, </span></span>
+<span class="r-in"><span>  agg <span class="op">=</span> <span class="cn">FALSE</span>, labcol <span class="op">=</span> <span class="st">'label'</span>,</span></span>
+<span class="r-in"><span>  offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.35</span>, col <span class="op">=</span> <span class="st">'black'</span>, tick.length <span class="op">=</span> <span class="fl">0.04</span>, lwd <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'b' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sketches</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">s</span>, color <span class="op">=</span> <span class="st">'e'</span>, col.label <span class="op">=</span> <span class="st">'Aggregate'</span>, col.palette <span class="op">=</span> <span class="fu"><a href="combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'grey'</span>, <span class="st">'royalblue'</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">'name'</span>, name.style <span class="op">=</span> <span class="st">'center-center'</span>, cex.names <span class="op">=</span> <span class="fl">0.75</span>,</span></span>
+<span class="r-in"><span>  max.depth <span class="op">=</span> <span class="fl">180</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="addBracket-1.png" alt="" width="700" height="1133"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># extract min--max depths associated with all A horizons</span></span></span>
-<span class="r-in"><span><span class="co"># result is a single-row data.frame / profile</span></span></span>
-<span class="r-in"><span><span class="va">combinedBracket</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">idn</span> <span class="op">&lt;-</span> <span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">this.id</span> <span class="op">&lt;-</span> <span class="va">h</span><span class="op">[[</span><span class="va">idn</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'^A'</span>, <span class="va">h</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    id <span class="op">=</span> <span class="va">this.id</span>,</span></span>
-<span class="r-in"><span>    top <span class="op">=</span> <span class="fu"><a href="min.html">min</a></span><span class="op">(</span><span class="va">h</span><span class="op">$</span><span class="va">top</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span><span class="op">)</span>, </span></span>
-<span class="r-in"><span>    bottom <span class="op">=</span> <span class="fu"><a href="max.html">max</a></span><span class="op">(</span><span class="va">h</span><span class="op">$</span><span class="va">bottom</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">idn</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># aggregate multiple brackets into single depth span</span></span></span>
+<span class="r-in"><span><span class="co"># include first label from each group</span></span></span>
+<span class="r-in"><span><span class="fu">addBracket</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">b</span>, </span></span>
+<span class="r-in"><span>  agg <span class="op">=</span> <span class="cn">TRUE</span>, labcol <span class="op">=</span> <span class="st">'label'</span>,</span></span>
+<span class="r-in"><span>  offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.35</span>, col <span class="op">=</span> <span class="st">'firebrick'</span>, tick.length <span class="op">=</span> <span class="fl">0.04</span>, lwd <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span> </span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'b' not found</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># return matching horizon top / bottom depths for A or C horizons</span></span></span>
-<span class="r-in"><span><span class="co"># result is a 0 or more row data.frame / profile</span></span></span>
-<span class="r-in"><span><span class="va">individualBrackets</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="horizons.html">horizons</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">idn</span> <span class="op">&lt;-</span> <span class="fu"><a href="idname.html">idname</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">this.id</span> <span class="op">&lt;-</span> <span class="va">h</span><span class="op">[[</span><span class="va">idn</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">'^A|^C'</span>, <span class="va">h</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    id <span class="op">=</span> <span class="va">this.id</span>,</span></span>
-<span class="r-in"><span>    top <span class="op">=</span> <span class="va">h</span><span class="op">$</span><span class="va">top</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span>, </span></span>
-<span class="r-in"><span>    bottom <span class="op">=</span> <span class="va">h</span><span class="op">$</span><span class="va">bottom</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">idn</span></span></span>
-<span class="r-in"><span>  </span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># combined brackets</span></span></span>
-<span class="r-in"><span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="va">combinedBracket</span>, frameify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># individual brackets</span></span></span>
-<span class="r-in"><span><span class="va">b2</span> <span class="op">&lt;-</span> <span class="fu"><a href="profileApply.html">profileApply</a></span><span class="op">(</span><span class="va">sp1</span>, <span class="va">individualBrackets</span>, frameify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot in reverse order</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp1</span>, plot.order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># note that plotting order is derived from the call to `plotSPC(sp1)`</span></span></span>
-<span class="r-in"><span><span class="fu">addBracket</span><span class="op">(</span><span class="va">b1</span>, col<span class="op">=</span><span class="st">'red'</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.35</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="addBracket-2.png" alt="" width="700" height="1133"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot in reverse order</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="SoilProfileCollection-plotting-methods.html">plotSPC</a></span><span class="op">(</span><span class="va">sp1</span>, plot.order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="length.html">length</a></span><span class="op">(</span><span class="va">sp1</span><span class="op">)</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># note that plotting order is derived from the call to `plotSPC(sp1)`</span></span></span>
-<span class="r-in"><span><span class="fu">addBracket</span><span class="op">(</span><span class="va">b2</span>, col<span class="op">=</span><span class="st">'red'</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.35</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="addBracket-3.png" alt="" width="700" height="1133"></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -70,7 +70,7 @@ length(sp1)
 table(sp1$sitevar)
 #> 
 #> 0 1 
-#> 7 2 
+#> 4 5 
 
 # compare number of horizons to number of horizon-level copies of sitevar `hz.'sitevar`
 nrow(sp1)
@@ -78,5 +78,5 @@ nrow(sp1)
 table(sp1$hz.sitevar)
 #> 
 #>  0  1 
-#> 51  9 
+#> 27 33 
 ```

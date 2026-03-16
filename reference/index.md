@@ -389,7 +389,7 @@
 - [`hzAbove()`](https://ncss-tech.github.io/aqp/reference/hzOffset.md)
   [`hzBelow()`](https://ncss-tech.github.io/aqp/reference/hzOffset.md)
   [`hzOffset()`](https://ncss-tech.github.io/aqp/reference/hzOffset.md)
-  : Horizons Above or Below
+  : Select Horizons Above or Below a Reference Horizon
 
 - [`hzTopographyCodeToLineType()`](https://ncss-tech.github.io/aqp/reference/hzTopographyCodeToLineType.md)
   : Convert Horizon Boundary Topography to Line Type
