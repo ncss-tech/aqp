@@ -4,7 +4,7 @@
 #' @description Annotate diagnostic features within a sketch of soil profiles.
 #' 
 #' @param s `SoilProfileCollection` object
-#' @param kind chracter, filter applied to `feature` column of diagnostic horizons registered within `s`
+#' @param kind character, filter applied to `feature` column of diagnostic horizons registered within `s`
 #' @param feature column name containing feature kind
 #' @param top column name containing feature top depth
 #' @param bottom column name containing feature top depth
@@ -102,7 +102,7 @@ addDiagnosticBracket <- function(s, kind, feature = 'featkind', top = 'featdept'
 #' 
 #' @param ... further arguments passed on to `segments()` or `arrows()`
 #' 
-#' @details `x` may contain multiple records per profile. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
+#' @details When `x` contains multiple records per profile a bracket will be created for each record. Setting `agg = TRUE` will first aggregate all records per profile, then add a single bracket spanning the depth range of those records. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
 #' 
 #' @note This is a `low-level` plotting function: you must first plot a `SoilProfileCollection` object before using this function. Details about the last plotted `SoilProfileCollection` are available using `get('last_spc_plot', envir = aqp.env)`. 
 #' 

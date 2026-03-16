@@ -42,7 +42,7 @@ addBracket(
 Add depth brackets to soil profile sketches.
 }
 \details{
-\code{x} may contain multiple records per profile. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
+When \code{x} contains multiple records per profile a bracket will be created for each record. Setting \code{agg = TRUE} will first aggregate all records per profile, then add a single bracket spanning the depth range of those records. Additional examples can be found in \href{http://ncss-tech.github.io/AQP/aqp/SPC-plotting-ideas.html}{this tutorial}.
 }
 \note{
 This is a \code{low-level} plotting function: you must first plot a \code{SoilProfileCollection} object before using this function. Details about the last plotted \code{SoilProfileCollection} are available using \code{get('last_spc_plot', envir = aqp.env)}.
