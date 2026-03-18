@@ -2,6 +2,8 @@
 
 ## aqp 2.3.1 (development)
 
+- new example data `Ohz.colors`, useful for estimating organic soil
+  material color
 - new function
   [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
   for fixing encoding of neutral colors
@@ -10,8 +12,10 @@
   for checking Munsell color notation
   ([\#339](https://github.com/ncss-tech/aqp/issues/339))
 - [`colorVariation()`](https://ncss-tech.github.io/aqp/reference/colorVariation.md)
-  gains new method ‘L1’ for comparing colors to L1-median (requires
-  Gmedian package)
+  updates:
+  - new method ‘L1’ for comparing colors to L1-median (requires Gmedian
+    package)
+  - fixed bug when `m` contains non-standard Munsell notation
 - [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
   updates:
   - gains new arguments `method` and `returnMunsell`

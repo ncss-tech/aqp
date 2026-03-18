@@ -44,10 +44,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-development">aqp 2.3.1 (development)<a class="anchor" aria-label="anchor" href="#aqp-231-development"></a></h2>
-<ul><li>new function <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> for fixing encoding of neutral colors</li>
+<ul><li>new example data <code>Ohz.colors</code>, useful for estimating organic soil material color</li>
+<li>new function <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> for fixing encoding of neutral colors</li>
 <li>new function <code><a href="../reference/validateMunsell.html">validateMunsell()</a></code> for checking Munsell color notation (<a href="https://github.com/ncss-tech/aqp/issues/339" class="external-link">#339</a>)</li>
 <li>
-<code><a href="../reference/colorVariation.html">colorVariation()</a></code> gains new method ‘L1’ for comparing colors to L1-median (requires Gmedian package)</li>
+<code><a href="../reference/colorVariation.html">colorVariation()</a></code> updates:
+<ul><li>new method ‘L1’ for comparing colors to L1-median (requires Gmedian package)</li>
+<li>fixed bug when <code>m</code> contains non-standard Munsell notation</li>
+</ul></li>
 <li>
 <code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code> updates:
 <ul><li>gains new arguments <code>method</code> and <code>returnMunsell</code>

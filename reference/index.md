@@ -18,6 +18,9 @@
 - [`NCSP()`](https://ncss-tech.github.io/aqp/reference/NCSP.md) :
   Numerical Classification of Soil Profiles
 
+- [`Ohz.colors`](https://ncss-tech.github.io/aqp/reference/Ohz.colors.md)
+  : Representative O Horizon Colors
+
 - [`ROSETTA.centroids`](https://ncss-tech.github.io/aqp/reference/ROSETTA.centroids.md)
   : Average Hydraulic Parameters from the ROSETTA Model by USDA Soil
   Texture Class
