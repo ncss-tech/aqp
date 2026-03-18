@@ -30,7 +30,7 @@ estimateSoilColor(
 \code{data.frame} of estimated colors in Munsell notation. The \code{sigma} column contains CIE2000 color contrast metric values describing the perceptual distance between estimated color in CIELAB coordinates and closest Munsell chip.
 }
 \description{
-All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons). Estimates are only valid for mineral soil material, having Munsell values < 10.
+All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons). Estimates are only valid for mineral soil material, having Munsell values and chroma < 10. Estimation has a median error rate of approximately (CIE dE2000) 5.
 
 Available Methods:
 \itemize{

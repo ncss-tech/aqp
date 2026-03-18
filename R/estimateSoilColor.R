@@ -8,7 +8,7 @@
 
 #' @title Estimate dry soil colors from moist soil colors and vice versa.
 #' 
-#' @description All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons). Estimates are only valid for mineral soil material, having Munsell values < 10.
+#' @description All else equal, soil color will predictably shift in perceived lightness (change in Munsell value) as moisture content changes. Field-described soil colors are typically collected at approximately air dry ("dry") and field capacity ("moist") states. This function estimates "dry" soil colors from "moist" soil colors and vice versa. Two methods are available for estimation, both developed from a national collection of field-described soil colors (approx. 800k horizons). Estimates are only valid for mineral soil material, having Munsell values and chroma < 10. Estimation has a median error rate of approximately (CIE dE2000) 5. 
 #' 
 #' Available Methods:
 #'  * "procrustes": soil colors are converted using scale, rotation, and translation parameters in CIELAB color space
