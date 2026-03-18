@@ -7,7 +7,8 @@ field capacity ("moist") states. This function estimates "dry" soil
 colors from "moist" soil colors and vice versa. Two methods are
 available for estimation, both developed from a national collection of
 field-described soil colors (approx. 800k horizons). Estimates are only
-valid for mineral soil material, having Munsell values \< 10.
+valid for mineral soil material, having Munsell values and chroma \< 10.
+Estimation has a median error rate of approximately (CIE dE2000) 5.
 
 Available Methods:
 
