@@ -62,14 +62,11 @@
     
   })
   
-  
   x <- do.call('rbind', x)
   
   return(x)
 }
 
-
-## TODO: is this generic enough to use elsewhere?
 
 # alternative formulation:
 # http://scottburns.us/wp-content/uploads/2015/05/Subtractive-Color-Mixture-Computation.pdf
@@ -79,6 +76,7 @@
 # weighted geometric mean
 # https://en.wikipedia.org/wiki/Weighted_geometric_mean
 # note: function will fail if any(v) == 0
+# note: NA not allowed in v or w
 .wgm <- function(v, w) {
   r <- sum(w * log(v)) / sum(w)
   r <- exp(r)

@@ -175,7 +175,7 @@ aggregateColor <- function(x, groups = 'genhz', col = 'soil_color', k = NULL, pr
       
       # clustering from distance matrix
       # TODO: save clustering results for later
-      v.pam <- cluster::pam(dE00, k = k.adj, diss = TRUE, pamonce = 5)
+      v.pam <- cluster::pam(dE00, k = k.adj, diss = TRUE, pamonce = 3)
       
       # put clustering vector into LUT
       lut$cluster <- v.pam$clustering

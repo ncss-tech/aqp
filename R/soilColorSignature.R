@@ -88,8 +88,11 @@
     white_from = 'D65'
   )
   
-  # convert to dist object, note transpose
-  dE00 <- as.dist(t(dE00))
+  # convert to dist object
+  # note transpose
+  dE00 <- as.dist(
+    t(dE00)
+  )
   
   # partitioning around medoids
   # optimization notes: 

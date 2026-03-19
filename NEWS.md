@@ -1,4 +1,5 @@
-# aqp 2.3.1 (development)
+# aqp 2.3.1 (2026-03-19)
+ * CRAN release
  * new example data `Ohz.colors`, useful for estimating organic soil material color
  * new function `launderMunsell()` for fixing encoding of neutral colors
  * new function `validateMunsell()` for checking Munsell color notation (#339)
@@ -10,6 +11,7 @@
    - Procrustes-based model updated from larger database of mineral soils
    - new OLS-based model added, select with `method = 'ols'`
    - detailed descriptions of methods added to manual page
+   - expanded demonstration in Munsell Color Conversion vignette
    
  * new argument to `plotSPC()` -> `offset.id` used to manually adjust vertical offset to all profile IDs (c/o Daniel Saurette)
  * bug fix in `col2Munsell()` when passed 0-length character
@@ -29,10 +31,6 @@
    - new arguments: `labcol` (label column), `agg` (aggregate multiple brackets / profile), `hzDepths` (override bracket top and bottom depth column names)
  
  * code-completion and preview for SPC objects in RStudio (@brownag)
- 
- MAYBE
- * `estimateSoilColor()` vignette or addition to existing vignette
- * mass-preserving spline (c/o mpspline2) / `slab()` comparison article
 
 # aqp 2.3 (2026-01-16)
  * CRAN release
