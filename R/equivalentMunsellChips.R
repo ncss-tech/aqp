@@ -143,10 +143,10 @@
 
   # create a nice lookup table to add to aqp
   equivalent_munsell <- xin1
-  names(equivalent_munsell) <- sprintf("%s %s/%s", munsell$hue, munsell$value, munsell$chroma)
+  names(equivalent_munsell) <- formatMunsell(munsell$hue, munsell$value, munsell$chroma)
 
   # this is only 107kB written to Rda
-  save(equivalent_munsell, file="data/equivalent_munsell.rda")
+  save(equivalent_munsell, file = "data/equivalent_munsell.rda")
 
   return(equivalent_munsell)
 }
@@ -215,7 +215,7 @@
 #' par(mar=c(0,0,1,1))
 #' 
 #' pie(rep(1, nrow(veryred)), col = with(veryred, munsell2rgb(hue, value, chroma)),
-#'     label = with(veryred, sprintf("%s %s/%s", hue, value, chroma)))
+#'     label = with(veryred, formatMunsell(hue, value, chroma)))
 #' 
 #' table(veryred$hue) # 2 hues
 #' #> 
@@ -250,7 +250,7 @@ equivalentMunsellChips <- function(hue = NULL, value = NULL, chroma = NULL) {
             munsell$chroma == chipdata$chroma[x])
   })
   res <- lapply(lidx, function(i) munsell[equivalent_munsell[i][[1]],])
-  names(res) <- sprintf("%s %s/%s", hue, value, chroma)
+  names(res) <- formatMunsell(hue, value, chroma)
   rownames(res) <- NULL
   return(res)
 }

@@ -60,7 +60,7 @@ veryred <- equivalentMunsellChips("10R", 6, 28)[[1]]
 par(mar=c(0,0,1,1))
 
 pie(rep(1, nrow(veryred)), col = with(veryred, munsell2rgb(hue, value, chroma)),
-    label = with(veryred, sprintf("\%s \%s/\%s", hue, value, chroma)))
+    label = with(veryred, formatMunsell(hue, value, chroma)))
 
 table(veryred$hue) # 2 hues
 #> 

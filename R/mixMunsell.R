@@ -379,7 +379,7 @@ mixMunsell <- function(x, w = rep(1, times = length(x)) / length(x), mixingMetho
       } else {
         # mx is a data.frame 
         res <- data.frame(
-          munsell = sprintf("%s %s/%s", mx$hue, mx$value, mx$chroma),
+          munsell = formatMunsell(mx$hue, mx$value, mx$chroma),
           distance = mx$sigma,
           scaledDistance = NA,
           distanceMetric = 'dE00',

@@ -14,7 +14,9 @@
 #'   * '10YR 2/0' -> 'N 2/0'
 #'   * 'N 4/1 -> 'N 4/0'
 #'   * '5Z 3/3' -> NA
+#'   * '5YR 3/' -> NA (hues other than N must have a valid chroma)
 #' 
+#' See [formatMunsell()] for additional details. 
 #'
 #' @param m character vector of Munsell colors
 #' @param verbose logical, optionally return a `data.frame` comparing modifications
@@ -50,6 +52,9 @@
 #' # missing chroma, not N => NA
 #' launderMunsell('2.5Y 4/')
 #' 
+#' # invalid chroma => NA
+#' launderMunsell('2.5Y 4/A')
+#' 
 launderMunsell <- function(m, verbose = FALSE, ...) {
   
   # split into components
@@ -73,7 +78,6 @@ launderMunsell <- function(m, verbose = FALSE, ...) {
   
   # combine back into standard notation
   # following conventions
-  # .res <- sprintf("%s %s/%s", .p$hue, .p$value, .p$chroma)
   .res <- formatMunsell(hue = .p$hue, value = .p$value, chroma = .p$chroma, ...)
   
   # optionally combine into a data.frame for inspection

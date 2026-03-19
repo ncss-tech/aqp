@@ -108,7 +108,7 @@ contrastChart <- function(m, hues, ccAbbreviate = 1, style = 'hue', gridLines = 
 
   # convert into hex notation for plotting
   x$color <- munsell2rgb(x$hue, x$value, x$chroma)
-  x$munsell <- sprintf("%s %s/%s", x$hue, x$value, x$chroma)
+  x$munsell <- formatMunsell(x$hue, x$value, x$chroma)
 
   # re-level hues according to color contrast guidance
   hh <- unique(x$hue)

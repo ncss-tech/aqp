@@ -29,7 +29,10 @@ Examples:
 \item '10YR 2/0' -> 'N 2/0'
 \item 'N 4/1 -> 'N 4/0'
 \item '5Z 3/3' -> NA
+\item '5YR 3/' -> NA (hues other than N must have a valid chroma)
 }
+
+See \code{\link[=formatMunsell]{formatMunsell()}} for additional details.
 }
 \examples{
 
@@ -54,6 +57,9 @@ launderMunsell('4ZR 4/6')
 
 # missing chroma, not N => NA
 launderMunsell('2.5Y 4/')
+
+# invalid chroma => NA
+launderMunsell('2.5Y 4/A')
 
 }
 \seealso{

@@ -63,7 +63,7 @@ ric <- expand.grid(
 )
 
 # combine hue, value, chroma into standard Munsell notation
-ric <- sprintf("\%s \%s/\%s", ric$hue, ric$value, ric$chroma)
+ric <- formatMunsell(ric$hue, ric$value, ric$chroma)
 
 # note that chip frequency-based size is disabled
 # because all chips have equal frequency
