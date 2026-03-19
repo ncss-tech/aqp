@@ -1,8 +1,6 @@
 # Changelog
 
-## aqp 2.3.x (development)
-
-CRAN release: 2026-01-17
+## aqp 2.3.2 (development)
 
 - new function
   [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)

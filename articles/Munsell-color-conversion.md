@@ -4,6 +4,12 @@ The `aqp` package provides several functions for working with colors
 specified in the [Munsell color
 system](https://en.wikipedia.org/wiki/Munsell_color_system).
 
+## Munsell Notation
+
+[`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
+and
+[`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
+
 ## Color Conversion Functions
 
 Conversion of Munsell notation to “something” that can be displayed
@@ -59,6 +65,10 @@ collected with a sensor vs. color book, can be approximated with
 [`getClosestMunsellChip()`](https://ncss-tech.github.io/aqp/reference/getClosestMunsellChip.md).
 A more accurate conversion can be performed with the [`munsellinterpol`
 package.](https://cran.r-project.org/package=munsellinterpol).
+
+### Reflectance Spectra
+
+[`spec2Munsell()`](https://ncss-tech.github.io/aqp/reference/spec2Munsell.md)
 
 ### Examples
 
