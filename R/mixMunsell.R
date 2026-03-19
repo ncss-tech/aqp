@@ -71,6 +71,11 @@
 
 ## TODO: is this generic enough to use elsewhere?
 
+# alternative formulation:
+# http://scottburns.us/wp-content/uploads/2015/05/Subtractive-Color-Mixture-Computation.pdf
+# 1:1 mixture -> a^(1/2) * b^(1/2)
+# 2:1 mixture -> a^(2/3) * b^(1/3)
+
 # weighted geometric mean
 # https://en.wikipedia.org/wiki/Weighted_geometric_mean
 # note: function will fail if any(v) == 0
@@ -79,6 +84,10 @@
   r <- exp(r)
   return(r)
 }
+
+
+
+
 
 
 # another possible approach using only sRGB coordinates
@@ -139,7 +148,7 @@
 #' Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color for Science, Art, and Technology (pp. 32-96). North-Holland.
 #' 
 #' 
-#'  * [inspiration / calculations based on the work of Scott Burns](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf)
+#'  * http://scottburns.us/wp-content/uploads/2015/05/Subtractive-Color-Mixture-Computation.pdf
 #'
 #'  * [related discussion on Stack Overflow](https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630)
 #'
@@ -151,7 +160,7 @@
 #' 
 #' An accurate simulation of pigment mixtures ("subtractive" color mixtures) is incredibly complex due to factors that aren't easily measured or controlled: pigment solubility, pigment particle size distribution, water content, substrate composition, and physical obstruction to name a few. That said, it is possible to simulate reasonable, subtractive color mixtures given a reference spectra library (350-800nm) and some assumptions about pigment qualities and lighting. For the purposes of estimating a mixture of soil colors (these are pigments after all) we can relax these assumptions and assume a standard light source. The only missing piece is the spectral library for all Munsell chips in our color books.
 #' 
-#' Thankfully, [Scott Burns has outlined the entire process](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf), and Paul Centore has provided a Munsell color chip reflectance spectra library (http://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:
+#' Paul Centore has provided a Munsell color chip reflectance spectra library (http://www.munsellcolourscienceforpainters.com). The estimation of a subtractive mixture of soil colors can proceed as follows:
 #'   
 #' 1. look up the associated spectra for each color in `x`
 #' 2. compute the weighted (`w` argument) geometric mean of the spectra
