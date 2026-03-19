@@ -318,8 +318,8 @@
 - [`glomApply()`](https://ncss-tech.github.io/aqp/reference/glomApply.md)
   : Subset an SPC by applying glom to each profile
 
-- [`grepSPC()`](https://ncss-tech.github.io/aqp/reference/grepSPC.md) :
-  Subset SPC with pattern-matching for text-based attributes
+- [`grepSPC(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/grepSPC.md)
+  : Subset SPC with pattern-matching for text-based attributes
 
 - [`groupSPC()`](https://ncss-tech.github.io/aqp/reference/groupSPC.md)
   : Store groupings within a profile collection.
@@ -510,7 +510,7 @@
 - [`munsellHuePosition`](https://ncss-tech.github.io/aqp/reference/munsellHuePosition.md)
   : Munsell Hue Position Reference
 
-- [`mutate_profile()`](https://ncss-tech.github.io/aqp/reference/mutate_profile.md)
+- [`mutate_profile(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/mutate_profile.md)
   [`mutate_profile_raw()`](https://ncss-tech.github.io/aqp/reference/mutate_profile.md)
   : Transform a SPC (by profile) with a set of expressions
 
@@ -639,7 +639,7 @@
   SoilProfileCollection
 
 - [`site(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/site.md)
-  [`` `site<-`() ``](https://ncss-tech.github.io/aqp/reference/site.md)
+  [`` `site<-`( ``*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/site.md)
   : Retrieve site data from SoilProfileCollection
 
 - [`` `siteNames<-`( ``*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/siteNames.md)
@@ -717,7 +717,7 @@
   Split a `SoilProfileCollection` into a list based on types of horizon
   logic errors
 
-- [`subApply()`](https://ncss-tech.github.io/aqp/reference/subApply.md)
+- [`subApply(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/subApply.md)
   : Subset SPC based on result of performing function on each profile
 
 - [`subset(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/subset-SoilProfileCollection-method.md)

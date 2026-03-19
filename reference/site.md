@@ -21,6 +21,7 @@ the join: `site(spc) <- newdata`
 # S4 method for class 'SoilProfileCollection'
 site(object)
 
+# S4 method for class 'SoilProfileCollection'
 site(object) <- value
 ```
 

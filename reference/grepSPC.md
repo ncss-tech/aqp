@@ -9,6 +9,7 @@ attribute.
 ## Usage
 
 ``` r
+# S4 method for class 'SoilProfileCollection'
 grepSPC(object, attr, pattern, ...)
 ```
 
