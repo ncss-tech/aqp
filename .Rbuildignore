@@ -19,3 +19,5 @@ README.md
 ^vignettes/articles/*_files$
 ^_pkgdown\.yml$
 ^pkgdown$
+^doc$
+^Meta$
