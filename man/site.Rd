@@ -6,6 +6,7 @@
 \alias{site,SoilProfileCollection-method}
 \alias{site}
 \alias{site<-,SoilProfileCollection-method}
+\alias{site<-}
 \title{Retrieve site data from SoilProfileCollection}
 \usage{
 \S4method{site}{SoilProfileCollection}(object)

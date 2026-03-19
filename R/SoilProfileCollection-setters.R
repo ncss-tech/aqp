@@ -263,6 +263,7 @@ setGeneric('site<-', function(object, value)
 #' @param object A SoilProfileCollection
 #' @param value A formula or object inheriting \code{data.frame}
 #' @rdname site
+#' @aliases site<-
 #' @export
 #' @examples
 #'
