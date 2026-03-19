@@ -265,6 +265,9 @@
 - [`flagOverlappingHz()`](https://ncss-tech.github.io/aqp/reference/flagOverlappingHz.md)
   : Flag perfectly overlapping horizons within a SoilProfileCollection
 
+- [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
+  : Format Munsell Notation from Hue, Value, and Chroma
+
 - [`fragmentClasses()`](https://ncss-tech.github.io/aqp/reference/fragmentClasses.md)
   : Coarse Fragment Class Labels and Diameter
 

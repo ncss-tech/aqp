@@ -1,5 +1,15 @@
 # Changelog
 
+## aqp 2.3.x (development)
+
+CRAN release: 2026-01-17
+
+- new function
+  [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
+  for safely formatting Munsell colors from hue, value, and chroma \#
+  [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
+  gains additional formatting fixes / failures to NA
+
 ## aqp 2.3.1 (2026-03-19)
 
 - CRAN release

@@ -8,16 +8,21 @@ optionally flagging) the following:
 
 - for neutral colors, any chroma \>0 will be set to 0
 
+- non-standard hues will be converted to NA (unless
+  `standardHues = FALSE`)
+
 Examples:
 
 - '10YR 2/0' -\> 'N 2/0'
 
 - 'N 4/1 -\> 'N 4/0'
 
+- '5Z 3/3' -\> NA
+
 ## Usage
 
 ``` r
-launderMunsell(m, verbose = FALSE)
+launderMunsell(m, verbose = FALSE, ...)
 ```
 
 ## Arguments
@@ -30,14 +35,53 @@ launderMunsell(m, verbose = FALSE)
 
   logical, optionally return a `data.frame` comparing modifications
 
+- ...:
+
+  additional arguments to
+  [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
+
 ## Value
 
 either character vector, or when `verbose = TRUE` a `data.frame`
 
+## See also
+
+[`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
+
 ## Examples
 
 ``` r
-# will be converted to 'N 4/0'
-launderMunsell('5G 4/0')
+# => 'N 2/0'
+launderMunsell('10YR 2/0')
+#> [1] "N 2/0"
+
+# => 'N 4/0'
+launderMunsell('N 4/1')
 #> [1] "N 4/0"
+
+# alternative neutral convention => 'N 4/'
+launderMunsell('N 4/0', neutralConvention = 'empty')
+#> [1] "N 4/"
+
+# => 'N 4/0'
+launderMunsell('N 4/NA')
+#> Warning: NAs introduced by coercion
+#> [1] "N 4/0"
+launderMunsell('N 4/')
+#> [1] "N 4/0"
+
+# => 'N 4/0'
+launderMunsell('5GY 4/0')
+#> [1] "N 4/0"
+
+# not a standard hue => NA
+launderMunsell('4ZR 4/6')
+#> some colors have non-standard hue, result is NA
+#> some colors missing hue or value, result is NA
+#> [1] NA
+
+# missing chroma, not N => NA
+launderMunsell('2.5Y 4/')
+#> some colors missing hue or value, result is NA
+#> [1] NA
 ```
