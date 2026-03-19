@@ -1,3 +1,8 @@
+# aqp 2.3.x (development)
+ * new function `formatMunsell()` for safely formatting Munsell colors from hue, value, and chroma
+ # `launderMunsell()` gains additional formatting fixes / failures to NA
+
+
 # aqp 2.3.1 (2026-03-19)
  * CRAN release
  * new example data `Ohz.colors`, useful for estimating organic soil material color

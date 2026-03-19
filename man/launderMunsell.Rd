@@ -4,12 +4,14 @@
 \alias{launderMunsell}
 \title{Fix Common Errors in Munsell Notation}
 \usage{
-launderMunsell(m, verbose = FALSE)
+launderMunsell(m, verbose = FALSE, ...)
 }
 \arguments{
 \item{m}{character vector of Munsell colors}
 
 \item{verbose}{logical, optionally return a \code{data.frame} comparing modifications}
+
+\item{\dots}{additional arguments to \code{\link[=formatMunsell]{formatMunsell()}}}
 }
 \value{
 either character vector, or when \code{verbose = TRUE} a \code{data.frame}
@@ -19,17 +21,41 @@ This function will "launder" colors in Munsell notation, fixing (and optionally 
 \itemize{
 \item colors specified with 0-chroma will be converted to neutral hue (N) and original value
 \item for neutral colors, any chroma >0 will be set to 0
+\item non-standard hues will be converted to NA (unless \code{standardHues = FALSE})
 }
 
 Examples:
 \itemize{
 \item '10YR 2/0' -> 'N 2/0'
 \item 'N 4/1 -> 'N 4/0'
+\item '5Z 3/3' -> NA
 }
 }
 \examples{
 
-# will be converted to 'N 4/0'
-launderMunsell('5G 4/0')
+# => 'N 2/0'
+launderMunsell('10YR 2/0')
 
+# => 'N 4/0'
+launderMunsell('N 4/1')
+
+# alternative neutral convention => 'N 4/'
+launderMunsell('N 4/0', neutralConvention = 'empty')
+
+# => 'N 4/0'
+launderMunsell('N 4/NA')
+launderMunsell('N 4/')
+
+# => 'N 4/0'
+launderMunsell('5GY 4/0')
+
+# not a standard hue => NA
+launderMunsell('4ZR 4/6')
+
+# missing chroma, not N => NA
+launderMunsell('2.5Y 4/')
+
+}
+\seealso{
+\code{\link[=formatMunsell]{formatMunsell()}}
 }
