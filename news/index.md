@@ -1,7 +1,8 @@
 # Changelog
 
-## aqp 2.3.1 (development)
+## aqp 2.3.1 (2026-03-19)
 
+- CRAN release
 - new example data `Ohz.colors`, useful for estimating organic soil
   material color
 - new function
@@ -22,6 +23,7 @@
   - Procrustes-based model updated from larger database of mineral soils
   - new OLS-based model added, select with `method = 'ols'`
   - detailed descriptions of methods added to manual page
+  - expanded demonstration in Munsell Color Conversion vignette
 - new argument to
   [`plotSPC()`](https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.md)
   -\> `offset.id` used to manually adjust vertical offset to all profile
@@ -62,13 +64,6 @@
     depth column names)
 - code-completion and preview for SPC objects in RStudio
   ([@brownag](https://github.com/brownag))
-
-MAYBE \*
-[`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
-vignette or addition to existing vignette \* mass-preserving spline (c/o
-mpspline2) /
-[`slab()`](https://ncss-tech.github.io/aqp/reference/slab.md) comparison
-article
 
 ## aqp 2.3 (2026-01-16)
 

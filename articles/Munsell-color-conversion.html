@@ -112,10 +112,9 @@ coordinates of the closest Munsell chip.</p>
 spectra in the range of 380nm to 730nm with the
 <code><a href="../reference/spec2Munsell.html">spec2Munsell()</a></code> function.</p>
 <p><img src="Munsell-color-conversion_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="" width="768" style="display: block; margin: auto;"></p>
-</div>
-<div class="section level2">
-<h2 id="special-cases">Special Cases<a class="anchor" aria-label="anchor" href="#special-cases"></a>
-</h2>
+<div class="section level3">
+<h3 id="special-cases">Special Cases<a class="anchor" aria-label="anchor" href="#special-cases"></a>
+</h3>
 <p>Neutral colors are commonly specified two ways in the Munsell system:
 <code>N 3/</code> or <code>N 3/0</code>, either format will work with
 <code><a href="../reference/munsell2rgb.html">munsell2rgb()</a></code> and <code><a href="../reference/parseMunsell.html">parseMunsell()</a></code>.</p>
@@ -125,9 +124,9 @@ with <code><a href="../reference/getClosestMunsellChip.html">getClosestMunsellCh
 can be performed with the <a href="https://cran.r-project.org/package=munsellinterpol" class="external-link"><code>munsellinterpol</code>
 package.</a>.</p>
 </div>
-<div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
-</h2>
+<div class="section level3">
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Munsell -&gt; hex color</span></span>
 <span><span class="fu"><a href="../reference/parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="st">'5PB 4/6'</span><span class="op">)</span></span></code></pre></div>
@@ -155,6 +154,97 @@ package.</a>.</p>
 <code class="sourceCode R"><span><span class="co"># non-standard notation</span></span>
 <span><span class="fu"><a href="../reference/getClosestMunsellChip.html">getClosestMunsellChip</a></span><span class="op">(</span><span class="st">'3.3YR 4.4/6.1'</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] "2.5YR 4/6"</span></span></code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2 id="estimating-dry-moist-colors">Estimating Dry ↔︎ Moist Colors<a class="anchor" aria-label="anchor" href="#estimating-dry-moist-colors"></a>
+</h2>
+<p>All else equal, soil color will predictably shift in perceived
+lightness (change in Munsell value) as moisture content changes.
+Field-described soil colors are typically collected at approximately air
+dry (“dry”) and field capacity (“moist”) states. This function estimates
+“dry” soil colors from “moist” soil colors and vice versa. Two methods
+are available for estimation, both developed from a national collection
+of field-described soil colors (approx. 800k horizons). Estimates are
+only valid for mineral soil material, having Munsell values and chroma
+&lt; 10. Estimation has a median error rate of approximately (CIE
+dE2000) 5.</p>
+<p>Available Methods: * “procrustes”: soil colors are converted using
+scale, rotation, and translation parameters in CIELAB color space *
+“ols”: soil colors are converted using 3 multiple linear regression
+models (CIELAB coordinates)</p>
+<p>The two methods will give similar results, with <code>ols</code>
+usually closer to observed moist or dry colors. Estimating moist → dry
+color change is not guaranteed symmetric with estimating dry → moist
+color.</p>
+<p>In the example below, the estimated dry colors are the same for both
+<code>method = 'procrustes'</code> and <code>method = 'ols'</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># example moist soil colors from the Musick soil series</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">"7.5YR 2.5/1"</span>, <span class="st">"10YR 3/2"</span>, <span class="st">"7.5YR 4/3"</span>, <span class="st">"2.5YR 3/6"</span>, <span class="st">"2.5YR 3/6"</span>, </span>
+<span>       <span class="st">"2.5YR 4/6"</span>, <span class="st">"5YR 4/6"</span>, <span class="st">"7.5YR 5/4"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">m</span>, convertColors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">d.p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateSoilColor.html">estimateSoilColor</a></span><span class="op">(</span></span>
+<span>  hue <span class="op">=</span> <span class="va">mm</span><span class="op">$</span><span class="va">hue</span>, </span>
+<span>  value <span class="op">=</span> <span class="va">mm</span><span class="op">$</span><span class="va">value</span>, </span>
+<span>  chroma <span class="op">=</span> <span class="va">mm</span><span class="op">$</span><span class="va">chroma</span>, </span>
+<span>  method <span class="op">=</span> <span class="st">'procrustes'</span>, </span>
+<span>  sourceMoistureState <span class="op">=</span> <span class="st">'moist'</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">d.ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateSoilColor.html">estimateSoilColor</a></span><span class="op">(</span></span>
+<span>  hue <span class="op">=</span> <span class="va">mm</span><span class="op">$</span><span class="va">hue</span>, </span>
+<span>  value <span class="op">=</span> <span class="va">mm</span><span class="op">$</span><span class="va">value</span>, </span>
+<span>  chroma <span class="op">=</span> <span class="va">mm</span><span class="op">$</span><span class="va">chroma</span>, </span>
+<span>  method <span class="op">=</span> <span class="st">'ols'</span>, </span>
+<span>  sourceMoistureState <span class="op">=</span> <span class="st">'moist'</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">d.p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s %s/%s"</span>, <span class="va">d.p</span><span class="op">$</span><span class="va">hue</span>, <span class="va">d.p</span><span class="op">$</span><span class="va">value</span>, <span class="va">d.p</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span>
+<span><span class="va">d.ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s %s/%s"</span>, <span class="va">d.ols</span><span class="op">$</span><span class="va">hue</span>, <span class="va">d.ols</span><span class="op">$</span><span class="va">value</span>, <span class="va">d.ols</span><span class="op">$</span><span class="va">chroma</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/colorContrastPlot.html">colorContrastPlot</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">d.p</span>, labels <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="st">'Moist'</span>, <span class="st">'Estimated\nDry'</span><span class="op">)</span>, d.cex <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Munsell-color-conversion_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># it is the same</span></span>
+<span><span class="co"># colorContrastPlot(m, d.ols, labels = c('Moist', 'Estimated\nDry'), d.cex = 0.9)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="organic-soil-colors">Organic Soil Colors<a class="anchor" aria-label="anchor" href="#organic-soil-colors"></a>
+</h3>
+<p>Representative O horizon colors for the most common types of organic
+soil material, at dry and moist states, have been added to aqp
+(&gt;=2.3.1) as <code>Ohz.colors</code>. Colors were derived from an
+analysis of soil morphologic data (5245 horizons) within the USDA-NRCS
+National Soil Information System. Representative colors are the L1
+median colors (see <code><a href="../reference/colorVariation.html">colorVariation()</a></code>) within groups
+generalized to “Oi”, “Oe”, “Oa”, and all “other”. These estimates may be
+useful place-holder values for soil color in collections where O horizon
+color was not recorded.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Ohz.colors"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Ohz.colors</span><span class="op">$</span><span class="va">col</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parseMunsell.html">parseMunsell</a></span><span class="op">(</span><span class="va">Ohz.colors</span><span class="op">$</span><span class="va">L1.munsell</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="../reference/combine-SoilProfileCollection-method.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">1.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
+<span>  <span class="va">Ohz.colors</span><span class="op">[</span><span class="va">Ohz.colors</span><span class="op">$</span><span class="va">state</span> <span class="op">==</span> <span class="st">'dry'</span>, <span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="../reference/soilPalette.html">soilPalette</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="va">col</span>, lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s\n%s"</span>, <span class="va">genhz</span>, <span class="va">L1.munsell</span><span class="op">)</span>, lab.cex <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">'Dry Colors'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
+<span>  <span class="va">Ohz.colors</span><span class="op">[</span><span class="va">Ohz.colors</span><span class="op">$</span><span class="va">state</span> <span class="op">==</span> <span class="st">'moist'</span>, <span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="../reference/soilPalette.html">soilPalette</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="va">col</span>, lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s\n%s"</span>, <span class="va">genhz</span>, <span class="va">L1.munsell</span><span class="op">)</span>, lab.cex <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">'Moist Colors'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Munsell-color-conversion_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># restore original base graphics state</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
