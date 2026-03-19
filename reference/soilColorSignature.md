@@ -172,7 +172,9 @@ data(sp1)
 depths(sp1) <- id ~ top + bottom
 
 # Munsell notation
-sp1$m <- sprintf("%s %s/%s", sp1$hue, sp1$value, sp1$chroma)
+sp1$m <- formatMunsell(sp1$hue, sp1$value, sp1$chroma)
+#> some colors have non-standard hue, result is NA
+#> some colors missing hue or value, result is NA
 
 # extract color signature
 pig <- soilColorSignature(sp1, color = 'm')

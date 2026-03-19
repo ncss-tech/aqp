@@ -1964,4 +1964,4 @@ Some additional examples can be found in:
 
 ------------------------------------------------------------------------
 
-This document is based on `aqp` version 2.3.1.
+This document is based on `aqp` version 2.3.2.

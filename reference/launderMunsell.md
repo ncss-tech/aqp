@@ -19,6 +19,12 @@ Examples:
 
 - '5Z 3/3' -\> NA
 
+- '5YR 3/' -\> NA (hues other than N must have a valid chroma)
+
+See
+[`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
+for additional details.
+
 ## Usage
 
 ``` r
@@ -82,6 +88,12 @@ launderMunsell('4ZR 4/6')
 
 # missing chroma, not N => NA
 launderMunsell('2.5Y 4/')
+#> some colors missing hue or value, result is NA
+#> [1] NA
+
+# invalid chroma => NA
+launderMunsell('2.5Y 4/A')
+#> Warning: NAs introduced by coercion
 #> some colors missing hue or value, result is NA
 #> [1] NA
 ```

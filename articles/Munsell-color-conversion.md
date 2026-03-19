@@ -154,8 +154,8 @@ d.ols <- estimateSoilColor(
   sourceMoistureState = 'moist'
 )
 
-d.p <- sprintf("%s %s/%s", d.p$hue, d.p$value, d.p$chroma)
-d.ols <- sprintf("%s %s/%s", d.ols$hue, d.ols$value, d.ols$chroma)
+d.p <- formatMunsell(d.p$hue, d.p$value, d.p$chroma)
+d.ols <- formatMunsell(d.ols$hue, d.ols$value, d.ols$chroma)
 
 colorContrastPlot(m, d.p, labels = c('Moist', 'Estimated\nDry'), d.cex = 0.9)
 ```
