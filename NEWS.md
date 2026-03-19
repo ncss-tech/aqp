@@ -1,4 +1,4 @@
-# aqp 2.3.x (development)
+# aqp 2.3.2 (development)
  * new function `formatMunsell()` for safely formatting Munsell colors from hue, value, and chroma
  # `launderMunsell()` gains additional formatting fixes / failures to NA
 
