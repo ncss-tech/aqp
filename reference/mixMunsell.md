@@ -103,8 +103,6 @@ pigments after all) we can relax these assumptions and assume a standard
 light source. The only missing piece is the spectral library for all
 Munsell chips in our color books.
 
-Thankfully, [Scott Burns has outlined the entire
-process](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf), and
 Paul Centore has provided a Munsell color chip reflectance spectra
 library (http://www.munsellcolourscienceforpainters.com). The estimation
 of a subtractive mixture of soil colors can proceed as follows:
@@ -145,8 +143,7 @@ A message is printed when `scaledDistance` is larger than 1.
 Marcus, R.T. (1998). The Measurement of Color. In K. Nassau (Ed.), Color
 for Science, Art, and Technology (pp. 32-96). North-Holland.
 
-- [inspiration / calculations based on the work of Scott
-  Burns](https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf)
+- http://scottburns.us/wp-content/uploads/2015/05/Subtractive-Color-Mixture-Computation.pdf
 
 - [related discussion on Stack
   Overflow](https://stackoverflow.com/questions/10254022/implementing-kubelka-munk-like-krita-to-mix-colours-color-like-paint/29967630#29967630)
