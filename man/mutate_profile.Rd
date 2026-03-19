@@ -6,7 +6,7 @@
 \alias{mutate_profile_raw}
 \title{Transform a SPC (by profile) with a set of expressions}
 \usage{
-mutate_profile(object, ..., col_names = NULL, horizon_level = NULL)
+\S4method{mutate_profile}{SoilProfileCollection}(object, ..., col_names = NULL, horizon_level = NULL)
 
 mutate_profile_raw(object, expr, col_names = NULL, horizon_level = NULL)
 }

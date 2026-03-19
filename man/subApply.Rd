@@ -5,7 +5,7 @@
 \alias{subApply,SoilProfileCollection-method}
 \title{Subset SPC based on result of performing function on each profile}
 \usage{
-subApply(object, .fun, ...)
+\S4method{subApply}{SoilProfileCollection}(object, .fun, ...)
 }
 \arguments{
 \item{object}{A SoilProfileCollection}

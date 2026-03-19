@@ -253,8 +253,6 @@ setGeneric('site<-', function(object, value)
 
 #' Create or Add Data to Site Slot
 #'
-#' @name site<-
-#'
 #' @description
 #' There are two options available via the \code{site<-} setter.
 #'
@@ -264,9 +262,6 @@ setGeneric('site<-', function(object, value)
 #'
 #' @param object A SoilProfileCollection
 #' @param value A formula or object inheriting \code{data.frame}
-#' @aliases site<-,SoilProfileCollection-method
-#' @usage site(object) <- value
-#'
 #' @rdname site
 #' @export
 #' @examples

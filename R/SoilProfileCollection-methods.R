@@ -613,6 +613,10 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
 
 # functions tailored for use with magrittr %>% operator / tidyr
 
+# if (!isGeneric("grepSPC"))
+setGeneric("grepSPC", function(object, attr, pattern, ...)
+  standardGeneric("grepSPC"))
+
 #' @title Subset SPC with pattern-matching for text-based attributes
 #' @name grepSPC
 #' @aliases grepSPC,SoilProfileCollection-method
@@ -626,11 +630,6 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
 #'
 #' @rdname grepSPC
 #' @export grepSPC
-
-# if (!isGeneric("grepSPC"))
-  setGeneric("grepSPC", function(object, attr, pattern, ...)
-    standardGeneric("grepSPC"))
-
 setMethod("grepSPC", signature(object = "SoilProfileCollection"),
           function(object, attr, pattern, ...) {
 
@@ -653,6 +652,10 @@ setMethod("grepSPC", signature(object = "SoilProfileCollection"),
 
           })
 
+# if (!isGeneric("subApply"))
+setGeneric("subApply", function(object, .fun, ...)
+  standardGeneric("subApply"))
+
 #' @title Subset SPC based on result of performing function on each profile
 #' @name subApply
 #' @aliases subApply,SoilProfileCollection-method
@@ -665,11 +668,6 @@ setMethod("grepSPC", signature(object = "SoilProfileCollection"),
 #'
 #' @rdname subApply
 #' @export subApply
-
-# if (!isGeneric("subApply"))
-  setGeneric("subApply", function(object, .fun, ...)
-    standardGeneric("subApply"))
-
 setMethod("subApply", signature(object = "SoilProfileCollection"),
           function(object, .fun, ...) {
 
@@ -687,8 +685,8 @@ setMethod("subApply", signature(object = "SoilProfileCollection"),
 ## h: horizon-level subsetting criteria (properly quoted)
 ## result: SoilProfileCollection with all profiles that match _either_ criteria- i.e. greedy matching
 # if (!isGeneric("subsetProfiles"))
-  setGeneric("subsetProfiles", function(object, s, h, ...)
-    standardGeneric("subsetProfiles"))
+setGeneric("subsetProfiles", function(object, s, h, ...)
+  standardGeneric("subsetProfiles"))
 
 #' DEPRECATED use subset
 #'

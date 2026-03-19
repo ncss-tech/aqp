@@ -104,9 +104,8 @@ setGeneric("initSpatial<-", function(object, crs = NULL, value)
 #' @param object A SoilProfileCollection
 #' @param value A formula specifying names of columns containing geometry (x and y coordinates), or character with the column names
 #' @param crs Optional: character. Representation of Coordinate Reference System as `"authority:code"`, integer EPSG code, WKT2019 or PROJ4 string, an sf `crs` or sp `CRS` object.
+#' @aliases initSpatial<-
 #' @rdname initSpatial
-#' @name initSpatial<-
-#' @aliases initSpatial<-,SoilProfileCollection,ANY,ANY-method
 #' @export
 #' @seealso [prj()]
 #' @examples

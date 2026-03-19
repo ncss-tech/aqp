@@ -1,3 +1,9 @@
+setGeneric("mutate_profile", function(object,
+                                      ...,
+                                      col_names = NULL,
+                                      horizon_level = NULL)
+  standardGeneric("mutate_profile"))
+
 #' @title Transform a SPC (by profile) with a set of expressions
 #' @name mutate_profile
 #' @aliases mutate_profile,SoilProfileCollection-method
@@ -20,9 +26,6 @@
 #' 
 #' mutate_profile(sp4, clay_wtd_average = weighted.mean(clay, bottom - top))
 #' 
-# if (!isGeneric("mutate_profile"))
-setGeneric("mutate_profile", function(object, ..., col_names = NULL, horizon_level = NULL) standardGeneric("mutate_profile"))
-
 setMethod("mutate_profile", signature(object = "SoilProfileCollection"), 
           function(object, ..., col_names = NULL, horizon_level = NULL) {
 
