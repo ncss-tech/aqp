@@ -6,7 +6,10 @@
 ##       * allow various specifications for color
 ##
 ##       * unify with colorQuantiles()
-
+##
+##       * return closest-n colors to representative color
+##
+##       * add language in manual about representative color interpretation
 
 
 #' @title Quantitative Description of Color Variation
