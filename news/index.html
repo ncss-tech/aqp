@@ -44,10 +44,18 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.2" id="aqp-232-development">aqp 2.3.2 (development)<a class="anchor" aria-label="anchor" href="#aqp-232-development"></a></h2>
-<ul><li>new function <code><a href="../reference/formatMunsell.html">formatMunsell()</a></code> for safely formatting Munsell colors from hue, value, and chroma # <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> gains additional formatting fixes / failures to NA</li>
+<ul><li>new function <code><a href="../reference/formatMunsell.html">formatMunsell()</a></code> for safely formatting Munsell colors from hue, value, and chroma</li>
+<li>
+<code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> gains additional formatting fixes / failures to NA</li>
+<li>new option to enable function verbosity: <code>options(.aqp.verbose = TRUE)</code> default: <code>FALSE</code>
+</li>
+<li>improved efficiency, when there are duplicate in input:
+<ul><li><code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code></li>
+<li><code><a href="../reference/colorContrast.html">colorContrast()</a></code></li>
+</ul></li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-2026-03-19">aqp 2.3.1 (2026-03-19)<a class="anchor" aria-label="anchor" href="#aqp-231-2026-03-19"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-2026-03-19">aqp 2.3.1 (2026-03-19)<a class="anchor" aria-label="anchor" href="#aqp-231-2026-03-19"></a></h2><p class="text-muted">CRAN release: 2026-03-20</p>
 <ul><li>CRAN release</li>
 <li>new example data <code>Ohz.colors</code>, useful for estimating organic soil material color</li>
 <li>new function <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> for fixing encoding of neutral colors</li>

@@ -4,11 +4,18 @@
 
 - new function
   [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
-  for safely formatting Munsell colors from hue, value, and chroma \#
-  [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
+  for safely formatting Munsell colors from hue, value, and chroma
+- [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
   gains additional formatting fixes / failures to NA
+- new option to enable function verbosity:
+  `options(.aqp.verbose = TRUE)` default: `FALSE`
+- improved efficiency, when there are duplicate in input:
+  - [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
+  - [`colorContrast()`](https://ncss-tech.github.io/aqp/reference/colorContrast.md)
 
 ## aqp 2.3.1 (2026-03-19)
+
+CRAN release: 2026-03-20
 
 - CRAN release
 - new example data `Ohz.colors`, useful for estimating organic soil
