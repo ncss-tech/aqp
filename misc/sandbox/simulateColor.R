@@ -36,7 +36,7 @@ table(.hvc$hue)
 
 # compare color variation before / after
 # good, very close
-colorVariation(sprintf("%s %s/%s", .hvc$hue, .hvc$value, .hvc$chroma), method = 'centroid')
+colorVariation(formatMunsell(.hvc$hue, .hvc$value, .hvc$chroma), method = 'centroid')
 
 colorVariation(m[[1]], method = 'centroid')
 

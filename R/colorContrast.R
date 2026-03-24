@@ -86,6 +86,8 @@ colorContrast <- function(m1, m2 = NULL) {
     m1 <- .combinations[, 1]
     m2 <- .combinations[, 2]
     
+    .cancache <- FALSE
+    
   } else {
     # must be more than 0 entries
     if(length(m1) < 1 | length(m2) < 1) {
@@ -100,7 +102,30 @@ colorContrast <- function(m1, m2 = NULL) {
     # in case colors are encoded as factors
     m1 <- as.character(m1)
     m2 <- as.character(m2)
+    
+    if(length(m1) > 10) {
+      .cancache <- TRUE  
+    } else {
+      .cancache <- FALSE
+    }
   }
+  
+  # TODO: cache input, work on unique combinations
+  #       --> only useful when m1 and m2 are vectors of same length and > 10 obs
+  # if(.cancache) {
+  #   
+  #   .cache <- data.frame(hue, value, chroma)
+  #   .cache$id <- sapply(1:nrow(.cache), function(i) {
+  #     # hash should only include values
+  #     digest::digest(
+  #       unlist(.cache[i, 1:3], use.names = FALSE), algo = 'xxhash32'
+  #     )
+  #   })
+  #   
+  #   # vector of original IDs
+  #   .in <- .cache$id
+  # 
+  # }
   
   
   # split into data.frame of hue/value/chroma
@@ -157,7 +182,7 @@ colorContrast <- function(m1, m2 = NULL) {
   for(i in 1:nrow(m1.lab)){
     d[i] <- farver::compare_colour(m1.lab[i, ], m2.lab[i, ], from_space = 'lab', method = 'CIE2000', white_from = 'D65')
   }
-  dE00 <- unlist(d)
+  dE00 <- unlist(d, use.names = FALSE)
   
   # NCSS color contrast classes
   # Soil Survey Technical Note 2 [wayback machine URL](https://web.archive.org/web/20220704214918/https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/ref/?cid=nrcs142p2_053569)

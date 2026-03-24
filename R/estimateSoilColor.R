@@ -79,37 +79,54 @@ estimateSoilColor <- function(hue, value, chroma, method = c('procrustes', 'ols'
   sourceMoistureState <- match.arg(sourceMoistureState)
   method <- match.arg(method)
   
-  
+  # TODO: accept other color input formats
   # detect color spec
   # .spec <- .detectColorSpec(color)
   
+  # build a cache so that only unique rows are processed
+  # NA in any column is handled correctly
+  .cache <- data.frame(hue, value, chroma)
+  .cache$id <- sapply(1:nrow(.cache), function(i) {
+    # hash should only include values
+    digest::digest(
+      unlist(.cache[i, 1:3], use.names = FALSE), algo = 'xxhash32'
+    )
+  })
+  
+  # vector of original IDs
+  .in <- .cache$id
+  
+  # iterate over unique colors
+  .cache <- unique(.cache)
+  
+  # reduction in records
+  if(getOption('.aqp.verbose', default = FALSE)) {
+    .rr <- nrow(.cache) / length(.in)
+    message(sprintf("cache performance: %s row reduction rate", round(.rr, 2)))  
+  }
+  
   # convert input to CIELAB
-  .lab <- munsell2rgb(hue, value, chroma, returnLAB = TRUE)
-  
-  
-  ## TODO: add logic to enforce same hue, not at important with latest model
-  # # optionally keep track of original hues
-  # if(sameHue) {
-  #   o.hue <- hue
-  # }
-  
+  .lab <- munsell2rgb(.cache$hue, .cache$value, .cache$chroma, returnLAB = TRUE)
   
   # manuscript in progress
   # latest models: soil-color/moist-dry-model/
   
   if(method == 'procrustes') {
-    res <- .ESC_procrustes(.lab, .state = sourceMoistureState, .m = returnMunsell)
+    .res <- .ESC_procrustes(.lab, .state = sourceMoistureState, .m = returnMunsell)
   }
   
   if(method == 'ols') {
-    res <- .ESC_OLS(.lab, .state = sourceMoistureState, .m = returnMunsell)
+    .res <- .ESC_OLS(.lab, .state = sourceMoistureState, .m = returnMunsell)
   }
   
-  
+  # expand unique records to original input stream
+  .idx <- match(.in, .cache$id)
+  .res <- .res[.idx, ]
+  row.names(.res) <- NULL
   
   ## TODO: post-processing or additional diagnostics?
   
-  return(res)
+  return(.res)
 }
 
 
@@ -172,9 +189,9 @@ estimateSoilColor <- function(hue, value, chroma, method = c('procrustes', 'ols'
     .res <- as.data.frame(Y)
     names(.res) <- c('L', 'A', 'B')
   }
- 
+  
   return(.res)
-   
+  
 }
 
 

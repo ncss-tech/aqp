@@ -1,6 +1,11 @@
 # aqp 2.3.2 (development)
  * new function `formatMunsell()` for safely formatting Munsell colors from hue, value, and chroma
- # `launderMunsell()` gains additional formatting fixes / failures to NA
+ * `launderMunsell()` gains additional formatting fixes / failures to NA
+ * new option to enable function verbosity: `options(.aqp.verbose = TRUE)` default: `FALSE`
+ * improved efficiency, when there are duplicate in input:
+   - `estimateSoilColor()`
+   - `colorContrast()`
+ 
 
 
 # aqp 2.3.1 (2026-03-19)
