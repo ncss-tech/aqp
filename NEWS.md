@@ -2,11 +2,12 @@
  * new function `formatMunsell()` for safely formatting Munsell colors from hue, value, and chroma
  * `launderMunsell()` gains additional formatting fixes / failures to NA
  * new option to enable function verbosity: `options(.aqp.verbose = TRUE)` default: `FALSE`
- * improved efficiency, when there are duplicate in input:
+ # added N 1/ chip to Munsell LUT and estimated neutral chip relfectance spectra
+ * slight adjustments to Munsell neutral chips: 
+   - N 2-7     (darker)
+   - N 9-9.5/ (lighter)
+ * improved efficiency, when there are duplicates:
    - `estimateSoilColor()`
-   - `colorContrast()`
- 
-
 
 # aqp 2.3.1 (2026-03-19)
  * CRAN release

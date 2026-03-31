@@ -231,14 +231,14 @@ test_that("Munsell <--> sRGB and back again", {
   expect_equal(parseMunsell(x), m)
   
   # sRGB triplets
-  expect_equal(m.rgb$r, 0.3618738, tolerance=0.0001)
-  expect_equal(m.rgb$g, 0.2598939, tolerance=0.0001)
-  expect_equal(m.rgb$b, 0.1337521, tolerance=0.0001)
+  expect_equal(m.rgb$r, 0.3618738, tolerance = 0.0001)
+  expect_equal(m.rgb$g, 0.2598939, tolerance = 0.0001)
+  expect_equal(m.rgb$b, 0.1337521, tolerance = 0.0001)
   
   # neutral colors
-  expect_equal(x.neutral$r, 0.1996, tolerance=0.001)
-  expect_equal(x.neutral$g, 0.1996, tolerance=0.001)
-  expect_equal(x.neutral$b, 0.1996, tolerance=0.001)
+  expect_equal(x.neutral$r, 0.07558, tolerance = 0.001)
+  expect_equal(x.neutral$g, 0.07558, tolerance = 0.001)
+  expect_equal(x.neutral$b, 0.07558, tolerance = 0.001)
   
   # sRGB --> Munsell
   expect_equal(x.back$hue, '10YR')
@@ -303,26 +303,26 @@ test_that("neutral hues", {
   
   N2 <- parseMunsell('N 2/')
   N6 <- parseMunsell('N 6/')
-  expect_equal(N2, '#333333FF')
-  expect_equal(N6, '#8F8F8FFF')
+  expect_equal(N2, '#131313FF')
+  expect_equal(N6, '#777777FF')
   
   # alternative notation
   N2 <- parseMunsell('N 2')
   N6 <- parseMunsell('N 6/0')
-  expect_equal(N2, '#333333FF')
-  expect_equal(N6, '#8F8F8FFF')
+  expect_equal(N2, '#131313FF')
+  expect_equal(N6, '#777777FF')
   
   # missing, 0, or bogus chroma are all ignored
   N2 <- munsell2rgb('N', 2, NA)
   N4 <- munsell2rgb('N', 4, 0)
   N6 <- munsell2rgb('N', 6, 4)
-  expect_equal(N2, '#333333FF')
-  expect_equal(N4, '#5C5C5CFF')
-  expect_equal(N6, '#8F8F8FFF')
+  expect_equal(N2, '#131313FF')
+  expect_equal(N4, '#3B3B3BFF')
+  expect_equal(N6, '#777777FF')
   
   # 0 chroma with any hue -> neutral
   N <- munsell2rgb('10YR', 4, 0)
-  expect_equal(N, '#5C5C5CFF')
+  expect_equal(N, '#3B3B3BFF')
 })
 
 

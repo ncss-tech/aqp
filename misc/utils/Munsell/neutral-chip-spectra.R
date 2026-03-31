@@ -3,6 +3,12 @@
 ## D.E. Beaudette
 
 
+## Log:
+
+# 2026-03-31: manually adjusted N chips L* values and associated Munsell LUT
+
+
+
 # always use the latest version, even if not yet installed
 devtools::load_all()
 
@@ -92,16 +98,17 @@ obj2 <- function(r, v) {
 }
 
 # test: ok
-obj1(0.03)
+obj1(0.003)
 
+obj2(0.01, v = 4)
 obj2(0.03, v = 2)
 obj2(0.2, v = 5)
 obj2(0.85, v = 9.5)
 
 # log-sequence covering estimated range
-.minr <- 0.003
-.maxr <- 0.9
-x <- logseq(.minr, .maxr, n = 500)
+.minr <- 0.001
+.maxr <- 0.999
+x <- logseq(.minr, .maxr, n = 1000)
 
 # eval objective function over full range of reflectance, for any neutral chip
 y <- sapply(x, obj1)
@@ -119,10 +126,13 @@ plot(y ~ x, data = d, type = 'l', cex = 0.1, las = 1)
 
 
 ## search for reasonable spectra for neutral chips
+# numerical instabilities when r is very low
+# found reasonable spectra for darkest chips manually
 # slower, but search entire range
-# ~ 1 minute
+# ~ 1.5 minute
 system.time( {
-  n.2 <- findmins(obj2, v = 2, a = .minr, b = .maxr)
+  n.1 <- 0.0033
+  n.2 <- 0.0066
   n.25 <- findmins(obj2, v = 2.5, a = .minr, b = .maxr)
   n.3 <- findmins(obj2, v = 3, a = .minr, b = .maxr)
   n.4 <- findmins(obj2, v = 4, a = .minr, b = .maxr)
@@ -138,10 +148,15 @@ system.time( {
 
 # combine local minima
 # looks good
-(n <- c(n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9, n.95))
+(n <- c(n.1, n.2, n.25,  n.3, n.4, n.5, n.6, n.7, n.8, n.85, n.9, n.95))
+
+
+# there should be 11 entries
+# findmins() will result in NULL when stepsize is too large
+stopifnot(length(n) == 12)
 
 # prepare chip colors and labels 
-.chips <- c(2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5)
+.chips <- c(1, 2, 2.5, 3, 4, 5, 6, 7, 8, 8.5, 9, 9.5)
 .m <- sprintf("N %s/", .chips)
 .cols <- parseMunsell(.m)
 
@@ -151,11 +166,11 @@ layout(matrix(c(1, 2), nrow = 2), heights = c(3, 1))
 
 par(mar = c(4, 4, 1, 0.25))
 
-plot(y ~ x, data = d, type = 'l', cex = 0.1,  log = 'x', ylab = 'dE00 from requested neutral chip', xlab = 'constant reflectance value', axes = FALSE, xlim = c(0.025, 1))
+plot(y ~ x, data = d, type = 'l', cex = 0.1,  log = 'x', ylab = 'dE00 from requested neutral chip', xlab = 'constant reflectance value', axes = FALSE, xlim = c(0.001, 1))
 abline(v = n, col = 'royalblue', lty = 3)
 abline(h = 1.5, col = 'firebrick', lty = 2)
 axis(side = 2, las = 1)
-axis(side = 1, at = n, labels = round(n, 3), las = 2)
+axis(side = 1, at = n, labels = round(n, 4), las = 2, cex.axis = 0.75)
 text(x = n, y = 5, labels = .m, cex = 0.75, font = 2)
 
 

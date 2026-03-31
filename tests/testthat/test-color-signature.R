@@ -154,9 +154,9 @@ test_that("expected order from OSDs, depthSlices", {
     dd <- diana(d)
     
     # expected ordering
-    o <- c("AMADOR", "MOGLIA", "VLECK", "HANFORD", "PARDEE", "CANEYHEAD", 
-           "HAYNER", "ARGONAUT", "MUSICK", "CECIL", "PALAU", "REDDING", 
-           "SIERRA", "DRUMMER", "ZOOK", "PENTZ", "YOLO", "SYCAMORE", "WILLOWS", 
+    o <- c("AMADOR", "MOGLIA", "HANFORD", "VLECK", "CANEYHEAD", "HAYNER", 
+           "ARGONAUT", "MUSICK", "CECIL", "PALAU", "REDDING", "SIERRA", 
+           "DRUMMER", "ZOOK", "PENTZ", "YOLO", "SYCAMORE", "WILLOWS", "PARDEE", 
            "KLAMATH")
     
     

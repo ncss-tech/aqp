@@ -39,7 +39,7 @@
 #' # mixture
 #' validateMunsell(c('5G 4/4', 'N 2/', NA, 'NA', '100R 3/3'))
 #' 
-validateMunsell <- function(m, vRange = c(1, 12), cRange = c(0, 50)) {
+validateMunsell <- function(m, vRange = c(1, 10), cRange = c(0, 50)) {
   
   # short-circuits
   if(all(is.na(m))) {

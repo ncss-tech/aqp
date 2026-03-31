@@ -54,7 +54,7 @@ test_that("neutral chips", {
   )
   
   # expected dE00
-  expect_equal(m$sigma, 0.36, tolerance = 0.01)
+  expect_equal(m$sigma, 0.27, tolerance = 0.01)
   
 })
 

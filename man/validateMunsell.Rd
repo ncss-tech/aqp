@@ -4,7 +4,7 @@
 \alias{validateMunsell}
 \title{Validate Standard Munsell Notation}
 \usage{
-validateMunsell(m, vRange = c(1, 12), cRange = c(0, 50))
+validateMunsell(m, vRange = c(1, 10), cRange = c(0, 50))
 }
 \arguments{
 \item{m}{character vector of colors in Munsell notation}

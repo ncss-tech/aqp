@@ -470,7 +470,21 @@ m.final <- m.final[, c('H', 'V', 'C', 'R', 'G', 'B')]
 ## NOTES:
 # 
 # * 2025-12-09: measured and verified CIELAB coordinates, D65 illuminant, 2 deg. observer, 2.5 and 8.5 chips included
-n <- read.csv(file = 'neutral-chips.csv')
+# * noticed that these seem "too light" at the low end, and "too dark" at the high end
+# n <- read.csv(file = 'neutral-chips.csv')
+
+# * 2026-03-31: custom N chips 
+#               based on measurements above and manual adjustments (Munsell Color Atlas)
+#                - darker <= N 4/
+#                - slightly darker N 5/ - N 8/
+#                - lighter at N 9.5/
+n <- data.frame(
+  V = c(1, 2, 2.5, 03, 04, 05, 06, 07, 08, 8.5, 09, 9.5),
+  L = c(3, 6, 009, 15, 25, 35, 50, 60, 70, 85, 090, 98)
+)
+
+plot(V ~ L,  data = n, type = 'b', las = 1, xlim = c(0, 100), ylim = c(1, 10))
+
 
 # zero-out A,B coordinates
 n$A <- 0
@@ -488,7 +502,7 @@ n <- n[order(n$V), ]
 
 # convert LAB -> sRGB
 # required so we can combine with other chips, only referenced to sRGB at this point
-.rgb <- convertColor(n[, c('L', 'A', 'B')], from = 'Lab', to = 'sRGB')
+.rgb <- convertColor(n[, c('L', 'A', 'B')], from = 'Lab', to = 'sRGB', from.ref.white = 'D65', to.ref.white = 'D65')
 .rgb <- data.frame(.rgb)
 names(.rgb) <- c('R', 'G', 'B')
 
