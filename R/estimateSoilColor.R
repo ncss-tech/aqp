@@ -101,8 +101,9 @@ estimateSoilColor <- function(hue, value, chroma, method = c('procrustes', 'ols'
   
   # reduction in records
   if(getOption('.aqp.verbose', default = FALSE)) {
-    .rr <- nrow(.cache) / length(.in)
-    message(sprintf("cache performance: %s row reduction rate", round(.rr, 2)))  
+    .rr <- 1 - (nrow(.cache) / length(.in))
+    .rr <- round(100 * .rr)
+    message(sprintf("cache performance: %s%% row reduction", .rr))
   }
   
   # convert input to CIELAB
