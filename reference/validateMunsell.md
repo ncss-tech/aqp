@@ -14,7 +14,7 @@ following requirements:
 ## Usage
 
 ``` r
-validateMunsell(m, vRange = c(1, 12), cRange = c(0, 50))
+validateMunsell(m, vRange = c(1, 10), cRange = c(0, 50))
 ```
 
 ## Arguments

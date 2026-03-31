@@ -127,7 +127,7 @@ estimateSoilColor(hue = '2.5YR', value = 3, chroma = 4, sourceMoistureState = 'm
 
 estimateSoilColor(hue = 'N', value = 2, chroma = 0, sourceMoistureState = 'moist')
 #>   hue value chroma    sigma
-#> 1   N     4      0 3.034095
+#> 1  5Y   2.5      1 1.521846
 
 estimateSoilColor(hue = '7.5YR', value = 2, chroma = 2, sourceMoistureState = 'moist')
 #>     hue value chroma    sigma

@@ -8,10 +8,13 @@
 - [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
   gains additional formatting fixes / failures to NA
 - new option to enable function verbosity:
-  `options(.aqp.verbose = TRUE)` default: `FALSE`
-- improved efficiency, when there are duplicate in input:
+  `options(.aqp.verbose = TRUE)` default: `FALSE` \# added N 1/ chip to
+  Munsell LUT and estimated neutral chip relfectance spectra
+- slight adjustments to Munsell neutral chips:
+  - N 2-7 (darker)
+  - N 9-9.5/ (lighter)
+- improved efficiency, when there are duplicates:
   - [`estimateSoilColor()`](https://ncss-tech.github.io/aqp/reference/estimateSoilColor.md)
-  - [`colorContrast()`](https://ncss-tech.github.io/aqp/reference/colorContrast.md)
 
 ## aqp 2.3.1 (2026-03-19)
 

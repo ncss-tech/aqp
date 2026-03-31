@@ -119,12 +119,12 @@ labels = c('helioblue-reddish', 'light cadmium yellow')
 ## Note: neutral hues aren't defined in TN2
 # approximation / extension of the concept
 colorContrast(m1 = 'N 3/', m2 = 'N 6/')
-#>     m1   m2 dH dV dC     dE00       cc
-#> 1 N 3/ N 6/  0  3  0 27.24374 Distinct
+#>     m1   m2 dH dV dC   dE00       cc
+#> 1 N 3/ N 6/  0  3  0 27.904 Distinct
 
 colorContrast(m1 = '10YR 3/3', m2 = 'N 3/')
 #>         m1   m2 dH dV dC     dE00        cc
-#> 1 10YR 3/3 N 3/  1  0  3 13.63413 Prominent
+#> 1 10YR 3/3 N 3/  1  0  3 17.42773 Prominent
 
 # pair-wise comparisons
 m1 <- c('10YR 6/3', '7.5YR 3/3', '10YR 2/2', 'N 3/')
@@ -132,8 +132,8 @@ colorContrast(m1)
 #>          m1        m2 dH dV dC      dE00        cc
 #> 1  10YR 6/3 7.5YR 3/3  1  3  0 30.517796 Prominent
 #> 2  10YR 6/3  10YR 2/2  0  4  1 37.558326 Prominent
-#> 3  10YR 6/3      N 3/  1  3  3 32.761012 Prominent
+#> 3  10YR 6/3      N 3/  1  3  3 42.350588 Prominent
 #> 4 7.5YR 3/3  10YR 2/2  1  1  1  9.252527     Faint
-#> 5 7.5YR 3/3      N 3/  1  0  3 14.016566 Prominent
-#> 6  10YR 2/2      N 3/  1  1  2 12.631128     Faint
+#> 5 7.5YR 3/3      N 3/  1  0  3 17.726173 Prominent
+#> 6  10YR 2/2      N 3/  1  1  2 10.131170     Faint
 ```

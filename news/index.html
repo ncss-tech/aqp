@@ -47,11 +47,13 @@
 <ul><li>new function <code><a href="../reference/formatMunsell.html">formatMunsell()</a></code> for safely formatting Munsell colors from hue, value, and chroma</li>
 <li>
 <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> gains additional formatting fixes / failures to NA</li>
-<li>new option to enable function verbosity: <code>options(.aqp.verbose = TRUE)</code> default: <code>FALSE</code>
-</li>
-<li>improved efficiency, when there are duplicate in input:
+<li>new option to enable function verbosity: <code>options(.aqp.verbose = TRUE)</code> default: <code>FALSE</code> # added N 1/ chip to Munsell LUT and estimated neutral chip relfectance spectra</li>
+<li>slight adjustments to Munsell neutral chips:
+<ul><li>N 2-7 (darker)</li>
+<li>N 9-9.5/ (lighter)</li>
+</ul></li>
+<li>improved efficiency, when there are duplicates:
 <ul><li><code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code></li>
-<li><code><a href="../reference/colorContrast.html">colorContrast()</a></code></li>
 </ul></li>
 </ul></div>
     <div class="section level2">

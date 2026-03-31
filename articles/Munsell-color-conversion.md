@@ -108,7 +108,7 @@ col2Munsell('#476189FF')
 parseMunsell('N 5/')
 ```
 
-    #> [1] "#767676FF"
+    #> [1] "#525252FF"
 
 ``` r
 # non-standard notation
