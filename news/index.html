@@ -47,14 +47,13 @@
 <ul><li>new function <code><a href="../reference/formatMunsell.html">formatMunsell()</a></code> for safely formatting Munsell colors from hue, value, and chroma</li>
 <li>
 <code><a href="../reference/launderMunsell.html">launderMunsell()</a></code> gains additional formatting fixes / failures to NA</li>
-<li>new option to enable function verbosity: <code>options(.aqp.verbose = TRUE)</code> default: <code>FALSE</code> # added N 1/ chip to Munsell LUT and estimated neutral chip relfectance spectra</li>
+<li>new option to enable function verbosity: <code>options(.aqp.verbose = TRUE)</code> default: <code>FALSE</code> # added N 1/ chip to Munsell LUT and estimated neutral chip reflectance spectra</li>
 <li>slight adjustments to Munsell neutral chips:
 <ul><li>N 2-7 (darker)</li>
 <li>N 9-9.5/ (lighter)</li>
 </ul></li>
-<li>improved efficiency, when there are duplicates:
-<ul><li><code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code></li>
-</ul></li>
+<li>
+<code><a href="../reference/estimateSoilColor.html">estimateSoilColor()</a></code> much faster when given duplicate colors to estimate</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.1" id="aqp-231-2026-03-19">aqp 2.3.1 (2026-03-19)<a class="anchor" aria-label="anchor" href="#aqp-231-2026-03-19"></a></h2><p class="text-muted">CRAN release: 2026-03-20</p>
