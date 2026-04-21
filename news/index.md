@@ -76,7 +76,7 @@ CRAN release: 2026-03-20
 - major changes to
   [`addBracket()`](https://ncss-tech.github.io/aqp/reference/addBracket.md):
   - when not specified, horizon depth names taken from last call to
-    \`plotSPC()
+    [`plotSPC()`](https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.md)
   - new arguments: `labcol` (label column), `agg` (aggregate multiple
     brackets / profile), `hzDepths` (override bracket top and bottom
     depth column names)
