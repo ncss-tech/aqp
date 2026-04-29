@@ -1,6 +1,6 @@
 # Changelog
 
-## aqp 2.3.2 (development)
+## aqp 2.3.2 (2026-04-29)
 
 - new function
   [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
@@ -8,8 +8,9 @@
 - [`launderMunsell()`](https://ncss-tech.github.io/aqp/reference/launderMunsell.md)
   gains additional formatting fixes / failures to NA
 - new option to enable function verbosity:
-  `options(.aqp.verbose = TRUE)` default: `FALSE` \# added N 1/ chip to
-  Munsell LUT and estimated neutral chip reflectance spectra
+  `options(.aqp.verbose = TRUE)` default: `FALSE`
+- added N 1/ chip to Munsell LUT and estimated neutral chip reflectance
+  spectra
 - slight adjustments to Munsell neutral chips:
   - N 2-7 (darker)
   - N 9-9.5/ (lighter)
