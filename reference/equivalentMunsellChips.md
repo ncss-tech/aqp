@@ -75,6 +75,7 @@ Forensic Sci, 65: 438-449. https://doi.org/10.1111/1556-4029.14193
 ## Examples
 
 ``` r
+
 # 7.5YR 4/4 (the one and only)
 
 equivalentMunsellChips("7.5YR", 4, 4)

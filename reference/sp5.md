@@ -26,6 +26,7 @@ attributes. Geoderma. 110: 241–263.
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 library(scales)
 data(sp5)

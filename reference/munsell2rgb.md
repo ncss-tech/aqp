@@ -100,6 +100,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # neutral hues (N) can be defined with chroma of 0 or NA 
 g <- expand.grid(hue = 'N', value = 2:8, chroma = 0, stringsAsFactors = FALSE)
 (m <- munsell2rgb(g$hue, g$value, g$chroma))

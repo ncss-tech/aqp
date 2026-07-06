@@ -158,6 +158,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # Salt Severity
 test <- expand.grid(
   EC  = sort(sapply(c(0, 0.75, 2, 4, 8, 15, 30), function(x) x + c(0, -0.05, 0.05))),

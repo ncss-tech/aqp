@@ -25,6 +25,7 @@ doi:[doi:10.2136/sssaj2002.3150](https://doi.org/10.2136/sssaj2002.3150)
 ## Examples
 
 ``` r
+
 # keep examples from using more than 2 cores
 data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 

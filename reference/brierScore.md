@@ -44,6 +44,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # columns 'a', 'b', 'c' contain predicted probabilities
 # column 'actual' contains observed class label
 

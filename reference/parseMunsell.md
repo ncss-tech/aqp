@@ -49,6 +49,7 @@ P. Roudier and D.E. Beaudette
 ## Examples
 
 ``` r
+
 # just sRGB
 parseMunsell("10YR 3/5", return_triplets = TRUE)
 #>           r         g          b

@@ -54,6 +54,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # load some example data
 data(sp1, package='aqp')
 

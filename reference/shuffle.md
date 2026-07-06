@@ -44,6 +44,7 @@ shuffle(x, mode = c("data", "horizon"), replace = FALSE, size = NULL)
 ## Examples
 
 ``` r
+
 data('osd', package = 'aqp')
 o <- osd
 

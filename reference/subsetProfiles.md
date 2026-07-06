@@ -44,6 +44,7 @@ returned. See examples for usage.
 ## Examples
 
 ``` r
+
 # more interesting sample data
 data(sp2)
 depths(sp2) <- id ~ top + bottom

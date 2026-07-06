@@ -70,6 +70,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # init SPC
 data(sp1)
 depths(sp1) <- id ~ top + bottom

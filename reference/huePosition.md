@@ -70,6 +70,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # get hue ordering for setting levels of a factor
 huePosition(returnHues = TRUE)
 #>  [1] "5R"    "7.5R"  "10R"   "2.5YR" "5YR"   "7.5YR" "10YR"  "2.5Y"  "5Y"   

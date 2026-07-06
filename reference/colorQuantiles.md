@@ -46,6 +46,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 # example data, see manual page for details
 data(sp5)

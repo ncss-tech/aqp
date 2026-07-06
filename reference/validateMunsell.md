@@ -46,6 +46,7 @@ logical vector,
 ## Examples
 
 ``` r
+
 # valid
 validateMunsell('5Y 6/8')
 #> [1] TRUE

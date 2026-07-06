@@ -59,6 +59,7 @@ or redder.
 ## Examples
 
 ``` r
+
 if (FALSE) { # \dontrun{
 
 library(aqp)

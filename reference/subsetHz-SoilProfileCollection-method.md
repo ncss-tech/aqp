@@ -43,6 +43,7 @@ the horizon data frame.
 ## Examples
 
 ``` r
+
 data(sp3)
 
 depths(sp3) <- id ~ top + bottom

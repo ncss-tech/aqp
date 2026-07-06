@@ -57,6 +57,7 @@ either character vector, or when `verbose = TRUE` a `data.frame`
 ## Examples
 
 ``` r
+
 # => 'N 2/0'
 launderMunsell('10YR 2/0')
 #> [1] "N 2/0"

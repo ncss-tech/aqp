@@ -90,6 +90,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # example data
 data(sp2)
 

@@ -65,6 +65,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
  # example data
 x <- c(
   'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',

@@ -37,6 +37,7 @@ Environmental Gradient on Andesitic Lahar. Soil Sci. Soc. Am. J., 71:
 ## Examples
 
 ``` r
+
 data(sierraTransect)
 
 # tighter margins

@@ -113,6 +113,7 @@ D.E. Beaudette and K.C. Thompson
 ## Examples
 
 ``` r
+
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 # easy

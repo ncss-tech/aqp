@@ -72,6 +72,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # 10 random profiles
 set.seed(10101)
 s <- lapply(as.character(1:10), random_profile)

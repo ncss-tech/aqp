@@ -112,6 +112,7 @@ Pierre Roudier, Dylan E. Beaudette, Andrew G. Brown
 ## Examples
 
 ``` r
+
 ## structure of default, empty SoilProfileCollection
 str(SoilProfileCollection())
 #> Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots

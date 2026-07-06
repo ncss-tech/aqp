@@ -100,6 +100,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # example 1
 data(jacobs2000)
 spc <- jacobs2000

@@ -109,6 +109,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 library(lattice)
 data(sp1)
 

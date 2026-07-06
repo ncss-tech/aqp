@@ -64,6 +64,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 h <- data.frame(
   id = 1,
   top    = c(0,  25, 44, 46, 50),

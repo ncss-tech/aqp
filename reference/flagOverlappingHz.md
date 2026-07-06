@@ -36,6 +36,7 @@ D.E. Beaudette, A.G. Brown
 ## Examples
 
 ``` r
+
 # two overlapping horizons
 z <- data.frame(
   id = 'SPC',

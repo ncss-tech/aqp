@@ -58,6 +58,7 @@ methods.
 ## Examples
 
 ``` r
+
 # some brownish colors with a wild outlier
 m <- c('10YR 3/3', '10YR 4/4', '10YR 4/4', '5GY 6/8')
 

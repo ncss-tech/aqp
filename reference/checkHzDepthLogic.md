@@ -80,6 +80,7 @@ D.E. Beaudette, A.G. Brown, S.M. Roecker
 ## Examples
 
 ``` r
+
 ## sample data
 
 data(sp3)

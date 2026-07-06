@@ -32,6 +32,7 @@ horizons(object) <- value
 ## Examples
 
 ``` r
+
 # load test data
 data(sp2)
 

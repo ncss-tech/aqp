@@ -50,6 +50,7 @@ functions and decisions made during adjustment of `x`.
 ## Examples
 
 ``` r
+
 s <- c(1, 2, 2.3, 4, 5, 5, 7)
 
 # simulated annealing, solution is non-deterministic

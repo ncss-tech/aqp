@@ -44,6 +44,7 @@ capacities corrected for rock fragments and salts
 ## Examples
 
 ``` r
+
 # medium organic matter, loam texture 
 base.awc <- 0.18 # estimateAWC(texcl = "l", omcl = 2, na.rm = TRUE)
 

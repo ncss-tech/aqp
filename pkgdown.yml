@@ -1,4 +1,4 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
@@ -9,7 +9,7 @@ articles:
   Munsell-color-conversion: Munsell-color-conversion.html
   NCSP: NCSP.html
   new-in-aqp-2: new-in-aqp-2.html
-last_built: 2026-04-29T20:11Z
+last_built: 2026-07-06T22:17Z
 urls:
   reference: https://ncss-tech.github.io/aqp/reference
   article: https://ncss-tech.github.io/aqp/articles

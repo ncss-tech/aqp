@@ -68,6 +68,7 @@ D.E. Beaudette and S.W. Salley
 ## Examples
 
 ``` r
+
 # create an example profile
 s <- quickSPC('p1:AA|Bt1Bt1Bt1|Bt2Bt2B|Bt3|Cr|RRRRR')
 

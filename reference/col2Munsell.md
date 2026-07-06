@@ -54,6 +54,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # vector of named R colors
 col2Munsell(c('red', 'green', 'blue'))
 #>    hue value chroma        sigma

@@ -74,6 +74,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group

@@ -39,6 +39,7 @@ types.
 ## Examples
 
 ``` r
+
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 

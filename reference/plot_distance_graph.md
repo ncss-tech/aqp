@@ -43,6 +43,7 @@ Dylan E Beaudette
 ## Examples
 
 ``` r
+
 data(sp2)
 depths(sp2) <- id ~ top + bottom
 d <- NCSP(

@@ -51,6 +51,7 @@ D.E. Beaudette and J.M. Skovlin
 ## Examples
 
 ``` r
+
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 

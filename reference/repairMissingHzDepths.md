@@ -46,6 +46,7 @@ resulting value exceeds `max.depth`, the `max.depth` value is returned
 ## Examples
 
 ``` r
+
 h <- data.frame(
 id = c(1, 1, 1, 2, 2, 2, 2, 3, 3),
 top = c(0:2, 0:3, 0:1) * 10,

@@ -54,6 +54,7 @@ D.E. Beaudette and A.G. Brown
 ## Examples
 
 ``` r
+
 data(sp2)
 depths(sp2) <- id ~ top + bottom
 

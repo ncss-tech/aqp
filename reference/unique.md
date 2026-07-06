@@ -33,6 +33,7 @@ integers
 ## Examples
 
 ``` r
+
   # an example soil profile
   x <- data.frame(
     id = 'A',

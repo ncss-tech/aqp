@@ -103,6 +103,7 @@ D.E. Beaudette, J. Nemecek, K. Godsey
 ## Examples
 
 ``` r
+
 # \donttest{
 
 if(

@@ -77,6 +77,7 @@ Andrew G. Brown
 ## Examples
 
 ``` r
+
 # a has the required attr pattern, but none of the optional
 a <- data.frame(id = 1, top = c(0,10), bottom=c(10,40),
                 clay=c(18,19))

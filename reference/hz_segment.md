@@ -77,6 +77,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # example data
 data(sp1)
 

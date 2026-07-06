@@ -81,6 +81,7 @@ Geoderma. 165:84-94.
 ## Examples
 
 ``` r
+
   # setup environment
   library(aqp)
   data(sp6)

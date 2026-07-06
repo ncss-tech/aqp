@@ -91,6 +91,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # sample data
 data(sp1)
 # convert colors from Munsell to hex-encoded RGB

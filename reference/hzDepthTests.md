@@ -40,6 +40,7 @@ Andrew G. Brown & Dylan E. Beaudette
 ## Examples
 
 ``` r
+
 # no logic errors
 res <- hzDepthTests(top = c(0,10,20,30), bottom = c(10,20,30,50))
 names(res)[res]

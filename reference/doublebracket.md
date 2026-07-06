@@ -30,6 +30,7 @@ x[[i, j]]
 ## Examples
 
 ``` r
+
 data(sp2)
 depths(sp2) <- id ~ top + bottom
 site(sp2) <- ~ surface

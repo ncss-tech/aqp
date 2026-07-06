@@ -94,6 +94,7 @@ D.E. Beaudette and Ben Marshall
 ## Examples
 
 ``` r
+
 ##
 ## Simple Example
 ##

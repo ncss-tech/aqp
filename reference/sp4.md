@@ -75,6 +75,7 @@ Soc. Am. J. 73: 2087-2095.
 ## Examples
 
 ``` r
+
 # load sample data set, a simple data.frame object with horizon-level data from 10 profiles
 library(aqp)
 data(sp4)

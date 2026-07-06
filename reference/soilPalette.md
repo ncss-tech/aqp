@@ -65,6 +65,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # maybe useful for teaching about soil color
 
 par(mfrow=c(2,1), mar=c(1,1,1,1))

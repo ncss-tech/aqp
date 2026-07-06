@@ -87,6 +87,7 @@ Foundation of Soil Science.
 ## Examples
 
 ``` r
+
 ## this example investigates the concept of a "median profile"
 
 # required packages

@@ -117,6 +117,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 data(sp1)
 
 # check original distribution of hz designations

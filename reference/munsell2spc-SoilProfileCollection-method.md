@@ -64,6 +64,7 @@ A SoilProfileCollection or `data.frame`-like object
 ## Examples
 
 ``` r
+
 data(sp3)
 depths(sp3) <- id ~ top + bottom
 

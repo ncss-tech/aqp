@@ -32,6 +32,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # class codes
 lu <- lookup_taxpartsize()
 

@@ -34,6 +34,7 @@ soil series. These data are provided in the example data set “osd” as
 part of the {aqp} package.
 
 ``` r
+
 library(aqp)
 library(cluster)
 
@@ -48,6 +49,7 @@ using the
 function.
 
 ``` r
+
 # assume a standard deviation of 10cm for horizon boundary depths
 # far too large for most horizons, but helps to make a point
 x$hzd <- 10
@@ -70,6 +72,7 @@ for the remainder of the R session. Simulated profiles are labeled with
 a numeric suffix (e.g. “-01”)
 
 ``` r
+
 # set plotSPC argument defaults
 options(.aqp.plotSPC.args = list(name.style = 'center-center', depth.axis = list(style = 'compact', line = -2.5), width = 0.33, cex.names = 0.75, cex.id = 0.66, max.depth = 185))
 
@@ -85,6 +88,7 @@ Quickly review the grouping structure with
 [`groupedProfilePlot()`](https://ncss-tech.github.io/aqp/reference/groupedProfilePlot.md).
 
 ``` r
+
 # encode as a factor for distance calculation
 z$subgroup <- factor(z$subgroup)
 
@@ -103,6 +107,7 @@ thematic soil profile sketch (horizon color defined by a property or
 condition) is a convenient way to graphically check GHL assignment.
 
 ``` r
+
 # assign GHL
 z$genhz <- generalize.hz(
   z$hzname, new = c('A', 'E', 'Bt', 'C'), 
@@ -125,6 +130,7 @@ for additional arguments that can be used to further customize the
 comparison.
 
 ``` r
+
 # horizon-level distance matrix weight
 w1 <- 1
 # perform NCSP using only the GHL (ordered factors) to a depth of 185cm
@@ -150,6 +156,7 @@ soil profile sketches. Note that the site-level distances have a very
 strong effect on the overall clustering structure.
 
 ``` r
+
 library(ape)
 
 # divisive hierarchical clustering

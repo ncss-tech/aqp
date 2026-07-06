@@ -66,6 +66,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 d <- data.frame(
 hue = c('10YR', NA, 'N', 'N', 'N', '5G', '5Z'),
 value = c(4, 3, 2, 4, 3, NA, 4),

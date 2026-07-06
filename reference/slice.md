@@ -97,6 +97,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 library(aqp)
 
 # simulate some data, IDs are 1:20

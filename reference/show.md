@@ -37,6 +37,7 @@ as.character(x, ...)
 ## Examples
 
 ``` r
+
 # load a SoilProfileCollection
 data(sp5)
 

@@ -49,6 +49,7 @@ Andrew G. Brown, Dylan Beaudette
 ## Examples
 
 ``` r
+
 data(sp1)
 
 # create a SoilProfileCollection from horizon data

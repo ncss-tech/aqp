@@ -42,6 +42,7 @@ a `SoilProfileCollection` object
 ## Examples
 
 ``` r
+
 # generate a SoilProfileCollection object with 10 profiles
 # using 0-padded, integer IDs for intuitive sorting
 spc <- rp(10, method = 'LPP')

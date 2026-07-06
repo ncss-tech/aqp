@@ -106,6 +106,7 @@ transformation and thickness calculation:
 ## Examples
 
 ``` r
+
 # example using hzdatum argument
 data(sp4)
 depths(sp4) <- id ~ top + bottom

@@ -35,6 +35,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # sample data
 data('sp4')
 

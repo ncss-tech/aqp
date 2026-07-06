@@ -1,12 +1,14 @@
 # Missing Data
 
 ``` r
+
 library(aqp)
 ```
 
     ## This is aqp 2.3.2
 
 ``` r
+
 # tighter margins
 op <- par(mar = c(2, 2.5, 3, 2))
 
@@ -21,6 +23,7 @@ plotSPC(jacobs2000, name.style = 'center-center',
 ![](missing-data_files/figure-html/unnamed-chunk-1-1.png)
 
 ``` r
+
 # missing some data
 plotSPC(jacobs2000, name.style = 'center-center', 
         cex.names = 0.8, color = 'concentration_color')
@@ -29,6 +32,7 @@ plotSPC(jacobs2000, name.style = 'center-center',
 ![](missing-data_files/figure-html/unnamed-chunk-1-2.png)
 
 ``` r
+
 # very nearly complete
 plotSPC(jacobs2000, name.style = 'center-center', 
         cex.names = 0.8, color = 'matrix_color')
@@ -37,6 +41,7 @@ plotSPC(jacobs2000, name.style = 'center-center',
 ![](missing-data_files/figure-html/unnamed-chunk-1-3.png)
 
 ``` r
+
 # variables to consider
 v <- c('time_saturated', 'concentration_color', 'matrix_color')
 
@@ -76,6 +81,7 @@ plotSPC(
 ![](missing-data_files/figure-html/unnamed-chunk-1-4.png)
 
 ``` r
+
 # rank on profile completeness
 new.order <- order(jacobs2000$data.complete)
 
@@ -109,6 +115,7 @@ mtext('Absolute\nCompleteness (cm)', side = 1, at = 0.25, line = 2.75, cex = 0.8
 ![](missing-data_files/figure-html/unnamed-chunk-1-5.png)
 
 ``` r
+
 library(soilDB)
 
 x <- fetchKSSL(series = 'pierre')

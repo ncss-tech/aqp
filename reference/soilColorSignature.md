@@ -167,6 +167,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # trivial example, not very interesting
 data(sp1)
 depths(sp1) <- id ~ top + bottom

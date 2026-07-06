@@ -30,6 +30,7 @@ Andrew G. Brown
 ## Examples
 
 ``` r
+
 data(sp5)
 
 # EXAMPLE #1 -- resolving overlap

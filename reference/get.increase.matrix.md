@@ -86,6 +86,7 @@ Andrew Gene Brown
 ## Examples
 
 ``` r
+
 data(sp1, package = 'aqp')
 depths(sp1) <- id ~ top + bottom
 site(sp1) <- ~ group

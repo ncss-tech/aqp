@@ -30,6 +30,7 @@ metadata(object) <- value
 ## Examples
 
 ``` r
+
 data(sp5)
 
 # replace default metadata with itself

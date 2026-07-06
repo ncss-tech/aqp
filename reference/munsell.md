@@ -54,5 +54,6 @@ D65 standard illuminant.
 ## Examples
 
 ``` r
+
 data(munsell)
 ```

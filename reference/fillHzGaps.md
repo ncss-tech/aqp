@@ -53,6 +53,7 @@ A.G. Brown and D.E. Beaudette
 ## Examples
 
 ``` r
+
 data(sp4)
 depths(sp4) <- id ~ top + bottom
 

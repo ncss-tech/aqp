@@ -30,6 +30,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # test with shades of grey
 s <- seq(0, 1, by = 0.05)
 cols <- grey(s)

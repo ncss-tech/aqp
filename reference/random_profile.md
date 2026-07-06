@@ -116,6 +116,7 @@ Dylan E. Beaudette
 
 ``` r
 
+
 # generate 10 random profiles, result is a list of SoilProfileCollection objects
 d <- lapply(1:10, random_profile, SPC=TRUE)
 

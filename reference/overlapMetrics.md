@@ -36,6 +36,7 @@ unique index to affected (overlapping) elements in `x`
 ## Examples
 
 ``` r
+
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 findOverlap(x, thresh = 0.5)

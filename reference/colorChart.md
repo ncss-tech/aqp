@@ -83,6 +83,7 @@ a `trellis` object
 ## Examples
 
 ``` r
+
 library(lattice)
 
 # two hue pages

@@ -225,6 +225,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 ##
 ## basic examples
 ##

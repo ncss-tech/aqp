@@ -38,6 +38,7 @@ a `data.frame` when `convertColors=TRUE`, otherwise character vector
 ## Examples
 
 ``` r
+
 # convert a non-standard color to closest "chip" in `munsell` look-up table
 getClosestMunsellChip('7.9YR 2.7/2.0', convertColors = FALSE)
 #> [1] "7.5YR 2.5/2"

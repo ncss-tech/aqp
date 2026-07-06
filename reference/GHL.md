@@ -37,6 +37,7 @@ metadata slot of the SoilProfileCollection.
 ## Examples
 
 ``` r
+
 data(sp1)
 
 # promote to SPC

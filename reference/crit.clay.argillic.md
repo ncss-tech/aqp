@@ -55,6 +55,7 @@ Andrew Gene Brown
 ## Examples
 
 ``` r
+
 # crit.clay.argillic uses different equations for clay content
 # less than 15 %, between 15 and 40 %, and >40 %
 

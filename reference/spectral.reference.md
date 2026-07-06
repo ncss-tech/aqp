@@ -28,6 +28,7 @@ https://law.resource.org/pub/us/cfr/ibr/003/cie.15.2004.tables.xls
 ## Examples
 
 ``` r
+
 data("spectral.reference")
 
 matplot(

@@ -55,6 +55,7 @@ coordinates(object) <- value
 ## Examples
 
 ``` r
+
 data(sp5)
 
 # coordinates are stored in x and y column of site

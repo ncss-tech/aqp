@@ -26,6 +26,7 @@ depth_units(object) <- value
 ## Examples
 
 ``` r
+
 data(sp5)
 
 ## get depth units

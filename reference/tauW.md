@@ -83,6 +83,7 @@ D.G. Rossiter
 ## Examples
 
 ``` r
+
 # example confusion matrix
 # rows: allocation (user's counts)
 # columns: reference (producer's counts)

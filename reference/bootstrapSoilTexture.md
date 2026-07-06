@@ -85,6 +85,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # \donttest{
 if(
 requireNamespace("compositions") &

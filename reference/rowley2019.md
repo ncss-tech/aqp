@@ -231,6 +231,7 @@ pedogenic trajectories of subalpine soils), Switzerland, Geoderma, 2019,
 ## Examples
 
 ``` r
+
 library(lattice)
 
 # load data

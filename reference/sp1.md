@@ -85,6 +85,7 @@ A data frame with 60 observations on the following 21 variables.
 ## Examples
 
 ``` r
+
 data(sp1)
 # convert colors from Munsell to hex-encoded RGB
 sp1$soil_color <- with(sp1, munsell2rgb(hue, value, chroma))

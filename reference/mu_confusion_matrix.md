@@ -88,6 +88,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 # example data
 mu <- rbind(
     data.frame(mapunit = "A", cophase = c("Alpha", "Beta"), comppct = c(90, 10), muacres = 100),

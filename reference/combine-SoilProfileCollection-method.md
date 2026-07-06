@@ -34,6 +34,7 @@ A SoilProfileCollection
 ## Examples
 
 ``` r
+
 # example data
 spc1 <- random_profile(1, SPC = TRUE)
 spc2 <- random_profile(2, SPC = TRUE)

@@ -60,6 +60,7 @@ D. E. Beaudette
 ## Examples
 
 ``` r
+
 # please see documentation for perturb() for examples
 #  the sim() function calls perturb() internally
 ```

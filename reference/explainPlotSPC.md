@@ -40,6 +40,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # sample data
 data(sp4)
 depths(sp4) <- id ~ top + bottom

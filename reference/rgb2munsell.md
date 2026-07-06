@@ -58,6 +58,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # keep examples from using more than 2 cores
 data.table::setDTthreads(Sys.getenv("OMP_THREAD_LIMIT", unset = 2))
 

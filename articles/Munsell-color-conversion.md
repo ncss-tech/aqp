@@ -73,6 +73,7 @@ package.](https://cran.r-project.org/package=munsellinterpol).
 ### Examples
 
 ``` r
+
 # Munsell -> hex color
 parseMunsell('5PB 4/6')
 ```
@@ -80,6 +81,7 @@ parseMunsell('5PB 4/6')
     #> [1] "#476189FF"
 
 ``` r
+
 # Munsell -> sRGB
 parseMunsell('5PB 4/6',  return_triplets = TRUE)
 ```
@@ -88,6 +90,7 @@ parseMunsell('5PB 4/6',  return_triplets = TRUE)
     #> 1 0.2774433 0.3816871 0.5373067
 
 ``` r
+
 # Munsell -> CIELAB
 parseMunsell('5PB 4/6',  returnLAB = TRUE)
 ```
@@ -96,6 +99,7 @@ parseMunsell('5PB 4/6',  returnLAB = TRUE)
     #> 1 40.78393 1.583845 -25.09816
 
 ``` r
+
 # hex color -> Munsell
 col2Munsell('#476189FF')
 ```
@@ -104,6 +108,7 @@ col2Munsell('#476189FF')
     #> 1 5PB     4      6 0.2196242
 
 ``` r
+
 # neutral color
 parseMunsell('N 5/')
 ```
@@ -111,6 +116,7 @@ parseMunsell('N 5/')
     #> [1] "#525252FF"
 
 ``` r
+
 # non-standard notation
 getClosestMunsellChip('3.3YR 4.4/6.1', convertColors = FALSE)
 ```
@@ -142,6 +148,7 @@ In the example below, the estimated dry colors are the same for both
 `method = 'procrustes'` and `method = 'ols'`.
 
 ``` r
+
 # example moist soil colors from the Musick soil series
 m <- c("7.5YR 2.5/1", "10YR 3/2", "7.5YR 4/3", "2.5YR 3/6", "2.5YR 3/6", 
        "2.5YR 4/6", "5YR 4/6", "7.5YR 5/4")
@@ -173,6 +180,7 @@ colorContrastPlot(m, d.p, labels = c('Moist', 'Estimated\nDry'), d.cex = 0.9)
 ![](Munsell-color-conversion_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
+
 # it is the same
 # colorContrastPlot(m, d.ols, labels = c('Moist', 'Estimated\nDry'), d.cex = 0.9)
 ```
@@ -190,6 +198,7 @@ estimates may be useful place-holder values for soil color in
 collections where O horizon color was not recorded.
 
 ``` r
+
 data("Ohz.colors")
 
 Ohz.colors$col <- parseMunsell(Ohz.colors$L1.munsell)
@@ -212,6 +221,7 @@ title(main = 'Moist Colors')
 ![](Munsell-color-conversion_files/figure-html/unnamed-chunk-4-1.png)
 
 ``` r
+
 # restore original base graphics state
 par(op)
 ```

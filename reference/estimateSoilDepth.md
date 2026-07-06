@@ -73,6 +73,7 @@ D.E. Beaudette and J.M. Skovlin
 
 ``` r
 
+
 ## consider a situation where there were multiple candidate
 ## "contacts": 2 Cd horizons over an R
 

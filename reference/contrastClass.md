@@ -71,6 +71,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 ## standard use, result is an ordered factor
 # 10YR 6/3 vs 5YR 3/4
 contrastClass(v1=6, c1=3, v2=3, c2=4, dH=2, dV=3, dC=1)

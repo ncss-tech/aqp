@@ -30,6 +30,7 @@ Simulation and duplication were used to generate multiple copies of the
 three variations on the original template.
 
 ``` r
+
 library(aqp)
 
 # soil profile template
@@ -114,6 +115,7 @@ Create a very busy profile with lots of possible overlapping horizon
 depth labels.
 
 ``` r
+
 x <- quickSPC(
   "SPC:Oi|Oe|AAA|E1|E2|E3|BhsBhsBhsBhs|Bt1|Bt2|Bt3Bt3|CCCCCC|Ab1|Ab2|2C2C2C2C2C2C|2Cr|2R2R2R2R2R2R2R2R", 
   interval = 1
@@ -128,6 +130,7 @@ and define a custom function to demonstrate various label adjustment
 settings.
 
 ``` r
+
 # pretty colors
 .bluecolors <- hcl.colors(n = 25, palette = 'Blues')[-25]
 
@@ -172,6 +175,7 @@ adjustment is different, unless randomness is “controlled” using
 [`set.seed()`](https://rdrr.io/r/base/Random.html).
 
 ``` r
+
 par(mar = c(1, 0, 0, 0), mfcol = c(1, 8))
 
 testIt(x, fixLabelCollisions = FALSE)
@@ -204,6 +208,7 @@ title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
 ## Compare with Real Soil Series
 
 ``` r
+
 library(aqp)
 library(soilDB)
 
@@ -221,30 +226,35 @@ plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
 ![](label-placement_files/figure-html/unnamed-chunk-9-1.png)
 
 ``` r
+
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1), max.depth = 151)
 ```
 
 ![](label-placement_files/figure-html/unnamed-chunk-9-2.png)
 
 ``` r
+
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
 ```
 
 ![](label-placement_files/figure-html/unnamed-chunk-9-3.png)
 
 ``` r
+
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.5), max.depth = 151)
 ```
 
 ![](label-placement_files/figure-html/unnamed-chunk-9-4.png)
 
 ``` r
+
 plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
 ```
 
 ![](label-placement_files/figure-html/unnamed-chunk-9-5.png)
 
 ``` r
+
 plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 ```
 
@@ -258,6 +268,7 @@ The function `overlapMetics()` can be used to determine overlap within a
 vector of positions based on a given distance threshold.
 
 ``` r
+
 x <- c(1, 2, 3, 3.4, 3.5, 5, 6, 10)
 
 overlapMetrics(x, thresh = 0.5)
@@ -281,6 +292,7 @@ successful solution was possible. See the manual page for
 for additional details.
 
 ``` r
+
 # vector of positions, typically labels but could be profile sketch alignment on the x-axis
 s <- c(1, 2, 2.3, 4, 5, 5.5, 7)
 
@@ -295,6 +307,7 @@ fixOverlap(s, thresh = 0.5, method = 'S')
     #> [1] TRUE
 
 ``` r
+
 # electrostatics-inspired simulation of particles
 # solution is deterministic
 fixOverlap(s, thresh = 0.5, method = 'E')
@@ -313,6 +326,7 @@ Define a custom function for comparing the extended output from
 (`method = 'E'`) and simulated annealing (`method = 'S')`.
 
 ``` r
+
 evalMethods <- function(x, thresh, q, ...) {
   
   cols <- hcl.colors(n = 9, palette = 'Zissou 1', rev = TRUE)
@@ -374,6 +388,7 @@ problems (e.g. larger thresholds, more overlap). However, setting `q`
 too high will result in chaos and failure to converge.
 
 ``` r
+
 # explore effect of charge (q)
 # too large -> chaos
 x <- c(0, 2, 5, 12, 18, 20, 35, 40, 50, 56, 90, 120, 145, 150)
@@ -385,6 +400,7 @@ evalMethods(x, thresh = 5, q = 1.1)
 ![](label-placement_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
+
 # ok, but now most label positions are affected
 evalMethods(x, thresh = 5, q = 1.8)
 ```
@@ -392,6 +408,7 @@ evalMethods(x, thresh = 5, q = 1.8)
 ![](label-placement_files/figure-html/unnamed-chunk-13-2.png)
 
 ``` r
+
 # too high, wasting time on more iterations
 evalMethods(x, thresh = 5, q = 3)
 ```
@@ -399,6 +416,7 @@ evalMethods(x, thresh = 5, q = 3)
 ![](label-placement_files/figure-html/unnamed-chunk-13-3.png)
 
 ``` r
+
 # far too high, wasting more time with little gain
 evalMethods(x, thresh = 5, q = 4)
 ```
@@ -406,6 +424,7 @@ evalMethods(x, thresh = 5, q = 4)
 ![](label-placement_files/figure-html/unnamed-chunk-13-4.png)
 
 ``` r
+
 # chaos and eventually convergence
 evalMethods(x, thresh = 5, q = 5)
 ```
@@ -415,6 +434,7 @@ evalMethods(x, thresh = 5, q = 5)
 Additional examples to tinker with.
 
 ``` r
+
 # threshold too large
 evalMethods(x, thresh = 10, q = 3)
 
@@ -467,6 +487,7 @@ Define a custom function for visualizing the extended output from
 `fixOverlap(..., method = 'S', trace = TRUE)`.
 
 ``` r
+
 tracePlot <- function(x, z, cex.axis.labels = 0.85) {
   # setup plot device
   op <- par(mar = c(4, 4, 1, 1), bg = 'black', fg = 'white')
@@ -531,6 +552,7 @@ tracePlot <- function(x, z, cex.axis.labels = 0.85) {
 A relatively challenging example.
 
 ``` r
+
 x <- c(0, 1, 2, 2.2, 2.8, 3.5, 6, 8, 10, 10.1, 12.8, 13, 14.8, 15, 15.5)
 
 # fix overlap, return debugging information
@@ -541,6 +563,7 @@ z <- fixOverlap(x, thresh = 0.73, method = 'S', trace = TRUE)
     #> 160 iterations
 
 ``` r
+
 # check convergence
 z$converged
 ```
@@ -548,6 +571,7 @@ z$converged
     #> [1] TRUE
 
 ``` r
+
 # inspect algorithm trace
 tracePlot(x, z)
 ```
@@ -555,6 +579,7 @@ tracePlot(x, z)
 ![](label-placement_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
+
 # trace log
 # B: boundary condition violation
 # O: rank (order) violation
@@ -570,6 +595,7 @@ table(z$log)
 A very challenging example.
 
 ``` r
+
 # fix overlap, return debugging information
 set.seed(101010)
 x <- sort(runif(10, min = 2.5, max = 3.5))
@@ -581,6 +607,7 @@ z <- fixOverlap(x, thresh = 0.2, trace = TRUE, min.x = 0, max.x = 10, maxIter = 
     #> 1203 iterations
 
 ``` r
+
 # check convergence
 z$converged
 ```
@@ -588,6 +615,7 @@ z$converged
     #> [1] TRUE
 
 ``` r
+
 # inspect algorithm trace
 tracePlot(x, z)
 ```
@@ -597,6 +625,7 @@ tracePlot(x, z)
 Cleanup.
 
 ``` r
+
 # reset plotSPC() options
 options(.aqp.plotSPC.args = NULL)
 ```

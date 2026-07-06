@@ -74,6 +74,7 @@ result downstream.
 ## Examples
 
 ``` r
+
 data(sp1)
 depths(sp1) <- id ~ top + bottom
 

@@ -2,6 +2,8 @@
 
 ## aqp 2.3.2 (2026-04-29)
 
+CRAN release: 2026-04-30
+
 - new function
   [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
   for safely formatting Munsell colors from hue, value, and chroma
@@ -196,7 +198,7 @@ CRAN release: 2024-10-19
   [`soilTextureColorPal()`](https://ncss-tech.github.io/aqp/reference/soilTextureColorPal.md)
   for suggesting a color palette suitable for soil texture class
 - **Breaking Change**: `@sp` slot of the `SoilProfileCollection` object,
-  and dependency on sp package, has been removed.
+  and dependency on sp package, have been removed.
   - Any `SoilProfileCollection` objects previously written to file
     (.rda, .rds) with aqp \<2.1.x will need to be rebuilt using
     [`rebuildSPC()`](https://ncss-tech.github.io/aqp/reference/rebuildSPC.md)

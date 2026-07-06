@@ -28,6 +28,7 @@ platform for bridging the gap between pedometric theory and practice.
 Get the stable version from CRAN:
 
 ``` r
+
 install.packages('aqp')
 ```
 
@@ -35,12 +36,14 @@ Get the development version from Github, after installing the CRAN
 version + dependencies:
 
 ``` r
+
 remotes::install_github("ncss-tech/aqp", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 ```
 
 Install suggested packages:
 
 ``` r
+
 p <- c("soilDB", "latticeExtra", "tactile", "compositions", 
 "sharpshootR", "markovchain", "xtable", "testthat", "Gmedian", 
 "Hmisc", "tibble", "RColorBrewer", "scales", "mpspline2", "soiltexture", "knitr", "rmarkdown", "mvtnorm")
@@ -55,6 +58,7 @@ install.packages(p)
 ## Examples
 
 ``` r
+
 library(aqp)
 
 # example data from three official series descriptions
@@ -88,6 +92,7 @@ plotSPC(
 ## Citation
 
 ``` r
+
 citation("aqp")
 #> To cite aqp in publications use:
 #> 

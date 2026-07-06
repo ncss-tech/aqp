@@ -103,6 +103,7 @@ D.E. Beaudette and K.C. Thompson
 ## Examples
 
 ``` r
+
 # vector of object locations, with potential overlap
 x <- c(1, 2, 3, 3.3, 3.8, 5, 6, 7, 8, 9, 10)
 

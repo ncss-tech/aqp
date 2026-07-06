@@ -57,6 +57,7 @@ tutorial for additional examples.
 ## Examples
 
 ``` r
+
 data("sierraTransect")
 
 # split transects

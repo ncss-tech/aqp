@@ -102,6 +102,7 @@ D.E. Beaudette, A.G. Brown
 ## Examples
 
 ``` r
+
 ### THICKNESS
 
 # load sample data and convert into SoilProfileCollection

@@ -92,6 +92,7 @@ influence of climate and lithology on soil phosphorus, Geoderma: 421.
 ## Examples
 
 ``` r
+
 data(wilson2022)
 
 groupedProfilePlot(wilson2022, groups = 'pm', 

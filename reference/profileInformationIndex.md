@@ -94,6 +94,7 @@ D.E. Beaudette
 ## Examples
 
 ``` r
+
 # single horizon, constant value
 p1 <- data.frame(id = 1, top = 0, bottom = 100, p = 5, name = 'H')
 

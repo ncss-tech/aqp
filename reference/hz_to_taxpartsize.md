@@ -70,6 +70,7 @@ Stephen Roecker
 ## Examples
 
 ``` r
+
 h <- data.frame(
   id = 1,
   hzname = c("A", "BA", "Bw", "BC", "C"),

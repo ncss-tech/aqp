@@ -39,6 +39,7 @@ for fine-earth fraction.
 ## Examples
 
 ``` r
+
 # organic matter, loam texture, low medium and high OM
 base.awc <- estimateAWC(c("l","l","l"), c(1, 2, 3), na.rm = TRUE)
 base.awc

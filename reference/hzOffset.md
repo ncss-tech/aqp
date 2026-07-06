@@ -95,6 +95,7 @@ values and their interpretation are as follows:
 ## Examples
 
 ``` r
+
 # example data
 x <- c(
   'P1:AAA|BwBwBwBw|CCCCCCC|CdCdCdCd',

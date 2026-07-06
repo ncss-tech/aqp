@@ -34,6 +34,7 @@ an ordered factor
 ## Examples
 
 ``` r
+
 # class codes
 SoilTextureLevels()
 #>  [1] cos  s    fs   vfs  lcos ls   lfs  lvfs cosl sl   fsl  vfsl l    sil  si  
