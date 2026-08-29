@@ -139,7 +139,7 @@ setReplaceMethod("depths", "data.frame",
   }
     
   # return 0-length or n-length (ID only) SPC
-  return(SoilProfileCollection(idcol = idn, 
+  return(.SoilProfileCollection(idcol = idn, 
                                depthcols = hzd,
                                horizons = nuhz,
                                site = nust))
@@ -205,7 +205,7 @@ setReplaceMethod("depths", "data.frame",
   names(nusite) <- nm[1]
 
   # create object
-  res <- SoilProfileCollection(idcol = nm[1],
+  res <- .SoilProfileCollection(idcol = nm[1],
                                hzidcol = 'hzID',
                                depthcols = depthcols,
                                site = nusite,

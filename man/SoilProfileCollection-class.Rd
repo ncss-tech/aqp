@@ -4,29 +4,30 @@
 \name{SoilProfileCollection}
 \alias{SoilProfileCollection}
 \alias{SoilProfileCollection-class}
+\alias{SoilProfileCollection.default}
+\alias{SoilProfileCollection.data.frame}
 \title{An S4 object representation of a group of soil profiles.}
 \usage{
-SoilProfileCollection(
-  idcol = "id",
-  hzidcol = "hzID",
+SoilProfileCollection(...)
+
+\method{SoilProfileCollection}{default}(...)
+
+\method{SoilProfileCollection}{data.frame}(
+  horizons = data.frame(),
+  site = data.frame(),
+  diagnostic = data.frame(),
+  restrictions = data.frame(),
+  metadata = list(),
+  idcol = NULL,
   depthcols = c("top", "bottom"),
-  metadata = list(aqp_df_class = "data.frame", aqp_group_by = "", aqp_hzdesgn = "",
-    aqp_hztexcl = "", stringsAsFactors = FALSE),
-  horizons = data.frame(id = character(0), hzID = character(0), top = numeric(0), bottom
-    = numeric(0), stringsAsFactors = FALSE),
-  site = data.frame(id = character(0), stringsAsFactors = FALSE),
-  diagnostic = data.frame(stringsAsFactors = FALSE),
-  restrictions = data.frame(stringsAsFactors = FALSE)
+  hzidcol = NULL,
+  coordinates = NULL,
+  crs = NULL,
+  ...
 )
 }
 \arguments{
-\item{idcol}{character. Profile ID Column Name}
-
-\item{hzidcol}{character. Horizon ID Column Name}
-
-\item{depthcols}{character. length 2 Top and Bottom Depth Column Names}
-
-\item{metadata}{list. metadata including data.frame class in use and depth units}
+\item{...}{Additional arguments (not used).}
 
 \item{horizons}{data.frame. An object inheriting from data.frame containing Horizon data.}
 
@@ -35,6 +36,18 @@ SoilProfileCollection(
 \item{diagnostic}{data.frame. An object inheriting from data.frame containing diagnostic feature data. Must contain profile ID. See \code{diagnostic_hz()}}
 
 \item{restrictions}{data.frame. An object inheriting from data.frame containing restrictive feature data. Must contain profile ID. See \code{restrictions()}}
+
+\item{metadata}{list. Metadata including data.frame class in use and depth units}
+
+\item{idcol}{character. Profile ID Column Name}
+
+\item{depthcols}{character. length 2 Top and Bottom Depth Column Names}
+
+\item{hzidcol}{character. Horizon ID Column Name}
+
+\item{coordinates}{character. Column name(s) containing spatial coordinates, e.g. \code{c("longitude", "latitude")}. Sets appropriate \code{metadata} entry.}
+
+\item{crs}{character. Coordinate Reference System for \code{coordinates}. Sets appropriate \code{metadata} entry.}
 }
 \description{
 In general, one should use \code{depths()} to initiate a SoilProfileCollection object from data. However, sometimes there are instances where either an empty, or very specific, object is needed. If that is the case, the general constructor \code{SoilProfileCollection} is available.
