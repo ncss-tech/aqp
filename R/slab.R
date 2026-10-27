@@ -624,7 +624,11 @@ setGeneric("slab", function(object,
 #' a <- slab(loafercreek, fm = ~ total_frags_pct + claytotest)
 #'
 #' # use HD quantile estimator from Hmisc package instead
-#' a.HD <- slab(loafercreek, fm = ~ total_frags_pct + claytotest, slab.fun = aqp:::.slab.fun.numeric.HD)
+#' a.HD <- slab(
+#' loafercreek, 
+#' fm = ~ total_frags_pct + claytotest, 
+#' slab.fun = aqp:::.slab.fun.numeric.HD
+#' )
 #'
 #' # combine
 #' g <- make.groups(standard=a, HD=a.HD)
