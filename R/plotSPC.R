@@ -804,7 +804,8 @@ plotSPC <- function(
               'ylim' = ylim.range,
               'extra_x_space' = extra_x_space,
               'extra_y_space' = extra_y_space,
-              'hz.depth.LAI' = rep(NA_real_, n),
+              'hz.depth.LAI' = rep(NA_real_, n), # label adjustment index (larger = more adjustment)
+              'hz.depth.RO' = rep(NA_real_, n),  # residual overlap in labels
               'legend.colors' = hz.color.interpretation$colors,
               'legend.data' = hz.color.interpretation$color.legend.data
   )
@@ -1452,6 +1453,10 @@ plotSPC <- function(
           hzd.txt.y <- hzd.txt.y.fixed
         }
         
+        ## TODO: finish this!
+        ## residual label overlap, >0 means some labels overlap
+        .residualLabelOverlap <- overlapMetrics(hzd.txt.y, thresh = 1.125 * abs(strheight('0', cex = hz.depths.cex)))$ov
+        lsp[['hz.depth.RO']][i] <- .residualLabelOverlap
         
         # annotate
         text(

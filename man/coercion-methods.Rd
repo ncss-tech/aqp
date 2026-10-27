@@ -7,6 +7,20 @@
 \alias{as.data.frame,SoilProfileCollection-method}
 \title{Coerce SoilProfileCollection with \code{as()}}
 \usage{
+\S4method{coerce}{SoilProfileCollection,list}(from, to = "list", strict = TRUE)
+
+\S4method{coerce}{SoilProfileCollection,data.frame}(from, to = "data.frame", strict = TRUE)
+
+\S4method{coerce}{SoilProfileCollection,tbl_df}(from, to = "tbl_df", strict = TRUE)
+
+\S4method{coerce}{SoilProfileCollection,data.table}(from, to = "data.table", strict = TRUE)
+
+\S4method{coerce}{SoilProfileCollection,SpatialPointsDataFrame}(from, to = "SpatialPointsDataFrame", strict = TRUE)
+
+\S4method{coerce}{SoilProfileCollection,sf}(from, to = "sf", strict = TRUE)
+
+\S4method{coerce}{SoilProfileCollection,SpatialPoints}(from, to = "SpatialPoints", strict = TRUE)
+
 \S4method{as.data.frame}{SoilProfileCollection}(x)
 }
 \arguments{

@@ -131,7 +131,7 @@ setMethod("names", signature("SoilProfileCollection"),
 #' @param object character. Either `"completion"`, `"parameter"`, or `"url"`.
 #' @param topic character. The help topic (e.g. the column name in `$` auto-completion).
 #' @param source character. The topic source (e.g. the parent object name in `$` auto-completion).
-#' @param ... 
+#' @param \dots additional arguments
 #' @importFrom utils capture.output str
 #' @returns list or character
 #' @noRd

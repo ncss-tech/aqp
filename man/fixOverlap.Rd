@@ -72,7 +72,7 @@ testIt <- function(x, ...) {
     "LAI: \%0.3f", 
     get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
   )
-  mtext(.txt, side = 1, at = 1, line = -2, cex = 0.8)
+  mtext(.txt, side = 1, at = 1, line = 0, cex = 0.8)
   
 }
 

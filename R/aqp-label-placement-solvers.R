@@ -41,14 +41,14 @@ findOverlap <- function(x, thresh) {
 
 
 
-#' @title Find and Quantify Overlap within a 1D Sequence
+#' @title 1D Overlab Metrics
 #' 
-#' @description Desc.
+#' @description Find and quantify vverlap within a 1D sequence.
 #' 
-#' @param x vector of relative horizontal positions, one for each profile
+#' @param x vector of relative positions, typically representing soil profile sketch centers or label parameters
 #' @param thresh threshold defining "overlap", typically < 1
 #' 
-#'  @return a `list`:
+#' @return a `list`:
 #'   * `idx`: unique index to overlapping elements in `x`
 #'   * `ov`: normalized overlap (see details)
 #' 
@@ -851,7 +851,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #'
 #' @param x vector of initial positions, pre-sorted
 #' @param thresh numeric, overlap threshold defined on the same scale as `x`
-#' @param method character vector, 'S' for simulated annealing via [SANN_1D()] or 'E' for electrostatic simulation via [electroStatics_1D()]
+#' @param method character vector, 'S' for simulated annealing via [SANN_1D()], 'E' for electrostatic simulation via [electroStatics_1D()], or 'H' for hybrid (electrostatic simulation then SANN)
 #' @param trace logical, return full output
 #' @param \dots additional arguments to [SANN_1D()] or [electroStatics_1D()]
 #'
@@ -910,7 +910,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #'     "LAI: %0.3f", 
 #'     get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
 #'   )
-#'   mtext(.txt, side = 1, at = 1, line = -2, cex = 0.8)
+#'   mtext(.txt, side = 1, at = 1, line = 0, cex = 0.8)
 #'   
 #' }
 #' 
@@ -924,8 +924,8 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #' testIt(x, fixOverlapArgs = list(method = 'S'))
 #' title('SANN (defaults)', line = -3)
 #' 
-#' testIt(x, fixOverlapArgs = list(method = 'E', q = 1.5))
-#' title('ES (q = 1.5)', line = -3)
+#' testIt(x, fixOverlapArgs = list(method = 'H', q = 0.5))
+#' title('Hybrid (q = 0.5)', line = -3)
 #' 
 #' testIt(x, fixOverlapArgs = list(method = 'E', q = 1))
 #' title('ES (q = 1)', line = -3)
@@ -938,7 +938,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #' 
 #' par(op)
 #' 
-fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...) {
+fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E', 'H'), trace = FALSE, ...) {
   
   # sanity checks on method
   method <- tolower(match.arg(method))
@@ -956,6 +956,13 @@ fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...
                  
                  's' = {
                    SANN_1D(x = x, thresh = thresh, trace = trace, ...) 
+                 },
+                 
+                 ## TODO: document / test this
+                 'h' = {
+                   .stage1 <- electroStatics_1D(x = x, thresh = thresh, trace = trace, ...)
+                   .stage2 <- SANN_1D(x = .stage1, thresh = thresh, trace = trace, ...)
+                   .stage2
                  }
   )
   
