@@ -1,7 +1,7 @@
-# Coerce SoilProfileCollection with `as()`
+# Coerce `SoilProfileCollection` with `as()`
 
-SoilProfileCollections can be coerced to other R object types using
-`as(spc, 'type')`.
+`SoilProfileCollection` objects can be coerced to other R object types
+using `as(spc, 'type')`.
 
 Possible endpoints include: `list`, `data.frame`,
 `SpatialPointsDataFrame` and `SpatialPoints`.
@@ -9,11 +9,44 @@ Possible endpoints include: `list`, `data.frame`,
 ## Usage
 
 ``` r
+# S4 method for class 'SoilProfileCollection,list'
+coerce(from, to = "list", strict = TRUE)
+
+# S4 method for class 'SoilProfileCollection,data.frame'
+coerce(from, to = "data.frame", strict = TRUE)
+
+# S4 method for class 'SoilProfileCollection,tbl_df'
+coerce(from, to = "tbl_df", strict = TRUE)
+
+# S4 method for class 'SoilProfileCollection,data.table'
+coerce(from, to = "data.table", strict = TRUE)
+
+# S4 method for class 'SoilProfileCollection,SpatialPointsDataFrame'
+coerce(from, to = "SpatialPointsDataFrame", strict = TRUE)
+
+# S4 method for class 'SoilProfileCollection,sf'
+coerce(from, to = "sf", strict = TRUE)
+
+# S4 method for class 'SoilProfileCollection,SpatialPoints'
+coerce(from, to = "SpatialPoints", strict = TRUE)
+
 # S4 method for class 'SoilProfileCollection'
 as.data.frame(x)
 ```
 
 ## Arguments
+
+- from:
+
+  `SoilProfileCollection`
+
+- to:
+
+  target class
+
+- strict:
+
+  (not used)
 
 - x:
 

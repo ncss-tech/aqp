@@ -110,11 +110,17 @@
 
   Test for a valid `SoilProfileCollection`
 
-- [`as.data.frame(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+- [`coerce(`*`<SoilProfileCollection>`*`,`*`<list>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`coerce(`*`<SoilProfileCollection>`*`,`*`<data.frame>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`coerce(`*`<SoilProfileCollection>`*`,`*`<tbl_df>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`coerce(`*`<SoilProfileCollection>`*`,`*`<data.table>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`coerce(`*`<SoilProfileCollection>`*`,`*`<SpatialPointsDataFrame>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`coerce(`*`<SoilProfileCollection>`*`,`*`<sf>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`coerce(`*`<SoilProfileCollection>`*`,`*`<SpatialPoints>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  [`as.data.frame(`*`<SoilProfileCollection>`*`)`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
   :
 
-  Coerce SoilProfileCollection with
-  [`as()`](https://ncss-tech.github.io/aqp/reference/coercion-methods.md)
+  Coerce `SoilProfileCollection` with `as()`
 
 - [`col2Munsell()`](https://ncss-tech.github.io/aqp/reference/col2Munsell.md)
   : Convert colors into Munsell Notation

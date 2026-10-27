@@ -2,7 +2,7 @@
 
 A very simple function for generating labeled swatches of soil colors.
 Largely based on
-[`colorspace::swatchplot`](https://colorspace.R-Forge.R-project.org/reference/swatchplot.html).
+[`colorspace::swatchplot`](https://zeileis.codeberg.page/colorspace/reference/swatchplot.html).
 
 ## Usage
 
@@ -48,7 +48,7 @@ soilPalette(
 - ...:
 
   further arguments to
-  [`colorspace::swatchplot`](https://colorspace.R-Forge.R-project.org/reference/swatchplot.html)
+  [`colorspace::swatchplot`](https://zeileis.codeberg.page/colorspace/reference/swatchplot.html)
 
 ## Value
 

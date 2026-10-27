@@ -71,7 +71,7 @@ colorContrastPlot(
 - ...:
 
   further arguments to
-  [`colorspace::swatchplot`](https://colorspace.R-Forge.R-project.org/reference/swatchplot.html)
+  [`colorspace::swatchplot`](https://zeileis.codeberg.page/colorspace/reference/swatchplot.html)
 
 ## Note
 

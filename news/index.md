@@ -4,6 +4,15 @@
 
 CRAN release: 2026-04-30
 
+- CRAN release
+- [`fixOverlap()`](https://ncss-tech.github.io/aqp/reference/fixOverlap.md)
+  gains new method ‘hybrid’, useful for nudging sketches or labels to
+  avoid overlap
+
+## aqp 2.3.2 (2026-04-29)
+
+CRAN release: 2026-04-30
+
 - new function
   [`formatMunsell()`](https://ncss-tech.github.io/aqp/reference/formatMunsell.md)
   for safely formatting Munsell colors from hue, value, and chroma

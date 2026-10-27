@@ -78,6 +78,11 @@ sizes, and graphics device settings (figure height, resolution).
   [`set.seed()`](https://rdrr.io/r/base/Random.html) to control output
   between runs.
 
+*hybrid:* This method uses a combination of electrostatic simulation,
+followed by simulated annealing if the first attempt does not converge.
+Try adjusting `q` to overcome even the most challenging label
+collisions.
+
 ### Electrostatic Simulation
 
 An electrostatic simulation applies forces of repulsion between labels
@@ -108,6 +113,27 @@ are passed to
 
 Note that each solution, within duplicate profiles, is slightly
 different. ![](label-placement_files/figure-html/unnamed-chunk-5-1.png)
+
+### Label Placement Diagnostics
+
+There are two diagnostics returned when calling
+`plotSPC(..., fixLabelCollisions = TRUE)`:
+
+- `hz.depth.LAI`: label adjustment index, a normalized score of how much
+  horizon depth labels have been moved from their original
+  configuration, one value for each profile
+- `hz.depth.RO`: residual overlap, an index of label overlap after
+  collision avoidance, one value for each profile
+
+Access these diagnosts immediatley after calling
+[`plotSPC()`](https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.md)
+like this:
+
+``` r
+
+get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
+get('last_spc_plot', envir = aqp.env)$hz.depth.RO
+```
 
 ## Quick Comparison
 
@@ -158,13 +184,17 @@ testIt <- function(x, ...) {
   # make sketches
   plotSPC(x, ...)
   
-  # a normalized index of label adjustment
+  # normalized index of label adjustment
   .LAI <- get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
   .LAI <- ifelse(is.na(.LAI), 0, .LAI)
   
+  # residual overlap
+  .RO <- get('last_spc_plot', envir = aqp.env)$hz.depth.RO
+  .RO <- ifelse(is.na(.RO), 0, .RO)
+  
   # annotate with label adjustment index
-  .txt <- sprintf("LAI: %0.3f", .LAI)
-  mtext(.txt, side = 1, at = 1, line = -1.5, cex = 0.8)
+  .txt <- sprintf("LAI: %0.3f\nRO: %0.3f", .LAI, .RO)
+  mtext(.txt, side = 1, at = 1, line = -0.5, cex = 0.8)
 }
 ```
 
@@ -172,7 +202,8 @@ Compare and contrast. The “LAI” is an index of label adjustment,
 relative to the original label positions. Larger values imply a higher
 degree of adjustment. Note that each simulated annealing (SANN) label
 adjustment is different, unless randomness is “controlled” using
-[`set.seed()`](https://rdrr.io/r/base/Random.html).
+[`set.seed()`](https://rdrr.io/r/base/Random.html). “RO” is the residual
+overlap among labels.
 
 ``` r
 
@@ -203,7 +234,40 @@ testIt(x, fixOverlapArgs = list(method = 'E', q = 0.25))
 title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-8-1.png)
+![](label-placement_files/figure-html/unnamed-chunk-9-1.png)
+
+Demonstrate ‘hybrid’ approach.
+
+``` r
+
+par(mar = c(1, 0, 0, 0), mfcol = c(1, 8))
+
+testIt(x, fixLabelCollisions = FALSE)
+title('No\nAdjustment', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN\nsim 1', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN\nsim 2', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN\nsim 3', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'E', q = 0.25))
+title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'H', q = 0.25))
+title('Hybrid\nq = 0.25 | sim 1', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'H', q = 0.25))
+title('Hybrid\nq = 0.25 | sim 2', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'H', q = 0.25))
+title('Hybrid\nq = 0.25 | sim 3', line = -3.5, adj = 0.5)
+```
+
+![](label-placement_files/figure-html/unnamed-chunk-10-1.png)
 
 ## Compare with Real Soil Series
 
@@ -215,50 +279,26 @@ library(soilDB)
 s <- c('inks' , 'pardee', 'clarksville', 'palau', 'hao', 'inks', 'eheuiki', 'puaulu', 'zook', 'cecil')
 x <- fetchOSD(s)
 
-par(mar = c(0, 0, 0, 3))
-
-.args <- list(width = 0.3, name.style = 'center-center', hz.depths = TRUE, cex.names = 0.8)
-options(.aqp.plotSPC.args = .args)
-
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
+# trap issues with web service
+if(inherits(x, 'SoilProfileCollection')) {
+  par(mar = c(0, 0, 0, 3))
+  
+  .args <- list(width = 0.3, name.style = 'center-center', hz.depths = TRUE, cex.names = 0.8)
+  options(.aqp.plotSPC.args = .args)
+  
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.5), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
+  
+  plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)  
+  
+  plotSPC(x, fixOverlapArgs = list(method = 'H', q = 0.25), max.depth = 151)  
+}
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-9-1.png)
-
-``` r
-
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1), max.depth = 151)
-```
-
-![](label-placement_files/figure-html/unnamed-chunk-9-2.png)
-
-``` r
-
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
-```
-
-![](label-placement_files/figure-html/unnamed-chunk-9-3.png)
-
-``` r
-
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.5), max.depth = 151)
-```
-
-![](label-placement_files/figure-html/unnamed-chunk-9-4.png)
-
-``` r
-
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
-```
-
-![](label-placement_files/figure-html/unnamed-chunk-9-5.png)
-
-``` r
-
-plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
-```
-
-![](label-placement_files/figure-html/unnamed-chunk-9-6.png)
+![](label-placement_files/figure-html/unnamed-chunk-11-1.png)![](label-placement_files/figure-html/unnamed-chunk-11-2.png)![](label-placement_files/figure-html/unnamed-chunk-11-3.png)![](label-placement_files/figure-html/unnamed-chunk-11-4.png)![](label-placement_files/figure-html/unnamed-chunk-11-5.png)![](label-placement_files/figure-html/unnamed-chunk-11-6.png)![](label-placement_files/figure-html/unnamed-chunk-11-7.png)
 
 ## General Cases
 
@@ -300,9 +340,9 @@ s <- c(1, 2, 2.3, 4, 5, 5.5, 7)
 fixOverlap(s, thresh = 0.5, method = 'S')
 ```
 
-    #> 17 iterations
+    #> 5 iterations
 
-    #> [1] 1.000000 2.181620 2.888599 4.000000 5.000000 5.500000 7.000000
+    #> [1] 1.000000 1.872940 2.447744 4.000000 5.000000 5.500000 7.000000
     #> attr(,"converged")
     #> [1] TRUE
 
@@ -397,7 +437,7 @@ x <- c(0, 2, 5, 12, 18, 20, 35, 40, 50, 56, 90, 120, 145, 150)
 evalMethods(x, thresh = 5, q = 1.1)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-13-1.png)
+![](label-placement_files/figure-html/unnamed-chunk-15-1.png)
 
 ``` r
 
@@ -405,7 +445,7 @@ evalMethods(x, thresh = 5, q = 1.1)
 evalMethods(x, thresh = 5, q = 1.8)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-13-2.png)
+![](label-placement_files/figure-html/unnamed-chunk-15-2.png)
 
 ``` r
 
@@ -413,7 +453,7 @@ evalMethods(x, thresh = 5, q = 1.8)
 evalMethods(x, thresh = 5, q = 3)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-13-3.png)
+![](label-placement_files/figure-html/unnamed-chunk-15-3.png)
 
 ``` r
 
@@ -421,7 +461,7 @@ evalMethods(x, thresh = 5, q = 3)
 evalMethods(x, thresh = 5, q = 4)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-13-4.png)
+![](label-placement_files/figure-html/unnamed-chunk-15-4.png)
 
 ``` r
 
@@ -429,7 +469,7 @@ evalMethods(x, thresh = 5, q = 4)
 evalMethods(x, thresh = 5, q = 5)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-13-5.png)
+![](label-placement_files/figure-html/unnamed-chunk-15-5.png)
 
 Additional examples to tinker with.
 
@@ -576,7 +616,7 @@ z$converged
 tracePlot(x, z)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-16-1.png)
+![](label-placement_files/figure-html/unnamed-chunk-18-1.png)
 
 ``` r
 
@@ -620,7 +660,7 @@ z$converged
 tracePlot(x, z)
 ```
 
-![](label-placement_files/figure-html/unnamed-chunk-17-1.png)
+![](label-placement_files/figure-html/unnamed-chunk-19-1.png)
 
 Cleanup.
 

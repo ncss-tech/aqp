@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">aqp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -544,8 +544,8 @@ data and the CRS, respectively.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># extract spatial data + site level attributes in new spatial object</span></span>
-<span>  <span class="va">sp4.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span></span>
-<span>  <span class="va">sp4.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'sf'</span><span class="op">)</span></span>
+<span>  <span class="va">sp4.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span></span>
+<span>  <span class="va">sp4.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'sf'</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -646,16 +646,16 @@ up):</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a data.frame from horizon+site data</span></span>
-<span><span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'data.frame'</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'data.frame'</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># or, equivalently:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sp4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># convert SoilProfileCollection to a named list containing all slots</span></span>
-<span><span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'list'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'list'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># extraction of site + spatial data as SpatialPointsDataFrame</span></span>
-<span><span class="fu"><a href="../reference/coercion-methods.html">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="va">sp4</span>, <span class="st">'SpatialPointsDataFrame'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="subsetting-soilprofilecollection-objects">Subsetting SoilProfileCollection Objects<a class="anchor" aria-label="anchor" href="#subsetting-soilprofilecollection-objects"></a>
@@ -1734,7 +1734,7 @@ Soil Series</a></li>
 Profile Distances</a></li>
 </ul>
 <hr>
-<p>This document is based on <code>aqp</code> version 2.3.2.</p>
+<p>This document is based on <code>aqp</code> version 2.3.3.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

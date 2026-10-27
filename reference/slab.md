@@ -202,8 +202,7 @@ replaced the previously defined `soil.slot.multiple` function as of aqp
 
 - data = "SoilProfileCollection":
 
-  Typical usage, where input is a
-  [`SoilProfileCollection`](https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-class.md).
+  Typical usage, where input is a `SoilProfileCollection`.
 
 ## References
 
@@ -427,10 +426,14 @@ library(data.table)
 data('loafercreek', package = 'soilDB')
 
 # defaul slab.fun wraps stats::quantile()
-a <- slab(loafercreek, fm = ~ total_frags_pct + clay)
+a <- slab(loafercreek, fm = ~ total_frags_pct + claytotest)
 
 # use HD quantile estimator from Hmisc package instead
-a.HD <- slab(loafercreek, fm = ~ total_frags_pct + clay, slab.fun = aqp:::.slab.fun.numeric.HD)
+a.HD <- slab(
+loafercreek, 
+fm = ~ total_frags_pct + claytotest, 
+slab.fun = aqp:::.slab.fun.numeric.HD
+)
 
 # combine
 g <- make.groups(standard=a, HD=a.HD)
