@@ -41,14 +41,14 @@ findOverlap <- function(x, thresh) {
 
 
 
-#' @title Find and Quantify Overlap within a 1D Sequence
+#' @title 1D Overlab Metrics
 #' 
-#' @description Desc.
+#' @description Find and quantify vverlap within a 1D sequence.
 #' 
-#' @param x vector of relative horizontal positions, one for each profile
+#' @param x vector of relative positions, typically representing soil profile sketch centers or label parameters
 #' @param thresh threshold defining "overlap", typically < 1
 #' 
-#'  @return a `list`:
+#' @return a `list`:
 #'   * `idx`: unique index to overlapping elements in `x`
 #'   * `ov`: normalized overlap (see details)
 #' 
@@ -851,7 +851,7 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #'
 #' @param x vector of initial positions, pre-sorted
 #' @param thresh numeric, overlap threshold defined on the same scale as `x`
-#' @param method character vector, 'S' for simulated annealing via [SANN_1D()] or 'E' for electrostatic simulation via [electroStatics_1D()]
+#' @param method character vector, 'S' for simulated annealing via [SANN_1D()], 'E' for electrostatic simulation via [electroStatics_1D()], or 'H' for hybrid (electrostatic simulation then SANN)
 #' @param trace logical, return full output
 #' @param \dots additional arguments to [SANN_1D()] or [electroStatics_1D()]
 #'
@@ -871,7 +871,6 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #' # electrostatics-inspired simulation of particles
 #' # solution is deterministic
 #' fixOverlap(s, thresh = 0.6, method = 'E')
-#' 
 #'
 #' # create a very busy profile with lots of possible overlapping
 #' # depth annotation
@@ -900,45 +899,50 @@ SANN_1D <- function(x, thresh = 0.6, adj = thresh * 2/3, min.x = min(x) - 0.2, m
 #' # set plotSPC default arguments
 #' options(.aqp.plotSPC.args = .a)
 #' 
-#' # wrapper function to test label collision solutions
+#' # helper function for diagnosing collision avoidance
 #' testIt <- function(x, ...) {
-#'   
-#'   plotSPC(x, ...)
-#'   
-#'   # a normalized index of label adjustment
-#'   .txt <- sprintf(
-#'     "LAI: %0.3f", 
-#'     get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
-#'   )
-#'   mtext(.txt, side = 1, at = 1, line = -2, cex = 0.8)
-#'   
+#' 
+#' # make sketches
+#' plotSPC(x, ...)
+#' 
+#' # normalized index of label adjustment
+#' .LAI <- get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
+#' .LAI <- ifelse(is.na(.LAI), 0, .LAI)
+#' 
+#' # residual overlap
+#' .RO <- get('last_spc_plot', envir = aqp.env)$hz.depth.RO
+#' .RO <- ifelse(is.na(.RO), 0, .RO)
+#' 
+#' # annotate with label adjustment index
+#' .txt <- sprintf("LAI: %0.3f\nRO: %0.3f", .LAI, .RO)
+#' mtext(.txt, side = 1, at = 1, line = 1, cex = 0.8)
 #' }
 #' 
 #' 
 #' # compare and contrast
-#' op <- par(mar = c(0, 0, 0, 0), mfcol = c(1, 6))
+#' op <- par(mar = c(2.5, 0, 0, 0), mfcol = c(1, 6))
 #' 
-#' testIt(x)
-#' title('ES (defaults)', line = -3)
+#' testIt(x, fixLabelCollisions = FALSE)
+#' title('Original Labels', line = -3)
 #' 
 #' testIt(x, fixOverlapArgs = list(method = 'S'))
 #' title('SANN (defaults)', line = -3)
 #' 
-#' testIt(x, fixOverlapArgs = list(method = 'E', q = 1.5))
-#' title('ES (q = 1.5)', line = -3)
-#' 
-#' testIt(x, fixOverlapArgs = list(method = 'E', q = 1))
-#' title('ES (q = 1)', line = -3)
+#' testIt(x, fixOverlapArgs = list(method = 'H', q = 0.1))
+#' title('Hybrid (q = 0.1)', line = -3)
 #' 
 #' testIt(x, fixOverlapArgs = list(method = 'E', q = 0.5))
 #' title('ES (q = 0.5)', line = -3)
+#' 
+#' testIt(x, fixOverlapArgs = list(method = 'E', q = 1))
+#' title('ES (q = 1)', line = -3)
 #' 
 #' testIt(x, fixOverlapArgs = list(method = 'E', q = 0.1))
 #' title('ES (q = 0.1)', line = -3)
 #' 
 #' par(op)
 #' 
-fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...) {
+fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E', 'H'), trace = FALSE, ...) {
   
   # sanity checks on method
   method <- tolower(match.arg(method))
@@ -956,6 +960,22 @@ fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E'), trace = FALSE, ...
                  
                  's' = {
                    SANN_1D(x = x, thresh = thresh, trace = trace, ...) 
+                 },
+                 
+                 # hybrid approach
+                 'h' = {
+                   # start with electrostatic simulation
+                   .stage1 <- electroStatics_1D(x = x, thresh = thresh, trace = trace, ...)
+                   if(attr(.stage1, 'converged')) {
+                     # print('ES converged')
+                   .r <- .stage1
+                   } else {
+                     # if that doesn't converge, try SANN
+                     # print('trying SANN...')
+                     .stage2 <- SANN_1D(x = .stage1, thresh = thresh, trace = trace, ...)
+                    .r <- .stage2
+                   }
+                   return(.r)
                  }
   )
   

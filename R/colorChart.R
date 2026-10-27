@@ -220,7 +220,7 @@ colorChart <- function(m, g = factor('All'), size = TRUE, annotate = FALSE, laun
   # convert colors
   tab$.color <- parseMunsell(tab$.munsell)
   
-  ## TODO: probably a cleaner way
+  # split Munsell notation into pieces
   pm <- parseMunsell(munsellColor = tab$.munsell, convertColors = FALSE)
   tab$hue <- pm$hue
   tab$value <- pm$value

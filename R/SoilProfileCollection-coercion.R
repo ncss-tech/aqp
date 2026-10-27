@@ -1,16 +1,17 @@
 ## Coercion methods: general
 
-#' Coerce SoilProfileCollection with \code{as()}
+#' Coerce `SoilProfileCollection` with `as()`
 #' 
-#' @description SoilProfileCollections can be coerced to other R object types using \code{as(spc, 'type')}.
+#' @description `SoilProfileCollection` objects can be coerced to other R object types using `as(spc, 'type')`.
 #' 
-#' Possible endpoints include: \code{list}, \code{data.frame}, \code{SpatialPointsDataFrame} and \code{SpatialPoints}.
+#' Possible endpoints include: `list`, `data.frame`, `SpatialPointsDataFrame` and `SpatialPoints`.
 #'
-#' @name as
 #' @return list
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
+#' @param from `SoilProfileCollection`
+#' @param to target class
+#' @param strict (not used)
 #'
 #' @examples
 #' # load example data stored as SoilProfileCollection
@@ -72,9 +73,8 @@ setAs("SoilProfileCollection", "list", function(from) {
   
 })
 
-#' @name as
+
 #' @return data.frame
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
 #'
@@ -103,9 +103,8 @@ setAs("SoilProfileCollection", "data.frame", function(from) {
   }
 })
 
-#' @name as
+
 #' @return tbl_df
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
 #'
@@ -113,9 +112,7 @@ setAs("SoilProfileCollection", "tbl_df", function(from) {
   .as.data.frame.aqp(as(from,'data.frame'), 'tbl_df')
 })
 
-#' @name as
 #' @return data.table
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
 #'
@@ -123,9 +120,8 @@ setAs("SoilProfileCollection", "data.table", function(from) {
   .as.data.frame.aqp(as(from, 'data.frame'), 'data.table')
 })
 
-#' @name as
+
 #' @return SpatialPointsDataFrame
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
@@ -136,9 +132,7 @@ setAs("SoilProfileCollection", "SpatialPointsDataFrame", function(from) {
 }
 )
 
-#' @name as
 #' @return sf
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "sf", 
@@ -166,9 +160,8 @@ setAs("SoilProfileCollection", "sf",
   }
 )
 
-#' @name as
+
 #' @return SpatialPoints
-#' @aliases as,SoilProfileCollection-method
 #' @docType methods
 #' @rdname coercion-methods
 setAs("SoilProfileCollection", "SpatialPoints", function(from) {

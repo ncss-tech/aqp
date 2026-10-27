@@ -355,7 +355,7 @@ setGeneric("slab", function(object,
 #' This is performed by specifying `identity` in `slab.fun`. See
 #' examples below for a demonstration of this functionality.
 #'
-#' The default \code{slab.fun} was changed 2019-10-30 from a wrapper around
+#' The default `slab.fun` was changed 2019-10-30 from a wrapper around
 #' [Hmisc::hdquantile()] to a wrapper around [stats::quantile()]. See
 #' examples below for a simple way to switch to the HD quantile estimator.
 #'
@@ -432,7 +432,7 @@ setGeneric("slab", function(object,
 #' weighted-summaries was broken in `aqp 1.2-6 (2012-06-26), and removed as of aqp 1.5 (2012-12-29). `slab()`` replaced the previously defined `soil.slot.multiple` function as of aqp 0.98-8.58 (2011-12-21).
 #' 
 #' @section Methods: \describe{ \item{data = "SoilProfileCollection"}{Typical
-#' usage, where input is a \code{\link{SoilProfileCollection}}.} }
+#' usage, where input is a `SoilProfileCollection`.} }
 #' 
 #' @author D.E. Beaudette
 #' 
@@ -621,10 +621,14 @@ setGeneric("slab", function(object,
 #' data('loafercreek', package = 'soilDB')
 #'
 #' # defaul slab.fun wraps stats::quantile()
-#' a <- slab(loafercreek, fm = ~ total_frags_pct + clay)
+#' a <- slab(loafercreek, fm = ~ total_frags_pct + claytotest)
 #'
 #' # use HD quantile estimator from Hmisc package instead
-#' a.HD <- slab(loafercreek, fm = ~ total_frags_pct + clay, slab.fun = aqp:::.slab.fun.numeric.HD)
+#' a.HD <- slab(
+#' loafercreek, 
+#' fm = ~ total_frags_pct + claytotest, 
+#' slab.fun = aqp:::.slab.fun.numeric.HD
+#' )
 #'
 #' # combine
 #' g <- make.groups(standard=a, HD=a.HD)

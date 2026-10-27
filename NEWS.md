@@ -1,4 +1,8 @@
 # aqp 2.3.2 (2026-04-29)
+ * CRAN release
+ * `fixOverlap()` gains new method 'hybrid', useful for nudging sketches or labels to avoid overlap
+
+# aqp 2.3.2 (2026-04-29)
  * new function `formatMunsell()` for safely formatting Munsell colors from hue, value, and chroma
  * `launderMunsell()` gains additional formatting fixes / failures to NA
  * new option to enable function verbosity: `options(.aqp.verbose = TRUE)` default: `FALSE`

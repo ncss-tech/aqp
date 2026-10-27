@@ -250,105 +250,127 @@ exportMethods(trunc)
 exportMethods(unique)
 exportMethods(validSpatialData)
 import(data.table)
-importFrom(ape,as.phylo)
-importFrom(ape,plot.phylo)
-importFrom(ape,tiplabels)
-importFrom(cluster,daisy)
-importFrom(cluster,pam)
-importFrom(cluster,silhouette)
-importFrom(colorspace,deutan)
-importFrom(colorspace,protan)
-importFrom(colorspace,tritan)
+importFrom(ape,
+  as.phylo,
+  plot.phylo,
+  tiplabels
+)
+importFrom(cluster,
+  daisy,
+  pam,
+  silhouette
+)
+importFrom(colorspace,
+  deutan,
+  protan,
+  tritan
+)
 importFrom(digest,digest)
-importFrom(farver,compare_colour)
-importFrom(farver,convert_colour)
-importFrom(grDevices,chull)
-importFrom(grDevices,col2rgb)
-importFrom(grDevices,colorRamp)
-importFrom(grDevices,colorRampPalette)
-importFrom(grDevices,colors)
-importFrom(grDevices,convertColor)
-importFrom(grDevices,grey)
-importFrom(grDevices,hsv)
-importFrom(grDevices,rgb)
-importFrom(grDevices,rgb2hsv)
-importFrom(graphics,abline)
-importFrom(graphics,arrows)
-importFrom(graphics,axis)
-importFrom(graphics,box)
-importFrom(graphics,grconvertX)
-importFrom(graphics,grid)
-importFrom(graphics,image)
-importFrom(graphics,legend)
-importFrom(graphics,lines)
-importFrom(graphics,mtext)
-importFrom(graphics,par)
-importFrom(graphics,plot)
-importFrom(graphics,points)
-importFrom(graphics,polygon)
-importFrom(graphics,rect)
-importFrom(graphics,segments)
-importFrom(graphics,strheight)
-importFrom(graphics,strwidth)
-importFrom(graphics,text)
-importFrom(grid,gpar)
-importFrom(grid,grid.text)
-importFrom(grid,unit)
-importFrom(lattice,levelplot)
-importFrom(lattice,panel.abline)
-importFrom(lattice,panel.grid)
-importFrom(lattice,panel.lines)
-importFrom(lattice,panel.points)
-importFrom(lattice,panel.polygon)
-importFrom(lattice,panel.rect)
-importFrom(lattice,panel.segments)
-importFrom(lattice,panel.text)
-importFrom(lattice,strip.custom)
-importFrom(lattice,trellis.par.get)
-importFrom(lattice,xyplot)
-importFrom(methods,"slot<-")
-importFrom(methods,.hasSlot)
-importFrom(methods,as)
-importFrom(methods,isGeneric)
-importFrom(methods,new)
-importFrom(methods,prototype)
-importFrom(methods,representation)
-importFrom(methods,setClass)
-importFrom(methods,setGeneric)
-importFrom(methods,setMethod)
-importFrom(methods,setOldClass)
-importFrom(methods,setReplaceMethod)
-importFrom(methods,slot)
-importFrom(methods,slotNames)
-importFrom(stats,TukeyHSD)
-importFrom(stats,aggregate)
-importFrom(stats,aov)
-importFrom(stats,approxfun)
-importFrom(stats,as.dist)
-importFrom(stats,as.formula)
-importFrom(stats,as.hclust)
-importFrom(stats,cmdscale)
-importFrom(stats,complete.cases)
-importFrom(stats,cov)
-importFrom(stats,dist)
-importFrom(stats,formula)
-importFrom(stats,median)
-importFrom(stats,model.frame)
-importFrom(stats,na.omit)
-importFrom(stats,na.pass)
-importFrom(stats,quantile)
-importFrom(stats,rnorm)
-importFrom(stats,runif)
-importFrom(stats,sd)
-importFrom(stats,setNames)
-importFrom(stats,splinefun)
-importFrom(stats,terms)
-importFrom(stats,update)
-importFrom(stats,weighted.mean)
-importFrom(stats,xtabs)
-importFrom(utils,.DollarNames)
-importFrom(utils,capture.output)
-importFrom(utils,combn)
-importFrom(utils,object.size)
-importFrom(utils,packageVersion)
-importFrom(utils,str)
+importFrom(farver,
+  compare_colour,
+  convert_colour
+)
+importFrom(grDevices,
+  chull,
+  col2rgb,
+  colorRamp,
+  colorRampPalette,
+  colors,
+  convertColor,
+  grey,
+  hsv,
+  rgb,
+  rgb2hsv
+)
+importFrom(graphics,
+  abline,
+  arrows,
+  axis,
+  box,
+  grconvertX,
+  grid,
+  image,
+  legend,
+  lines,
+  mtext,
+  par,
+  plot,
+  points,
+  polygon,
+  rect,
+  segments,
+  strheight,
+  strwidth,
+  text
+)
+importFrom(grid,
+  gpar,
+  grid.text,
+  unit
+)
+importFrom(lattice,
+  levelplot,
+  panel.abline,
+  panel.grid,
+  panel.lines,
+  panel.points,
+  panel.polygon,
+  panel.rect,
+  panel.segments,
+  panel.text,
+  strip.custom,
+  trellis.par.get,
+  xyplot
+)
+importFrom(methods,
+  "slot<-",
+  .hasSlot,
+  as,
+  isGeneric,
+  new,
+  prototype,
+  representation,
+  setClass,
+  setGeneric,
+  setMethod,
+  setOldClass,
+  setReplaceMethod,
+  slot,
+  slotNames
+)
+importFrom(stats,
+  TukeyHSD,
+  aggregate,
+  aov,
+  approxfun,
+  as.dist,
+  as.formula,
+  as.hclust,
+  cmdscale,
+  complete.cases,
+  cov,
+  dist,
+  formula,
+  median,
+  model.frame,
+  na.omit,
+  na.pass,
+  quantile,
+  rnorm,
+  runif,
+  sd,
+  setNames,
+  splinefun,
+  terms,
+  update,
+  weighted.mean,
+  xtabs
+)
+importFrom(utils,
+  .DollarNames,
+  capture.output,
+  combn,
+  object.size,
+  packageVersion,
+  str
+)

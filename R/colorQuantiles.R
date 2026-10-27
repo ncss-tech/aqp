@@ -9,7 +9,7 @@
 
 
 ## TODO: 
-##       * allow Munsell, CIELAB, sRGB, etc.
+##       * allow Munsell, CIELAB, sRGB, etc. via aqp:::.detectColorSpec()
 ##       * quantiles should be weighted by thickness, can we do this via dice()?
 ##       * finish documentation + links
 ##       * consider a third output: chip with pair-wise min(dE00) within distance matrix

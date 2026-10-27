@@ -10,23 +10,23 @@ findOverlap(x, thresh)
 overlapMetrics(x, thresh)
 }
 \arguments{
-\item{x}{vector of relative horizontal positions, one for each profile}
+\item{x}{vector of relative positions, typically representing soil profile sketch centers or label parameters}
 
-\item{thresh}{threshold defining "overlap", typically < 1
-
-@return a \code{list}:
-\itemize{
-\item \code{idx}: unique index to overlapping elements in \code{x}
-\item \code{ov}: normalized overlap (see details)
-}}
+\item{thresh}{threshold defining "overlap", typically < 1}
 }
 \value{
 unique index to affected (overlapping) elements in \code{x}
+
+a \code{list}:
+\itemize{
+\item \code{idx}: unique index to overlapping elements in \code{x}
+\item \code{ov}: normalized overlap (see details)
+}
 }
 \description{
 Establish which elements within a vector of horizontal positions overlap beyond a given threshold
 
-Desc.
+Find and quantify vverlap within a 1D sequence.
 }
 \examples{
 

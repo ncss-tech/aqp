@@ -413,7 +413,7 @@ Beaudette, D.E., Roudier P., and A.T. O'Geen. 2013. Algorithms for Quantitative 
 Soil Scientists. Computers & Geosciences. 52:258 - 268.
 }
 \seealso{
-\code{\link[=fixOverlap]{fixOverlap()}}, \code{\link[=explainPlotSPC]{explainPlotSPC()}}, \linkS4class{SoilProfileCollection}, \code{\link[=pretty]{pretty()}}, \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}, \code{\link[=addBracket]{addBracket()}}, \code{\link[=profileGroupLabels]{profileGroupLabels()}}
+\code{\link[=fixOverlap]{fixOverlap()}}, \code{\link[=explainPlotSPC]{explainPlotSPC()}}, \link[=SoilProfileCollection-class]{SoilProfileCollection}, \code{\link[=pretty]{pretty()}}, \code{\link[=hzDistinctnessCodeToOffset]{hzDistinctnessCodeToOffset()}}, \code{\link[=addBracket]{addBracket()}}, \code{\link[=profileGroupLabels]{profileGroupLabels()}}
 }
 \author{
 D.E. Beaudette

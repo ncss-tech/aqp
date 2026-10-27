@@ -83,6 +83,8 @@ Selecting the optimal label-adjustment methods and parameters will depend on the
   
   * *simulated annealing:* This method is the most adaptive, typically capable of providing reasonable solutions for even the most complex profiles. The non-deterministic solutions can be undesirable when preparing figures for publication. Use `set.seed()` to control output between runs.
 
+  *hybrid:* This method uses a combination of electrostatic simulation, followed by simulated annealing if the first attempt does not converge. Try adjusting `q` to overcome even the most challenging label collisions.
+
 
 ### Electrostatic Simulation
 
@@ -93,7 +95,7 @@ par(mar = c(0, 0, 0, 0))
 # select "Electrostatic" label placement method
 # adjust default charge density to 0.5
 plotSPC(s, fixOverlapArgs = list(method = 'E', q = 0.5))
-title('Label Adjustment by Electrostatic Simulation', line = -1.5)
+title('Label Adjustment by Electrostatic Simulation (q = 0.5)', line = -1.5)
 ```
 
 
@@ -108,6 +110,19 @@ plotSPC(s, fixOverlapArgs = list(method = 'S'))
 title('Label Adjustment by Simulated Annealing', line = -1.5)
 
 options(.aqp.plotSPC.args = NULL)
+```
+
+
+### Label Placement Diagnostics
+There are two diagnostics returned when calling `plotSPC(..., fixLabelCollisions = TRUE)`:
+
+  * `hz.depth.LAI`: label adjustment index, a normalized score of how much horizon depth labels have been moved from their original configuration, one value for each profile
+  * `hz.depth.RO`: residual overlap, an index of label overlap after collision avoidance, one value for each profile
+
+Access these diagnosts immediatley after calling `plotSPC()` like this:
+```{r, eval = FALSE}
+get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
+get('last_spc_plot', envir = aqp.env)$hz.depth.RO
 ```
 
 
@@ -152,17 +167,21 @@ testIt <- function(x, ...) {
   # make sketches
   plotSPC(x, ...)
   
-  # a normalized index of label adjustment
+  # normalized index of label adjustment
   .LAI <- get('last_spc_plot', envir = aqp.env)$hz.depth.LAI
   .LAI <- ifelse(is.na(.LAI), 0, .LAI)
   
+  # residual overlap
+  .RO <- get('last_spc_plot', envir = aqp.env)$hz.depth.RO
+  .RO <- ifelse(is.na(.RO), 0, .RO)
+  
   # annotate with label adjustment index
-  .txt <- sprintf("LAI: %0.3f", .LAI)
-  mtext(.txt, side = 1, at = 1, line = -1.5, cex = 0.8)
+  .txt <- sprintf("LAI: %0.3f\nRO: %0.3f", .LAI, .RO)
+  mtext(.txt, side = 1, at = 1, line = -0.5, cex = 0.8)
 }
 ```
 
-Compare and contrast. The "LAI" is an index of label adjustment, relative to the original label positions. Larger values imply a higher degree of adjustment. Note that each simulated annealing (SANN) label adjustment is different, unless randomness is "controlled" using `set.seed()`.
+Compare and contrast. The "LAI" is an index of label adjustment, relative to the original label positions. Larger values imply a higher degree of adjustment. Note that each simulated annealing (SANN) label adjustment is different, unless randomness is "controlled" using `set.seed()`. "RO" is the residual overlap among labels.
 ```{r fig.width=8, fig.height=5}
 par(mar = c(1, 0, 0, 0), mfcol = c(1, 8))
 
@@ -191,6 +210,36 @@ testIt(x, fixOverlapArgs = list(method = 'E', q = 0.25))
 title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
 ```
 
+Demonstrate 'hybrid' approach.
+```{r fig.width=8, fig.height=5}
+par(mar = c(1, 0, 0, 0), mfcol = c(1, 8))
+
+testIt(x, fixLabelCollisions = FALSE)
+title('No\nAdjustment', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN\nsim 1', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN\nsim 2', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'S'))
+title('SANN\nsim 3', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'E', q = 0.25))
+title('Electrostatic\nq = 0.25', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'H', q = 0.25))
+title('Hybrid\nq = 0.25 | sim 1', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'H', q = 0.25))
+title('Hybrid\nq = 0.25 | sim 2', line = -3.5, adj = 0.5)
+
+testIt(x, fixOverlapArgs = list(method = 'H', q = 0.25))
+title('Hybrid\nq = 0.25 | sim 3', line = -3.5, adj = 0.5)
+```
+
+
 ## Compare with Real Soil Series
 ```{r eval=requireNamespace("soilDB", quietly=TRUE), fig.width=9, fig.height=5}
 library(aqp)
@@ -199,18 +248,24 @@ library(soilDB)
 s <- c('inks' , 'pardee', 'clarksville', 'palau', 'hao', 'inks', 'eheuiki', 'puaulu', 'zook', 'cecil')
 x <- fetchOSD(s)
 
-par(mar = c(0, 0, 0, 3))
+# trap issues with web service
+if(inherits(x, 'SoilProfileCollection')) {
+  par(mar = c(0, 0, 0, 3))
+  
+  .args <- list(width = 0.3, name.style = 'center-center', hz.depths = TRUE, cex.names = 0.8)
+  options(.aqp.plotSPC.args = .args)
+  
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.5), max.depth = 151)
+  plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
+  
+  plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)  
+  
+  plotSPC(x, fixOverlapArgs = list(method = 'H', q = 0.25), max.depth = 151)  
+}
 
-.args <- list(width = 0.3, name.style = 'center-center', hz.depths = TRUE, cex.names = 0.8)
-options(.aqp.plotSPC.args = .args)
-
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1.25), max.depth = 151)
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 1), max.depth = 151)
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.75), max.depth = 151)
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.5), max.depth = 151)
-plotSPC(x, fixOverlapArgs = list(method = 'E', q = 0.25), max.depth = 151)
-
-plotSPC(x, fixOverlapArgs = list(method = 'S'), max.depth = 151)
 ```
 
 ## General Cases
