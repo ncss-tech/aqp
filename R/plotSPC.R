@@ -1345,6 +1345,10 @@ plotSPC <- function(
       # along with user adjustment
       hzd.txt.x <- x0 + width + hz.depths.xfuzz + hz.depths.offset
       
+      # reasonable threshold (depth-axis) for label collision detection
+      # depends on aesthetic weighting / graphics device / hz.depths.cex
+      y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
+      
       ## top-most horizon
       # top depth: vertical alignment is close to "top"
       hzd.txt <- this_profile_data[[tcol]][1]
@@ -1365,7 +1369,6 @@ plotSPC <- function(
         
         # device coordinates: scaling / offset applied
         hzd.txt.y <- y1[-1]
-        
         
         # sanity checks before attempting label collision repair:
         #  - no NA
@@ -1388,13 +1391,8 @@ plotSPC <- function(
         ## collision detection / fix
         if(fixLabelCollisions && .canFixLabelCollision) {
           
-          ## TODO: only need to compute this 1 time, move outside of loop
+          ## TODO: hz label domain and acceptable threshold can be performed once for all profiles 
           ## TODO: consider adjusting by scaling.factor
-          
-          # reasonable threshold for label collision detection
-          # depends on aesthetic weighting / graphics device / hz.depths.cex
-          y.thresh <- 1.125 * abs(strheight('0', cex = hz.depths.cex))
-          # print(y.thresh)
           
           # must include top + bottom depths for collision detection
           # account for the fact that top-most and bottom-most horizon depths are inset
@@ -1453,12 +1451,13 @@ plotSPC <- function(
           hzd.txt.y <- hzd.txt.y.fixed
         }
         
-        ## TODO: finish this!
+        
         ## residual label overlap, >0 means some labels overlap
-        .residualLabelOverlap <- overlapMetrics(hzd.txt.y, thresh = 1.125 * abs(strheight('0', cex = hz.depths.cex)))$ov
+        .residualLabelOverlap <- overlapMetrics(hzd.txt.y, thresh = y.thresh)$ov
         lsp[['hz.depth.RO']][i] <- .residualLabelOverlap
         
-        # annotate
+        
+        ## annotate horizon depth label
         text(
           x = hzd.txt.x, 
           y = hzd.txt.y, 
