@@ -962,13 +962,15 @@ fixOverlap <- function(x, thresh = 0.6, method = c('S', 'E', 'H'), trace = FALSE
                    SANN_1D(x = x, thresh = thresh, trace = trace, ...) 
                  },
                  
-                 ## TODO: document / test this
+                 # hybrid approach
                  'h' = {
+                   # start with electrostatic simulation
                    .stage1 <- electroStatics_1D(x = x, thresh = thresh, trace = trace, ...)
                    if(attr(.stage1, 'converged')) {
                      # print('ES converged')
                    .r <- .stage1
                    } else {
+                     # if that doesn't converge, try SANN
                      # print('trying SANN...')
                      .stage2 <- SANN_1D(x = .stage1, thresh = thresh, trace = trace, ...)
                     .r <- .stage2
