@@ -70,13 +70,13 @@ test_that("guessGenHzLevels works as expected", {
 test_that("hzTransitionProbabilities works as expected", {
   res <- hzTransitionProbabilities(sp3, "genhz")
   expect_equal(res, structure(c(0, 0, 0, 0.375, 1, 0.111111111111111,
-                                0.625, 0, 0.888888888888889), .Dim = c(3L, 3L),
-                              .Dimnames = list(c("A", "Bt", "C"),
+                                0.625, 0, 0.888888888888889), dim = c(3L, 3L),
+                              dimnames = list(c("A", "Bt", "C"),
                                                c("A", "Bt", "C")), ties = FALSE))
   res <- hzTransitionProbabilities(sp3, "genhz", loopTerminalStates = TRUE)
   expect_equal(res, structure(c(0, 0, 0, 0.375, 1, 0.111111111111111,
                                 0.625, 0, 0.888888888888889),
-                              .Dim = c(3L, 3L), .Dimnames = list(c("A", "Bt", "C"),
+                              dim = c(3L, 3L), dimnames = list(c("A", "Bt", "C"),
                                                                  c("A", "Bt", "C")), ties = FALSE))
 
   horizons(sp3)$genhz2 <- NA
