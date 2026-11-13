@@ -1,4 +1,8 @@
 
+## TODO: add similarity-weighted shannon entropy 
+#        https://arxiv.org/html/2511.03849v2
+
+
 #' @title Shannon Entropy
 #' @description A very simple implementation of Shannon entropy.
 #'
@@ -30,7 +34,7 @@
 #' 
 ## TODO: test that sum(x) == 1
 shannonEntropy <- function(x, b = 2) {
-  # 0s automatically removed by na.rm=TRUE (0 * log(0) = Nan)
+  # 0s automatically removed by na.rm = TRUE (0 * log(0) = Nan)
   # consider: ifelse(x == 0, 0, x * log(x))
   
   res <- -1 * sum(x * log(x, base = b), na.rm = TRUE)
