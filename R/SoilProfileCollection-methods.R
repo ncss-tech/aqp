@@ -569,7 +569,7 @@ setMethod("subsetHz", signature(x = "SoilProfileCollection"), function(x, ..., d
 
 #' @description  used to implement "drop=FALSE" for various methods that remove horizons from SoilProfileCollection object
 #' @noRd
-.insert_dropped_horizons <- function(object = SoilProfileCollection(), 
+.insert_dropped_horizons <- function(object = .SoilProfileCollection(), 
                                      horizons = horizons(object), 
                                      sites = site(object),
                                      pid = idname(object),
